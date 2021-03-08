@@ -1,4 +1,5 @@
 import time
+import urllib.parse
 
 import jwt
 
@@ -123,19 +124,26 @@ class OAuth(Auth):
 
         # Prepare HTTP POST request data.
         # Note: The requests package applies Form URL-Encoding by default.
-        import urllib.parse
         request_data = urllib.parse.urlencode({
             'assertion': encoded_jwt,
             'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer'
         })
 
         # Exchange the JWT for an access token.
-        access_token_response = req.post(
-            endpoint=token_url,
-            data=request_data,
-            headers={'Content-Type': 'application/x-www-form-urlencoded'},
-            authorize=False,
-        )
+        try:
+            access_token_response = req.post(
+                endpoint=token_url,
+                data=request_data,
+                headers={'Content-Type': 'application/x-www-form-urlencoded'},
+                authorize=False,
+            )
+        except errors.BadRequest:
+            # Re-raise exception with more specific information.
+            raise errors.BadRequest(
+                'Could not authenticate with the provided credentials.\n'
+                + 'Read more: https://developer.d21s.com/docs/authentication'
+                + '/oauth2#common-errors'
+            )
 
         # Return the access token in the request.
         return access_token_response
