@@ -30,6 +30,15 @@ class Auth():
             OAuth2:     dt.Oauth.authorize(key_id, secret, email)'
         )
 
+    def _verify_str_credentials(self, credentials):
+        for c in credentials:
+            if type(c) != str:
+                raise TypeError(
+                    'Authentication credentials must be of type '
+                    + '<class \'str\'>, but received {}.'.format(
+                        type(c)
+                    ))
+
 
 class BasicAuth(Auth):
     def __init__(self, key_id, secret):
@@ -37,6 +46,7 @@ class BasicAuth(Auth):
         super().__init__()
 
         # Set initial variables.
+        self._verify_str_credentials([key_id, secret])
         self.key_id = key_id
         self.secret = secret
 
@@ -65,13 +75,17 @@ class OAuth(Auth):
         # Inherit everything from parent.
         super().__init__()
 
-        # Set attributes from arguments.
+        # Verify str type and set input credential attributes.
+        self._verify_str_credentials([key_id, secret, email])
         self.key_id = key_id
         self.secret = secret
         self.email = email
 
         # Initialise new attributes.
         self.expiration = 0
+
+        # Run refresh once at initialization to set token.
+        self.refresh()
 
     @classmethod
     def authenticate(cls, key_id, secret, email):
