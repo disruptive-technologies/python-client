@@ -15,6 +15,9 @@ class TestResponseStatusCodes():
     def setup_class(cls):
         cls.mock_request_patcher = patch('requests.request')
         cls.mock_request = cls.mock_request_patcher.start()
+
+        # Initialise auth object to avoid unauthenticated error.
+        # The credentials doesn't matter as we mock the request.
         dt.OAuth.authenticate('', '', '')
 
     @classmethod
