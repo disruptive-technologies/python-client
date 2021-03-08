@@ -38,7 +38,8 @@ class TestResponseStatusCodes():
         assert_raises(
             errors.Unauthenticated,
             dt.OAuth.authenticate,
-            '', '', '')
+            '', '', ''
+        )
 
     def test_error_code_403(self):
         # Set response status code to represent test.
