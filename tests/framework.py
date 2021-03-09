@@ -5,7 +5,7 @@ import disruptive as dt
 
 class MockRequest():
 
-    def __init__(self, status_code, json={}, headers={}):
+    def __init__(self, status_code=200, json={}, headers={}):
         self.status_code = status_code
         self.headers = headers
         self._json = json
