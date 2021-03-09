@@ -20,7 +20,7 @@ def get(endpoint: str,
         timeout=None,
         auth=None
         ):
-    return __send_request(
+    return __construct_request(
         "GET",
         endpoint,
         params,
@@ -37,7 +37,7 @@ def post(endpoint: str,
          authorize: bool = True,
          auth=None,
          ):
-    return __send_request(
+    return __construct_request(
         "POST",
         endpoint,
         body=body,
@@ -49,11 +49,11 @@ def post(endpoint: str,
 
 
 def patch(endpoint: str, body: dict, auth=None):
-    return __send_request("PATCH", endpoint, body=body, auth=auth)
+    return __construct_request("PATCH", endpoint, body=body, auth=auth)
 
 
 def delete(endpoint: str, auth=None):
-    return __send_request("DELETE", endpoint, auth=auth)
+    return __construct_request("DELETE", endpoint, auth=auth)
 
 
 def auto_paginated_list(
@@ -67,7 +67,7 @@ def auto_paginated_list(
     params['pageSize'] = page_size
 
     while True:
-        response = __send_request("GET", endpoint, params=params, auth=auth)
+        response = __construct_request("GET", endpoint, params=params, auth=auth)
         results += response[pagination_key]
 
         if len(response['nextPageToken']) > 0:
@@ -88,7 +88,7 @@ def generator_list(
     params['pageSize'] = page_size
 
     while True:
-        response = __send_request("GET", endpoint, params, auth=auth)
+        response = __construct_request("GET", endpoint, params, auth=auth)
 
         yield response[pagination_key]
 
@@ -98,7 +98,7 @@ def generator_list(
             break
 
 
-def __send_request(
+def __construct_request(
         method: str,
         endpoint: str,
         params: dict = {},
@@ -121,12 +121,12 @@ def __send_request(
 
     # Send request.
     log.log('Request [{}] to {}.'.format(method, endpoint))
-    response = requests.request(
+    response = __send_request(
         method=method,
-        url=endpoint,
+        endpoint=endpoint,
         params=params,
         headers=headers,
-        json=body,
+        body=body,
         data=data,
         timeout=timeout,
     )
@@ -153,7 +153,7 @@ def __send_request(
             time.sleep(retry_after)
 
         # Retry.
-        __send_request(
+        __construct_request(
             method=method,
             endpoint=endpoint,
             params=params,
@@ -169,6 +169,25 @@ def __send_request(
         raise error(response.json())
 
     return response.json()
+
+
+def __send_request(method,
+                   endpoint,
+                   params,
+                   headers,
+                   body,
+                   data,
+                   timeout,
+                   ):
+    return requests.request(
+        method=method,
+        url=endpoint,
+        params=params,
+        headers=headers,
+        json=body,
+        data=data,
+        timeout=timeout,
+    )
 
 
 def stream(endpoint: str, params: dict):
