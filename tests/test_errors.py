@@ -1,6 +1,3 @@
-# Standard library imports.
-from unittest.mock import patch
-
 # Third-party imports.
 import pytest
 
@@ -11,14 +8,6 @@ from tests.framework import MockRequest, TestEndpoint
 
 
 class TestResponseStatusCodes(TestEndpoint):
-    # @classmethod
-    # def setup_class(cls):
-    #     cls.mock_request_patcher = patch('requests.request')
-    #     cls.mock_request = cls.mock_request_patcher.start()
-
-    # @classmethod
-    # def teardown_class(cls):
-    #     cls.mock_request_patcher.stop()
 
     def test_error_code_400(self):
         # Set response status code to represent test.
