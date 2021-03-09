@@ -2,7 +2,7 @@
 from unittest.mock import patch
 
 # Third-party imports.
-from nose.tools import assert_raises
+import pytest
 
 # Project imports.
 import disruptive as dt
@@ -24,96 +24,69 @@ class TestResponseStatusCodes():
         self.mock_request.return_value.status_code = 400
 
         # Try to authenticate. This sends a POST request internally.
-        assert_raises(
-            errors.BadRequest,
-            dt.OAuth.authenticate,
-            '', '', ''
-        )
+        with pytest.raises(errors.BadRequest):
+            dt.OAuth.authenticate('', '', '')
 
     def test_error_code_401(self):
         # Set response status code to represent test.
         self.mock_request.return_value.status_code = 401
 
         # Call the service, which will send a request to the server.
-        assert_raises(
-            errors.Unauthenticated,
-            dt.OAuth.authenticate,
-            '', '', ''
-        )
+        with pytest.raises(errors.NotFound):
+            dt.OAuth.authenticate('', '', '')
 
     def test_error_code_403(self):
         # Set response status code to represent test.
         self.mock_request.return_value.status_code = 403
 
         # Call the service, which will send a request to the server.
-        assert_raises(
-            errors.Forbidden,
-            dt.OAuth.authenticate,
-            '', '', ''
-        )
+        with pytest.raises(errors.Forbidden):
+            dt.OAuth.authenticate('', '', '')
 
     def test_error_code_404(self):
         # Set response status code to represent test.
         self.mock_request.return_value.status_code = 404
 
         # Call the service, which will send a request to the server.
-        assert_raises(
-            errors.NotFound,
-            dt.OAuth.authenticate,
-            '', '', ''
-        )
+        with pytest.raises(errors.NotFound):
+            dt.OAuth.authenticate('', '', '')
 
     def test_error_code_409(self):
         # Set response status code to represent test.
         self.mock_request.return_value.status_code = 409
 
         # Call the service, which will send a request to the server.
-        assert_raises(
-            errors.Conflict,
-            dt.OAuth.authenticate,
-            '', '', ''
-        )
+        with pytest.raises(errors.Conflict):
+            dt.OAuth.authenticate('', '', '')
 
     def test_error_code_429(self):
         # Set response status code to represent test.
         self.mock_request.return_value.status_code = 429
 
         # Call the service, which will send a request to the server.
-        assert_raises(
-            errors.TooManyRequests,
-            dt.OAuth.authenticate,
-            '', '', ''
-        )
+        with pytest.raises(errors.TooManyRequests):
+            dt.OAuth.authenticate('', '', '')
 
     def test_error_code_500(self):
         # Set response status code to represent test.
         self.mock_request.return_value.status_code = 500
 
         # Call the service, which will send a request to the server.
-        assert_raises(
-            errors.InternalServerError,
-            dt.OAuth.authenticate,
-            '', '', ''
-        )
+        with pytest.raises(errors.InternalServerError):
+            dt.OAuth.authenticate('', '', '')
 
     def test_error_code_503(self):
         # Set response status code to represent test.
         self.mock_request.return_value.status_code = 503
 
         # Call the service, which will send a request to the server.
-        assert_raises(
-            errors.InternalServerError,
-            dt.OAuth.authenticate,
-            '', '', ''
-        )
+        with pytest.raises(errors.InternalServerError):
+            dt.OAuth.authenticate('', '', '')
 
     def test_error_code_504(self):
         # Set response status code to represent test.
         self.mock_request.return_value.status_code = 504
 
         # Call the service, which will send a request to the server.
-        assert_raises(
-            errors.InternalServerError,
-            dt.OAuth.authenticate,
-            '', '', ''
-        )
+        with pytest.raises(errors.InternalServerError):
+            dt.OAuth.authenticate('', '', '')
