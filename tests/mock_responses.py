@@ -27,3 +27,19 @@ devices = {
         }
     }
 }
+
+dataconnectors = {
+    'basic': {
+        'name': 'projects/c0md3mm0c7bet3vico8g/dataconnectors/c0selfd3dsqvucf9l990',
+        'displayName': 'ngrok',
+        'type': 'HTTP_PUSH',
+        'status': 'ACTIVE',
+        'events': [],
+        'labels': ['name'],
+        'httpConfig': {
+            'url': 'https://584087e0a1fa.eu.ngrok.io/api/endpoint',
+            'signatureSecret': 'veryGoodSecret',
+            'headers': {}
+        }
+    }
+}
