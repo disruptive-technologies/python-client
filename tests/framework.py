@@ -24,6 +24,10 @@ class RequestMock():
             return_value=False,
         )
 
+        self.sleep_patcher = self._mocker.patch(
+            'time.sleep',
+        )
+
     def _patched_request(self, **kwargs):
         return DTResponse(self.json, self.status_code, self.headers)
 
