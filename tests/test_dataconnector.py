@@ -1,19 +1,49 @@
 # Project imports.
 import disruptive as dt
-from tests.framework import MockRequest, TestEndpoint
-from tests.mock_responses import dataconnectors
+
+# Test imports.
+import tests.mock_responses as mock_responses
 
 
-class TestDataconnector(TestEndpoint):
+class TestDataconnector():
 
-    def test_get_expected(self):
-        # Mock the REST API response with an expected dataconnector body.
-        self.mock_request.return_value = MockRequest(
-            json=dataconnectors['basic'],
-        )
+    def test_attributes(self, request_mock):
+        # Update the response json with a mock dataconnector response.
+        res = mock_responses.dataconnectors['single']
+        request_mock.json = res
 
-        # Send GET request for a single dataconnector in project.
-        device = dt.Device.get('', '')
+        # Call the appropriate endpoint.
+        d = dt.Dataconnector.get('project-id', 'device-id')
 
-        # Assert that attributes in output object are as expected.
-        assert device.id == dataconnectors['basic']['name'].split('/')[-1]
+        # Assert attributes unpacked correctly.
+        assert d.id == res['name'].split('/')[-1]
+        assert d.type == res['type']
+        assert d.status == res['status']
+        assert d.display_name == res['displayName']
+
+    def test_get(self, request_mock):
+        # Update the response json with a mock dataconnector response.
+        request_mock.json = mock_responses.dataconnectors['single']
+
+        # Call the appropriate endpoint.
+        d = dt.Dataconnector.get('project-id', 'device-id')
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output instance.
+        assert isinstance(d, dt.Dataconnector)
+
+    def test_list(self, request_mock):
+        # Update the response json with a mock dataconnector response.
+        request_mock.json = mock_responses.dataconnectors['list']
+
+        # Call the appropriate endpoint.
+        dataconnectors = dt.Dataconnector.list('project-id')
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output instance.
+        for d in dataconnectors:
+            assert isinstance(d, dt.Dataconnector)

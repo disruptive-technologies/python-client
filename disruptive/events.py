@@ -1,12 +1,12 @@
 from disruptive import transforms as trf
-from disruptive.responses import ResponseBase
+from disruptive.outputs import OutputBase
 
 
-class Event(ResponseBase):
+class Event(OutputBase):
 
     def __init__(self, event_dict):
         # Inherit attributes from ResponseBase parent.
-        ResponseBase.__init__(self, event_dict)
+        OutputBase.__init__(self, event_dict)
 
         # Unpack parts of event that is common for all types.
         self.__unpack()

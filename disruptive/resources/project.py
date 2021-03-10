@@ -1,26 +1,26 @@
 import disruptive as dt
 import disruptive.requests as req
-from disruptive.responses import ResponseBase
+from disruptive.outputs import OutputBase
 
 
-class Project(ResponseBase):
+class Project(OutputBase):
 
     def __init__(self, project_dict):
         # Inherit from Response parent.
-        ResponseBase.__init__(self, project_dict)
+        OutputBase.__init__(self, project_dict)
 
         # Unpack organization json.
         self.__unpack()
 
     @classmethod
     def get(cls, project_id: str, auth=None):
-        # Construct endpoint url
+        # Construct URL
         url = dt.base_url
         url += '/projects/{}'.format(project_id)
 
         # Return simple GET request instance.
         return cls(req.get(
-            endpoint=url,
+            url=url,
             auth=auth
         ))
 

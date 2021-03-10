@@ -1,19 +1,41 @@
 # Project imports.
 import disruptive as dt
-from tests.framework import MockRequest, TestEndpoint
-from tests.mock_responses import devices
+
+# Test imports.
+import tests.mock_responses as mock_responses
 
 
-class TestDevice(TestEndpoint):
+class TestDevice():
 
-    def test_get_expected(self):
+    def test_attributes(self, request_mock):
         # Mock the REST API response with an expected device body.
-        self.mock_request.return_value = MockRequest(
-            json=devices['touch'],
-        )
+        res = mock_responses.devices['touch']
+        request_mock.json = res
 
-        # Send GET request for a single device in project.
-        device = dt.Device.get('', '')
+        # Call the appropriate endpoint.
+        d = dt.Device.get('project-id', 'device-id')
 
-        # Assert that attributes in output object are as expected.
-        assert device.id == devices['touch']['name'].split('/')[-1]
+        # Assert attributes unpacked correctly.
+        assert d.id == res['name'].split('/')[-1]
+        assert d.type == res['type']
+
+    def test_get(self, request_mock):
+        # Mock the REST API response with an expected device body.
+        request_mock.json = mock_responses.devices['touch']
+
+        # Call the appropriate endpoint.
+        d = dt.Device.get('project-id', 'device-id')
+
+        # Assert attributes in output Device object.
+        assert isinstance(d, dt.Device)
+
+    def test_list(self, request_mock):
+        # Mock the REST API response with an expected device body.
+        request_mock.json = mock_responses.devices['list']
+
+        # Call the appropriate endpoint.
+        devices = dt.Device.list('project-id')
+
+        # Assert output instance.
+        for d in devices:
+            assert isinstance(d, dt.Device)
