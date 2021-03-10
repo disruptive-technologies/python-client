@@ -1,34 +1,31 @@
-from unittest.mock import patch
-
-import disruptive as dt
-
-
-class MockRequest():
-
-    def __init__(self, status_code=200, json={}, headers={}):
-        self.status_code = status_code
-        self.headers = headers
-        self._json = json
-
-    def json(self):
-        return self._json
+# Project imports.
+from disruptive.authentication import Auth
+from disruptive.response import DTResponse
 
 
-class TestEndpoint():
+class RequestMock():
 
-    @classmethod
-    def setup_class(cls):
-        cls.mock_request_patcher = patch('disruptive.requests.__send_request')
-        cls.mock_request = cls.mock_request_patcher.start()
+    def __init__(self, mocker):
+        self._mocker = mocker
 
-        # Initialize the authorisation object to avoid Unauthorized error.
-        with patch('disruptive.requests.post') as mock_auth_post:
-            mock_auth_post.return_value = {
-                'access_token': '',
-                'expires_in': 3600,
-            }
-            dt.OAuth.authenticate('', '', '')
+        self.json = {}
+        self.status_code = 200
+        self.headers = {}
 
-    @classmethod
-    def teardown_class(cls):
-        cls.mock_request_patcher.stop()
+        self.request_patcher = self._mocker.patch(
+            'disruptive.requests.__send_request',
+            side_effect=self._patched_request
+        )
+
+        self.auth_expiration_patcher = self._mocker.patch.object(
+            Auth,
+            'has_expired',
+            return_value=False,
+        )
+
+    def _patched_request(self, **kwargs):
+        return DTResponse(self.json, self.status_code, self.headers)
+
+    def assert_request_count(self, n):
+        if self.request_patcher.call_count != n:
+            raise AssertionError

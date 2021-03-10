@@ -1,82 +1,81 @@
-# Third-party imports.
+# Third-part imports.
 import pytest
 
 # Project imports.
 import disruptive as dt
 import disruptive.errors as errors
-from tests.framework import MockRequest, TestEndpoint
 
 
-class TestResponseStatusCodes(TestEndpoint):
+class TestResponseStatusCodes():
 
-    def test_error_code_400(self):
+    def test_error_code_400(self, request_mock):
         # Set response status code to represent test.
-        self.mock_request.return_value = MockRequest(status_code=400)
+        request_mock.status_code = 400
 
         # Try to authenticate. This sends a POST request internally.
         with pytest.raises(errors.BadRequest):
-            dt.OAuth.authenticate('', '', '')
+            dt.Device.get('', '')
 
-    def test_error_code_401(self):
+    def test_error_code_401(self, request_mock):
         # Set response status code to represent test.
-        self.mock_request.return_value = MockRequest(status_code=401)
+        request_mock.status_code = 401
 
         # Call the service, which will send a request to the server.
         with pytest.raises(errors.Unauthenticated):
-            dt.OAuth.authenticate('', '', '')
+            dt.Device.get('', '')
 
-    def test_error_code_403(self):
+    def test_error_code_403(self, request_mock):
         # Set response status code to represent test.
-        self.mock_request.return_value = MockRequest(status_code=403)
+        request_mock.status_code = 403
 
         # Call the service, which will send a request to the server.
         with pytest.raises(errors.Forbidden):
-            dt.OAuth.authenticate('', '', '')
+            dt.Device.get('', '')
 
-    def test_error_code_404(self):
+    def test_error_code_404(self, request_mock):
         # Set response status code to represent test.
-        self.mock_request.return_value = MockRequest(status_code=404)
+        request_mock.status_code = 404
 
         # Call the service, which will send a request to the server.
         with pytest.raises(errors.NotFound):
-            dt.OAuth.authenticate('', '', '')
+            dt.Device.get('', '')
 
-    def test_error_code_409(self):
+    def test_error_code_409(self, request_mock):
         # Set response status code to represent test.
-        self.mock_request.return_value = MockRequest(status_code=409)
+        request_mock.status_code = 409
 
         # Call the service, which will send a request to the server.
         with pytest.raises(errors.Conflict):
-            dt.OAuth.authenticate('', '', '')
+            dt.Device.get('', '')
 
-    def test_error_code_429(self):
+    def test_error_code_429(self, request_mock):
         # Set response status code to represent test.
-        self.mock_request.return_value = MockRequest(status_code=429)
+        request_mock.status_code = 429
 
         # Call the service, which will send a request to the server.
         with pytest.raises(errors.TooManyRequests):
-            dt.OAuth.authenticate('', '', '')
+            dt.Device.get('', '')
 
-    def test_error_code_500(self):
+    def test_error_code_500(self, request_mock):
         # Set response status code to represent test.
-        self.mock_request.return_value = MockRequest(status_code=500)
+        request_mock.status_code = 500
 
         # Call the service, which will send a request to the server.
         with pytest.raises(errors.InternalServerError):
-            dt.OAuth.authenticate('', '', '')
+            dt.Device.get('', '')
 
-    def test_error_code_503(self):
+    def test_error_code_503(self, request_mock):
         # Set response status code to represent test.
-        self.mock_request.return_value = MockRequest(status_code=503)
+        request_mock.status_code = 503
 
         # Call the service, which will send a request to the server.
         with pytest.raises(errors.InternalServerError):
-            dt.OAuth.authenticate('', '', '')
+            dt.Device.get('', '')
 
-    def test_error_code_504(self):
+    def test_error_code_504(self, request_mock):
         # Set response status code to represent test.
-        self.mock_request.return_value = MockRequest(status_code=504)
+        request_mock.status_code = 504
 
         # Call the service, which will send a request to the server.
         with pytest.raises(errors.InternalServerError):
-            dt.OAuth.authenticate('', '', '')
+            dt.Device.get('', '')

@@ -1,16 +1,16 @@
 
 
-class ResponseBase():
+class OutputBase():
 
     def __init__(self, raw):
         self.raw = raw
 
 
-class Metric(ResponseBase):
+class Metric(OutputBase):
 
     def __init__(self, metric_dict):
         # Inherit attributes from ResponseBase parent.
-        ResponseBase.__init__(self, metric_dict)
+        OutputBase.__init__(self, metric_dict)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
