@@ -16,6 +16,7 @@ log = False
 # explain here
 ping_interval = 10
 ping_jitter = 2
+request_timeout = 3
 
 max_connection_retries = 5
 
