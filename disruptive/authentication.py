@@ -6,7 +6,6 @@ import urllib.parse
 import jwt
 
 # Project imports
-import disruptive as dt
 import disruptive.requests as req
 import disruptive.errors as errors
 from disruptive import transforms
@@ -17,6 +16,14 @@ class Auth():
     def __init__(self):
         # Initialise variables
         self.token = None
+
+    @staticmethod
+    def basic(key_id, secret):
+        return BasicAuth(key_id, secret)
+
+    @staticmethod
+    def oauth(key_id, secret, email):
+        return OAuth(key_id, secret, email)
 
     def get_token(self):
         # Check expiration time.
@@ -62,14 +69,6 @@ class BasicAuth(Auth):
             ))
         )
 
-    @classmethod
-    def authenticate(cls, key_id, secret):
-        dt.auth = cls(key_id, secret)
-
-    @classmethod
-    def create(cls, key_id, secret):
-        return cls(key_id, secret)
-
     def has_expired(self):
         return False
 
@@ -87,17 +86,6 @@ class OAuth(Auth):
 
         # Initialise new attributes.
         self.expiration = 0
-
-        # Run refresh once at initialization to set token.
-        self.refresh()
-
-    @classmethod
-    def authenticate(cls, key_id, secret, email):
-        dt.auth = cls(key_id, secret, email)
-
-    @classmethod
-    def create(cls, key_id, secret, email):
-        return cls(key_id, secret, email)
 
     def __get_access_token(self):
         # Set access token URL.

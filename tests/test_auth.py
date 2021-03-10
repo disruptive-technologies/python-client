@@ -9,23 +9,21 @@ from disruptive.authentication import OAuth
 import tests.mock_responses as mock_responses
 
 
-class TestOAuth():
+class TestAuth():
 
-    def test_constructors(self, request_mock):
+    def test_oauth(self, request_mock):
         # Update the response json with a mock token response.
         res = mock_responses.auth_tokens['fresh']
         request_mock.json = res
 
         # Call the two classmethod constructors.
-        dt.OAuth.authenticate('', '', '')
-        auth_instance = dt.OAuth.create('', '', '')
+        auth = dt.Auth.oauth('', '', '')
 
-        # Assert token post request sent for each.
-        request_mock.assert_request_count(2)
+        # Assert token post request not sent at construction.
+        request_mock.assert_request_count(0)
 
         # Assert instance of OAuth class.
-        assert isinstance(dt.auth, OAuth)
-        assert isinstance(auth_instance, OAuth)
+        assert isinstance(auth, OAuth)
 
     def test_token_refresh(self, request_mock):
         # Update the response json with an expired token response.
@@ -33,7 +31,7 @@ class TestOAuth():
         request_mock.json = res
 
         # Create an authentication object.
-        auth = dt.OAuth.create('', '', '')
+        auth = dt.Auth.oauth('', '', '')
 
         # Verify expired token.
         assert auth.has_expired()
@@ -51,8 +49,8 @@ class TestOAuth():
     def test_raise_missing_credential(self):
         # Verify TypeError raised at missing input credential.
         with pytest.raises(TypeError):
-            dt.OAuth.authenticate(None, '', '')
+            dt.Auth.oauth(None, '', '')
         with pytest.raises(TypeError):
-            dt.OAuth.authenticate('', None, '')
+            dt.Auth.oauth('', None, '')
         with pytest.raises(TypeError):
-            dt.OAuth.authenticate('', '', None)
+            dt.Auth.oauth('', '', None)
