@@ -1,8 +1,11 @@
+# Standard library imports.
 import time
 import urllib.parse
 
+# Third-party imports.
 import jwt
 
+# Project imports
 import disruptive as dt
 import disruptive.requests as req
 import disruptive.errors as errors
