@@ -115,11 +115,11 @@ def __construct_request(
         auth=None,
 ):
     # Add headers to request
-    if authorize:
-        if auth is None:
-            headers["Authorization"] = dt.auth.get_token()
-        else:
-            headers["Authorization"] = auth.get_token()
+    # if authorize:
+    #     if auth is None:
+    #         headers["Authorization"] = dt.auth.get_token()
+    #     else:
+    #         headers["Authorization"] = auth.get_token()
     for key in headers.keys():
         headers[key] = headers[key]
 
@@ -149,11 +149,11 @@ def __construct_request(
     )
 
     # Check if retry is required
-    if should_retry and retry_count >= MAX_RETRIES:
+    if should_retry and retry_count <= MAX_RETRIES:
 
         log.log("Got error {}. Will retry up to {} more times".format(
             error,
-            retry_count - MAX_RETRIES
+            MAX_RETRIES - retry_count
         ))
 
         # Sleep if necessary.
@@ -168,7 +168,7 @@ def __construct_request(
             headers=headers,
             body=body,
             data=data,
-            retry_count=retry_after + 1,
+            retry_count=retry_count + 1,
             authorize=authorize,
         )
 
