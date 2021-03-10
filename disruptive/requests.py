@@ -1,9 +1,12 @@
+# Standard library imports.
 import time
 import json
 
+# Third-party imports.
 import requests
 
-import disruptive
+# Project imports
+import disruptive as dt
 import disruptive.log as log
 import disruptive.errors as errors
 from disruptive.response import DTResponse
@@ -107,18 +110,22 @@ def __construct_request(
         body: dict = None,
         data: str = None,
         retry_count: int = 0,
-        timeout: int = 3,
+        timeout: int = None,
         authorize: bool = True,
         auth=None,
 ):
     # Add headers to request
     if authorize:
         if auth is None:
-            headers["Authorization"] = disruptive.auth.get_token()
+            headers["Authorization"] = dt.auth.get_token()
         else:
             headers["Authorization"] = auth.get_token()
     for key in headers.keys():
         headers[key] = headers[key]
+
+    # Set default timeout if explicitly provided.
+    if timeout is None:
+        timeout = dt.request_timeout
 
     # Send request.
     log.log('Request [{}] to {}.'.format(method, url))
@@ -194,12 +201,12 @@ def __send_request(method,
 
 def stream(url: str, params: dict):
     # Construct uURL.
-    url = disruptive.base_url + url
+    url = dt.base_url + url
 
     # Set streaming parameters and headers.
     params['ping_interval'] = '{}s'.format(PING_INTERVAL)
     headers = {
-        'Authorization': disruptive.auth.get_token()
+        'Authorization': dt.auth.get_token()
     }
 
     # Set up a simple catch-all retry policy.
