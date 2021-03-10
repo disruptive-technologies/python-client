@@ -115,11 +115,11 @@ def __construct_request(
         auth=None,
 ):
     # Add headers to request
-    # if authorize:
-    #     if auth is None:
-    #         headers["Authorization"] = dt.auth.get_token()
-    #     else:
-    #         headers["Authorization"] = auth.get_token()
+    if authorize:
+        if auth is None:
+            headers["Authorization"] = dt.auth.get_token()
+        else:
+            headers["Authorization"] = auth.get_token()
     for key in headers.keys():
         headers[key] = headers[key]
 
