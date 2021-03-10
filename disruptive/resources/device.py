@@ -1,26 +1,26 @@
 import disruptive as dt
 import disruptive.requests as req
-from disruptive.responses import ResponseBase
+from disruptive.outputs import OutputBase
 
 
-class Device(ResponseBase):
+class Device(OutputBase):
 
     def __init__(self, device_dict):
         # Inherit from Response parent.
-        ResponseBase.__init__(self, device_dict)
+        OutputBase.__init__(self, device_dict)
 
         # Unpack device json.
         self.__unpack()
 
     @classmethod
     def get(cls, project_id: str, device_id: str, auth=None):
-        # Construct endpoint url
+        # Construct URL
         url = dt.base_url
         url += '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Return simple GET request instance.
         return cls(req.get(
-            endpoint=url,
+            url=url,
             auth=auth
         ))
 
@@ -49,7 +49,7 @@ class Device(ResponseBase):
 
         # Return paginated GET request instance.
         devices = req.auto_paginated_list(
-            endpoint=dt.base_url + '/projects/{}/devices'.format(project_id),
+            url=dt.base_url + '/projects/{}/devices'.format(project_id),
             pagination_key='devices',
             params=params,
             auth=auth,
@@ -58,12 +58,12 @@ class Device(ResponseBase):
 
     @classmethod
     def generator(cls, project_id, page_size=100, auth=None):
-        # Construct endpoint URL
-        endpoint = dt.base_url + '/projects/{}/devices'.format(project_id)
+        # Construct URL
+        url = dt.base_url + '/projects/{}/devices'.format(project_id)
 
         # Relay generator output, converting the responses to Device instances.
         for devices in req.generator_list(
-                endpoint,
+                url,
                 'devices',
                 {},
                 page_size,
@@ -90,13 +90,13 @@ class Device(ResponseBase):
             'removeLabels': remove_keys,
         }
 
-        # Construct endpoint URL.
+        # Construct URL.
         url = dt.base_url
         url += '/projects/{}/devices:batchUpdate'.format(project_id)
 
         # Send POST request to API.
         req.post(
-            endpoint=url,
+            url=url,
             body=body,
             auth=auth,
         )
@@ -141,7 +141,7 @@ class Device(ResponseBase):
 
         # Send POST request to API.
         req.post(
-            endpoint=dt.base_url + '/projects/{}/devices:transfer'.format(
+            url=dt.base_url + '/projects/{}/devices:transfer'.format(
                 target_project_id
             ),
             body=body,

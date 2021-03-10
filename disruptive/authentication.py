@@ -132,7 +132,7 @@ class OAuth(Auth):
         # Exchange the JWT for an access token.
         try:
             access_token_response = req.post(
-                endpoint=token_url,
+                url=token_url,
                 data=request_data,
                 headers={'Content-Type': 'application/x-www-form-urlencoded'},
                 authorize=False,

@@ -6,6 +6,7 @@ import requests
 import disruptive
 import disruptive.log as log
 import disruptive.errors as errors
+from disruptive.response import DTResponse
 
 # Constants.
 MAX_RETRIES = 3
@@ -14,7 +15,7 @@ PING_INTERVAL = 10
 PING_JITTER = 2
 
 
-def get(endpoint: str,
+def get(url: str,
         params={},
         headers={},
         timeout=None,
@@ -22,7 +23,7 @@ def get(endpoint: str,
         ):
     return __construct_request(
         "GET",
-        endpoint,
+        url,
         params,
         headers,
         timeout=timeout,
@@ -30,7 +31,7 @@ def get(endpoint: str,
     )
 
 
-def post(endpoint: str,
+def post(url: str,
          body: dict = None,
          data: str = None,
          headers: dict = {},
@@ -39,7 +40,7 @@ def post(endpoint: str,
          ):
     return __construct_request(
         "POST",
-        endpoint,
+        url,
         body=body,
         data=data,
         headers=headers,
@@ -48,16 +49,16 @@ def post(endpoint: str,
     )
 
 
-def patch(endpoint: str, body: dict, auth=None):
-    return __construct_request("PATCH", endpoint, body=body, auth=auth)
+def patch(url: str, body: dict, auth=None):
+    return __construct_request("PATCH", url, body=body, auth=auth)
 
 
-def delete(endpoint: str, auth=None):
-    return __construct_request("DELETE", endpoint, auth=auth)
+def delete(url: str, auth=None):
+    return __construct_request("DELETE", url, auth=auth)
 
 
 def auto_paginated_list(
-        endpoint: str,
+        url: str,
         pagination_key: str,
         params: dict = {},
         page_size: int = 100,
@@ -67,7 +68,7 @@ def auto_paginated_list(
     params['pageSize'] = page_size
 
     while True:
-        response = __construct_request("GET", endpoint, params=params, auth=auth)
+        response = __construct_request("GET", url, params=params, auth=auth)
         results += response[pagination_key]
 
         if len(response['nextPageToken']) > 0:
@@ -79,7 +80,7 @@ def auto_paginated_list(
 
 
 def generator_list(
-        endpoint: str,
+        url: str,
         pagination_key: str,
         params: dict = {},
         page_size: int = 100,
@@ -88,7 +89,7 @@ def generator_list(
     params['pageSize'] = page_size
 
     while True:
-        response = __construct_request("GET", endpoint, params, auth=auth)
+        response = __construct_request("GET", url, params, auth=auth)
 
         yield response[pagination_key]
 
@@ -100,7 +101,7 @@ def generator_list(
 
 def __construct_request(
         method: str,
-        endpoint: str,
+        url: str,
         params: dict = {},
         headers: dict = {},
         body: dict = None,
@@ -120,10 +121,10 @@ def __construct_request(
         headers[key] = headers[key]
 
     # Send request.
-    log.log('Request [{}] to {}.'.format(method, endpoint))
+    log.log('Request [{}] to {}.'.format(method, url))
     response = __send_request(
         method=method,
-        endpoint=endpoint,
+        url=url,
         params=params,
         headers=headers,
         body=body,
@@ -155,7 +156,7 @@ def __construct_request(
         # Retry.
         __construct_request(
             method=method,
-            endpoint=endpoint,
+            url=url,
             params=params,
             headers=headers,
             body=body,
@@ -166,33 +167,34 @@ def __construct_request(
 
     # Raise error if present.
     if error is not None:
-        raise error(response.json())
+        raise error(response.data)
 
-    return response.json()
+    return response.data
 
 
 def __send_request(method,
-                   endpoint,
+                   url,
                    params,
                    headers,
                    body,
                    data,
                    timeout,
                    ):
-    return requests.request(
+    response = requests.request(
         method=method,
-        url=endpoint,
+        url=url,
         params=params,
         headers=headers,
         json=body,
         data=data,
-        timeout=timeout,
-    )
+        timeout=timeout)
+
+    return DTResponse(response.json(), response.status_code, response.headers)
 
 
-def stream(endpoint: str, params: dict):
-    # Construct endpoint URL.
-    url = disruptive.base_url + endpoint
+def stream(url: str, params: dict):
+    # Construct uURL.
+    url = disruptive.base_url + url
 
     # Set streaming parameters and headers.
     params['ping_interval'] = '{}s'.format(PING_INTERVAL)

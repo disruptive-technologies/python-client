@@ -1,6 +1,6 @@
 import disruptive as dt
 import disruptive.requests as req
-from disruptive.responses import Metric
+from disruptive.outputs import Metric
 
 
 class Dataconnector():
@@ -14,14 +14,14 @@ class Dataconnector():
 
     @classmethod
     def get(cls, project_id, dataconnector_id, auth=None):
-        # Construct endpoint url
+        # Construct URL
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
         # Return simple GET request instance.
         return cls(req.get(
-            endpoint=url,
+            url=url,
             auth=auth
         ))
 
@@ -29,7 +29,7 @@ class Dataconnector():
     def list(cls, project_id):
         # Return paginated GET request instance.
         devices = req.auto_paginated_list(
-            endpoint=dt.base_url + '/projects/{}/dataconnectors'.format(project_id),
+            url=dt.base_url + '/projects/{}/dataconnectors'.format(project_id),
             pagination_key='dataConnectors',
         )
         return [cls(device) for device in devices]
@@ -37,7 +37,7 @@ class Dataconnector():
     @classmethod
     def create(cls,
                project_id,
-               endpoint_url,
+               url,
                display_name=None,
                status='ACTIVE',
                events=[],
@@ -54,7 +54,7 @@ class Dataconnector():
             'events': [],
             'labels': labels,
             'httpConfig': {
-                'url': endpoint_url,
+                'url': url,
                 'headers': {}
             }
         }
@@ -63,13 +63,13 @@ class Dataconnector():
         if signature_secret is not None:
             body['httpConfig']['signatureSecret'] = signature_secret
 
-        # Construct endpoint URL.
+        # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors'.format(project_id)
 
         # Send POST request to API.
         return cls(req.post(
-            endpoint=url,
+            url=url,
             body=body,
             auth=auth,
         ))
@@ -82,7 +82,7 @@ class Dataconnector():
                status=None,
                events=None,
                labels=None,
-               endpoint=None,
+               url=None,
                signature_secret=None,
                headers=None,
                auth=None,
@@ -97,41 +97,41 @@ class Dataconnector():
             body['events'] = events
         if labels is not None:
             body['labels'] = labels
-        if endpoint is not None:
-            body['httpConfig']['url'] = endpoint
+        if url is not None:
+            body['httpConfig']['url'] = url
         if signature_secret is not None:
             body['httpConfig']['signatureSecret'] = signature_secret
         if headers is not None:
             body['headers'] = headers
 
-        # Construct endpoint URL.
+        # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
         # Send POST request to API.
         return cls(req.patch(
-            endpoint=url,
+            url=url,
             body=body,
             auth=auth,
         ))
 
     @classmethod
     def delete(cls, project_id, dataconnector_id, auth=None):
-        # Construct endpoint URL.
+        # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
         # Send DELETE request to API.
         req.delete(
-            endpoint=url,
+            url=url,
             auth=auth,
         )
 
     @classmethod
     def metrics(cls, project_id, dataconnector_id, auth=None):
-        # Construct endpoint URL.
+        # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
@@ -139,13 +139,13 @@ class Dataconnector():
 
         # Send GET request to API.
         return Metric(req.get(
-            endpoint=url,
+            url=url,
             auth=auth,
         ))
 
     @classmethod
     def sync(cls, project_id, dataconnector_id, auth=None):
-        # Construct endpoint URL.
+        # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
@@ -153,13 +153,12 @@ class Dataconnector():
 
         # Send GET request to API.
         return req.post(
-            endpoint=url,
+            url=url,
             auth=auth,
         )
 
     def __unpack(self):
         self.id = self.raw['name'].split('/')[-1]
         self.type = self.raw['type']
-        self.status = self.raw['status']
         self.status = self.raw['status']
         self.display_name = self.raw['displayName']

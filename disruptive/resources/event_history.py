@@ -24,7 +24,7 @@ class EventHistory():
         url = dt.base_url
         url += '/projects/{}/devices/{}/events'.format(project_id, device_id)
         res = req.get(
-            endpoint=url,
+            url=url,
             auth=auth,
         )
         return cls(res['events'])
