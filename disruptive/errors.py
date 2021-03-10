@@ -39,7 +39,7 @@ def parse_error(status_code: int, headers: dict, retry_count: int):
     elif status_code == 400:
         return (BadRequest, False, None)
     elif status_code == 401:
-        return (Unauthenticated, True, None)
+        return (Unauthenticated, retry_count < 1, None)
     elif status_code == 403:
         return (Forbidden, False, None)
     elif status_code == 404:
