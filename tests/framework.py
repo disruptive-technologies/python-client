@@ -1,4 +1,5 @@
 # Project imports.
+import disruptive as dt
 from disruptive.authentication import Auth
 from disruptive.response import DTResponse
 
@@ -29,3 +30,22 @@ class RequestMock():
     def assert_request_count(self, n):
         if self.request_patcher.call_count != n:
             raise AssertionError
+
+    def assert_requested(self,
+                         method,
+                         url,
+                         params={},
+                         headers={'Authorization': 'Bearer '},
+                         body=None,
+                         data=None,
+                         timeout=dt.request_timeout,
+                         ):
+        self.request_patcher.assert_called_with(
+            method=method,
+            url=url,
+            params=params,
+            headers=headers,
+            body=body,
+            data=data,
+            timeout=timeout,
+        )

@@ -3,6 +3,7 @@ import pytest
 
 # Project imports.
 import disruptive as dt
+from disruptive.authentication import OAuth
 
 # Test imports.
 import tests.mock_responses as mock_responses
@@ -17,7 +18,14 @@ class TestOAuth():
 
         # Call the two classmethod constructors.
         dt.OAuth.authenticate('', '', '')
-        dt.OAuth.create('', '', '')
+        auth_instance = dt.OAuth.create('', '', '')
+
+        # Assert token post request sent for each.
+        request_mock.assert_request_count(2)
+
+        # Assert instance of OAuth class.
+        assert isinstance(dt.auth, OAuth)
+        assert isinstance(auth_instance, OAuth)
 
     def test_token_refresh(self, request_mock):
         # Update the response json with an expired token response.

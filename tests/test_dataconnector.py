@@ -13,7 +13,7 @@ class TestDataconnector():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        d = dt.Dataconnector.get('project-id', 'device-id')
+        d = dt.Dataconnector.get('project_id', 'device_id')
 
         # Assert attributes unpacked correctly.
         assert d.id == res['name'].split('/')[-1]
@@ -26,7 +26,7 @@ class TestDataconnector():
         request_mock.json = mock_responses.dataconnectors['single']
 
         # Call the appropriate endpoint.
-        d = dt.Dataconnector.get('project-id', 'device-id')
+        d = dt.Dataconnector.get('project_id', 'device_id')
 
         # Assert single request sent.
         request_mock.assert_request_count(1)
@@ -39,7 +39,7 @@ class TestDataconnector():
         request_mock.json = mock_responses.dataconnectors['list']
 
         # Call the appropriate endpoint.
-        dataconnectors = dt.Dataconnector.list('project-id')
+        dataconnectors = dt.Dataconnector.list('project_id')
 
         # Assert single request sent.
         request_mock.assert_request_count(1)
