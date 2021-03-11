@@ -11,11 +11,6 @@ import disruptive.log as log
 import disruptive.errors as errors
 from disruptive.response import DTResponse
 
-# Constants.
-MAX_RETRIES = 3
-PING_INTERVAL = 10
-PING_JITTER = 2
-
 
 def get(url: str,
         params={},
@@ -149,11 +144,11 @@ def __construct_request(
     )
 
     # Check if retry is required
-    if should_retry and retry_count < MAX_RETRIES:
+    if should_retry and retry_count < dt.max_request_retries:
 
         log.log("Got error {}. Will retry up to {} more times".format(
             error,
-            MAX_RETRIES - retry_count
+            dt.max_request_retries - retry_count
         ))
 
         # Sleep if necessary.
@@ -204,23 +199,23 @@ def stream(url: str, params: dict):
     url = dt.base_url + url
 
     # Set streaming parameters and headers.
-    params['ping_interval'] = '{}s'.format(PING_INTERVAL)
+    params['ping_interval'] = '{}s'.format(dt.ping_interval)
     headers = {
         'Authorization': dt.auth.get_token()
     }
 
     # Set up a simple catch-all retry policy.
     nth_retry = 0
-    while nth_retry <= MAX_RETRIES:
+    while nth_retry <= dt.max_request_retries:
         try:
             # Set up a stream connection.
             # Connection will timeout and reconnect if no single event
-            # is received in an interval of PING_INTERVAL + PING_JITTER.
+            # is received in an interval of ping_interval + ping_jitter.
             log.log('Starting stream...')
             stream = requests.get(
                 url=url,
                 stream=True,
-                timeout=PING_INTERVAL + PING_JITTER,
+                timeout=dt.ping_interval + dt.ping_jitter,
                 params=params,
                 headers=headers,
             )
@@ -248,11 +243,11 @@ def stream(url: str, params: dict):
 
         except Exception as e:
             print(e)
-            # Print the error and try again up to MAX_RETRIES.
-            if nth_retry < MAX_RETRIES:
+            # Print the error and try again up to max_request_retries.
+            if nth_retry < dt.max_request_retries:
                 log.log('Connection lost. Retry {}/{}.'.format(
                     nth_retry+1,
-                    MAX_RETRIES,
+                    dt.max_request_retries,
                 ))
 
                 # Exponential backoff in sleep time.
