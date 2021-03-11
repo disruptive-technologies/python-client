@@ -50,9 +50,18 @@ class Event(OutputBase):
             return NetworkStatusEvent
         elif event['eventType'] == 'touch':
             return TouchEvent
+        elif event['eventType'] == 'objectPresent':
+            return ObjectPresentEvent
         else:
             print('Unknown event type {}.'.format(event['eventType']))
             return None
+
+
+class TouchEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
 
 
 class TemperatureEvent(Event):
@@ -66,6 +75,77 @@ class TemperatureEvent(Event):
 
     def __unpack(self):
         self.value = self.data['value']
+
+
+class ObjectPresentEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.state = self.data['state']
+
+
+class HumidityEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.temperature = self.data['temperature']
+        self.humidity = self.data['relativeHumidity']
+
+
+class ObjectPresentCountEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.total = self.data['total']
+
+
+class TouchCountEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.total = self.data['total']
+
+
+class WaterPresentEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.state = self.data['state']
 
 
 class NetworkStatusEvent(Event):
@@ -82,10 +162,84 @@ class NetworkStatusEvent(Event):
         self.signal_strength = self.data['signalStrength']
         self.rssi = self.data['rssi']
         self.transmission_mode = self.data['transmissionMode']
+        self.cloud_connectors = []
+        for ccon in self.data['cloudConnectors']:
+            self.cloud_connectors.append({
+                'id': ccon['id'],
+                'signalStrength': ccon['signalStrength'],
+                'rssi': ccon['rssi'],
+            })
 
 
-class TouchEvent(Event):
+class BatteryStatusEvent(Event):
 
     def __init__(self, event_dict):
         # Inherit parent Event class init.
         Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.percentage = self.data['percentage']
+
+
+class LabelsChangedEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.added = self.data['added']
+        self.modified = self.data['modified']
+        self.removed = self.data['removed']
+
+
+class ConnectionStatusEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.connection = self.data['connection']
+        self.available = self.data['available']
+
+
+class EthernetStatusEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.mac_address = self.data['macAddress']
+        self.ip_address = self.data['ipAddress']
+
+
+class CellularStatusEvent(Event):
+
+    def __init__(self, event_dict):
+        # Inherit parent Event class init.
+        Event.__init__(self, event_dict)
+
+        # Unpack type-specific data in event dictionary.
+        self.__unpack()
+
+    def __unpack(self):
+        # Set attributes.
+        self.signal_strength = self.data['signalStrength']
