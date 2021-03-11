@@ -150,4 +150,6 @@ class Device(OutputBase):
 
     def __unpack(self):
         self.id = self.raw['name'].split('/')[-1]
+        self.project_id = self.raw['name'].split('/')[1]
         self.type = self.raw['type']
+        self.reported = self.raw['reported']
