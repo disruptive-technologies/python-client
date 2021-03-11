@@ -13,7 +13,6 @@ from disruptive.response import DTResponse
 
 # Constants.
 MAX_RETRIES = 3
-MAX_CONNECTION_RETRIES = 5
 PING_INTERVAL = 10
 PING_JITTER = 2
 
@@ -109,7 +108,7 @@ def __construct_request(
         headers: dict = {},
         body: dict = None,
         data: str = None,
-        retry_count: int = 0,
+        retry_count: int = 1,
         timeout: int = None,
         authorize: bool = True,
         auth=None,
@@ -143,13 +142,14 @@ def __construct_request(
     # If there is any hope at all that a retry might resolve the error,
     # should_retry will be True. (eg. a 401).
     error, should_retry, retry_after = errors.parse_error(
+        # status_code=response.status_code,
         status_code=response.status_code,
         headers=response.headers,
         retry_count=retry_count,
     )
 
     # Check if retry is required
-    if should_retry and retry_count <= MAX_RETRIES:
+    if should_retry and retry_count < MAX_RETRIES:
 
         log.log("Got error {}. Will retry up to {} more times".format(
             error,
@@ -211,7 +211,7 @@ def stream(url: str, params: dict):
 
     # Set up a simple catch-all retry policy.
     nth_retry = 0
-    while nth_retry <= MAX_CONNECTION_RETRIES:
+    while nth_retry <= MAX_RETRIES:
         try:
             # Set up a stream connection.
             # Connection will timeout and reconnect if no single event
@@ -248,11 +248,11 @@ def stream(url: str, params: dict):
 
         except Exception as e:
             print(e)
-            # Print the error and try again up to MAX_CONNECTION_RETRIES.
-            if nth_retry < MAX_CONNECTION_RETRIES:
+            # Print the error and try again up to MAX_RETRIES.
+            if nth_retry < MAX_RETRIES:
                 log.log('Connection lost. Retry {}/{}.'.format(
                     nth_retry+1,
-                    MAX_CONNECTION_RETRIES,
+                    MAX_RETRIES,
                 ))
 
                 # Exponential backoff in sleep time.
