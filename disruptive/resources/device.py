@@ -152,4 +152,5 @@ class Device(OutputBase):
         self.id = self.raw['name'].split('/')[-1]
         self.project_id = self.raw['name'].split('/')[1]
         self.type = self.raw['type']
+        self.labels = self.raw['labels']
         self.reported = self.raw['reported']
