@@ -64,6 +64,9 @@ class TestResponseStatusCodes():
         with pytest.raises(errors.InternalServerError):
             dt.Device.get('', '')
 
+        # Assert expected retry attempts.
+        request_mock.assert_request_count(3)
+
     def test_error_code_503(self, request_mock):
         # Set response status code to represent test.
         request_mock.status_code = 503
@@ -72,6 +75,9 @@ class TestResponseStatusCodes():
         with pytest.raises(errors.InternalServerError):
             dt.Device.get('', '')
 
+        # Assert expected retry attempts.
+        request_mock.assert_request_count(3)
+
     def test_error_code_504(self, request_mock):
         # Set response status code to represent test.
         request_mock.status_code = 504
@@ -79,3 +85,6 @@ class TestResponseStatusCodes():
         # Call the service, which will send a request to the server.
         with pytest.raises(errors.InternalServerError):
             dt.Device.get('', '')
+
+        # Assert expected retry attempts.
+        request_mock.assert_request_count(3)
