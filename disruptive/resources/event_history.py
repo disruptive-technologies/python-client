@@ -11,23 +11,32 @@ class EventHistory():
         self.events = Event.from_mixed_list(event_list)
 
     @classmethod
-    def single(cls,
+    def device(cls,
                project_id,
                device_id,
                event_types=[],
                start_time=None,
                end_time=None,
-               page_size=None,
                auth=None,
                ):
+        # Construct parameters dictionary.
+        params = {}
+        if len(event_types) > 0:
+            params['eventTypes'] = event_types
+        if start_time is not None:
+            params['startTime'] = start_time
+        if end_time is not None:
+            params['endTime'] = end_time
 
         url = dt.base_url
         url += '/projects/{}/devices/{}/events'.format(project_id, device_id)
-        res = req.get(
+        res = req.auto_paginated_list(
             url=url,
+            pagination_key='events',
+            params=params,
             auth=auth,
         )
-        return cls(res['events'])
+        return cls(res)
 
     @property
     def temperature(self):

@@ -58,11 +58,12 @@ def auto_paginated_list(
         url: str,
         pagination_key: str,
         params: dict = {},
-        page_size: int = 100,
+        page_size: int = None,
         auth=None,
 ):
     results = []
-    params['pageSize'] = page_size
+    if page_size is not None:
+        params['pageSize'] = page_size
 
     while True:
         response = __construct_request("GET", url, params=params, auth=auth)
