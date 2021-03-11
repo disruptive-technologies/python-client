@@ -44,14 +44,32 @@ class Event(OutputBase):
 
     def __classify_event_by_type(event):
         # Initialize the correct object.
-        if event['eventType'] == 'temperature':
-            return TemperatureEvent
-        elif event['eventType'] == 'networkStatus':
-            return NetworkStatusEvent
-        elif event['eventType'] == 'touch':
+        if event['eventType'] == 'touch':
             return TouchEvent
+        elif event['eventType'] == 'temperature':
+            return TemperatureEvent
         elif event['eventType'] == 'objectPresent':
             return ObjectPresentEvent
+        elif event['eventType'] == 'humidity':
+            return HumidityEvent
+        elif event['eventType'] == 'objectPresentCount':
+            return ObjectPresentCountEvent
+        elif event['eventType'] == 'touchCount':
+            return TouchCountEvent
+        elif event['eventType'] == 'waterPresent':
+            return WaterPresentEvent
+        elif event['eventType'] == 'networkStatus':
+            return NetworkStatusEvent
+        elif event['eventType'] == 'batteryStatus':
+            return BatteryStatusEvent
+        elif event['eventType'] == 'labelsChanged':
+            return LabelsChangedEvent
+        elif event['eventType'] == 'connectionStatus':
+            return ConnectionStatusEvent
+        elif event['eventType'] == 'ethernetStatus':
+            return EthernetStatusEvent
+        elif event['eventType'] == 'cellularStatus':
+            return CellularStatusEvent
         else:
             print('Unknown event type {}.'.format(event['eventType']))
             return None
