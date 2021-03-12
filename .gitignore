@@ -139,4 +139,4 @@ dmypy.json
 
 tests/bench.py
 notes.md
-editable-build.sh
+local-build.sh
