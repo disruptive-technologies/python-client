@@ -17,12 +17,14 @@ class Event(OutputBase):
         self.project_id = self.raw['targetName'].split('/')[1]
 
         # Set isolated data field as attribute.
-        self.data = self.raw['data']
+        if self.type == 'labelsChanged':
+            # Special case for labelsChanged event.
+            self.data = self.raw['data']
+        else:
+            self.data = self.raw['data'][self.type]
 
         # Convert ISO-8601 string to datetime format.
-        self.timestamp = trf.iso8601_to_datetime(
-            self.raw['timestamp']
-        )
+        self.timestamp = trf.iso8601_to_datetime(self.raw['timestamp'])
 
     @classmethod
     def from_single(cls, event):
@@ -94,7 +96,7 @@ class TemperatureEvent(Event):
         self.__unpack()
 
     def __unpack(self):
-        self.value = self.data[self.type]['value']
+        self.value = self.data['value']
 
 
 class ObjectPresentEvent(Event):
@@ -108,7 +110,7 @@ class ObjectPresentEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.state = self.data[self.type]['state']
+        self.state = self.data['state']
 
 
 class HumidityEvent(Event):
@@ -122,8 +124,8 @@ class HumidityEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.temperature = self.data[self.type]['temperature']
-        self.humidity = self.data[self.type]['relativeHumidity']
+        self.temperature = self.data['temperature']
+        self.humidity = self.data['relativeHumidity']
 
 
 class ObjectPresentCountEvent(Event):
@@ -137,7 +139,7 @@ class ObjectPresentCountEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.total = self.data[self.type]['total']
+        self.total = self.data['total']
 
 
 class TouchCountEvent(Event):
@@ -151,7 +153,7 @@ class TouchCountEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.total = self.data[self.type]['total']
+        self.total = self.data['total']
 
 
 class WaterPresentEvent(Event):
@@ -165,7 +167,7 @@ class WaterPresentEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.state = self.data[self.type]['state']
+        self.state = self.data['state']
 
 
 class NetworkStatusEvent(Event):
@@ -179,11 +181,11 @@ class NetworkStatusEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.signal_strength = self.data[self.type]['signalStrength']
-        self.rssi = self.data[self.type]['rssi']
-        self.transmission_mode = self.data[self.type]['transmissionMode']
+        self.signal_strength = self.data['signalStrength']
+        self.rssi = self.data['rssi']
+        self.transmission_mode = self.data['transmissionMode']
         self.cloud_connectors = []
-        for ccon in self.data[self.type]['cloudConnectors']:
+        for ccon in self.data['cloudConnectors']:
             self.cloud_connectors.append({
                 'id': ccon['id'],
                 'signalStrength': ccon['signalStrength'],
@@ -202,7 +204,7 @@ class BatteryStatusEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.percentage = self.data[self.type]['percentage']
+        self.percentage = self.data['percentage']
 
 
 class LabelsChangedEvent(Event):
@@ -232,8 +234,8 @@ class ConnectionStatusEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.connection = self.data[self.type]['connection']
-        self.available = self.data[self.type]['available']
+        self.connection = self.data['connection']
+        self.available = self.data['available']
 
 
 class EthernetStatusEvent(Event):
@@ -247,8 +249,8 @@ class EthernetStatusEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.mac_address = self.data[self.type]['macAddress']
-        self.ip_address = self.data[self.type]['ipAddress']
+        self.mac_address = self.data['macAddress']
+        self.ip_address = self.data['ipAddress']
 
 
 class CellularStatusEvent(Event):
@@ -262,4 +264,4 @@ class CellularStatusEvent(Event):
 
     def __unpack(self):
         # Set attributes.
-        self.signal_strength = self.data[self.type]['signalStrength']
+        self.signal_strength = self.data['signalStrength']
