@@ -5,14 +5,14 @@ import types
 import disruptive as dt
 
 # Test imports.
-import tests.mock_responses as mock_responses
+import tests.mock_responses as dtresponses
 
 
 class TestDevice():
 
     def test_attributes(self, request_mock):
         # Update the response data with device data.
-        res = mock_responses.devices['touch']
+        res = dtresponses.touch_sensor
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -24,7 +24,7 @@ class TestDevice():
 
     def test_get(self, request_mock):
         # Update the response data with device data.
-        request_mock.json = mock_responses.devices['touch']
+        request_mock.json = dtresponses.touch_sensor
 
         # Call the appropriate endpoint.
         d = dt.Device.get('project_id', 'device_id')
@@ -40,7 +40,7 @@ class TestDevice():
 
     def test_list(self, request_mock):
         # Update the response data with a list of device data.
-        request_mock.json = mock_responses.devices['list']
+        request_mock.json = dtresponses.paginated_device_response
 
         # Call the appropriate endpoint.
         devices = dt.Device.list('project_id')
@@ -54,7 +54,7 @@ class TestDevice():
 
     def test_generator(self, request_mock):
         # Update the response data with a list of device data.
-        request_mock.json = mock_responses.devices['list']
+        request_mock.json = dtresponses.paginated_device_response
 
         # Call the appropriate endpoint.
         gen = dt.Device.generator('project_id')
