@@ -1,6 +1,6 @@
 import disruptive.outputs as dtoutputs
-import disruptive.errors as dterrors
 import disruptive.events as dtevents
+import disruptive.log as dtlog
 
 
 class DataClass(dtoutputs.OutputBase):
@@ -14,9 +14,13 @@ class DataClass(dtoutputs.OutputBase):
         # From the type, select the appropriate child class.
         child, key = cls.__child_map(event_type)
 
+        # Return None at invalid event type.
+        if child is None:
+            return None
+
         # Return the initialized class instance.
         if key:
-            return child(data_dict)
+            return child(data_dict[event_type])
         else:
             # Special case for labelsChanged event.
             return child(data_dict)
@@ -30,9 +34,8 @@ class DataClass(dtoutputs.OutputBase):
             )
             return out
         else:
-            raise dterrors.NotFound(
-                'Unknown event type {}.'.format(event_type)
-            )
+            dtlog.log('Unknown event type {}. Skipping.'.format(event_type))
+            return None, None
 
 
 class Touch(DataClass):

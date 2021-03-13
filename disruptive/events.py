@@ -4,6 +4,10 @@ from disruptive import transforms as trf
 from disruptive.outputs import OutputBase
 import disruptive.datas as dtdatas
 
+# This dictionary is created to bridge the three different naming conventions
+# used for every single event. The REST API returns events with camel case,
+# whereas in python we prefer snake casing, and classes fully cased. It also
+# prevent recreating long if-statements when choosing an event by type.
 EVENTS_MAP = {
     'touch': {
         'attr': 'touch',
@@ -90,7 +94,7 @@ class Event(OutputBase):
 
         # Initialize the appropriate data class.
         self.data = dtdatas.DataClass.from_event_type(
-            self.raw['data'][self.event_type],
+            self.raw['data'],
             self.event_type
         )
 
