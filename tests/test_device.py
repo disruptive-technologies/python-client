@@ -3,6 +3,8 @@ import types
 
 # Project imports.
 import disruptive as dt
+import disruptive.events as dtevents
+import disruptive.datas as dtdatas
 
 # Test imports.
 import tests.mock_responses as dtresponses
@@ -70,3 +72,27 @@ class TestDevice():
             for device in page:
                 # Each device should be an instance of Device.
                 assert isinstance(device, dt.Device)
+
+    def test_no_reported_data(self, request_mock):
+        # Update the response data with device data.
+        request_mock.json = dtresponses.null_reported_sensor
+
+        # Call the appropriate endpoint.
+        d = dt.Device.get('project_id', 'device_id')
+
+        # Assert None for all reported datas.
+        for key in dtevents.EVENTS_MAP:
+            attr = dtevents.EVENTS_MAP[key]['attr']
+            assert getattr(d.reported, attr) is None
+
+    def test_reported_touch_data(self, request_mock):
+        # Update the response data with device data.
+        request_mock.json = dtresponses.touch_sensor
+
+        # Call the appropriate endpoint.
+        d = dt.Device.get('project_id', 'device_id')
+
+        # Assert appropriate reported data instances.
+        assert isinstance(d.reported.network_status, dtdatas.NetworkStatus)
+        assert isinstance(d.reported.battery_status, dtdatas.BatteryStatus)
+        assert isinstance(d.reported.touch, dtdatas.Touch)
