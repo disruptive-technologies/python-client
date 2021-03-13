@@ -179,8 +179,11 @@ class Reported(dtoutputs.OutputBase):
             if self.raw[key] is None:
                 continue
 
+            # Repack the data field in expected format.
+            repacked = {key: self.raw[key]}
+
             # Initialize appropriate data instance.
-            data = dtdatas.DataClass.from_event_type(self.raw[key], key)
+            data = dtdatas.DataClass.from_event_type(repacked, key)
 
             # Set attribute according to event type.
             if key in dtevents.EVENTS_MAP:
