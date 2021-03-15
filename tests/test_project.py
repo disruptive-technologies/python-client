@@ -46,3 +46,20 @@ class TestProject():
         # Assert instances of Project in output list.
         for p in projects:
             assert isinstance(p, dt.Project)
+
+    def test_create(self, request_mock):
+        # Update the response data with project data.
+        request_mock.json = dtresponses.empty_project
+
+        # Call the appropriate endpoint.
+        p = dt.Project.create('org', 'name')
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='POST',
+            url=dt.base_url+'/projects',
+            body={'organization': 'organizations/org', 'displayName': 'name'},
+        )
+
+        # Assert attributes in output Device object.
+        assert isinstance(p, dt.Project)

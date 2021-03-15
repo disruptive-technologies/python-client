@@ -1,6 +1,3 @@
-# Third-party imports.
-import requests.utils as rutils
-
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
@@ -37,7 +34,7 @@ class Project(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def list(cls, organization_id: str = None, query: str = None):
+    def list(cls, organization_id: str = None, query: str = None, auth=None):
         # Construct URL.
         url = dt.base_url + '/projects'
 
@@ -46,13 +43,32 @@ class Project(dtoutputs.OutputBase):
         if organization_id is not None:
             params['organization'] = 'organizations/' + organization_id
         if query is not None:
-            params['query'] = rutils.quote(query)
+            params['query'] = query
 
         # Get responses by auto-paginating.
         responses = dtrequests.auto_paginated_list(
             url=url,
             pagination_key='projects',
             params=params,
+            auth=auth,
         )
 
         return [cls(r) for r in responses]
+
+    @classmethod
+    def create(cls, organization_id, display_name, auth=None):
+        # Construct URL.
+        url = dt.base_url + '/projects'
+
+        # Construct request body.
+        body = {
+            'organization': 'organizations/' + organization_id,
+            'displayName': display_name,
+        }
+
+        # Send POST request and return Project object of it.
+        return cls(dtrequests.post(
+            url=url,
+            body=body,
+            auth=auth,
+        ))
