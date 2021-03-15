@@ -3,7 +3,6 @@ import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.events as dtevents
 import disruptive.errors as dterrors
-import disruptive.datas as dtdatas
 import disruptive.outputs as dtoutputs
 
 
@@ -184,7 +183,7 @@ class Reported(dtoutputs.OutputBase):
             repacked = {key: self.raw[key]}
 
             # Initialize appropriate data instance.
-            data = dtdatas.DataClass.from_event_type(repacked, key)
+            data = dtevents.DataClass.from_event_type(repacked, key)
 
             # Set attribute according to event type.
             if key in dtevents.EVENTS_MAP:

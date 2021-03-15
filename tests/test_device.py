@@ -4,7 +4,6 @@ import types
 # Project imports.
 import disruptive as dt
 import disruptive.events as dtevents
-import disruptive.datas as dtdatas
 import tests.mock_responses as dtresponses
 
 
@@ -91,6 +90,6 @@ class TestDevice():
         d = dt.Device.get('project_id', 'device_id')
 
         # Assert appropriate reported data instances.
-        assert isinstance(d.reported.network_status, dtdatas.NetworkStatus)
-        assert isinstance(d.reported.battery_status, dtdatas.BatteryStatus)
-        assert isinstance(d.reported.touch, dtdatas.Touch)
+        assert isinstance(d.reported.network_status, dtevents.NetworkStatus)
+        assert isinstance(d.reported.battery_status, dtevents.BatteryStatus)
+        assert isinstance(d.reported.touch, dtevents.Touch)
