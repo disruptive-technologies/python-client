@@ -5,14 +5,12 @@ import types
 import disruptive as dt
 import disruptive.events as dtevents
 import disruptive.datas as dtdatas
-
-# Test imports.
 import tests.mock_responses as dtresponses
 
 
 class TestDevice():
 
-    def test_attributes(self, request_mock):
+    def test_unpack(self, request_mock):
         # Update the response data with device data.
         res = dtresponses.touch_sensor
         request_mock.json = res
@@ -37,7 +35,7 @@ class TestDevice():
             url=dt.base_url+'/projects/project_id/devices/device_id',
         )
 
-        # Assert attributes in output Device object.
+        # Assert instance of Device object.
         assert isinstance(d, dt.Device)
 
     def test_list(self, request_mock):
@@ -50,7 +48,7 @@ class TestDevice():
         # output should be list.
         assert type(devices) == list
 
-        # Assert output instance.
+        # Assert output instance for devices in list.
         for d in devices:
             assert isinstance(d, dt.Device)
 

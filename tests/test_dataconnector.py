@@ -1,7 +1,5 @@
 # Project imports.
 import disruptive as dt
-
-# Test imports.
 import tests.mock_responses as dtresponses
 
 

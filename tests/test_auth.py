@@ -4,8 +4,6 @@ import pytest
 # Project imports.
 import disruptive as dt
 from disruptive.authentication import OAuth
-
-# Test imports.
 import tests.mock_responses as dtresponses
 
 

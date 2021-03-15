@@ -369,3 +369,13 @@ paginated_dataconnectors_response = {
         configured_dataconnector,
     ]
 }
+
+project = {
+    "name": "projects/c15j9p094l47cdv0o3pg",
+    "displayName": "my-project",
+    "organization": "organizations/c11humqoss9000pgu53g",
+    "organizationDisplayName": "some-display-name",
+    "sensorCount": 7,
+    "cloudConnectorCount": 1,
+    "inventory": False
+}
