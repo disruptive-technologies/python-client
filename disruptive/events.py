@@ -1,6 +1,6 @@
 # Project imports.
-from disruptive import transforms as trf
-from disruptive.outputs import OutputBase
+import disruptive.transforms as dttransforms
+import disruptive.outputs as dtoutputs
 import disruptive.datas as dtdatas
 
 # This dictionary is created to bridge the three different naming conventions
@@ -76,11 +76,11 @@ EVENTS_MAP = {
 }
 
 
-class Event(OutputBase):
+class Event(dtoutputs.OutputBase):
 
     def __init__(self, event_dict):
         # Inherit attributes from ResponseBase parent.
-        OutputBase.__init__(self, event_dict)
+        dtoutputs.OutputBase.__init__(self, event_dict)
 
         # Unpack parts of event that is common for all types.
         self.__unpack()
@@ -98,7 +98,9 @@ class Event(OutputBase):
         )
 
         # Convert ISO-8601 string to datetime format.
-        self.timestamp = trf.iso8601_to_datetime(self.raw['timestamp'])
+        self.timestamp = dttransforms.iso8601_to_datetime(
+            self.raw['timestamp']
+        )
 
     @classmethod
     def from_single(cls, event):

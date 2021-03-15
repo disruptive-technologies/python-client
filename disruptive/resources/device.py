@@ -1,5 +1,5 @@
 import disruptive as dt
-import disruptive.requests as dtrequest
+import disruptive.requests as dtrequests
 import disruptive.events as dtevents
 import disruptive.errors as dterrors
 import disruptive.datas as dtdatas
@@ -22,7 +22,7 @@ class Device(dtoutputs.OutputBase):
         url += '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Return simple GET request instance.
-        return cls(dtrequest.get(
+        return cls(dtrequests.get(
             url=url,
             auth=auth
         ))
@@ -51,7 +51,7 @@ class Device(dtoutputs.OutputBase):
             params['order_by'] = order_by
 
         # Return paginated GET request instance.
-        devices = dtrequest.auto_paginated_list(
+        devices = dtrequests.auto_paginated_list(
             url=dt.base_url + '/projects/{}/devices'.format(project_id),
             pagination_key='devices',
             params=params,
@@ -65,7 +65,7 @@ class Device(dtoutputs.OutputBase):
         url = dt.base_url + '/projects/{}/devices'.format(project_id)
 
         # Relay generator output, converting the responses to Device instances.
-        for devices in dtrequest.generator_list(
+        for devices in dtrequests.generator_list(
                 url,
                 'devices',
                 {},
@@ -98,7 +98,7 @@ class Device(dtoutputs.OutputBase):
         url += '/projects/{}/devices:batchUpdate'.format(project_id)
 
         # Send POST request to API.
-        dtrequest.post(
+        dtrequests.post(
             url=url,
             body=body,
             auth=auth,
@@ -143,7 +143,7 @@ class Device(dtoutputs.OutputBase):
         }
 
         # Send POST request to API.
-        dtrequest.post(
+        dtrequests.post(
             url=dt.base_url + '/projects/{}/devices:transfer'.format(
                 target_project_id
             ),

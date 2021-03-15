@@ -6,9 +6,9 @@ import urllib.parse
 import jwt
 
 # Project imports
-import disruptive.requests as req
-import disruptive.errors as errors
-from disruptive import transforms
+import disruptive.requests as dtrequests
+import disruptive.errors as dterrors
+import disruptive.transforms as dttransforms
 
 
 class Auth():
@@ -34,7 +34,7 @@ class Auth():
         return self.token
 
     def has_expired(self):
-        raise errors.Unauthenticated(
+        raise dterrors.Unauthenticated(
             'Authentication object not initialized.\n\n\
             Set globally by calling one of the following methods:\n\
             Basic Auth: dt.BasicAuth.authorize(key_id, secret)\n\
@@ -63,7 +63,7 @@ class BasicAuth(Auth):
 
         # Construct token.
         self.token = 'Basic {}'.format(
-            transforms.base64_encode('{}:{}'.format(
+            dttransforms.base64_encode('{}:{}'.format(
                 self.key_id,
                 self.secret
             ))
@@ -122,15 +122,15 @@ class OAuth(Auth):
 
         # Exchange the JWT for an access token.
         try:
-            access_token_response = req.post(
+            access_token_response = dtrequests.post(
                 url=token_url,
                 data=request_data,
                 headers={'Content-Type': 'application/x-www-form-urlencoded'},
                 authorize=False,
             )
-        except errors.BadRequest:
+        except dterrors.BadRequest:
             # Re-raise exception with more specific information.
-            raise errors.BadRequest(
+            raise dterrors.BadRequest(
                 'Could not authenticate with the provided credentials.\n'
                 + 'Read more: https://developer.d21s.com/docs/authentication'
                 + '/oauth2#common-errors'
