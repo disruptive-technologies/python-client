@@ -7,9 +7,9 @@ import requests
 
 # Project imports
 import disruptive as dt
-import disruptive.log as log
-import disruptive.errors as errors
-from disruptive.response import DTResponse
+import disruptive.log as dtlog
+import disruptive.errors as dterrors
+import disruptive.responses as dtresponses
 
 
 def get(url: str,
@@ -123,7 +123,7 @@ def __construct_request(
         timeout = dt.request_timeout
 
     # Send request.
-    log.log('Request [{}] to {}.'.format(method, url))
+    dtlog.log('Request [{}] to {}.'.format(method, url))
     response = __send_request(
         method=method,
         url=url,
@@ -137,7 +137,7 @@ def __construct_request(
     # Parse errors.
     # If there is any hope at all that a retry might resolve the error,
     # should_retry will be True. (eg. a 401).
-    error, should_retry, retry_after = errors.parse_error(
+    error, should_retry, retry_after = dterrors.parse_error(
         # status_code=response.status_code,
         status_code=response.status_code,
         headers=response.headers,
@@ -147,7 +147,7 @@ def __construct_request(
     # Check if retry is required
     if should_retry and retry_count < dt.max_request_retries:
 
-        log.log("Got error {}. Will retry up to {} more times".format(
+        dtlog.log("Got error {}. Will retry up to {} more times".format(
             error,
             dt.max_request_retries - retry_count
         ))
@@ -192,7 +192,11 @@ def __send_request(method,
         data=data,
         timeout=timeout)
 
-    return DTResponse(response.json(), response.status_code, response.headers)
+    return dtresponses.DTResponse(
+        response.json(),
+        response.status_code,
+        response.headers
+    )
 
 
 def stream(url: str, params: dict):
@@ -212,7 +216,7 @@ def stream(url: str, params: dict):
             # Set up a stream connection.
             # Connection will timeout and reconnect if no single event
             # is received in an interval of ping_interval + ping_jitter.
-            log.log('Starting stream...')
+            dtlog.log('Starting stream...')
             stream = requests.get(
                 url=url,
                 stream=True,
@@ -234,7 +238,7 @@ def stream(url: str, params: dict):
                 # Check for ping event.
                 event = payload['result']['event']
                 if event['eventType'] == 'ping':
-                    log.log('Got ping')
+                    dtlog.log('Got ping')
                     continue
 
                 yield event
@@ -246,7 +250,7 @@ def stream(url: str, params: dict):
             print(e)
             # Print the error and try again up to max_request_retries.
             if nth_retry < dt.max_request_retries:
-                log.log('Connection lost. Retry {}/{}.'.format(
+                dtlog.log('Connection lost. Retry {}/{}.'.format(
                     nth_retry+1,
                     dt.max_request_retries,
                 ))

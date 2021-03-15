@@ -1,8 +1,8 @@
+# Project imports.
 import disruptive as dt
-import disruptive.requests as dtrequest
+import disruptive.requests as dtrequests
 import disruptive.events as dtevents
 import disruptive.errors as dterrors
-import disruptive.datas as dtdatas
 import disruptive.outputs as dtoutputs
 
 
@@ -15,6 +15,13 @@ class Device(dtoutputs.OutputBase):
         # Unpack device json.
         self.__unpack()
 
+    def __unpack(self):
+        self.device_id = self.raw['name'].split('/')[-1]
+        self.project_id = self.raw['name'].split('/')[1]
+        self.type = self.raw['type']
+        self.labels = self.raw['labels']
+        self.reported = Reported(self.raw['reported'])
+
     @classmethod
     def get(cls, project_id: str, device_id: str, auth=None):
         # Construct URL
@@ -22,7 +29,7 @@ class Device(dtoutputs.OutputBase):
         url += '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Return simple GET request instance.
-        return cls(dtrequest.get(
+        return cls(dtrequests.get(
             url=url,
             auth=auth
         ))
@@ -30,7 +37,7 @@ class Device(dtoutputs.OutputBase):
     @classmethod
     def list(cls,
              project_id,
-             query='',
+             query=None,
              device_ids=[],
              device_types=[],
              label_filters=[],
@@ -39,7 +46,7 @@ class Device(dtoutputs.OutputBase):
 
         # Construct parameters dictionary.
         params = {}
-        if len(query) > 0:
+        if query is not None:
             params['query'] = query
         if len(device_ids) > 0:
             params['device_ids'] = device_ids
@@ -51,7 +58,7 @@ class Device(dtoutputs.OutputBase):
             params['order_by'] = order_by
 
         # Return paginated GET request instance.
-        devices = dtrequest.auto_paginated_list(
+        devices = dtrequests.auto_paginated_list(
             url=dt.base_url + '/projects/{}/devices'.format(project_id),
             pagination_key='devices',
             params=params,
@@ -65,7 +72,7 @@ class Device(dtoutputs.OutputBase):
         url = dt.base_url + '/projects/{}/devices'.format(project_id)
 
         # Relay generator output, converting the responses to Device instances.
-        for devices in dtrequest.generator_list(
+        for devices in dtrequests.generator_list(
                 url,
                 'devices',
                 {},
@@ -98,7 +105,7 @@ class Device(dtoutputs.OutputBase):
         url += '/projects/{}/devices:batchUpdate'.format(project_id)
 
         # Send POST request to API.
-        dtrequest.post(
+        dtrequests.post(
             url=url,
             body=body,
             auth=auth,
@@ -143,20 +150,13 @@ class Device(dtoutputs.OutputBase):
         }
 
         # Send POST request to API.
-        dtrequest.post(
+        dtrequests.post(
             url=dt.base_url + '/projects/{}/devices:transfer'.format(
                 target_project_id
             ),
             body=body,
             auth=auth,
         )
-
-    def __unpack(self):
-        self.device_id = self.raw['name'].split('/')[-1]
-        self.project_id = self.raw['name'].split('/')[1]
-        self.type = self.raw['type']
-        self.labels = self.raw['labels']
-        self.reported = Reported(self.raw['reported'])
 
 
 class Reported(dtoutputs.OutputBase):
@@ -183,7 +183,7 @@ class Reported(dtoutputs.OutputBase):
             repacked = {key: self.raw[key]}
 
             # Initialize appropriate data instance.
-            data = dtdatas.DataClass.from_event_type(repacked, key)
+            data = dtevents.DataClass.from_event_type(repacked, key)
 
             # Set attribute according to event type.
             if key in dtevents.EVENTS_MAP:

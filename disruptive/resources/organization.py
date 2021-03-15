@@ -1,13 +1,13 @@
 import disruptive as dt
-import disruptive.requests as req
-from disruptive.outputs import OutputBase
+import disruptive.requests as dtrequests
+import disruptive.outputs as dtoutputs
 
 
-class Organization(OutputBase):
+class Organization(dtoutputs.OutputBase):
 
     def __init__(self, org_dict):
         # Inherit from Response parent.
-        OutputBase.__init__(self, org_dict)
+        dtoutputs.OutputBase.__init__(self, org_dict)
 
         # Unpack organization json.
         self.__unpack()
@@ -22,7 +22,7 @@ class Organization(OutputBase):
         url += '/organizations/{}'.format(organization_id)
 
         # Return simple GET request instance.
-        return cls(req.get(
+        return cls(dtrequests.get(
             url=url,
             auth=auth
         ))
@@ -30,7 +30,7 @@ class Organization(OutputBase):
     @classmethod
     def list(cls, auth=None):
         # Return paginated GET request instance.
-        orgs = req.auto_paginated_list(
+        orgs = dtrequests.auto_paginated_list(
             url=dt.base_url + '/organizations',
             pagination_key='organizations',
             auth=auth,

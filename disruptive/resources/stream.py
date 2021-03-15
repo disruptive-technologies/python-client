@@ -1,5 +1,5 @@
 import disruptive
-from disruptive.events import Event
+import disruptive.events as dtevents
 
 
 class Stream():
@@ -17,7 +17,7 @@ class Stream():
         # Relay generator output.
         url = '/projects/{}/devices/{}:stream'.format(project_id, device_id)
         for event in disruptive.requests.stream(url, params):
-            yield Event(event)
+            yield dtevents.Event(event)
 
     @staticmethod
     def project(project_id,
@@ -40,4 +40,4 @@ class Stream():
         # Relay generator output.
         url = '/projects/{}/devices:stream'.format(project_id)
         for event in disruptive.requests.stream(url, params):
-            yield Event.from_single(event)
+            yield dtevents.Event.from_single(event)

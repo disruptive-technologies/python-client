@@ -1,7 +1,7 @@
 # Project imports.
 import disruptive as dt
-from disruptive.authentication import Auth
-from disruptive.response import DTResponse
+import disruptive.authentication as dtauth
+import disruptive.responses as dtresponses
 
 
 class RequestMock():
@@ -19,7 +19,7 @@ class RequestMock():
         )
 
         self.auth_expiration_patcher = self._mocker.patch.object(
-            Auth,
+            dtauth.Auth,
             'has_expired',
             return_value=False,
         )
@@ -29,7 +29,11 @@ class RequestMock():
         )
 
     def _patched_request(self, **kwargs):
-        return DTResponse(self.json, self.status_code, self.headers)
+        return dtresponses.DTResponse(
+            self.json,
+            self.status_code,
+            self.headers
+        )
 
     def assert_request_count(self, n):
         if self.request_patcher.call_count != n:

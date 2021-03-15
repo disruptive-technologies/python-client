@@ -1,6 +1,6 @@
 import disruptive as dt
-import disruptive.requests as req
-from disruptive.outputs import Metric
+import disruptive.requests as dtrequests
+import disruptive.outputs as dtoutputs
 
 
 class Dataconnector():
@@ -12,6 +12,12 @@ class Dataconnector():
         # Unpack device json.
         self.__unpack()
 
+    def __unpack(self):
+        self.id = self.raw['name'].split('/')[-1]
+        self.type = self.raw['type']
+        self.status = self.raw['status']
+        self.display_name = self.raw['displayName']
+
     @classmethod
     def get(cls, project_id, dataconnector_id, auth=None):
         # Construct URL
@@ -20,7 +26,7 @@ class Dataconnector():
         url = url.format(project_id, dataconnector_id)
 
         # Return simple GET request instance.
-        return cls(req.get(
+        return cls(dtrequests.get(
             url=url,
             auth=auth
         ))
@@ -28,7 +34,7 @@ class Dataconnector():
     @classmethod
     def list(cls, project_id):
         # Return paginated GET request instance.
-        devices = req.auto_paginated_list(
+        devices = dtrequests.auto_paginated_list(
             url=dt.base_url + '/projects/{}/dataconnectors'.format(project_id),
             pagination_key='dataConnectors',
         )
@@ -68,7 +74,7 @@ class Dataconnector():
         url += '/projects/{}/dataconnectors'.format(project_id)
 
         # Send POST request to API.
-        return cls(req.post(
+        return cls(dtrequests.post(
             url=url,
             body=body,
             auth=auth,
@@ -110,7 +116,7 @@ class Dataconnector():
         url = url.format(project_id, dataconnector_id)
 
         # Send POST request to API.
-        return cls(req.patch(
+        return cls(dtrequests.patch(
             url=url,
             body=body,
             auth=auth,
@@ -124,7 +130,7 @@ class Dataconnector():
         url = url.format(project_id, dataconnector_id)
 
         # Send DELETE request to API.
-        req.delete(
+        dtrequests.delete(
             url=url,
             auth=auth,
         )
@@ -138,7 +144,7 @@ class Dataconnector():
         url += ':metrics'
 
         # Send GET request to API.
-        return Metric(req.get(
+        return dtoutputs.Metric(dtrequests.get(
             url=url,
             auth=auth,
         ))
@@ -152,13 +158,7 @@ class Dataconnector():
         url += ':sync'
 
         # Send GET request to API.
-        return req.post(
+        return dtrequests.post(
             url=url,
             auth=auth,
         )
-
-    def __unpack(self):
-        self.id = self.raw['name'].split('/')[-1]
-        self.type = self.raw['type']
-        self.status = self.raw['status']
-        self.display_name = self.raw['displayName']

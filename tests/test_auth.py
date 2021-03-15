@@ -3,9 +3,7 @@ import pytest
 
 # Project imports.
 import disruptive as dt
-from disruptive.authentication import OAuth
-
-# Test imports.
+import disruptive.authentication as dtauth
 import tests.mock_responses as dtresponses
 
 
@@ -23,7 +21,7 @@ class TestAuth():
         request_mock.assert_request_count(0)
 
         # Assert instance of OAuth class.
-        assert isinstance(auth, OAuth)
+        assert isinstance(auth, dtauth.OAuth)
 
     def test_token_refresh(self, request_mock):
         # Update the response json with an expired token response.
