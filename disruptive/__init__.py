@@ -1,6 +1,6 @@
 
 # Authentication scheme.
-from disruptive.authentication import Auth
+from disruptive.authentication import Auth  # noqa
 
 # When auth is an instance of Auth set with the default constructor,
 # the project is globally unauthorized, throwing an Unauthorized error at call.
@@ -11,12 +11,12 @@ from disruptive.authentication import Auth
 auth = Auth()
 
 # Resources.
-from disruptive.resources.device import Device
-from disruptive.resources.dataconnector import Dataconnector
-from disruptive.resources.organization import Organization
-from disruptive.resources.project import Project
-from disruptive.resources.stream import Stream
-from disruptive.resources.event_history import EventHistory
+from disruptive.resources.device import Device  # noqa
+from disruptive.resources.dataconnector import Dataconnector  # noqa
+from disruptive.resources.organization import Organization  # noqa
+from disruptive.resources.project import Project  # noqa
+from disruptive.resources.stream import Stream  # noqa
+from disruptive.resources.event_history import EventHistory  # noqa
 
 # If True, debug information is sent to stdout.
 log = False

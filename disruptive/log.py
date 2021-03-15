@@ -1,5 +1,6 @@
 import disruptive
 
+
 def log(msg: str):
-    if disruptive.log == True:
+    if disruptive.log is True:
         print('[Disruptive]: {}'.format(msg))

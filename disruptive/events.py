@@ -1,5 +1,4 @@
 # Project imports.
-import disruptive.errors as errors
 from disruptive import transforms as trf
 from disruptive.outputs import OutputBase
 import disruptive.datas as dtdatas

@@ -320,7 +320,8 @@ paginated_device_response = {
 }
 
 simple_dataconnector = {
-    "name": "projects/c0md3mm0c7pet3vico8g/dataconnectors/c16eegpdidie7lltpefg",
+    "name": "projects/c0md3mm0c7pet3vico8g/"
+            + "dataconnectors/c16eegpdidie7lltpefg",
     "displayName": "my-new-dcon",
     "type": "HTTP_PUSH",
     "status": "ACTIVE",
@@ -336,7 +337,8 @@ simple_dataconnector = {
 }
 
 configured_dataconnector = {
-    "name": "projects/c0md3pm0p7bet3vico8g/dataconnectors/c16pegipidie7lltrefg",
+    "name": "projects/c0md3pm0p7bet3vico8g/"
+            + "dataconnectors/c16pegipidie7lltrefg",
     "displayName": "my-new-dcon",
     "type": "HTTP_PUSH",
     "status": "ACTIVE",
