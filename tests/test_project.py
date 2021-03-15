@@ -6,8 +6,8 @@ import tests.mock_responses as dtresponses
 class TestProject():
 
     def test_unpack(self, request_mock):
-        # Update the response data with device data.
-        res = dtresponses.project
+        # Update the response data with project data.
+        res = dtresponses.small_project
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -21,8 +21,8 @@ class TestProject():
         assert p.cloud_connector_count == res['cloudConnectorCount']
 
     def test_get(self, request_mock):
-        # Update the response data with device data.
-        request_mock.json = dtresponses.project
+        # Update the response data with project data.
+        request_mock.json = dtresponses.small_project
 
         # Call the appropriate endpoint.
         p = dt.Project.get('project_id')
@@ -35,3 +35,14 @@ class TestProject():
 
         # Assert attributes in output Device object.
         assert isinstance(p, dt.Project)
+
+    def test_list(self, request_mock):
+        # Update the response data with list of project data.
+        request_mock.json = dtresponses.projects
+
+        # Call the appropriate endpoint
+        projects = dt.Project.list()
+
+        # Assert instances of Project in output list.
+        for p in projects:
+            assert isinstance(p, dt.Project)

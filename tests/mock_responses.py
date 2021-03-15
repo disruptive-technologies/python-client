@@ -370,7 +370,7 @@ paginated_dataconnectors_response = {
     ]
 }
 
-project = {
+small_project = {
     "name": "projects/c15j9p094l47cdv0o3pg",
     "displayName": "my-project",
     "organization": "organizations/c11humqoss9000pgu53g",
@@ -378,4 +378,22 @@ project = {
     "sensorCount": 7,
     "cloudConnectorCount": 1,
     "inventory": False
+}
+
+empty_project = {
+    "name": "projects/c10humqoss90036gu876",
+    "displayName": "no-sensors-here",
+    "organization": "organizations/c10hamsoss90036gu53g",
+    "organizationDisplayName": "some-display-name",
+    "sensorCount": 0,
+    "cloudConnectorCount": 0,
+    "inventory": True
+}
+
+projects = {
+    'nextPageToken': '',
+    'projects': [
+        small_project,
+        empty_project
+    ]
 }
