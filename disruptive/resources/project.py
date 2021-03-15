@@ -72,3 +72,20 @@ class Project(dtoutputs.OutputBase):
             body=body,
             auth=auth,
         ))
+
+    @staticmethod
+    def update(project_id, display_name, auth=None):
+        # Construct URL.
+        url = dt.base_url + '/projects/' + project_id
+
+        # Construct request body.
+        body = {}
+        if display_name is not None:
+            body['displayName'] = display_name
+
+        # Send PATCH request, but return nothing.
+        dtrequests.patch(
+            url=url,
+            body=body,
+            auth=auth,
+        )

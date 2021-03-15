@@ -63,3 +63,17 @@ class TestProject():
 
         # Assert attributes in output Device object.
         assert isinstance(p, dt.Project)
+
+    def test_update(self, request_mock):
+        # Update the response data with project data.
+        request_mock.json = dtresponses.empty_project
+
+        # Call the appropriate endpoint.
+        dt.Project.update('project_id', 'new-name')
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='PATCH',
+            url=dt.base_url+'/projects/project_id',
+            body={'displayName': 'new-name'},
+        )
