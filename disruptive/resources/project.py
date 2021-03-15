@@ -89,3 +89,14 @@ class Project(dtoutputs.OutputBase):
             body=body,
             auth=auth,
         )
+
+    @staticmethod
+    def delete(project_id, auth=None):
+        # Construct URL.
+        url = dt.base_url + '/projects/' + project_id
+
+        # Send DELETE request, but return nothing.
+        dtrequests.delete(
+            url=url,
+            auth=auth,
+        )

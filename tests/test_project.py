@@ -77,3 +77,13 @@ class TestProject():
             url=dt.base_url+'/projects/project_id',
             body={'displayName': 'new-name'},
         )
+
+    def test_delete(self, request_mock):
+        # Call the appropriate endpoint.
+        dt.Project.delete('project_id')
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='DELETE',
+            url=dt.base_url+'/projects/project_id',
+        )
