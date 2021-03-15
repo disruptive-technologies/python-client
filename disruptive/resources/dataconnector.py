@@ -12,6 +12,12 @@ class Dataconnector():
         # Unpack device json.
         self.__unpack()
 
+    def __unpack(self):
+        self.id = self.raw['name'].split('/')[-1]
+        self.type = self.raw['type']
+        self.status = self.raw['status']
+        self.display_name = self.raw['displayName']
+
     @classmethod
     def get(cls, project_id, dataconnector_id, auth=None):
         # Construct URL
@@ -156,9 +162,3 @@ class Dataconnector():
             url=url,
             auth=auth,
         )
-
-    def __unpack(self):
-        self.id = self.raw['name'].split('/')[-1]
-        self.type = self.raw['type']
-        self.status = self.raw['status']
-        self.display_name = self.raw['displayName']

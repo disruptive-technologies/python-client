@@ -16,6 +16,14 @@ class Project(dtoutputs.OutputBase):
         # Unpack organization json.
         self.__unpack()
 
+    def __unpack(self):
+        self.display_name = self.raw['displayName']
+        self.organization_id = self.raw['organization'].split('/')[-1]
+        self.organization_display_name = self.raw['organizationDisplayName']
+        self.sensor_count = self.raw['sensorCount']
+        self.cloud_connector_count = self.raw['cloudConnectorCount']
+        self.is_inventory = self.raw['inventory']
+
     @classmethod
     def get(cls, project_id: str, auth=None):
         # Construct URL.
@@ -48,11 +56,3 @@ class Project(dtoutputs.OutputBase):
         )
 
         return [cls(r) for r in responses]
-
-    def __unpack(self):
-        self.display_name = self.raw['displayName']
-        self.organization_id = self.raw['organization'].split('/')[-1]
-        self.organization_display_name = self.raw['organizationDisplayName']
-        self.sensor_count = self.raw['sensorCount']
-        self.cloud_connector_count = self.raw['cloudConnectorCount']
-        self.is_inventory = self.raw['inventory']

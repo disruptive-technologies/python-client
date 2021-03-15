@@ -19,6 +19,13 @@ class Device(dtoutputs.OutputBase):
         # Unpack device json.
         self.__unpack()
 
+    def __unpack(self):
+        self.device_id = self.raw['name'].split('/')[-1]
+        self.project_id = self.raw['name'].split('/')[1]
+        self.type = self.raw['type']
+        self.labels = self.raw['labels']
+        self.reported = Reported(self.raw['reported'])
+
     @classmethod
     def get(cls, project_id: str, device_id: str, auth=None):
         # Construct URL
@@ -154,13 +161,6 @@ class Device(dtoutputs.OutputBase):
             body=body,
             auth=auth,
         )
-
-    def __unpack(self):
-        self.device_id = self.raw['name'].split('/')[-1]
-        self.project_id = self.raw['name'].split('/')[1]
-        self.type = self.raw['type']
-        self.labels = self.raw['labels']
-        self.reported = Reported(self.raw['reported'])
 
 
 class Reported(dtoutputs.OutputBase):
