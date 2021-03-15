@@ -1,3 +1,7 @@
+# Third-party imports
+import requests.utils as rutils
+
+# Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.events as dtevents
@@ -30,7 +34,7 @@ class Device(dtoutputs.OutputBase):
     @classmethod
     def list(cls,
              project_id,
-             query='',
+             query=None,
              device_ids=[],
              device_types=[],
              label_filters=[],
@@ -39,8 +43,8 @@ class Device(dtoutputs.OutputBase):
 
         # Construct parameters dictionary.
         params = {}
-        if len(query) > 0:
-            params['query'] = query
+        if query is not None:
+            params['query'] = rutils.quote(query)
         if len(device_ids) > 0:
             params['device_ids'] = device_ids
         if len(device_types) > 0:
