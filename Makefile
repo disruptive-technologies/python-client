@@ -26,4 +26,6 @@ mypy:
 lint:
 	flake8
 
+tests: test mypy lint
+
 all: build test mypy lint
