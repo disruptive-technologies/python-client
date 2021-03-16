@@ -43,6 +43,12 @@ class TestProject():
         # Call the appropriate endpoint
         projects = dt.Project.list()
 
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='GET',
+            url=dt.base_url+'/projects',
+        )
+
         # Assert instances of Project in output list.
         for p in projects:
             assert isinstance(p, dt.Project)
