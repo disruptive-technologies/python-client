@@ -28,4 +28,4 @@ lint:
 
 tests: test mypy lint
 
-all: build test mypy lint
+all: build tests
