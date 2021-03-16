@@ -12,7 +12,7 @@ auth = Auth()
 
 # Resources.
 from disruptive.resources.device import Device  # noqa
-from disruptive.resources.dataconnector import Dataconnector  # noqa
+from disruptive.resources.dataconnector import DataConnector  # noqa
 from disruptive.resources.organization import Organization  # noqa
 from disruptive.resources.project import Project  # noqa
 from disruptive.resources.stream import Stream  # noqa

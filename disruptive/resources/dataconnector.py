@@ -3,7 +3,7 @@ import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
 
 
-class Dataconnector():
+class DataConnector():
 
     def __init__(self, dataconnector_dict):
         # Inherit everything from Response parent.
