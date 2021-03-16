@@ -17,6 +17,7 @@ from disruptive.resources.organization import Organization  # noqa
 from disruptive.resources.project import Project  # noqa
 from disruptive.resources.stream import Stream  # noqa
 from disruptive.resources.event_history import EventHistory  # noqa
+from disruptive.resources.serviceaccount import ServiceAccount  # noqa
 
 # If True, debug information is sent to stdout.
 log = False
