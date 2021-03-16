@@ -43,7 +43,7 @@ class TestServiceAccount():
         request_mock.json = dtresponses.serviceaccounts
 
         # Call the appropriate endpoint
-        sas = dt.ServiceAccount.list('project_id')
+        sas = dt.ServiceAccount.get_list('project_id')
 
         # Verify request parameters.
         request_mock.assert_requested(

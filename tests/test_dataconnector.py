@@ -37,7 +37,7 @@ class TestDataconnector():
         request_mock.json = dtresponses.paginated_dataconnectors_response
 
         # Call the appropriate endpoint.
-        dataconnectors = dt.DataConnector.list('project_id')
+        dataconnectors = dt.DataConnector.get_list('project_id')
 
         # Assert single request sent.
         request_mock.assert_request_count(1)

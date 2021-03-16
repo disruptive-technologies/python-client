@@ -38,7 +38,7 @@ class TestOrganization():
         request_mock.json = dtresponses.organizations
 
         # Call the appropriate endpoint
-        orgs = dt.Organization.list()
+        orgs = dt.Organization.get_list()
 
         # Verify request parameters.
         request_mock.assert_requested(

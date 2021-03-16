@@ -1,19 +1,23 @@
+from __future__ import annotations
+
+# Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttransforms
+from disruptive.authentication import BasicAuth, OAuth
 
 
 class ServiceAccount(dtoutputs.OutputBase):
 
-    def __init__(self, org_dict):
+    def __init__(self, serviceaccount: dict) -> None:
         # Inherit from Response parent.
-        dtoutputs.OutputBase.__init__(self, org_dict)
+        dtoutputs.OutputBase.__init__(self, serviceaccount)
 
         # Unpack organization json.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         self.email = self.raw['email']
         self.display_name = self.raw['displayName']
         self.basic_auth = self.raw['enableBasicAuth']
@@ -21,7 +25,12 @@ class ServiceAccount(dtoutputs.OutputBase):
         self.updated = dttransforms.iso8601_to_datetime(self.raw['updateTime'])
 
     @classmethod
-    def get(cls, project_id: str, serviceaccount_id: str, auth=None):
+    def get(cls,
+            project_id: str,
+            serviceaccount_id: str,
+            auth: BasicAuth | OAuth | None = None
+            ) -> ServiceAccount:
+
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/serviceaccounts/{}'.format(
@@ -36,7 +45,11 @@ class ServiceAccount(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def list(cls, project_id: str, auth=None):
+    def get_list(cls,
+                 project_id: str,
+                 auth: BasicAuth | OAuth | None = None,
+                 ) -> list[ServiceAccount]:
+
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/serviceaccounts'.format(project_id)
@@ -52,20 +65,20 @@ class ServiceAccount(dtoutputs.OutputBase):
     @classmethod
     def create(cls,
                project_id: str,
-               display_name: str = None,
-               basic_auth: bool = None,
-               auth=None
+               display_name: str = '',
+               basic_auth: bool = False,
+               auth: BasicAuth | OAuth | None = None,
                ):
+
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/serviceaccounts'.format(project_id)
 
         # Construct body.
-        body = {}
-        if display_name is not None:
+        body: dict = dict()
+        body['enableBasicAuth'] = basic_auth
+        if len(display_name) > 0:
             body['displayName'] = display_name
-        if basic_auth is not None:
-            body['enableBasicAuth'] = basic_auth
 
         # Return ServiceAccount object of GET request response.
         return (cls(dtrequests.post(
@@ -78,10 +91,11 @@ class ServiceAccount(dtoutputs.OutputBase):
     def update(cls,
                project_id: str,
                serviceaccount_id: str,
-               display_name: str = None,
-               basic_auth: bool = None,
-               auth=None,
+               display_name: str = '',
+               basic_auth: bool | None = None,
+               auth: BasicAuth | OAuth | None = None,
                ):
+
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/serviceaccounts/{}'.format(
@@ -90,8 +104,8 @@ class ServiceAccount(dtoutputs.OutputBase):
         )
 
         # Construct body.
-        body = {}
-        if display_name is not None:
+        body: dict = dict()
+        if len(display_name) > 0:
             body['displayName'] = display_name
         if basic_auth is not None:
             body['enableBasicAuth'] = basic_auth
@@ -104,7 +118,12 @@ class ServiceAccount(dtoutputs.OutputBase):
         )))
 
     @classmethod
-    def delete(cls, project_id: str, serviceaccount_id: str):
+    def delete(cls,
+               project_id: str,
+               serviceaccount_id: str,
+               auth: BasicAuth | OAuth | None = None,
+               ) -> None:
+
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/serviceaccounts/{}'.format(

@@ -42,7 +42,7 @@ class TestDevice():
         request_mock.json = dtresponses.paginated_device_response
 
         # Call the appropriate endpoint.
-        devices = dt.Device.list('project_id')
+        devices = dt.Device.get_list('project_id')
 
         # output should be list.
         assert type(devices) == list
