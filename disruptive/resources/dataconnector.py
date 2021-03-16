@@ -69,7 +69,8 @@ class DataConnector():
                ) -> DataConnector:
 
         # Construct request body dictionary.
-        body: dict = dict()
+        # body: dict = dict()
+        body = {}
         body['type'] = http_type
         body['status'] = status
         body['events'] = events
