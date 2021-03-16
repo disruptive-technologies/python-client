@@ -17,7 +17,7 @@ class TestServiceAccount():
         # Assert attributes unpacked correctly.
         assert s.email == res['email']
         assert s.display_name == res['displayName']
-        assert s.basic_auth_enabled == res['enableBasicAuth']
+        assert s.basic_auth == res['enableBasicAuth']
         assert s.created == dttransforms.iso8601_to_datetime(res['createTime'])
         assert s.updated == dttransforms.iso8601_to_datetime(res['updateTime'])
 
@@ -54,3 +54,20 @@ class TestServiceAccount():
         # Assert instances of Project in output list.
         for s in sas:
             assert isinstance(s, dt.ServiceAccount)
+
+    def test_create(self, request_mock):
+        # Update the response data with serviceaccount data.
+        request_mock.json = dtresponses.serviceaccount1
+
+        # Call the appropriate endpoint.
+        s = dt.ServiceAccount.create('project_id', 'new-sa', True)
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='POST',
+            url=dt.base_url+'/projects/project_id/serviceaccounts',
+            body={'displayName': 'new-sa', 'enableBasicAuth': True},
+        )
+
+        # Assert attributes in output Device object.
+        assert isinstance(s, dt.ServiceAccount)
