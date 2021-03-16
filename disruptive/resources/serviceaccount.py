@@ -73,3 +73,32 @@ class ServiceAccount(dtoutputs.OutputBase):
             body=body,
             auth=auth,
         )))
+
+    @classmethod
+    def update(cls,
+               project_id: str,
+               serviceaccount_id: str,
+               display_name: str = None,
+               basic_auth: bool = None,
+               auth=None,
+               ):
+        # Construct URL.
+        url = dt.base_url
+        url += '/projects/{}/serviceaccounts/{}'.format(
+            project_id,
+            serviceaccount_id,
+        )
+
+        # Construct body.
+        body = {}
+        if display_name is not None:
+            body['displayName'] = display_name
+        if basic_auth is not None:
+            body['enableBasicAuth'] = basic_auth
+
+        # Return ServiceAccount object of GET request response.
+        return (cls(dtrequests.patch(
+            url=url,
+            body=body,
+            auth=auth,
+        )))

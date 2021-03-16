@@ -71,3 +71,26 @@ class TestServiceAccount():
 
         # Assert attributes in output Device object.
         assert isinstance(s, dt.ServiceAccount)
+
+    def test_update(self, request_mock):
+        # Update the response data with serviceaccount data.
+        request_mock.json = dtresponses.serviceaccount1
+
+        # Call the appropriate endpoint.
+        s = dt.ServiceAccount.update(
+            project_id='project_id',
+            serviceaccount_id='serviceaccount_id',
+            display_name='service-account-1',
+            basic_auth=False,
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='PATCH',
+            url=dt.base_url+'/projects/project_id/'
+            + 'serviceaccounts/serviceaccount_id',
+            body={'displayName': 'service-account-1', 'enableBasicAuth': False}
+        )
+
+        # Assert attributes in output Device object.
+        assert isinstance(s, dt.ServiceAccount)
