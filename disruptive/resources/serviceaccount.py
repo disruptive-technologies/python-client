@@ -21,12 +21,31 @@ class ServiceAccount(dtoutputs.OutputBase):
         self.updated = dttransforms.iso8601_to_datetime(self.raw['updateTime'])
 
     @classmethod
+    def get(cls,
+            project_id: str = None,
+            serviceaccount_id: str = None,
+            auth=None
+            ):
+        # Construct URL.
+        url = dt.base_url
+        url += '/projects/{}/serviceaccounts/{}'.format(
+            project_id,
+            serviceaccount_id,
+        )
+
+        # Return ServiceAccount object of GET request response.
+        return cls(dtrequests.get(
+            url=url,
+            auth=auth
+        ))
+
+    @classmethod
     def list(cls, project_id: str = None, auth=None):
-        # Construct URL
+        # Construct URL.
         url = dt.base_url
         url += '/projects/{}/serviceaccounts'.format(project_id)
 
-        # Return list of ServiceAccount objects.
+        # Return list of ServiceAccount objects of paginated GET response.
         service_accounts = dtrequests.auto_paginated_list(
             url=url,
             pagination_key='serviceAccounts',
