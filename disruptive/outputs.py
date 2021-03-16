@@ -1,9 +1,14 @@
+# Standard-library imports.
+import json
 
 
 class OutputBase():
 
     def __init__(self, raw):
         self.raw = raw
+
+    def pprint(self, n=4):
+        print(json.dumps(self.raw, indent=n))
 
 
 class Metric(OutputBase):

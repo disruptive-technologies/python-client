@@ -1,79 +1,91 @@
+from __future__ import annotations
+
+# Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
-import disruptive.outputs as dtoutputs
+from disruptive.outputs import Metric
+from disruptive.authentication import BasicAuth, OAuth
 
 
-class Dataconnector():
+class DataConnector():
 
-    def __init__(self, dataconnector_dict):
+    def __init__(self, dataconnector: dict) -> None:
         # Inherit everything from Response parent.
-        self.raw = dataconnector_dict
+        self.raw = dataconnector
 
         # Unpack device json.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         self.id = self.raw['name'].split('/')[-1]
         self.type = self.raw['type']
         self.status = self.raw['status']
         self.display_name = self.raw['displayName']
 
     @classmethod
-    def get(cls, project_id, dataconnector_id, auth=None):
+    def get(cls,
+            project_id: str,
+            dataconnector_id: str,
+            auth: BasicAuth | OAuth | None = None
+            ) -> DataConnector:
+
         # Construct URL
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
-        # Return simple GET request instance.
+        # Return DataConnector object of GET request response.
         return cls(dtrequests.get(
             url=url,
             auth=auth
         ))
 
     @classmethod
-    def list(cls, project_id):
-        # Return paginated GET request instance.
-        devices = dtrequests.auto_paginated_list(
+    def get_list(cls,
+                 project_id: str,
+                 auth: BasicAuth | OAuth | None = None
+                 ) -> list[DataConnector]:
+
+        # Return list of DataConnector objects of paginated GET response.
+        dataconnectors = dtrequests.auto_paginated_list(
             url=dt.base_url + '/projects/{}/dataconnectors'.format(project_id),
             pagination_key='dataConnectors',
+            auth=auth,
         )
-        return [cls(device) for device in devices]
+        return [cls(dcon) for dcon in dataconnectors]
 
     @classmethod
     def create(cls,
-               project_id,
-               url,
-               display_name=None,
-               status='ACTIVE',
-               events=[],
-               http_type='HTTP_PUSH',
-               signature_secret=None,
-               headers={},
-               labels=[],
-               auth=None,
-               ):
+               project_id: str,
+               url: str,
+               display_name: str = '',
+               status: str = 'ACTIVE',
+               events: list[str] = [],
+               http_type: str = 'HTTP_PUSH',
+               signature_secret: str = '',
+               headers: dict = {},
+               labels: list[str] = [],
+               auth: BasicAuth | OAuth | None = None,
+               ) -> DataConnector:
+
         # Construct request body dictionary.
-        body = {
-            'type': http_type,
-            'status': status,
-            'events': [],
-            'labels': labels,
-            'httpConfig': {
-                'url': url,
-                'headers': {}
-            }
-        }
-        if display_name is not None:
+        body: dict = dict()
+        body['type'] = http_type
+        body['status'] = status
+        body['events'] = events
+        body['labels'] = labels
+        body['httpConfig'] = dict()
+        body['httpConfig']['url'] = url
+        body['httpConfig']['headers'] = headers
+        body['httpConfig']['signatureSecret'] = signature_secret
+        if len(display_name) > 0:
             body['displayName'] = display_name
-        if signature_secret is not None:
-            body['httpConfig']['signatureSecret'] = signature_secret
 
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors'.format(project_id)
 
-        # Send POST request to API.
+        # Return DataConnector object of POST request response.
         return cls(dtrequests.post(
             url=url,
             body=body,
@@ -82,32 +94,34 @@ class Dataconnector():
 
     @classmethod
     def update(cls,
-               project_id,
-               dataconnector_id,
-               display_name=None,
-               status=None,
-               events=None,
-               labels=None,
-               url=None,
-               signature_secret=None,
-               headers=None,
-               auth=None,
-               ):
+               project_id: str,
+               dataconnector_id: str,
+               display_name: str = '',
+               status: str = '',
+               events: list[str] = [],
+               labels: list[str] = [],
+               url: str = '',
+               signature_secret: str = '',
+               headers: dict = {},
+               auth: BasicAuth | OAuth | None = None,
+               ) -> DataConnector:
+
         # Construct request body dictionary.
-        body = {'httpConfig': {}}
-        if display_name is not None:
+        body: dict = dict()
+        body['httpConfig'] = {}
+        if len(display_name) > 0:
             body['displayName'] = display_name
-        if status is not None:
+        if len(status) > 0:
             body['status'] = status
-        if events is not None:
+        if len(events) > 0:
             body['events'] = events
-        if labels is not None:
+        if len(labels) > 0:
             body['labels'] = labels
-        if url is not None:
+        if len(url) > 0:
             body['httpConfig']['url'] = url
-        if signature_secret is not None:
+        if len(signature_secret) > 0:
             body['httpConfig']['signatureSecret'] = signature_secret
-        if headers is not None:
+        if len(headers) > 0:
             body['headers'] = headers
 
         # Construct URL.
@@ -115,7 +129,7 @@ class Dataconnector():
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
-        # Send POST request to API.
+        # Return DataConnector object of PATCH request response.
         return cls(dtrequests.patch(
             url=url,
             body=body,
@@ -123,42 +137,56 @@ class Dataconnector():
         ))
 
     @classmethod
-    def delete(cls, project_id, dataconnector_id, auth=None):
+    def delete(cls,
+               project_id: str,
+               dataconnector_id: str,
+               auth: BasicAuth | OAuth | None = None
+               ) -> None:
+
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
-        # Send DELETE request to API.
+        # Send DELETE request, but return nothing.
         dtrequests.delete(
             url=url,
             auth=auth,
         )
 
     @classmethod
-    def metrics(cls, project_id, dataconnector_id, auth=None):
+    def metrics(cls,
+                project_id: str,
+                dataconnector_id: str,
+                auth: BasicAuth | OAuth | None = None
+                ) -> Metric:
+
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
         url += ':metrics'
 
-        # Send GET request to API.
-        return dtoutputs.Metric(dtrequests.get(
+        # Return Metric object of GET request response.
+        return Metric(dtrequests.get(
             url=url,
             auth=auth,
         ))
 
     @classmethod
-    def sync(cls, project_id, dataconnector_id, auth=None):
+    def sync(cls,
+             project_id: str,
+             dataconnector_id: str,
+             auth: BasicAuth | OAuth | None = None
+             ) -> None:
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
         url += ':sync'
 
-        # Send GET request to API.
-        return dtrequests.post(
+        # Send POST request, but return nothing.
+        dtrequests.post(
             url=url,
             auth=auth,
         )

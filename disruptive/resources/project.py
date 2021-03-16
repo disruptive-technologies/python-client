@@ -1,19 +1,22 @@
+from __future__ import annotations
+
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
+from disruptive.authentication import BasicAuth, OAuth
 
 
 class Project(dtoutputs.OutputBase):
 
-    def __init__(self, project_dict):
+    def __init__(self, project: dict) -> None:
         # Inherit from Response parent.
-        dtoutputs.OutputBase.__init__(self, project_dict)
+        dtoutputs.OutputBase.__init__(self, project)
 
         # Unpack organization json.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         self.display_name = self.raw['displayName']
         self.organization_id = self.raw['organization'].split('/')[-1]
         self.organization_display_name = self.raw['organizationDisplayName']
@@ -22,41 +25,54 @@ class Project(dtoutputs.OutputBase):
         self.is_inventory = self.raw['inventory']
 
     @classmethod
-    def get(cls, project_id: str, auth=None):
+    def get(cls,
+            project_id: str,
+            auth: BasicAuth | OAuth | None = None
+            ) -> Project:
+
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}'.format(project_id)
 
-        # Return class instance from GET request response.
+        # Return Project object of GET request response.
         return cls(dtrequests.get(
             url=url,
             auth=auth
         ))
 
     @classmethod
-    def list(cls, organization_id: str = None, query: str = None, auth=None):
+    def get_list(cls,
+                 organization_id: str = '',
+                 query: str = '',
+                 auth: BasicAuth | OAuth | None = None
+                 ) -> list[Project]:
+
         # Construct URL.
         url = dt.base_url + '/projects'
 
         # Construct parameters dictionary.
         params = {}
-        if organization_id is not None:
+        if len(organization_id) > 0:
             params['organization'] = 'organizations/' + organization_id
-        if query is not None:
+        if len(query) > 0:
             params['query'] = query
 
-        # Get responses by auto-paginating.
+        # Return list of Project objects of paginated GET response.
         responses = dtrequests.auto_paginated_list(
             url=url,
             pagination_key='projects',
             params=params,
             auth=auth,
         )
-
         return [cls(r) for r in responses]
 
     @classmethod
-    def create(cls, organization_id, display_name, auth=None):
+    def create(cls,
+               organization_id: str,
+               display_name: str,
+               auth: BasicAuth | OAuth | None = None
+               ) -> Project:
+
         # Construct URL.
         url = dt.base_url + '/projects'
 
@@ -66,7 +82,7 @@ class Project(dtoutputs.OutputBase):
             'displayName': display_name,
         }
 
-        # Send POST request and return Project object of it.
+        # Return Project object of POST request response.
         return cls(dtrequests.post(
             url=url,
             body=body,
@@ -74,7 +90,11 @@ class Project(dtoutputs.OutputBase):
         ))
 
     @staticmethod
-    def update(project_id, display_name, auth=None):
+    def update(project_id: str,
+               display_name: str,
+               auth: BasicAuth | OAuth | None = None
+               ) -> None:
+
         # Construct URL.
         url = dt.base_url + '/projects/' + project_id
 
@@ -91,7 +111,10 @@ class Project(dtoutputs.OutputBase):
         )
 
     @staticmethod
-    def delete(project_id, auth=None):
+    def delete(project_id: str,
+               auth: BasicAuth | OAuth | None = None
+               ) -> None:
+
         # Construct URL.
         url = dt.base_url + '/projects/' + project_id
 

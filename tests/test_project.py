@@ -41,7 +41,7 @@ class TestProject():
         request_mock.json = dtresponses.projects
 
         # Call the appropriate endpoint
-        projects = dt.Project.list()
+        projects = dt.Project.get_list()
 
         # Verify request parameters.
         request_mock.assert_requested(

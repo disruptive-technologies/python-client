@@ -1,30 +1,37 @@
+from __future__ import annotations
+
+# Project imports.
 import disruptive as dt
 import disruptive.requests as req
-
 from disruptive.events import Event
+from disruptive.authentication import BasicAuth, OAuth
 
 
 class EventHistory():
 
     @staticmethod
-    def get(project_id,
-            device_id,
-            event_types=[],
-            start_time=None,
-            end_time=None,
-            auth=None,
-            ):
+    def get(project_id: str,
+            device_id: str,
+            event_types: list[str] = [],
+            start_time: str = '',
+            end_time: str = '',
+            auth: BasicAuth | OAuth | None = None,
+            ) -> list[Event]:
+
         # Construct parameters dictionary.
-        params = {}
+        params: dict = dict()
         if len(event_types) > 0:
             params['eventTypes'] = event_types
-        if start_time is not None:
+        if len(start_time) > 0:
             params['startTime'] = start_time
-        if end_time is not None:
+        if len(end_time) > 0:
             params['endTime'] = end_time
 
+        # Construct URL.
         url = dt.base_url
         url += '/projects/{}/devices/{}/events'.format(project_id, device_id)
+
+        # Send paginated GET request.
         res = req.auto_paginated_list(
             url=url,
             pagination_key='events',
@@ -32,4 +39,6 @@ class EventHistory():
             page_size=1000,
             auth=auth,
         )
+
+        # Return list of Event objects of paginated GET response.
         return Event.from_mixed_list(res)

@@ -411,3 +411,33 @@ organizations = {
         organization,
     ]
 }
+
+serviceaccount1 = {
+    "name": "projects/c14u9q095l47ccv1o3pg/"
+            + "serviceaccounts/c14uar7915fg90c8lfp0",
+    "email": "c15uar7915fg13c8lfp0@c15u9p094l47cdv1o3qg."
+            + "serviceaccount.d21s.com",
+    "displayName": "service-account-1",
+    "enableBasicAuth": False,
+    "createTime": "2021-03-11T09:39:56.015971Z",
+    "updateTime": "2021-03-11T09:39:56.103249Z"
+}
+
+serviceaccount2 = {
+    "name": "projects/c14u88094l47cdv1o3pg/"
+            + "serviceaccounts/c17m9hm914gg00c8levg",
+    "email": "c17m8hn915gg00c8levg@c24u9p094l47cdv1o2pg."
+            + "serviceaccount.d21s.com",
+    "displayName": "service-account-2",
+    "enableBasicAuth": True,
+    "createTime": "2021-03-15T13:44:38.974097Z",
+    "updateTime": "2021-03-15T13:44:39.039375Z"
+}
+
+serviceaccounts = {
+    'nextPageToken': '',
+    'serviceAccounts': [
+        serviceaccount1,
+        serviceaccount2,
+    ]
+}

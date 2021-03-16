@@ -11,7 +11,7 @@ class TestDataconnector():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        d = dt.Dataconnector.get('project_id', 'device_id')
+        d = dt.DataConnector.get('project_id', 'device_id')
 
         # Assert attributes unpacked correctly.
         assert d.id == res['name'].split('/')[-1]
@@ -24,24 +24,24 @@ class TestDataconnector():
         request_mock.json = dtresponses.configured_dataconnector
 
         # Call the appropriate endpoint.
-        d = dt.Dataconnector.get('project_id', 'device_id')
+        d = dt.DataConnector.get('project_id', 'device_id')
 
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
         # Assert output instance.
-        assert isinstance(d, dt.Dataconnector)
+        assert isinstance(d, dt.DataConnector)
 
     def test_list(self, request_mock):
         # Update the response json with a mock dataconnector response.
         request_mock.json = dtresponses.paginated_dataconnectors_response
 
         # Call the appropriate endpoint.
-        dataconnectors = dt.Dataconnector.list('project_id')
+        dataconnectors = dt.DataConnector.get_list('project_id')
 
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
         # Assert output instance.
         for d in dataconnectors:
-            assert isinstance(d, dt.Dataconnector)
+            assert isinstance(d, dt.DataConnector)

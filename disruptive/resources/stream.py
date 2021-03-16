@@ -1,23 +1,31 @@
-import disruptive
-import disruptive.events as dtevents
+from __future__ import annotations
+
+# Standard library imports
+import typing
+
+# Project Imports.
+import disruptive as dt
+from disruptive.events import Event
 
 
 class Stream():
 
     @staticmethod
-    def single(project_id,
-               device_id,
-               event_types=[]
-               ):
+    def single(project_id: str,
+               device_id: str,
+               event_types: list[str] = [],
+               ) -> typing.Generator:
+
         # Construct parameters dictionary.
-        params = {'ping_interval': '{}s'.format(disruptive.ping_interval)}
+        params: dict = dict()
+        params['ping_interval'] = '{}s'.format(dt.ping_interval)
         if len(event_types) > 0:
             params['event_types'] = event_types
 
         # Relay generator output.
         url = '/projects/{}/devices/{}:stream'.format(project_id, device_id)
-        for event in disruptive.requests.stream(url, params):
-            yield dtevents.Event(event)
+        for event in dt.requests.stream(url, params):
+            yield Event(event)
 
     @staticmethod
     def project(project_id,
@@ -26,8 +34,9 @@ class Stream():
                 device_types=[],
                 event_types=[],
                 ):
+
         # Construct parameters dictionary.
-        params = {'ping_interval': '{}s'.format(disruptive.ping_interval)}
+        params = {'ping_interval': '{}s'.format(dt.ping_interval)}
         if len(device_ids) > 0:
             params['device_ids'] = device_ids
         if len(device_types) > 0:
@@ -39,5 +48,5 @@ class Stream():
 
         # Relay generator output.
         url = '/projects/{}/devices:stream'.format(project_id)
-        for event in disruptive.requests.stream(url, params):
-            yield dtevents.Event.from_single(event)
+        for event in dt.requests.stream(url, params):
+            yield Event.from_single(event)
