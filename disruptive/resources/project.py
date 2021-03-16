@@ -27,7 +27,7 @@ class Project(dtoutputs.OutputBase):
         url = dt.base_url
         url += '/projects/{}'.format(project_id)
 
-        # Return class instance from GET request response.
+        # Return Project object of GET request response.
         return cls(dtrequests.get(
             url=url,
             auth=auth
@@ -45,7 +45,7 @@ class Project(dtoutputs.OutputBase):
         if query is not None:
             params['query'] = query
 
-        # Get responses by auto-paginating.
+        # Return list of Project objects of paginated GET response.
         responses = dtrequests.auto_paginated_list(
             url=url,
             pagination_key='projects',
@@ -66,7 +66,7 @@ class Project(dtoutputs.OutputBase):
             'displayName': display_name,
         }
 
-        # Send POST request and return Project object of it.
+        # Return Project object of POST request response.
         return cls(dtrequests.post(
             url=url,
             body=body,

@@ -28,7 +28,7 @@ class Device(dtoutputs.OutputBase):
         url = dt.base_url
         url += '/projects/{}/devices/{}'.format(project_id, device_id)
 
-        # Return simple GET request instance.
+        # Return Device object of GET request response.
         return cls(dtrequests.get(
             url=url,
             auth=auth
@@ -57,7 +57,7 @@ class Device(dtoutputs.OutputBase):
         if len(order_by) > 0:
             params['order_by'] = order_by
 
-        # Return paginated GET request instance.
+        # Return list of Device objects of paginated GET response.
         devices = dtrequests.auto_paginated_list(
             url=dt.base_url + '/projects/{}/devices'.format(project_id),
             pagination_key='devices',
@@ -71,7 +71,7 @@ class Device(dtoutputs.OutputBase):
         # Construct URL
         url = dt.base_url + '/projects/{}/devices'.format(project_id)
 
-        # Relay generator output, converting the responses to Device instances.
+        # Relay generator output, yielding Device objects of response.
         for devices in dtrequests.generator_list(
                 url,
                 'devices',
@@ -104,7 +104,7 @@ class Device(dtoutputs.OutputBase):
         url = dt.base_url
         url += '/projects/{}/devices:batchUpdate'.format(project_id)
 
-        # Send POST request to API.
+        # Sent POST request, but return nothing.
         dtrequests.post(
             url=url,
             body=body,
@@ -149,7 +149,7 @@ class Device(dtoutputs.OutputBase):
             "devices": devices
         }
 
-        # Send POST request to API.
+        # Sent POST request, but return nothing.
         dtrequests.post(
             url=dt.base_url + '/projects/{}/devices:transfer'.format(
                 target_project_id

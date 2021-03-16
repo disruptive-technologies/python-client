@@ -22,7 +22,7 @@ class Organization(dtoutputs.OutputBase):
         url = dt.base_url
         url += '/organizations/{}'.format(organization_id)
 
-        # Return simple GET request instance.
+        # Return Organization object of GET request response.
         return cls(dtrequests.get(
             url=url,
             auth=auth
@@ -30,7 +30,7 @@ class Organization(dtoutputs.OutputBase):
 
     @classmethod
     def list(cls, auth=None):
-        # Return paginated GET request instance.
+        # Return list of Organization objects of paginated GET response.
         orgs = dtrequests.auto_paginated_list(
             url=dt.base_url + '/organizations',
             pagination_key='organizations',

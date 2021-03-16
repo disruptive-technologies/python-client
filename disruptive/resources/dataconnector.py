@@ -25,7 +25,7 @@ class Dataconnector():
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
-        # Return simple GET request instance.
+        # Return DataConnector object of GET request response.
         return cls(dtrequests.get(
             url=url,
             auth=auth
@@ -33,7 +33,7 @@ class Dataconnector():
 
     @classmethod
     def list(cls, project_id):
-        # Return paginated GET request instance.
+        # Return list of DataConnector objects of paginated GET response.
         devices = dtrequests.auto_paginated_list(
             url=dt.base_url + '/projects/{}/dataconnectors'.format(project_id),
             pagination_key='dataConnectors',
@@ -73,7 +73,7 @@ class Dataconnector():
         url = dt.base_url
         url += '/projects/{}/dataconnectors'.format(project_id)
 
-        # Send POST request to API.
+        # Return DataConnector object of POST request response.
         return cls(dtrequests.post(
             url=url,
             body=body,
@@ -115,7 +115,7 @@ class Dataconnector():
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
-        # Send POST request to API.
+        # Return DataConnector object of PATCH request response.
         return cls(dtrequests.patch(
             url=url,
             body=body,
@@ -129,7 +129,7 @@ class Dataconnector():
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
-        # Send DELETE request to API.
+        # Send DELETE request, but return nothing.
         dtrequests.delete(
             url=url,
             auth=auth,
@@ -143,7 +143,7 @@ class Dataconnector():
         url = url.format(project_id, dataconnector_id)
         url += ':metrics'
 
-        # Send GET request to API.
+        # Return Metric object of GET request response.
         return dtoutputs.Metric(dtrequests.get(
             url=url,
             auth=auth,
@@ -157,8 +157,8 @@ class Dataconnector():
         url = url.format(project_id, dataconnector_id)
         url += ':sync'
 
-        # Send GET request to API.
-        return dtrequests.post(
+        # Send POST request, but return nothing.
+        dtrequests.post(
             url=url,
             auth=auth,
         )
