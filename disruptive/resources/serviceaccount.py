@@ -1,6 +1,7 @@
 import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
+import disruptive.transforms as dttransforms
 
 
 class ServiceAccount(dtoutputs.OutputBase):
@@ -13,7 +14,11 @@ class ServiceAccount(dtoutputs.OutputBase):
         self.__unpack()
 
     def __unpack(self):
-        pass
+        self.email = self.raw['email']
+        self.display_name = self.raw['displayName']
+        self.basic_auth_enabled = self.raw['enableBasicAuth']
+        self.created = dttransforms.iso8601_to_datetime(self.raw['createTime'])
+        self.updated = dttransforms.iso8601_to_datetime(self.raw['updateTime'])
 
     @classmethod
     def list(cls, project_id: str = None, auth=None):
