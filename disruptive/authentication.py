@@ -1,4 +1,5 @@
 # Standard library imports.
+import os
 import time
 import urllib.parse
 
@@ -18,11 +19,16 @@ class Auth():
         self.token = None
 
     @staticmethod
-    def basic(key_id, secret):
+    def basic(key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID'),
+              secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET'),
+              ):
         return BasicAuth(key_id, secret)
 
     @staticmethod
-    def oauth(key_id, secret, email):
+    def oauth(key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID'),
+              secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET'),
+              email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL')
+              ):
         return OAuth(key_id, secret, email)
 
     def get_token(self):
