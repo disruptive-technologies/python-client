@@ -102,3 +102,15 @@ class ServiceAccount(dtoutputs.OutputBase):
             body=body,
             auth=auth,
         )))
+
+    @classmethod
+    def delete(cls, project_id: str, serviceaccount_id: str):
+        # Construct URL.
+        url = dt.base_url
+        url += '/projects/{}/serviceaccounts/{}'.format(
+            project_id,
+            serviceaccount_id,
+        )
+
+        # Send DELETE request, but return nothing.
+        dtrequests.delete(url=url)

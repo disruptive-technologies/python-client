@@ -94,3 +94,20 @@ class TestServiceAccount():
 
         # Assert attributes in output Device object.
         assert isinstance(s, dt.ServiceAccount)
+
+    def test_delete(self, request_mock):
+        # Update the response status code to 200.
+        request_mock.status_code = 200
+
+        # Call the appropriate endpoint.
+        dt.ServiceAccount.delete(
+            project_id='project_id',
+            serviceaccount_id='serviceaccount_id',
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='DELETE',
+            url=dt.base_url+'/projects/project_id/'
+            + 'serviceaccounts/serviceaccount_id',
+        )
