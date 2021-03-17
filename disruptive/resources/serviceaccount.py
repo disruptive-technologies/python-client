@@ -196,6 +196,27 @@ class ServiceAccount(dtoutputs.OutputBase):
         )
         return Key.with_secret(response)
 
+    @staticmethod
+    def delete_key(project_id: str,
+                   serviceaccount_id: str,
+                   key_id: str,
+                   auth: BasicAuth | OAuth | None = None,
+                   ) -> None:
+
+        # Construct URL.
+        url = dt.base_url
+        url += '/projects/{}/serviceaccounts/{}/keys/{}'.format(
+            project_id,
+            serviceaccount_id,
+            key_id,
+        )
+
+        # Return Key object of POST request response.
+        dtrequests.delete(
+            url=url,
+            auth=auth,
+        )
+
 
 class Key(dtoutputs.OutputBase):
 
@@ -216,7 +237,7 @@ class Key(dtoutputs.OutputBase):
             self.secret = self.raw['secret']
 
     @classmethod
-    def with_secret(cls, key: dict) -> None:
+    def with_secret(cls, key: dict) -> Key:
         combined = key['key']
         combined['secret'] = key['secret']
         return cls(combined)

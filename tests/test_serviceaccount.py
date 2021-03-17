@@ -198,3 +198,24 @@ class TestServiceAccount():
 
         # Assert attributes in output Device object.
         assert isinstance(key, Key)
+
+    def test_delete_key(self, request_mock):
+        # Update the response status code to 200.
+        request_mock.status_code = 200
+
+        # Call the appropriate endpoint.
+        dt.ServiceAccount.delete_key(
+            project_id='project_id',
+            serviceaccount_id='serviceaccount_id',
+            key_id='key_id',
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='DELETE',
+            url=dt.base_url+'/projects/project_id/'
+            + 'serviceaccounts/serviceaccount_id/keys/key_id',
+        )
+
+        # Verify single request sent.
+        request_mock.assert_request_count(1)
