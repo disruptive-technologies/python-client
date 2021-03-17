@@ -1,3 +1,6 @@
+# Standard library imports.
+from typing import List
+
 # Project imports.
 import disruptive.transforms as dttrans
 import disruptive.outputs as dtoutputs
@@ -6,12 +9,12 @@ import disruptive.log as dtlog
 
 class DataClass(dtoutputs.OutputBase):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict) -> None:
         # Inherit parent Event class init.
-        dtoutputs.OutputBase.__init__(self, data_dict)
+        dtoutputs.OutputBase.__init__(self, data)
 
     @classmethod
-    def from_event_type(cls, data_dict, event_type):
+    def from_event_type(cls, data: dict, event_type: str):
         # From the type, select the appropriate child class.
         child, key = cls.__child_map(event_type)
 
@@ -21,12 +24,13 @@ class DataClass(dtoutputs.OutputBase):
 
         # Return the initialized class instance.
         if key:
-            return child(data_dict[event_type])
+            return child(data[event_type])
         else:
             # Special case for labelsChanged event.
-            return child(data_dict)
+            return child(data)
 
-    def __child_map(event_type):
+    @staticmethod
+    def __child_map(event_type: str):
         # Initialize the correct object.
         if event_type in EVENTS_MAP:
             out = (
@@ -41,48 +45,48 @@ class DataClass(dtoutputs.OutputBase):
 
 class Touch(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
 
 class Temperature(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         self.value = self.raw['value']
 
 
 class ObjectPresent(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.state = self.raw['state']
 
 
 class Humidity(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.temperature = self.raw['temperature']
         self.humidity = self.raw['relativeHumidity']
@@ -90,56 +94,56 @@ class Humidity(DataClass):
 
 class ObjectPresentCount(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.total = self.raw['total']
 
 
 class TouchCount(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.total = self.raw['total']
 
 
 class WaterPresent(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.state = self.raw['state']
 
 
 class NetworkStatus(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.signal_strength = self.raw['signalStrength']
         self.rssi = self.raw['rssi']
@@ -155,28 +159,28 @@ class NetworkStatus(DataClass):
 
 class BatteryStatus(DataClass):
 
-    def __init__(self, event_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, event_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.percentage = self.raw['percentage']
 
 
 class LabelsChanged(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.added = self.raw['added']
         self.modified = self.raw['modified']
@@ -185,14 +189,14 @@ class LabelsChanged(DataClass):
 
 class ConnectionStatus(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.connection = self.raw['connection']
         self.available = self.raw['available']
@@ -200,14 +204,14 @@ class ConnectionStatus(DataClass):
 
 class EthernetStatus(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.mac_address = self.raw['macAddress']
         self.ip_address = self.raw['ipAddress']
@@ -215,14 +219,14 @@ class EthernetStatus(DataClass):
 
 class CellularStatus(DataClass):
 
-    def __init__(self, data_dict):
+    def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data_dict)
+        DataClass.__init__(self, data)
 
         # Unpack type-specific data in event dictionary.
         self.__unpack()
 
-    def __unpack(self):
+    def __unpack(self) -> None:
         # Set attributes.
         self.signal_strength = self.raw['signalStrength']
 
@@ -230,7 +234,8 @@ class CellularStatus(DataClass):
 # This dictionary is created to bridge the three different naming conventions
 # used for every single event. The REST API returns events with camel case,
 # whereas in python we prefer snake casing, and classes fully cased. It also
-# prevent recreating long if-statements when choosing an event by type.
+# prevent recreating long if-statements when choosing an event by type as it
+# lists all event-types currently known.
 EVENTS_MAP = {
     'touch': {
         'attr': 'touch',
@@ -302,23 +307,23 @@ EVENTS_MAP = {
 
 class Event(dtoutputs.OutputBase):
 
-    def __init__(self, event_dict):
+    def __init__(self, event: dict):
         # Inherit attributes from ResponseBase parent.
-        dtoutputs.OutputBase.__init__(self, event_dict)
+        dtoutputs.OutputBase.__init__(self, event)
 
         # Unpack parts of event that is common for all types.
         self.__unpack()
 
-    def __unpack(self):
-        self.event_id = self.raw['eventId']
-        self.event_type = self.raw['eventType']
+    def __unpack(self) -> None:
+        self.id = self.raw['eventId']
+        self.type = self.raw['eventType']
         self.device_id = self.raw['targetName'].split('/')[-1]
         self.project_id = self.raw['targetName'].split('/')[1]
 
         # Initialize the appropriate data class.
         self.data = DataClass.from_event_type(
             self.raw['data'],
-            self.event_type
+            self.type
         )
 
         # Convert ISO-8601 string to datetime format.
@@ -327,18 +332,13 @@ class Event(dtoutputs.OutputBase):
         )
 
     @classmethod
-    def from_single(cls, event):
-        child = cls.__classify_event_by_type(event)
-        return child(event)
-
-    @classmethod
-    def from_mixed_list(cls, event_list):
+    def from_mixed_list(cls, events: List[dict]):
         # Initialise output list.
         object_list = []
 
         # Iterate events in list.
-        for event in event_list:
+        for event in events:
             # Initialize instance and append to output.
-            object_list.append(Event(event))
+            object_list.append(cls(event))
 
         return object_list

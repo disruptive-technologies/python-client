@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # Standard library imports.
 import time
 import json
@@ -13,31 +15,31 @@ import disruptive.responses as dtresponses
 
 
 def get(url: str,
-        params={},
-        headers={},
-        timeout=None,
+        params: dict = {},
+        headers: dict = {},
+        timeout: int | None = None,
         auth=None
-        ):
+        ) -> dict:
     return __construct_request(
-        "GET",
-        url,
-        params,
-        headers,
+        method="GET",
+        url=url,
+        params=params,
+        headers=headers,
         timeout=timeout,
         auth=auth
     )
 
 
 def post(url: str,
-         body: dict = None,
-         data: str = None,
+         body: dict | None = None,
+         data: str | None = None,
          headers: dict = {},
          authorize: bool = True,
          auth=None,
          ):
     return __construct_request(
-        "POST",
-        url,
+        method="POST",
+        url=url,
         body=body,
         data=data,
         headers=headers,
@@ -175,13 +177,13 @@ def __construct_request(
     return response.data
 
 
-def __send_request(method,
-                   url,
-                   params,
-                   headers,
-                   body,
-                   data,
-                   timeout,
+def __send_request(method: str,
+                   url: str,
+                   params: dict,
+                   headers: dict,
+                   body: dict | None,
+                   data: str | None,
+                   timeout: int,
                    ):
     response = requests.request(
         method=method,
@@ -195,7 +197,7 @@ def __send_request(method,
     return dtresponses.DTResponse(
         response.json(),
         response.status_code,
-        response.headers
+        dict(response.headers),
     )
 
 

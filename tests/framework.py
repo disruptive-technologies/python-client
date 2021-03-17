@@ -43,7 +43,7 @@ class RequestMock():
                          method,
                          url,
                          params={},
-                         headers={'Authorization': None},
+                         headers={'Authorization': ''},
                          body=None,
                          data=None,
                          timeout=dt.request_timeout,

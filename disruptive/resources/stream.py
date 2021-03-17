@@ -49,4 +49,4 @@ class Stream():
         # Relay generator output.
         url = '/projects/{}/devices:stream'.format(project_id)
         for event in dt.requests.stream(url, params):
-            yield Event.from_single(event)
+            yield Event(event)

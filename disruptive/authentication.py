@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 # Standard library imports.
-import os
 import time
 import urllib.parse
+from typing import List, Literal
 
 # Third-party imports.
 import jwt
@@ -14,24 +16,24 @@ import disruptive.transforms as dttrans
 
 class Auth():
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Initialise variables
-        self.token = None
+        self.token = ''
 
     @staticmethod
-    def basic(key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID'),
-              secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET'),
-              ):
+    def basic(key_id: str,
+              secret: str,
+              ) -> BasicAuth:
         return BasicAuth(key_id, secret)
 
     @staticmethod
-    def oauth(key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID'),
-              secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET'),
-              email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL')
-              ):
+    def oauth(key_id: str,
+              secret: str,
+              email: str,
+              ) -> OAuth:
         return OAuth(key_id, secret, email)
 
-    def get_token(self):
+    def get_token(self) -> str:
         # Check expiration time.
         if self.has_expired():
             # Renew access token.
@@ -39,15 +41,21 @@ class Auth():
 
         return self.token
 
-    def has_expired(self):
+    def refresh(self) -> None:
+        # This function only exists to please Mypy type-checking.
+        # If unauthorized, it should never be called.
+        # Once authorized, it will be overwritten by the child class.
+        pass
+
+    def has_expired(self) -> bool:
         raise dterrors.Unauthenticated(
             'Authentication object not initialized.\n\n\
             Set globally by calling one of the following methods:\n\
-            Basic Auth: dt.BasicAuth.authorize(key_id, secret)\n\
-            OAuth2:     dt.Oauth.authorize(key_id, secret, email)'
+            Basic Auth: dt.Auth.basic(key_id, secret)\n\
+            OAuth2:     dt.Auth.oauth(key_id, secret, email)'
         )
 
-    def _verify_str_credentials(self, credentials):
+    def _verify_str_credentials(self, credentials: List[str]) -> None:
         for c in credentials:
             if type(c) != str:
                 raise TypeError(
@@ -58,7 +66,8 @@ class Auth():
 
 
 class BasicAuth(Auth):
-    def __init__(self, key_id, secret):
+
+    def __init__(self, key_id: str, secret: str) -> None:
         # Inherit everything from parent.
         super().__init__()
 
@@ -75,12 +84,13 @@ class BasicAuth(Auth):
             ))
         )
 
-    def has_expired(self):
+    def has_expired(self) -> Literal[False]:
         return False
 
 
 class OAuth(Auth):
-    def __init__(self, key_id, secret, email):
+
+    def __init__(self, key_id: str, secret: str, email: str) -> None:
         # Inherit everything from parent.
         super().__init__()
 
@@ -93,7 +103,7 @@ class OAuth(Auth):
         # Initialise new attributes.
         self.expiration = 0
 
-    def __get_access_token(self):
+    def __get_access_token(self) -> dict:
         # Set access token URL.
         token_url = 'https://identity.disruptive-technologies.com/oauth2/token'
 
@@ -145,13 +155,13 @@ class OAuth(Auth):
         # Return the access token in the request.
         return access_token_response
 
-    def has_expired(self):
+    def has_expired(self) -> bool:
         if time.time() > self.expiration:
             return True
         else:
             return False
 
-    def refresh(self):
+    def refresh(self) -> None:
         response = self.__get_access_token()
         self.expiration = time.time() + response['expires_in']
         self.token = 'Bearer {}'.format(response['access_token'])
