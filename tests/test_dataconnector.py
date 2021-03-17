@@ -14,7 +14,7 @@ class TestDataconnector():
         d = dt.DataConnector.get('project_id', 'device_id')
 
         # Assert attributes unpacked correctly.
-        assert d.id == res['name'].split('/')[-1]
+        assert d.dataconnector_id == res['name'].split('/')[-1]
         assert d.type == res['type']
         assert d.status == res['status']
         assert d.display_name == res['displayName']
