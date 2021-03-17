@@ -3,7 +3,7 @@ from __future__ import annotations
 # Standard library imports.
 import time
 import urllib.parse
-from typing import List, Literal
+from typing import List
 
 # Third-party imports.
 import jwt
@@ -84,7 +84,7 @@ class BasicAuth(Auth):
             ))
         )
 
-    def has_expired(self) -> Literal[False]:
+    def has_expired(self) -> bool:
         return False
 
 
