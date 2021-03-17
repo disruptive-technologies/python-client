@@ -46,15 +46,15 @@ class Device(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def get_list(cls,
-                 project_id: str,
-                 query: str = '',
-                 device_ids: list[str] = [],
-                 device_types: list[str] = [],
-                 label_filters: list[str] = [],
-                 order_by: str = '',
-                 auth: BasicAuth | OAuth | None = None,
-                 ) -> list[Device]:
+    def listing(cls,
+                project_id: str,
+                query: str = '',
+                device_ids: list[str] = [],
+                device_types: list[str] = [],
+                label_filters: list[str] = [],
+                order_by: str = '',
+                auth: BasicAuth | OAuth | None = None,
+                ) -> list[Device]:
 
         # Construct parameters dictionary.
         params: dict = dict()

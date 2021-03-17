@@ -41,11 +41,11 @@ class Project(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def get_list(cls,
-                 organization_id: str = '',
-                 query: str = '',
-                 auth: BasicAuth | OAuth | None = None
-                 ) -> list[Project]:
+    def listing(cls,
+                organization_id: str = '',
+                query: str = '',
+                auth: BasicAuth | OAuth | None = None
+                ) -> list[Project]:
 
         # Construct URL.
         url = dt.base_url + '/projects'

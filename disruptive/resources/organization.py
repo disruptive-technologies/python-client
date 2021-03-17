@@ -37,9 +37,9 @@ class Organization(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def get_list(cls,
-                 auth: BasicAuth | OAuth | None = None,
-                 ) -> list[Organization]:
+    def listing(cls,
+                auth: BasicAuth | OAuth | None = None,
+                ) -> list[Organization]:
 
         # Return list of Organization objects of paginated GET response.
         orgs = dtrequests.auto_paginated_list(

@@ -33,12 +33,12 @@ class TestOrganization():
         # Assert attributes in output Device object.
         assert isinstance(o, dt.Organization)
 
-    def test_list(self, request_mock):
+    def test_listing(self, request_mock):
         # Update the response data with list of organization data.
         request_mock.json = dtresponses.organizations
 
         # Call the appropriate endpoint
-        orgs = dt.Organization.get_list()
+        orgs = dt.Organization.listing()
 
         # Verify request parameters.
         request_mock.assert_requested(

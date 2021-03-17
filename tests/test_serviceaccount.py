@@ -38,12 +38,12 @@ class TestServiceAccount():
         # Assert attributes in output Device object.
         assert isinstance(s, dt.ServiceAccount)
 
-    def test_list(self, request_mock):
+    def test_listing(self, request_mock):
         # Update the response data with list of serviceaccount data.
         request_mock.json = dtresponses.serviceaccounts
 
         # Call the appropriate endpoint
-        sas = dt.ServiceAccount.get_list('project_id')
+        sas = dt.ServiceAccount.listing('project_id')
 
         # Verify request parameters.
         request_mock.assert_requested(

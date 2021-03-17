@@ -37,12 +37,12 @@ class TestDevice():
         # Assert instance of Device object.
         assert isinstance(d, dt.Device)
 
-    def test_list(self, request_mock):
+    def test_listing(self, request_mock):
         # Update the response data with a list of device data.
         request_mock.json = dtresponses.paginated_device_response
 
         # Call the appropriate endpoint.
-        devices = dt.Device.get_list('project_id')
+        devices = dt.Device.listing('project_id')
 
         # output should be list.
         assert type(devices) == list

@@ -41,10 +41,10 @@ class DataConnector():
         ))
 
     @classmethod
-    def get_list(cls,
-                 project_id: str,
-                 auth: BasicAuth | OAuth | None = None
-                 ) -> list[DataConnector]:
+    def listing(cls,
+                project_id: str,
+                auth: BasicAuth | OAuth | None = None
+                ) -> list[DataConnector]:
 
         # Return list of DataConnector objects of paginated GET response.
         dataconnectors = dtrequests.auto_paginated_list(
