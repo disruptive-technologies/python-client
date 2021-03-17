@@ -449,6 +449,16 @@ key_without_secret = {
     "createTime": "2021-03-17T08:25:48.953067Z"
 }
 
+key_with_secret = {
+    "key": {
+        "name": "projects/c14u9p095l47ccv1o3pg/serviceaccounts/"
+                + "c18ppqmoiv9008epsv1g/keys/c19tg0eoiv9008epsv50",
+        "id": "c19tg0eoiv9008epsv50",
+        "createTime": "2021-03-17T10:20:49.231251Z",
+    },
+    "secret": "239dcd912b8041a58054f843a2a633a4"
+}
+
 keys = {
     'nextPageToken': '',
     'keys': [

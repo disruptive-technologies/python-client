@@ -175,3 +175,26 @@ class TestServiceAccount():
         # Assert attributes in output Device object.
         for key in keys:
             assert isinstance(key, Key)
+
+    def test_create_key(self, request_mock):
+        # Update the response data with serviceaccount data.
+        request_mock.json = dtresponses.key_with_secret
+
+        # Call the appropriate endpoint.
+        key = dt.ServiceAccount.create_key(
+            project_id='project_id',
+            serviceaccount_id='serviceaccount_id',
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='POST',
+            url=dt.base_url+'/projects/project_id/'
+            + 'serviceaccounts/serviceaccount_id/keys',
+        )
+
+        # Verify single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert attributes in output Device object.
+        assert isinstance(key, Key)

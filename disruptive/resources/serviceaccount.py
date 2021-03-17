@@ -176,6 +176,26 @@ class ServiceAccount(dtoutputs.OutputBase):
         )
         return [Key(key) for key in keys]
 
+    @staticmethod
+    def create_key(project_id: str,
+                   serviceaccount_id: str,
+                   auth: BasicAuth | OAuth | None = None,
+                   ) -> Key:
+
+        # Construct URL.
+        url = dt.base_url
+        url += '/projects/{}/serviceaccounts/{}/keys'.format(
+            project_id,
+            serviceaccount_id,
+        )
+
+        # Return Key object of POST request response.
+        response = dtrequests.post(
+            url=url,
+            auth=auth,
+        )
+        return Key.with_secret(response)
+
 
 class Key(dtoutputs.OutputBase):
 
@@ -194,3 +214,9 @@ class Key(dtoutputs.OutputBase):
         self.create_time = self.raw['createTime']
         if 'secret' in self.raw:
             self.secret = self.raw['secret']
+
+    @classmethod
+    def with_secret(cls, key: dict) -> None:
+        combined = key['key']
+        combined['secret'] = key['secret']
+        return cls(combined)
