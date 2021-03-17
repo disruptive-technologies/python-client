@@ -441,3 +441,18 @@ serviceaccounts = {
         serviceaccount2,
     ]
 }
+
+key_without_secret = {
+    "name": "projects/c14u0p894l47cdd1o3pg/serviceaccounts/"
+            + "c18jpqmolv9076epsv1g/keys/c18rs36olv9021epsv2g",
+    "id": "c18rs36olv9021epsv2g",
+    "createTime": "2021-03-17T08:25:48.953067Z"
+}
+
+keys = {
+    'nextPageToken': '',
+    'keys': [
+        key_without_secret,
+        key_without_secret,
+    ]
+}
