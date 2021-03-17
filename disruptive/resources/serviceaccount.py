@@ -134,12 +134,47 @@ class ServiceAccount(dtoutputs.OutputBase):
         # Send DELETE request, but return nothing.
         dtrequests.delete(url=url)
 
-    @classmethod
-    def list_keys(cls,
-                  project_id: str,
-                  serviceaccount_id: str
+    @staticmethod
+    def get_key(project_id: str,
+                serviceaccount_id: str,
+                key_id: str,
+                auth: BasicAuth | OAuth | None = None,
+                ) -> Key:
+
+        # Construct URL.
+        url = dt.base_url
+        url += '/projects/{}/serviceaccounts/{}/keys/{}'.format(
+            project_id,
+            serviceaccount_id,
+            key_id,
+        )
+
+        # Return Key object of GET request response.
+        return Key(dtrequests.get(
+            url=url,
+            auth=auth,
+        ))
+
+    @staticmethod
+    def list_keys(project_id: str,
+                  serviceaccount_id: str,
+                  auth: BasicAuth | OAuth | None = None,
                   ) -> list[Key]:
-        pass
+
+        # Construct URL.
+        url = dt.base_url
+        url += '/projects/{}/serviceaccounts/{}/keys'.format(
+            project_id,
+            serviceaccount_id,
+        )
+
+        # Return list of Key objects of paginated GET response.
+        keys = dtrequests.auto_paginated_list(
+            url=url,
+            pagination_key='keys',
+            auth=auth,
+        )
+        return [Key(key) for key in keys]
 
 
 class Key(dtoutputs.OutputBase):

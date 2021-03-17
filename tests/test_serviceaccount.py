@@ -2,6 +2,7 @@
 import disruptive as dt
 import tests.mock_responses as dtresponses
 import disruptive.transforms as dttrans
+from disruptive.resources.serviceaccount import Key
 
 
 class TestServiceAccount():
@@ -35,6 +36,9 @@ class TestServiceAccount():
             + 'serviceaccounts/serviceaccount_id',
         )
 
+        # Verify single request sent.
+        request_mock.assert_request_count(1)
+
         # Assert attributes in output Device object.
         assert isinstance(s, dt.ServiceAccount)
 
@@ -50,6 +54,9 @@ class TestServiceAccount():
             method='GET',
             url=dt.base_url+'/projects/project_id/serviceaccounts',
         )
+
+        # Verify single request sent.
+        request_mock.assert_request_count(1)
 
         # Assert instances of Project in output list.
         for s in sas:
@@ -69,6 +76,9 @@ class TestServiceAccount():
             body={'displayName': 'new-sa', 'enableBasicAuth': True},
         )
 
+        # Verify single request sent.
+        request_mock.assert_request_count(1)
+
         # Assert attributes in output Device object.
         assert isinstance(s, dt.ServiceAccount)
 
@@ -83,6 +93,9 @@ class TestServiceAccount():
             display_name='service-account-1',
             basic_auth=False,
         )
+
+        # Verify single request sent.
+        request_mock.assert_request_count(1)
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -105,9 +118,60 @@ class TestServiceAccount():
             serviceaccount_id='serviceaccount_id',
         )
 
+        # Verify single request sent.
+        request_mock.assert_request_count(1)
+
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
             url=dt.base_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id',
         )
+
+    def test_get_key(self, request_mock):
+        # Update the response data with serviceaccount data.
+        request_mock.json = dtresponses.key_without_secret
+
+        # Call the appropriate endpoint.
+        key = dt.ServiceAccount.get_key(
+            project_id='project_id',
+            serviceaccount_id='serviceaccount_id',
+            key_id='key_id',
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='GET',
+            url=dt.base_url+'/projects/project_id/'
+            + 'serviceaccounts/serviceaccount_id/keys/key_id',
+        )
+
+        # Verify single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert attributes in output Device object.
+        assert isinstance(key, Key)
+
+    def test_list_keys(self, request_mock):
+        # Update the response data with serviceaccount data.
+        request_mock.json = dtresponses.keys
+
+        # Call the appropriate endpoint.
+        keys = dt.ServiceAccount.list_keys(
+            project_id='project_id',
+            serviceaccount_id='serviceaccount_id',
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='GET',
+            url=dt.base_url+'/projects/project_id/'
+            + 'serviceaccounts/serviceaccount_id/keys',
+        )
+
+        # Verify single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert attributes in output Device object.
+        for key in keys:
+            assert isinstance(key, Key)
