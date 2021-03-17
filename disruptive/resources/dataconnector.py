@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import List, Sequence
+from typing import List, Sequence, Optional
 
 # Project imports.
 import disruptive as dt
@@ -29,7 +29,7 @@ class DataConnector():
     def get(cls,
             project_id: str,
             dataconnector_id: str,
-            auth: BasicAuth | OAuth | None = None
+            auth: Optional[BasicAuth | OAuth] = None
             ) -> DataConnector:
 
         # Construct URL
@@ -46,7 +46,7 @@ class DataConnector():
     @classmethod
     def list(cls,
              project_id: str,
-             auth: BasicAuth | OAuth | None = None
+             auth: Optional[BasicAuth | OAuth] = None
              ) -> List[DataConnector]:
 
         # Return list of DataConnector objects of paginated GET response.
@@ -61,19 +61,19 @@ class DataConnector():
     def create(cls,
                project_id: str,
                url: str,
+               dataconnector_type: str,
                display_name: str = '',
                status: str = 'ACTIVE',
                events: Sequence[str] = [],
-               http_type: str = 'HTTP_PUSH',
                signature_secret: str = '',
-               headers: dict = {},
+               headers: dict[str, str] = {},
                labels: Sequence[str] = [],
-               auth: BasicAuth | OAuth | None = None,
+               auth: Optional[BasicAuth | OAuth] = None,
                ) -> DataConnector:
 
         # Construct request body dictionary.
         body: dict = dict()
-        body['type'] = http_type
+        body['type'] = dataconnector_type
         body['status'] = status
         body['events'] = events
         body['labels'] = labels
@@ -99,32 +99,32 @@ class DataConnector():
     def update(cls,
                project_id: str,
                dataconnector_id: str,
-               display_name: str = '',
-               status: str = '',
-               events: Sequence[str] = [],
-               labels: Sequence[str] = [],
-               url: str = '',
-               signature_secret: str = '',
-               headers: dict = {},
-               auth: BasicAuth | OAuth | None = None,
+               display_name: Optional[str] = None,
+               status: Optional[str] = None,
+               events: Optional[Sequence[str]] = None,
+               labels: Optional[Sequence[str]] = None,
+               url: Optional[str] = None,
+               signature_secret: Optional[str] = None,
+               headers: Optional[dict[str, str]] = None,
+               auth: Optional[BasicAuth | OAuth] = None,
                ) -> DataConnector:
 
         # Construct request body dictionary.
         body: dict = dict()
         body['httpConfig'] = {}
-        if len(display_name) > 0:
+        if display_name is not None:
             body['displayName'] = display_name
-        if len(status) > 0:
+        if status is not None:
             body['status'] = status
-        if len(events) > 0:
+        if events is not None:
             body['events'] = events
-        if len(labels) > 0:
+        if labels is not None:
             body['labels'] = labels
-        if len(url) > 0:
+        if url is not None:
             body['httpConfig']['url'] = url
-        if len(signature_secret) > 0:
+        if signature_secret is not None:
             body['httpConfig']['signatureSecret'] = signature_secret
-        if len(headers) > 0:
+        if headers is not None:
             body['headers'] = headers
 
         # Construct URL.
@@ -143,7 +143,7 @@ class DataConnector():
     def delete(cls,
                project_id: str,
                dataconnector_id: str,
-               auth: BasicAuth | OAuth | None = None
+               auth: Optional[BasicAuth | OAuth] = None
                ) -> None:
 
         # Construct URL.
@@ -161,7 +161,7 @@ class DataConnector():
     def metrics(cls,
                 project_id: str,
                 dataconnector_id: str,
-                auth: BasicAuth | OAuth | None = None
+                auth: Optional[BasicAuth | OAuth] = None
                 ) -> Metric:
 
         # Construct URL.
@@ -180,8 +180,9 @@ class DataConnector():
     def sync(cls,
              project_id: str,
              dataconnector_id: str,
-             auth: BasicAuth | OAuth | None = None
+             auth: Optional[BasicAuth | OAuth] = None
              ) -> None:
+
         # Construct URL.
         url = dt.base_url
         url += '/projects/{}/dataconnectors/{}'

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import Sequence, List, Generator
+from typing import Sequence, List, Generator, Optional
 
 # Project imports.
 import disruptive as dt
@@ -32,7 +32,7 @@ class Device(dtoutputs.OutputBase):
     def get(cls,
             project_id: str,
             device_id: str,
-            auth: BasicAuth | OAuth | None = None,
+            auth: Optional[BasicAuth | OAuth] = None,
             ) -> Device:
 
         # Construct URL
@@ -48,25 +48,25 @@ class Device(dtoutputs.OutputBase):
     @classmethod
     def list(cls,
              project_id: str,
-             query: str = '',
-             device_ids: Sequence[str] = [],
-             device_types: Sequence[str] = [],
-             label_filters: Sequence[str] = [],
-             order_by: str = '',
-             auth: BasicAuth | OAuth | None = None,
+             query: Optional[str] = None,
+             device_ids: Optional[Sequence[str]] = None,
+             device_types: Optional[Sequence[str]] = None,
+             label_filters: Optional[Sequence[str]] = None,
+             order_by: Optional[str] = None,
+             auth: Optional[BasicAuth | OAuth] = None,
              ) -> List[Device]:
 
         # Construct parameters dictionary.
         params: dict = dict()
-        if len(query) > 0:
+        if query is not None:
             params['query'] = query
-        if len(device_ids) > 0:
+        if device_ids is not None:
             params['device_ids'] = device_ids
-        if len(device_types) > 0:
+        if device_types is not None:
             params['device_types'] = device_types
-        if len(label_filters) > 0:
+        if label_filters is not None:
             params['label_filters'] = label_filters
-        if len(order_by) > 0:
+        if order_by is not None:
             params['order_by'] = order_by
 
         # Return list of Device objects of paginated GET response.
@@ -82,7 +82,7 @@ class Device(dtoutputs.OutputBase):
     def generator(cls,
                   project_id: str,
                   page_size: int = 100,
-                  auth: BasicAuth | OAuth | None = None,
+                  auth: Optional[BasicAuth | OAuth] = None,
                   ) -> Generator:
 
         # Construct URL
@@ -90,10 +90,10 @@ class Device(dtoutputs.OutputBase):
 
         # Relay generator output, yielding Device objects of response.
         for devices in dtrequests.generator_list(
-                url,
-                'devices',
-                {},
-                page_size,
+                url=url,
+                pagination_key='devices',
+                params={},
+                page_size=page_size,
                 auth=auth
                 ):
             yield [cls(device) for device in devices]
@@ -101,9 +101,9 @@ class Device(dtoutputs.OutputBase):
     @staticmethod
     def batch_update_labels(project_id: str,
                             device_ids: Sequence[str],
-                            add_labels: dict = {},
-                            remove_keys: Sequence[str] = [],
-                            auth: BasicAuth | OAuth | None = None,
+                            add_labels: Optional[dict[str, str]] = None,
+                            remove_labels: Optional[Sequence[str]] = None,
+                            auth: Optional[BasicAuth | OAuth] = None,
                             ) -> None:
 
         # Construct list of devices.
@@ -111,11 +111,12 @@ class Device(dtoutputs.OutputBase):
         devices = [name.format(project_id, xid) for xid in device_ids]
 
         # Construct request body dictionary.
-        body = {
-            'devices': devices,
-            'addLabels': add_labels,
-            'removeLabels': remove_keys,
-        }
+        body: dict = dict()
+        body['devices'] = devices
+        if add_labels is not None:
+            body['addLabels'] = add_labels
+        if remove_labels is not None:
+            body['removeLabels'] = remove_labels
 
         # Construct URL.
         url = dt.base_url
@@ -133,7 +134,7 @@ class Device(dtoutputs.OutputBase):
                   device_id: str,
                   key: str,
                   value: str,
-                  auth: BasicAuth | OAuth | None = None,
+                  auth: Optional[BasicAuth | OAuth] = None,
                   ) -> None:
 
         # Use batch_update_labels for safer call.
@@ -149,7 +150,7 @@ class Device(dtoutputs.OutputBase):
                      device_id: str,
                      key: str,
                      value: str,
-                     auth: BasicAuth | OAuth | None = None,
+                     auth: Optional[BasicAuth | OAuth] = None,
                      ) -> None:
 
         # Use batch_update_labels for safer call.
@@ -163,15 +164,15 @@ class Device(dtoutputs.OutputBase):
     @staticmethod
     def remove_label(project_id: str,
                      device_id: str,
-                     key: str,
-                     auth: BasicAuth | OAuth | None = None,
+                     label: str,
+                     auth: Optional[BasicAuth | OAuth] = None,
                      ) -> None:
 
         # Use batch_update_labels for safer call.
         Device.batch_update_labels(
             project_id=project_id,
             device_ids=[device_id],
-            remove_keys=[key],
+            remove_labels=[label],
             auth=auth,
         )
 
@@ -179,7 +180,7 @@ class Device(dtoutputs.OutputBase):
     def transfer(source_project_id: str,
                  target_project_id: str,
                  device_ids: Sequence[str],
-                 auth: BasicAuth | OAuth | None = None,
+                 auth: Optional[BasicAuth | OAuth] = None,
                  ) -> None:
 
         # Construct list of devices.

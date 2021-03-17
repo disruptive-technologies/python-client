@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import List
+from typing import List, Optional
 
 # Project imports.
 import disruptive as dt
@@ -32,7 +32,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def get(cls,
             project_id: str,
             serviceaccount_id: str,
-            auth: BasicAuth | OAuth | None = None
+            auth: Optional[BasicAuth | OAuth] = None
             ) -> ServiceAccount:
 
         # Construct URL.
@@ -51,7 +51,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     @classmethod
     def list(cls,
              project_id: str,
-             auth: BasicAuth | OAuth | None = None,
+             auth: Optional[BasicAuth | OAuth] = None,
              ) -> List[ServiceAccount]:
 
         # Construct URL.
@@ -71,7 +71,7 @@ class ServiceAccount(dtoutputs.OutputBase):
                project_id: str,
                display_name: str = '',
                basic_auth: bool = False,
-               auth: BasicAuth | OAuth | None = None,
+               auth: Optional[BasicAuth | OAuth] = None,
                ):
 
         # Construct URL.
@@ -95,9 +95,9 @@ class ServiceAccount(dtoutputs.OutputBase):
     def update(cls,
                project_id: str,
                serviceaccount_id: str,
-               display_name: str = '',
-               basic_auth: bool | None = None,
-               auth: BasicAuth | OAuth | None = None,
+               display_name: Optional[str] = None,
+               basic_auth: Optional[bool] = None,
+               auth: Optional[BasicAuth | OAuth] = None,
                ):
 
         # Construct URL.
@@ -109,7 +109,7 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         # Construct body.
         body: dict = dict()
-        if len(display_name) > 0:
+        if display_name is not None:
             body['displayName'] = display_name
         if basic_auth is not None:
             body['enableBasicAuth'] = basic_auth
@@ -125,7 +125,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def delete(cls,
                project_id: str,
                serviceaccount_id: str,
-               auth: BasicAuth | OAuth | None = None,
+               auth: Optional[BasicAuth | OAuth] = None,
                ) -> None:
 
         # Construct URL.
@@ -142,7 +142,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def get_key(project_id: str,
                 serviceaccount_id: str,
                 key_id: str,
-                auth: BasicAuth | OAuth | None = None,
+                auth: Optional[BasicAuth | OAuth] = None,
                 ) -> Key:
 
         # Construct URL.
@@ -162,7 +162,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     @staticmethod
     def list_keys(project_id: str,
                   serviceaccount_id: str,
-                  auth: BasicAuth | OAuth | None = None,
+                  auth: Optional[BasicAuth | OAuth] = None,
                   ) -> List[Key]:
 
         # Construct URL.
@@ -183,7 +183,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     @staticmethod
     def create_key(project_id: str,
                    serviceaccount_id: str,
-                   auth: BasicAuth | OAuth | None = None,
+                   auth: Optional[BasicAuth | OAuth] = None,
                    ) -> Key:
 
         # Construct URL.
@@ -204,7 +204,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def delete_key(project_id: str,
                    serviceaccount_id: str,
                    key_id: str,
-                   auth: BasicAuth | OAuth | None = None,
+                   auth: Optional[BasicAuth | OAuth] = None,
                    ) -> None:
 
         # Construct URL.

@@ -3,6 +3,7 @@ from __future__ import annotations
 # Standard library imports.
 import time
 import json
+from typing import Optional
 
 # Third-party imports.
 import requests
@@ -17,7 +18,7 @@ import disruptive.responses as dtresponses
 def get(url: str,
         params: dict = {},
         headers: dict = {},
-        timeout: int | None = None,
+        timeout: Optional[int] = None,
         auth=None
         ) -> dict:
     return __construct_request(
@@ -31,8 +32,8 @@ def get(url: str,
 
 
 def post(url: str,
-         body: dict | None = None,
-         data: str | None = None,
+         body: Optional[dict] = None,
+         data: Optional[str] = None,
          headers: dict = {},
          authorize: bool = True,
          auth=None,
@@ -60,7 +61,7 @@ def auto_paginated_list(
         url: str,
         pagination_key: str,
         params: dict = {},
-        page_size: int = None,
+        page_size: Optional[int] = None,
         auth=None,
 ):
     results = []
@@ -79,20 +80,25 @@ def auto_paginated_list(
     return results
 
 
-def generator_list(
-        url: str,
-        pagination_key: str,
-        params: dict = {},
-        page_size: int = 100,
-        auth=None,
-):
+def generator_list(url: str,
+                   pagination_key: str,
+                   params: dict = {},
+                   page_size: int = 100,
+                   auth=None,
+                   ):
+
+    # Add page size to params dictionary.
     params['pageSize'] = page_size
 
+    # Iterate until complete.
     while True:
+        # Get response from API.
         response = __construct_request("GET", url, params, auth=auth)
 
+        # Yield the response contents.
         yield response[pagination_key]
 
+        # Update pagination token as required.
         if len(response['nextPageToken']) > 0:
             params['pageToken'] = response['nextPageToken']
         else:
@@ -104,10 +110,10 @@ def __construct_request(
         url: str,
         params: dict = {},
         headers: dict = {},
-        body: dict = None,
-        data: str = None,
+        body: Optional[dict] = None,
+        data: Optional[str] = None,
         retry_count: int = 1,
-        timeout: int = None,
+        timeout: Optional[int] = None,
         authorize: bool = True,
         auth=None,
 ):
@@ -181,8 +187,8 @@ def __send_request(method: str,
                    url: str,
                    params: dict,
                    headers: dict,
-                   body: dict | None,
-                   data: str | None,
+                   body: Optional[dict],
+                   data: Optional[str],
                    timeout: int,
                    ):
     response = requests.request(
