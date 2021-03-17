@@ -1,5 +1,5 @@
 # Project imports.
-import disruptive.transforms as dttransforms
+import disruptive.transforms as dttrans
 import disruptive.outputs as dtoutputs
 import disruptive.log as dtlog
 
@@ -322,7 +322,7 @@ class Event(dtoutputs.OutputBase):
         )
 
         # Convert ISO-8601 string to datetime format.
-        self.timestamp = dttransforms.iso8601_to_datetime(
+        self.timestamp = dttrans.iso8601_to_datetime(
             self.raw['timestamp']
         )
 

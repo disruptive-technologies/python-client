@@ -4,7 +4,7 @@ from __future__ import annotations
 import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
-import disruptive.transforms as dttransforms
+import disruptive.transforms as dttrans
 from disruptive.authentication import BasicAuth, OAuth
 
 
@@ -21,8 +21,8 @@ class ServiceAccount(dtoutputs.OutputBase):
         self.email = self.raw['email']
         self.display_name = self.raw['displayName']
         self.basic_auth = self.raw['enableBasicAuth']
-        self.created = dttransforms.iso8601_to_datetime(self.raw['createTime'])
-        self.updated = dttransforms.iso8601_to_datetime(self.raw['updateTime'])
+        self.create_time = dttrans.iso8601_to_datetime(self.raw['createTime'])
+        self.update_time = dttrans.iso8601_to_datetime(self.raw['updateTime'])
 
     @classmethod
     def get(cls,
@@ -45,10 +45,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def get_list(cls,
-                 project_id: str,
-                 auth: BasicAuth | OAuth | None = None,
-                 ) -> list[ServiceAccount]:
+    def listing(cls,
+                project_id: str,
+                auth: BasicAuth | OAuth | None = None,
+                ) -> list[ServiceAccount]:
 
         # Construct URL.
         url = dt.base_url
@@ -133,3 +133,29 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         # Send DELETE request, but return nothing.
         dtrequests.delete(url=url)
+
+    @classmethod
+    def list_keys(cls,
+                  project_id: str,
+                  serviceaccount_id: str
+                  ) -> list[Key]:
+        pass
+
+
+class Key(dtoutputs.OutputBase):
+
+    def __init__(self, key: dict) -> None:
+        # Inherit from Response parent.
+        dtoutputs.OutputBase.__init__(self, key)
+
+        # Initialize secret, which is only not-None when created.
+        self.secret = None
+
+        # Unpack organization json.
+        self.__unpack()
+
+    def __unpack(self) -> None:
+        self.key_id = self.raw['id']
+        self.create_time = self.raw['createTime']
+        if 'secret' in self.raw:
+            self.secret = self.raw['secret']

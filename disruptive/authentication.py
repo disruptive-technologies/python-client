@@ -9,7 +9,7 @@ import jwt
 # Project imports
 import disruptive.requests as dtrequests
 import disruptive.errors as dterrors
-import disruptive.transforms as dttransforms
+import disruptive.transforms as dttrans
 
 
 class Auth():
@@ -69,7 +69,7 @@ class BasicAuth(Auth):
 
         # Construct token.
         self.token = 'Basic {}'.format(
-            dttransforms.base64_encode('{}:{}'.format(
+            dttrans.base64_encode('{}:{}'.format(
                 self.key_id,
                 self.secret
             ))

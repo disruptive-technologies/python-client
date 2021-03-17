@@ -1,7 +1,7 @@
 # Project imports.
 import disruptive as dt
 import tests.mock_responses as dtresponses
-import disruptive.transforms as dttransforms
+import disruptive.transforms as dttrans
 
 
 class TestServiceAccount():
@@ -18,8 +18,8 @@ class TestServiceAccount():
         assert s.email == res['email']
         assert s.display_name == res['displayName']
         assert s.basic_auth == res['enableBasicAuth']
-        assert s.created == dttransforms.iso8601_to_datetime(res['createTime'])
-        assert s.updated == dttransforms.iso8601_to_datetime(res['updateTime'])
+        assert s.create_time == dttrans.iso8601_to_datetime(res['createTime'])
+        assert s.update_time == dttrans.iso8601_to_datetime(res['updateTime'])
 
     def test_get(self, request_mock):
         # Update the response data with serviceaccount data.
