@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import List
+from typing import List, Optional
 
 # Project imports.
 import disruptive as dt
@@ -31,7 +31,7 @@ class Project(dtoutputs.OutputBase):
     @classmethod
     def get(cls,
             project_id: str,
-            auth: BasicAuth | OAuth | None = None
+            auth: Optional[BasicAuth | OAuth] = None
             ) -> Project:
 
         # Construct URL.
@@ -46,9 +46,9 @@ class Project(dtoutputs.OutputBase):
 
     @classmethod
     def list(cls,
-             organization_id: str = '',
-             query: str = '',
-             auth: BasicAuth | OAuth | None = None
+             organization_id: Optional[str] = None,
+             query: Optional[str] = None,
+             auth: Optional[BasicAuth | OAuth] = None
              ) -> List[Project]:
 
         # Construct URL.
@@ -56,9 +56,9 @@ class Project(dtoutputs.OutputBase):
 
         # Construct parameters dictionary.
         params = {}
-        if len(organization_id) > 0:
+        if organization_id is not None:
             params['organization'] = 'organizations/' + organization_id
-        if len(query) > 0:
+        if query is not None:
             params['query'] = query
 
         # Return list of Project objects of paginated GET response.
@@ -74,7 +74,7 @@ class Project(dtoutputs.OutputBase):
     def create(cls,
                organization_id: str,
                display_name: str,
-               auth: BasicAuth | OAuth | None = None
+               auth: Optional[BasicAuth | OAuth] = None
                ) -> Project:
 
         # Construct URL.
@@ -96,7 +96,7 @@ class Project(dtoutputs.OutputBase):
     @staticmethod
     def update(project_id: str,
                display_name: str,
-               auth: BasicAuth | OAuth | None = None
+               auth: Optional[BasicAuth | OAuth] = None
                ) -> None:
 
         # Construct URL.
@@ -116,7 +116,7 @@ class Project(dtoutputs.OutputBase):
 
     @staticmethod
     def delete(project_id: str,
-               auth: BasicAuth | OAuth | None = None
+               auth: Optional[BasicAuth | OAuth] = None
                ) -> None:
 
         # Construct URL.

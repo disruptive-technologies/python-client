@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import Sequence, List
+from typing import Sequence, List, Optional
 
 # Project imports.
 import disruptive as dt
@@ -15,19 +15,19 @@ class EventHistory():
     @staticmethod
     def get(project_id: str,
             device_id: str,
-            event_types: Sequence[str] = [],
-            start_time: str = '',
-            end_time: str = '',
-            auth: BasicAuth | OAuth | None = None,
+            event_types: Optional[Sequence[str]] = None,
+            start_time: Optional[str] = None,
+            end_time: Optional[str] = None,
+            auth: Optional[BasicAuth | OAuth] = None,
             ) -> List[Event]:
 
         # Construct parameters dictionary.
         params: dict = dict()
-        if len(event_types) > 0:
+        if event_types is not None:
             params['eventTypes'] = event_types
-        if len(start_time) > 0:
+        if start_time is not None:
             params['startTime'] = start_time
-        if len(end_time) > 0:
+        if end_time is not None:
             params['endTime'] = end_time
 
         # Construct URL.

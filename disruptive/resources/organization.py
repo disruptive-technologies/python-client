@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports
-from typing import List
+from typing import List, Optional
 
 # Project imports.
 import disruptive as dt
@@ -26,7 +26,7 @@ class Organization(dtoutputs.OutputBase):
     @classmethod
     def get(cls,
             organization_id: str,
-            auth: BasicAuth | OAuth | None = None
+            auth: Optional[BasicAuth | OAuth] = None
             ) -> Organization:
 
         # Construct URL
@@ -41,7 +41,7 @@ class Organization(dtoutputs.OutputBase):
 
     @classmethod
     def list(cls,
-             auth: BasicAuth | OAuth | None = None,
+             auth: Optional[BasicAuth | OAuth] = None,
              ) -> List[Organization]:
 
         # Return list of Organization objects of paginated GET response.
