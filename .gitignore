@@ -137,6 +137,6 @@ dmypy.json
 # profiling data
 .prof
 
-tests/bench.py
+bench.py
 notes.md
 local-build.sh
