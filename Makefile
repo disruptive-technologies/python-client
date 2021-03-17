@@ -22,6 +22,7 @@ test:
 
 mypy:
 	mypy disruptive/
+	mypy examples/
 
 lint:
 	flake8
