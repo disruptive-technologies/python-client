@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports
-import typing
+from typing import Sequence, Generator
 
 # Project Imports.
 import disruptive as dt
@@ -13,8 +13,8 @@ class Stream():
     @staticmethod
     def single(project_id: str,
                device_id: str,
-               event_types: list[str] = [],
-               ) -> typing.Generator:
+               event_types: Sequence[str] = [],
+               ) -> Generator:
 
         # Construct parameters dictionary.
         params: dict = dict()

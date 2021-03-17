@@ -14,6 +14,7 @@ class TestProject():
         p = dt.Project.get('project_id')
 
         # Assert attributes unpacked correctly.
+        assert p.id == res['name'].split('/')[-1]
         assert p.display_name == res['displayName']
         assert p.organization_id == res['organization'].split('/')[-1]
         assert p.organization_display_name == res['organizationDisplayName']

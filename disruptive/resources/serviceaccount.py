@@ -21,6 +21,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         self.__unpack()
 
     def __unpack(self) -> None:
+        self.id = self.raw['name'].split('/')[-1]
         self.email = self.raw['email']
         self.display_name = self.raw['displayName']
         self.basic_auth = self.raw['enableBasicAuth']
@@ -234,8 +235,8 @@ class Key(dtoutputs.OutputBase):
         self.__unpack()
 
     def __unpack(self) -> None:
-        self.key_id = self.raw['id']
-        self.create_time = self.raw['createTime']
+        self.id = self.raw['id']
+        self.create_time = dttrans.iso8601_to_datetime(self.raw['createTime'])
         if 'secret' in self.raw:
             self.secret = self.raw['secret']
 

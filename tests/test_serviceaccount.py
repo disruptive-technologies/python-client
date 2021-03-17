@@ -16,6 +16,7 @@ class TestServiceAccount():
         s = dt.ServiceAccount.get('project_id', 'serviceaccount_id')
 
         # Assert attributes unpacked correctly.
+        assert s.id == res['name'].split('/')[-1]
         assert s.email == res['email']
         assert s.display_name == res['displayName']
         assert s.basic_auth == res['enableBasicAuth']
@@ -127,6 +128,37 @@ class TestServiceAccount():
             url=dt.base_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id',
         )
+
+    def test_key_attributes(self, request_mock):
+        # Update the response data with serviceaccount data.
+        res = dtresponses.key_without_secret
+        request_mock.json = res
+
+        # Call the appropriate endpoint.
+        k = dt.ServiceAccount.get_key(
+            'project_id',
+            'serviceaccount_id',
+            'key_id'
+        )
+
+        # Assert attributes unpacked correctly.
+        assert k.id == res['name'].split('/')[-1]
+        assert k.create_time == dttrans.iso8601_to_datetime(res['createTime'])
+        assert k.secret is None
+
+    def test_key_secret_set(self, request_mock):
+        # Update the response data with serviceaccount data.
+        res = dtresponses.key_with_secret
+        request_mock.json = res
+
+        # Call the appropriate endpoint.
+        k = dt.ServiceAccount.create_key(
+            'project_id',
+            'serviceaccount_id',
+        )
+
+        # Assert attributes unpacked correctly.
+        assert k.secret == res['secret']
 
     def test_get_key(self, request_mock):
         # Update the response data with serviceaccount data.

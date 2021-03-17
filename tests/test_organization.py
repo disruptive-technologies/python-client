@@ -14,8 +14,8 @@ class TestOrganization():
         o = dt.Organization.get('organization_id')
 
         # Assert attributes unpacked correctly.
+        assert o.id == res['name'].split('/')[-1]
         assert o.display_name == res['displayName']
-        assert o.organization_id == res['name'].split('/')[-1]
 
     def test_get(self, request_mock):
         # Update the response data with organization data.

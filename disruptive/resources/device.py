@@ -22,7 +22,7 @@ class Device(dtoutputs.OutputBase):
         self.__unpack()
 
     def __unpack(self) -> None:
-        self.device_id = self.raw['name'].split('/')[-1]
+        self.id = self.raw['name'].split('/')[-1]
         self.project_id = self.raw['name'].split('/')[1]
         self.type = self.raw['type']
         self.labels = self.raw['labels']

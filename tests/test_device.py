@@ -18,7 +18,7 @@ class TestDevice():
         d = dt.Device.get('project_id', 'device_id')
 
         # Assert attributes unpacked correctly.
-        assert d.device_id == res['name'].split('/')[-1]
+        assert d.id == res['name'].split('/')[-1]
         assert d.type == res['type']
 
     def test_get(self, request_mock):

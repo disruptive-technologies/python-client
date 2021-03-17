@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# Standard library imports.
+from typing import Sequence, List
+
 # Project imports.
 import disruptive as dt
 import disruptive.requests as req
@@ -12,11 +15,11 @@ class EventHistory():
     @staticmethod
     def get(project_id: str,
             device_id: str,
-            event_types: list[str] = [],
+            event_types: Sequence[str] = [],
             start_time: str = '',
             end_time: str = '',
             auth: BasicAuth | OAuth | None = None,
-            ) -> list[Event]:
+            ) -> List[Event]:
 
         # Construct parameters dictionary.
         params: dict = dict()

@@ -20,7 +20,7 @@ class Organization(dtoutputs.OutputBase):
         self.__unpack()
 
     def __unpack(self) -> None:
-        self.organization_id = self.raw['name'].split('/')[-1]
+        self.id = self.raw['name'].split('/')[-1]
         self.display_name = self.raw['displayName']
 
     @classmethod

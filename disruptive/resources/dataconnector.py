@@ -20,7 +20,7 @@ class DataConnector():
         self.__unpack()
 
     def __unpack(self) -> None:
-        self.dataconnector_id = self.raw['name'].split('/')[-1]
+        self.id = self.raw['name'].split('/')[-1]
         self.type = self.raw['type']
         self.status = self.raw['status']
         self.display_name = self.raw['displayName']

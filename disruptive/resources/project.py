@@ -20,6 +20,7 @@ class Project(dtoutputs.OutputBase):
         self.__unpack()
 
     def __unpack(self) -> None:
+        self.id = self.raw['name'].split('/')[-1]
         self.display_name = self.raw['displayName']
         self.organization_id = self.raw['organization'].split('/')[-1]
         self.organization_display_name = self.raw['organizationDisplayName']
