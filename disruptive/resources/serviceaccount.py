@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# Standard library imports.
+from typing import List
+
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
@@ -45,10 +48,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def listing(cls,
-                project_id: str,
-                auth: BasicAuth | OAuth | None = None,
-                ) -> list[ServiceAccount]:
+    def list(cls,
+             project_id: str,
+             auth: BasicAuth | OAuth | None = None,
+             ) -> List[ServiceAccount]:
 
         # Construct URL.
         url = dt.base_url
@@ -159,7 +162,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def list_keys(project_id: str,
                   serviceaccount_id: str,
                   auth: BasicAuth | OAuth | None = None,
-                  ) -> list[Key]:
+                  ) -> List[Key]:
 
         # Construct URL.
         url = dt.base_url

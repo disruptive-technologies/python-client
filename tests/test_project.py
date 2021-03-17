@@ -36,12 +36,12 @@ class TestProject():
         # Assert attributes in output Device object.
         assert isinstance(p, dt.Project)
 
-    def test_listing(self, request_mock):
+    def test_list(self, request_mock):
         # Update the response data with list of project data.
         request_mock.json = dtresponses.projects
 
         # Call the appropriate endpoint
-        projects = dt.Project.listing()
+        projects = dt.Project.list()
 
         # Verify request parameters.
         request_mock.assert_requested(

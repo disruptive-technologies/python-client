@@ -32,12 +32,12 @@ class TestDataconnector():
         # Assert output instance.
         assert isinstance(d, dt.DataConnector)
 
-    def test_listing(self, request_mock):
+    def test_list(self, request_mock):
         # Update the response json with a mock dataconnector response.
         request_mock.json = dtresponses.paginated_dataconnectors_response
 
         # Call the appropriate endpoint.
-        dataconnectors = dt.DataConnector.listing('project_id')
+        dataconnectors = dt.DataConnector.list('project_id')
 
         # Assert single request sent.
         request_mock.assert_request_count(1)

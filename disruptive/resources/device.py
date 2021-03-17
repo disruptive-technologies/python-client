@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-import typing
+from typing import Sequence, List, Generator
 
 # Project imports.
 import disruptive as dt
@@ -46,15 +46,15 @@ class Device(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def listing(cls,
-                project_id: str,
-                query: str = '',
-                device_ids: list[str] = [],
-                device_types: list[str] = [],
-                label_filters: list[str] = [],
-                order_by: str = '',
-                auth: BasicAuth | OAuth | None = None,
-                ) -> list[Device]:
+    def list(cls,
+             project_id: str,
+             query: str = '',
+             device_ids: Sequence[str] = [],
+             device_types: Sequence[str] = [],
+             label_filters: Sequence[str] = [],
+             order_by: str = '',
+             auth: BasicAuth | OAuth | None = None,
+             ) -> List[Device]:
 
         # Construct parameters dictionary.
         params: dict = dict()
@@ -83,7 +83,7 @@ class Device(dtoutputs.OutputBase):
                   project_id: str,
                   page_size: int = 100,
                   auth: BasicAuth | OAuth | None = None,
-                  ) -> typing.Generator:
+                  ) -> Generator:
 
         # Construct URL
         url = dt.base_url + '/projects/{}/devices'.format(project_id)
@@ -100,9 +100,9 @@ class Device(dtoutputs.OutputBase):
 
     @staticmethod
     def batch_update_labels(project_id: str,
-                            device_ids: list[str],
+                            device_ids: Sequence[str],
                             add_labels: dict = {},
-                            remove_keys: list[str] = [],
+                            remove_keys: Sequence[str] = [],
                             auth: BasicAuth | OAuth | None = None,
                             ) -> None:
 
@@ -178,7 +178,7 @@ class Device(dtoutputs.OutputBase):
     @staticmethod
     def transfer(source_project_id: str,
                  target_project_id: str,
-                 device_ids: list[str],
+                 device_ids: Sequence[str],
                  auth: BasicAuth | OAuth | None = None,
                  ) -> None:
 

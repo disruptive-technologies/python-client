@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# Standard library imports.
+from typing import List, Sequence
+
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
@@ -41,10 +44,10 @@ class DataConnector():
         ))
 
     @classmethod
-    def listing(cls,
-                project_id: str,
-                auth: BasicAuth | OAuth | None = None
-                ) -> list[DataConnector]:
+    def list(cls,
+             project_id: str,
+             auth: BasicAuth | OAuth | None = None
+             ) -> List[DataConnector]:
 
         # Return list of DataConnector objects of paginated GET response.
         dataconnectors = dtrequests.auto_paginated_list(
@@ -60,11 +63,11 @@ class DataConnector():
                url: str,
                display_name: str = '',
                status: str = 'ACTIVE',
-               events: list[str] = [],
+               events: Sequence[str] = [],
                http_type: str = 'HTTP_PUSH',
                signature_secret: str = '',
                headers: dict = {},
-               labels: list[str] = [],
+               labels: Sequence[str] = [],
                auth: BasicAuth | OAuth | None = None,
                ) -> DataConnector:
 
@@ -98,8 +101,8 @@ class DataConnector():
                dataconnector_id: str,
                display_name: str = '',
                status: str = '',
-               events: list[str] = [],
-               labels: list[str] = [],
+               events: Sequence[str] = [],
+               labels: Sequence[str] = [],
                url: str = '',
                signature_secret: str = '',
                headers: dict = {},

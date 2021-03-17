@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# Standard library imports.
+from typing import List
+
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
@@ -41,11 +44,11 @@ class Project(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def listing(cls,
-                organization_id: str = '',
-                query: str = '',
-                auth: BasicAuth | OAuth | None = None
-                ) -> list[Project]:
+    def list(cls,
+             organization_id: str = '',
+             query: str = '',
+             auth: BasicAuth | OAuth | None = None
+             ) -> List[Project]:
 
         # Construct URL.
         url = dt.base_url + '/projects'

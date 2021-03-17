@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# Standard library imports
+from typing import List
+
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
@@ -37,9 +40,9 @@ class Organization(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def listing(cls,
-                auth: BasicAuth | OAuth | None = None,
-                ) -> list[Organization]:
+    def list(cls,
+             auth: BasicAuth | OAuth | None = None,
+             ) -> List[Organization]:
 
         # Return list of Organization objects of paginated GET response.
         orgs = dtrequests.auto_paginated_list(
