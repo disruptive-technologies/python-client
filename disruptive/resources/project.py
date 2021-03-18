@@ -212,3 +212,22 @@ class Project(OutputBase):
             body=body,
             auth=auth,
         ))
+
+    @staticmethod
+    def remove_member(project_id: str,
+                      member_id: str,
+                      auth: Optional[BasicAuth | OAuth] = None,
+                      ) -> None:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members/{}'.format(
+            project_id,
+            member_id,
+        )
+
+        # Send DELETE request, but return nothing.
+        dtrequests.delete(
+            url=url,
+            auth=auth,
+        )

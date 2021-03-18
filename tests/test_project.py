@@ -188,3 +188,25 @@ class TestProject():
 
         # Assert instances of Project in output list.
         assert isinstance(member, dt.outputs.Member)
+
+    def test_remove_member(self, request_mock):
+        # Update the response with status code 200.
+        request_mock.status_code = 200
+
+        # Call the appropriate endpoint
+        response = dt.Project.remove_member(
+            project_id='project_id',
+            member_id='member_id',
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='DELETE',
+            url=dt.base_url+'/projects/project_id/members/member_id',
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert response is None
