@@ -466,3 +466,36 @@ keys = {
         key_without_secret,
     ]
 }
+
+user_member = {
+    "name": "organizations/c11humq0ss9o036gu53g/members/9201",
+    "displayName": "my-org-member",
+    "roles": [
+        "roles/organization.admin"
+    ],
+    "status": "ACCEPTED",
+    "email": "my_user_account@disruptive-technologies.com",
+    "accountType": "USER",
+    "createTime": "1970-01-01T00:00:00.000000Z"
+}
+
+serviceaccount_member = {
+    "name": "organizations/c10humqoss90032gu54g/members/c17n9hn915gg00c8ievg",
+    "displayName": "localdev",
+    "roles": [
+        "roles/project.developer"
+    ],
+    "status": "ACCEPTED",
+    "email": "c17m9hn815gg00c8levu@c14u9p094l47cdv1o3pg."
+    + "serviceaccount.d21s.com",
+    "accountType": "SERVICE_ACCOUNT",
+    "createTime": "2021-03-15T13:45:53.964040Z"
+}
+
+members = {
+    'nextPageToken': '',
+    'members': [
+        user_member,
+        serviceaccount_member,
+    ]
+}

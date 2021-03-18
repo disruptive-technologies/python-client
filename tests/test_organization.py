@@ -30,6 +30,9 @@ class TestOrganization():
             url=dt.base_url+'/organizations/organization_id',
         )
 
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
         # Assert attributes in output Device object.
         assert isinstance(o, dt.Organization)
 
@@ -46,6 +49,29 @@ class TestOrganization():
             url=dt.base_url+'/organizations',
         )
 
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
         # Assert instances of Project in output list.
         for o in orgs:
             assert isinstance(o, dt.Organization)
+
+    def test_list_members(self, request_mock):
+        # Update the response data with list of organization data.
+        request_mock.json = dtresponses.members
+
+        # Call the appropriate endpoint
+        members = dt.Organization.list_members('org_id')
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='GET',
+            url=dt.base_url+'/organizations/org_id/members',
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert instances of Project in output list.
+        for m in members:
+            assert isinstance(m, dt.outputs.Member)
