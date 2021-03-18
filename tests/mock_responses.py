@@ -526,3 +526,52 @@ members = {
         serviceaccount_member,
     ]
 }
+
+project_user_role = {
+    "name": "roles/project.user",
+    "displayName": "Project user",
+    "description": "Users cannot change anything, just view "
+    + "the data in the Project",
+    "permissions": [
+        "project.read",
+        "membership.read",
+        "sensor.read",
+        "device.read",
+        "dataconnector.read",
+        "serviceaccount.read",
+        "serviceaccount.key.read",
+        "emulator.read"
+    ]
+}
+
+project_developer_role = {
+    "name": "roles/project.developer",
+    "displayName": "Project developer",
+    "description": "Allows editing devices and Project settings",
+    "permissions": [
+        "project.read",
+        "membership.read",
+        "sensor.read",
+        "sensor.update",
+        "device.read",
+        "device.update",
+        "dataconnector.create",
+        "dataconnector.read",
+        "dataconnector.update",
+        "dataconnector.delete",
+        "serviceaccount.read",
+        "serviceaccount.key.read",
+        "emulator.read",
+        "emulator.update",
+        "emulator.create",
+        "emulator.delete"
+    ]
+}
+
+roles = {
+    'nextPageToken': '',
+    'roles': [
+        project_user_role,
+        project_developer_role,
+    ]
+}

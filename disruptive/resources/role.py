@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# Standard library imports.
+from typing import List
+
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
@@ -29,7 +32,7 @@ class Role(OutputBase):
         ))
 
     @classmethod
-    def list(cls) -> Role:
+    def list(cls) -> List[Role]:
         # Return list of Role objects.
         response = dtrequests.auto_paginated_list(
             url=dt.base_url + '/roles',
