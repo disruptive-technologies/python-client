@@ -20,18 +20,18 @@ class Auth():
         # Initialise variables
         self.token = ''
 
-    @staticmethod
-    def basic(key_id: str,
-              secret: str,
-              ) -> BasicAuth:
-        return BasicAuth(key_id, secret)
+    # @staticmethod
+    # def basic(key_id: str,
+    #           secret: str,
+    #           ) -> BasicAuth:
+    #     return BasicAuth(key_id, secret)
 
-    @staticmethod
-    def oauth(key_id: str,
-              secret: str,
-              email: str,
-              ) -> OAuth:
-        return OAuth(key_id, secret, email)
+    # @staticmethod
+    # def oauth(key_id: str,
+    #           secret: str,
+    #           email: str,
+    #           ) -> OAuth:
+    #     return OAuth(key_id, secret, email)
 
     def get_token(self) -> str:
         # Check expiration time.

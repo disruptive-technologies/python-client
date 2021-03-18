@@ -1,6 +1,6 @@
 
 # Authentication scheme.
-from disruptive.authentication import Auth  # noqa
+from disruptive.authentication import Auth, BasicAuth, OAuth  # noqa
 
 # When auth is an instance of Auth set with the default constructor,
 # the project is globally unauthorized, throwing an Unauthorized error at call.
