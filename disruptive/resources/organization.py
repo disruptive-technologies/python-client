@@ -85,7 +85,7 @@ class Organization(OutputBase):
         body['roles'] = ['roles/' + r for r in roles]
         body['email'] = email
 
-        # Return list of Member objects of paginated GET response.
+        # Return Member object of POST request response.
         return Member(dtrequests.post(
             url=url,
             body=body,
@@ -105,7 +105,7 @@ class Organization(OutputBase):
             member_id,
         )
 
-        # Return list of Member objects of paginated GET response.
+        # Return Member object of GET request response.
         return Member(dtrequests.get(
             url=url,
             auth=auth,
