@@ -13,15 +13,44 @@ from disruptive.authentication import BasicAuth, OAuth
 
 
 class Device(dtoutputs.OutputBase):
+    """
+    Represents sensors and cloud connectors.
+
+    When the REST API endpoint response contains a device object, the
+    content is unpacked and set to the related attributes.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified device object received from the REST API.
+    id : str
+        Device ID.
+    project_id : str
+        Project in which the device resides.
+    type : str
+        Device type.
+    labels : dict
+        Label keys and values.
+    reported : Reported
+        Object containing the data from the most recent events.
+
+    """
 
     def __init__(self, device: dict) -> None:
+        """
+        Constructs the Device class by unpacking the raw device object.
+
+        Parameters
+        ----------
+        device : dict
+            Dictionary of device data returned by an endpoint.
+
+        """
+
         # Inherit from Response parent.
         dtoutputs.OutputBase.__init__(self, device)
 
-        # Unpack device json.
-        self.__unpack()
-
-    def __unpack(self) -> None:
+        # Unpack attributes from dictionary.
         self.id = self.raw['name'].split('/')[-1]
         self.project_id = self.raw['name'].split('/')[1]
         self.type = self.raw['type']
@@ -34,6 +63,25 @@ class Device(dtoutputs.OutputBase):
             device_id: str,
             auth: Optional[BasicAuth | OAuth] = None,
             ) -> Device:
+        """
+        Gets a device specified by its project and id.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        device_id : str
+            Unique device ID.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            Will be prioritized over project-wide settings if provided.
+
+        Returns
+        -------
+        device : Device
+            Object representing the specified device.
+
+        """
 
         # Construct URL
         url = dt.base_url
