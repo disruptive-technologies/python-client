@@ -231,3 +231,22 @@ class Project(OutputBase):
             url=url,
             auth=auth,
         )
+
+    @staticmethod
+    def get_member_invite_url(project_id: str,
+                              member_id: str,
+                              auth: Optional[BasicAuth | OAuth] = None,
+                              ) -> None:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members/{}'.format(
+            project_id,
+            member_id,
+        ) + ':getInviteUrl'
+
+        # Return url string in GET response.
+        return dtrequests.get(
+            url=url,
+            auth=auth,
+        )['inviteUrl']
