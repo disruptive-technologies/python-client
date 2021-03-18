@@ -1,20 +1,20 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import List, Optional
+from typing import List, Optional, Sequence
 
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
-import disruptive.outputs as dtoutputs
+from disruptive.outputs import OutputBase, Member
 from disruptive.authentication import BasicAuth, OAuth
 
 
-class Project(dtoutputs.OutputBase):
+class Project(OutputBase):
 
     def __init__(self, project: dict) -> None:
         # Inherit from Response parent.
-        dtoutputs.OutputBase.__init__(self, project)
+        OutputBase.__init__(self, project)
 
         # Unpack organization json.
         self.__unpack()
@@ -73,7 +73,7 @@ class Project(dtoutputs.OutputBase):
     @classmethod
     def create(cls,
                organization_id: str,
-               display_name: str,
+               display_name: str = '',
                auth: Optional[BasicAuth | OAuth] = None
                ) -> Project:
 
@@ -81,10 +81,9 @@ class Project(dtoutputs.OutputBase):
         url = dt.base_url + '/projects'
 
         # Construct request body.
-        body = {
-            'organization': 'organizations/' + organization_id,
-            'displayName': display_name,
-        }
+        body: dict = dict()
+        body['organization'] = 'organizations/' + organization_id
+        body['displayName'] = display_name
 
         # Return Project object of POST request response.
         return cls(dtrequests.post(
@@ -95,7 +94,7 @@ class Project(dtoutputs.OutputBase):
 
     @staticmethod
     def update(project_id: str,
-               display_name: str,
+               display_name: Optional[str] = None,
                auth: Optional[BasicAuth | OAuth] = None
                ) -> None:
 
@@ -125,5 +124,144 @@ class Project(dtoutputs.OutputBase):
         # Send DELETE request, but return nothing.
         dtrequests.delete(
             url=url,
+            auth=auth,
+        )
+
+    @staticmethod
+    def list_members(project_id: str,
+                     auth: Optional[BasicAuth | OAuth] = None,
+                     ) -> List[Member]:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members'.format(project_id)
+
+        # Return list of Member objects of paginated GET response.
+        members = dtrequests.auto_paginated_list(
+            url=url,
+            pagination_key='members',
+            auth=auth,
+        )
+        return [Member(m) for m in members]
+
+    @staticmethod
+    def add_member(project_id: str,
+                   email: str,
+                   roles: Sequence[str],
+                   auth: Optional[BasicAuth | OAuth] = None,
+                   ) -> Member:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members'.format(project_id)
+
+        # Construct request body.
+        body: dict = dict()
+        body['roles'] = ['roles/' + r for r in roles]
+        body['email'] = email
+
+        # Return Member object of POST request response.
+        return Member(dtrequests.post(
+            url=url,
+            body=body,
+            auth=auth,
+        ))
+
+    @staticmethod
+    def get_member(project_id: str,
+                   member_id: str,
+                   auth: Optional[BasicAuth | OAuth] = None,
+                   ) -> Member:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members/{}'.format(
+            project_id,
+            member_id,
+        )
+
+        # Return Member object of GET request response.
+        return Member(dtrequests.get(
+            url=url,
+            auth=auth,
+        ))
+
+    @staticmethod
+    def update_member(project_id: str,
+                      member_id: str,
+                      roles: Optional[Sequence[str]] = None,
+                      auth: Optional[BasicAuth | OAuth] = None,
+                      ) -> Member:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members/{}'.format(
+            project_id,
+            member_id,
+        )
+
+        # Construct request body.
+        body: dict = dict()
+        if roles is not None:
+            body['roles'] = ['roles/' + r for r in roles]
+
+        # Return updated Member object of PATCH request response.
+        return Member(dtrequests.patch(
+            url=url,
+            body=body,
+            auth=auth,
+        ))
+
+    @staticmethod
+    def remove_member(project_id: str,
+                      member_id: str,
+                      auth: Optional[BasicAuth | OAuth] = None,
+                      ) -> None:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members/{}'.format(
+            project_id,
+            member_id,
+        )
+
+        # Send DELETE request, but return nothing.
+        dtrequests.delete(
+            url=url,
+            auth=auth,
+        )
+
+    @staticmethod
+    def get_member_invite_url(project_id: str,
+                              member_id: str,
+                              auth: Optional[BasicAuth | OAuth] = None,
+                              ) -> None:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members/{}'.format(
+            project_id,
+            member_id,
+        ) + ':getInviteUrl'
+
+        # Return url string in GET response.
+        return dtrequests.get(
+            url=url,
+            auth=auth,
+        )['inviteUrl']
+
+    @staticmethod
+    def list_permissions(project_id: str,
+                         auth: Optional[BasicAuth | OAuth] = None,
+                         ) -> List[str]:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/permissions'.format(project_id)
+
+        # Return list of permissions in GET response.
+        return dtrequests.auto_paginated_list(
+            url=url,
+            pagination_key='permissions',
             auth=auth,
         )
