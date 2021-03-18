@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # Project imports.
 import disruptive as dt
@@ -21,7 +22,14 @@ class Role(OutputBase):
         self.permissions = self.raw['permissions']
 
     @classmethod
-    def list(cls):
+    def get(cls, role: str) -> Role:
+        # Return list of Role objects.
+        return cls(dtrequests.get(
+            url=dt.base_url + '/roles/' + role,
+        ))
+
+    @classmethod
+    def list(cls) -> Role:
         # Return list of Role objects.
         response = dtrequests.auto_paginated_list(
             url=dt.base_url + '/roles',
