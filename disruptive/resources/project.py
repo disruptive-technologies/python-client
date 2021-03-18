@@ -6,15 +6,15 @@ from typing import List, Optional
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
-import disruptive.outputs as dtoutputs
+from disruptive.outputs import OutputBase, Member
 from disruptive.authentication import BasicAuth, OAuth
 
 
-class Project(dtoutputs.OutputBase):
+class Project(OutputBase):
 
     def __init__(self, project: dict) -> None:
         # Inherit from Response parent.
-        dtoutputs.OutputBase.__init__(self, project)
+        OutputBase.__init__(self, project)
 
         # Unpack organization json.
         self.__unpack()
@@ -127,3 +127,20 @@ class Project(dtoutputs.OutputBase):
             url=url,
             auth=auth,
         )
+
+    @staticmethod
+    def list_members(project_id: str,
+                     auth: Optional[BasicAuth | OAuth] = None,
+                     ) -> List[Member]:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members'.format(project_id)
+
+        # Return list of Member objects of paginated GET response.
+        members = dtrequests.auto_paginated_list(
+            url=url,
+            pagination_key='members',
+            auth=auth,
+        )
+        return [Member(m) for m in members]

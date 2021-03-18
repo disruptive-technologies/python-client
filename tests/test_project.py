@@ -94,3 +94,23 @@ class TestProject():
             method='DELETE',
             url=dt.base_url+'/projects/project_id',
         )
+
+    def test_list_members(self, request_mock):
+        # Update the response data with list of member data.
+        request_mock.json = dtresponses.members
+
+        # Call the appropriate endpoint
+        members = dt.Project.list_members('project_id')
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='GET',
+            url=dt.base_url+'/projects/project_id/members',
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert instances of Project in output list.
+        for m in members:
+            assert isinstance(m, dt.outputs.Member)
