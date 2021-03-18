@@ -161,9 +161,28 @@ class Project(OutputBase):
         body['roles'] = ['roles/' + r for r in roles]
         body['email'] = email
 
-        # Return list of Member objects of paginated GET response.
+        # Return Member object of POST request response.
         return Member(dtrequests.post(
             url=url,
             body=body,
+            auth=auth,
+        ))
+
+    @staticmethod
+    def get_member(project_id: str,
+                   member_id: str,
+                   auth: Optional[BasicAuth | OAuth] = None,
+                   ) -> Member:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members/{}'.format(
+            project_id,
+            member_id,
+        )
+
+        # Return Member object of GET request response.
+        return Member(dtrequests.get(
+            url=url,
             auth=auth,
         ))
