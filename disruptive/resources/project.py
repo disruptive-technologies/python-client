@@ -73,7 +73,7 @@ class Project(OutputBase):
     @classmethod
     def create(cls,
                organization_id: str,
-               display_name: str,
+               display_name: str = '',
                auth: Optional[BasicAuth | OAuth] = None
                ) -> Project:
 
@@ -81,10 +81,9 @@ class Project(OutputBase):
         url = dt.base_url + '/projects'
 
         # Construct request body.
-        body = {
-            'organization': 'organizations/' + organization_id,
-            'displayName': display_name,
-        }
+        body: dict = dict()
+        body['organization'] = 'organizations/' + organization_id
+        body['displayName'] = display_name
 
         # Return Project object of POST request response.
         return cls(dtrequests.post(
@@ -95,7 +94,7 @@ class Project(OutputBase):
 
     @staticmethod
     def update(project_id: str,
-               display_name: str,
+               display_name: Optional[str] = None,
                auth: Optional[BasicAuth | OAuth] = None
                ) -> None:
 
