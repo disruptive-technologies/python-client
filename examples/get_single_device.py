@@ -1,7 +1,7 @@
 import os
 import disruptive as dt
 
-dt.Auth.oauth(
+dt.OAuth(
     key_id=str(os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID')),
     secret=str(os.environ.get('DT_SERVICE_ACCOUNT_SECRET')),
     email=str(os.environ.get('DT_SERVICE_ACCOUNT_EMAIL')),
