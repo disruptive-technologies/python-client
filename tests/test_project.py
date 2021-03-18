@@ -164,3 +164,27 @@ class TestProject():
 
         # Assert instances of Project in output list.
         assert isinstance(member, dt.outputs.Member)
+
+    def test_update_member(self, request_mock):
+        # Update the response data with member data.
+        request_mock.json = dtresponses.user_member
+
+        # Call the appropriate endpoint
+        member = dt.Project.update_member(
+            project_id='project_id',
+            member_id='member_id',
+            roles=['project.developer'],
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='PATCH',
+            url=dt.base_url+'/projects/project_id/members/member_id',
+            body={'roles': ['roles/project.developer']}
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert instances of Project in output list.
+        assert isinstance(member, dt.outputs.Member)

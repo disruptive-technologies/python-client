@@ -186,3 +186,29 @@ class Project(OutputBase):
             url=url,
             auth=auth,
         ))
+
+    @staticmethod
+    def update_member(project_id: str,
+                      member_id: str,
+                      roles: Optional[Sequence[str]] = None,
+                      auth: Optional[BasicAuth | OAuth] = None,
+                      ) -> Member:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/projects/{}/members/{}'.format(
+            project_id,
+            member_id,
+        )
+
+        # Construct request body.
+        body: dict = dict()
+        if roles is not None:
+            body['roles'] = ['roles/' + r for r in roles]
+
+        # Return updated Member object of PATCH request response.
+        return Member(dtrequests.patch(
+            url=url,
+            body=body,
+            auth=auth,
+        ))
