@@ -124,7 +124,7 @@ class Organization(OutputBase):
             member_id,
         )
 
-        # Send DELETE reuqest, but return nothing.
+        # Send DELETE request, but return nothing.
         dtrequests.delete(
             url=url,
             auth=auth,
