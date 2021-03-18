@@ -84,7 +84,7 @@ class TestOrganization():
         member = dt.Organization.add_member(
             organization_id='org_id',
             email='serviceaccount_email@domain.com',
-            roles=['organization.administrator'],
+            roles=['organization.admin'],
         )
 
         # Verify request parameters.
@@ -92,7 +92,7 @@ class TestOrganization():
             method='POST',
             url=dt.base_url+'/organizations/org_id/members',
             body={
-                'roles': ['roles/organization.administrator'],
+                'roles': ['roles/organization.admin'],
                 'email': 'serviceaccount_email@domain.com',
             }
         )
