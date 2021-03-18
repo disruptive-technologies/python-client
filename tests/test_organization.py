@@ -75,3 +75,30 @@ class TestOrganization():
         # Assert instances of Project in output list.
         for m in members:
             assert isinstance(m, dt.outputs.Member)
+
+    def test_add_member(self, request_mock):
+        # Update the response data with list of organization data.
+        request_mock.json = dtresponses.serviceaccount_member
+
+        # Call the appropriate endpoint
+        member = dt.Organization.add_member(
+            organization_id='org_id',
+            email='serviceaccount_email@domain.com',
+            roles=['organization.administrator'],
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='POST',
+            url=dt.base_url+'/organizations/org_id/members',
+            body={
+                'roles': ['roles/organization.administrator'],
+                'email': 'serviceaccount_email@domain.com',
+            }
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert instances of Project in output list.
+        assert isinstance(member, dt.outputs.Member)

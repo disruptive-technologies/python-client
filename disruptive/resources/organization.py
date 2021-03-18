@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports
-from typing import List, Optional
+from typing import List, Optional, Sequence
 
 # Project imports.
 import disruptive as dt
@@ -68,3 +68,26 @@ class Organization(OutputBase):
             auth=auth,
         )
         return [Member(m) for m in members]
+
+    @staticmethod
+    def add_member(organization_id: str,
+                   email: str,
+                   roles: Sequence[str],
+                   auth: Optional[BasicAuth | OAuth] = None,
+                   ) -> Member:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/organizations/{}/members'.format(organization_id)
+
+        # Construct request body.
+        body: dict = dict()
+        body['roles'] = ['roles/' + r for r in roles]
+        body['email'] = email
+
+        # Return list of Member objects of paginated GET response.
+        return Member(dtrequests.post(
+            url=url,
+            body=body,
+            auth=auth,
+        ))
