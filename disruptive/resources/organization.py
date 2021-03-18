@@ -110,3 +110,22 @@ class Organization(OutputBase):
             url=url,
             auth=auth,
         ))
+
+    @staticmethod
+    def remove_member(organization_id: str,
+                      member_id: str,
+                      auth: Optional[BasicAuth | OAuth] = None,
+                      ) -> None:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/organizations/{}/members/{}'.format(
+            organization_id,
+            member_id,
+        )
+
+        # Send DELETE reuqest, but return nothing.
+        dtrequests.delete(
+            url=url,
+            auth=auth,
+        )
