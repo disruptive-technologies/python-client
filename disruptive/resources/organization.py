@@ -91,3 +91,22 @@ class Organization(OutputBase):
             body=body,
             auth=auth,
         ))
+
+    @staticmethod
+    def get_member(organization_id: str,
+                   member_id: str,
+                   auth: Optional[BasicAuth | OAuth] = None,
+                   ) -> Member:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/organizations/{}/members/{}'.format(
+            organization_id,
+            member_id,
+        )
+
+        # Return list of Member objects of paginated GET response.
+        return Member(dtrequests.get(
+            url=url,
+            auth=auth,
+        ))
