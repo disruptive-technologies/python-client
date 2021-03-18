@@ -398,6 +398,20 @@ projects = {
     ]
 }
 
+project_permissions = {
+    'nextPageToken': '',
+    'permissions': [
+        'sensor.update',
+        'serviceaccount.read',
+        'dataconnector.read',
+        'serviceaccount.key.read',
+        'project.read',
+        'emulator.create',
+        'sensor.read',
+        'serviceaccount.key.create',
+    ]
+}
+
 organization = {
     "name": "organizations/c10hussoss90036gu54g",
     "displayName": "some-display-name"

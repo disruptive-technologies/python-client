@@ -255,3 +255,28 @@ class TestProject():
 
         # Assert output matches response content.
         assert response == res['inviteUrl']
+
+    def test_list_permissions(self, request_mock):
+        # Update the response with list of permissions.
+        request_mock.json = dtresponses.project_permissions
+
+        # Call the appropriate endpoint
+        response = dt.Project.list_permissions(
+            project_id='project_id',
+        )
+
+        # Assert output is of type list.
+        assert type(response) == list
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='GET',
+            url=dt.base_url+'/projects/project_id/permissions'
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert only strings in output list.
+        for permission in response:
+            assert type(permission) == str
