@@ -146,3 +146,27 @@ class TestOrganization():
 
         # Assert instances of Project in output list.
         assert response is None
+
+    def test_get_member_invite_url(self, request_mock):
+        # Update the response with an email string.
+        res = {'inviteUrl': 'some-email@domain.com'}
+        request_mock.json = res
+
+        # Call the appropriate endpoint
+        response = dt.Organization.get_member_invite_url(
+            organization_id='org_id',
+            member_id='member_id',
+        )
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='GET',
+            url=dt.base_url+'/organizations/org_id/members/'
+            + 'member_id:getInviteUrl',
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert instances of Project in output list.
+        assert response == res['inviteUrl']
