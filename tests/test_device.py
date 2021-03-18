@@ -62,13 +62,9 @@ class TestDevice():
         assert isinstance(gen, types.GeneratorType)
 
         # Assert generator output is as expected.
-        for page in gen:
-            # Each page should be a list.
-            assert type(page) == list
-            # Iterate devices in page list.
-            for device in page:
-                # Each device should be an instance of Device.
-                assert isinstance(device, dt.Device)
+        for device in gen:
+            # Each device should be an instance of Device.
+            assert isinstance(device, dt.Device)
 
     def test_no_reported_data(self, request_mock):
         # Update the response data with device data.

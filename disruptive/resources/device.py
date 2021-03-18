@@ -96,7 +96,8 @@ class Device(dtoutputs.OutputBase):
                 page_size=page_size,
                 auth=auth
                 ):
-            yield [cls(device) for device in devices]
+            for device in devices:
+                yield cls(device)
 
     @staticmethod
     def batch_update_labels(project_id: str,
@@ -130,7 +131,7 @@ class Device(dtoutputs.OutputBase):
         )
 
     @staticmethod
-    def set_label(project_id: str,
+    def add_label(project_id: str,
                   device_id: str,
                   key: str,
                   value: str,
