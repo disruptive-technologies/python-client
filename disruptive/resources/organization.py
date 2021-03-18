@@ -143,8 +143,24 @@ class Organization(OutputBase):
             member_id,
         ) + ':getInviteUrl'
 
-        # Send DELETE reuqest, but return nothing.
+        # Return url string in GET response.
         return dtrequests.get(
             url=url,
             auth=auth,
         )['inviteUrl']
+
+    @staticmethod
+    def list_permissions(organization_id: str,
+                         auth: Optional[BasicAuth | OAuth] = None,
+                         ) -> List[str]:
+
+        # Construct URL
+        url = dt.base_url
+        url += '/organizations/{}/permissions'.format(organization_id)
+
+        # Return list of permissions in GET response.
+        return dtrequests.auto_paginated_list(
+            url=url,
+            pagination_key='permissions',
+            auth=auth,
+        )

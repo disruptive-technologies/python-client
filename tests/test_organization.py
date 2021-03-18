@@ -170,3 +170,28 @@ class TestOrganization():
 
         # Assert instances of Project in output list.
         assert response == res['inviteUrl']
+
+    def test_list_permissions(self, request_mock):
+        # Update the response with an email string.
+        request_mock.json = dtresponses.organization_permissions
+
+        # Call the appropriate endpoint
+        response = dt.Organization.list_permissions(
+            organization_id='org_id',
+        )
+
+        # Assert output is of type list.
+        assert type(response) == list
+
+        # Verify request parameters.
+        request_mock.assert_requested(
+            method='GET',
+            url=dt.base_url+'/organizations/org_id/permissions'
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert instances of Project in output list.
+        for permission in response:
+            assert type(permission) == str

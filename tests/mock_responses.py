@@ -412,6 +412,19 @@ organizations = {
     ]
 }
 
+organization_permissions = {
+    'nextPageToken': '',
+    'permissions': [
+        'project.create',
+        'membership.create',
+        'membership.read',
+        'membership.update',
+        'organization.update',
+        'organization.read',
+        'membership.delete',
+    ]
+}
+
 serviceaccount1 = {
     "name": "projects/c14u9q095l47ccv1o3pg/"
             + "serviceaccounts/c14uar7915fg90c8lfp0",
