@@ -34,7 +34,10 @@ class TestProject():
             url=dt.base_url+'/projects/project_id',
         )
 
-        # Assert attributes in output Device object.
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is instance of Project.
         assert isinstance(p, dt.Project)
 
     def test_list(self, request_mock):
@@ -49,6 +52,9 @@ class TestProject():
             method='GET',
             url=dt.base_url+'/projects',
         )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
 
         # Assert instances of Project in output list.
         for p in projects:
@@ -68,7 +74,10 @@ class TestProject():
             body={'organization': 'organizations/org', 'displayName': 'name'},
         )
 
-        # Assert attributes in output Device object.
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is instance of Project.
         assert isinstance(p, dt.Project)
 
     def test_update(self, request_mock):
@@ -76,7 +85,7 @@ class TestProject():
         request_mock.json = dtresponses.empty_project
 
         # Call the appropriate endpoint.
-        dt.Project.update('project_id', 'new-name')
+        output = dt.Project.update('project_id', 'new-name')
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -85,15 +94,27 @@ class TestProject():
             body={'displayName': 'new-name'},
         )
 
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert output is None
+
     def test_delete(self, request_mock):
         # Call the appropriate endpoint.
-        dt.Project.delete('project_id')
+        output = dt.Project.delete('project_id')
 
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
             url=dt.base_url+'/projects/project_id',
         )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert output is None
 
     def test_list_members(self, request_mock):
         # Update the response data with list of member data.
@@ -111,7 +132,7 @@ class TestProject():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert instances of Member in output list.
         for m in members:
             assert isinstance(m, dt.outputs.Member)
 
@@ -140,7 +161,7 @@ class TestProject():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert output is instance of Member.
         assert isinstance(member, dt.outputs.Member)
 
     def test_get_member(self, request_mock):
@@ -162,7 +183,7 @@ class TestProject():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert output is instance of Member.
         assert isinstance(member, dt.outputs.Member)
 
     def test_update_member(self, request_mock):
@@ -186,7 +207,7 @@ class TestProject():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert output is instance of Member.
         assert isinstance(member, dt.outputs.Member)
 
     def test_remove_member(self, request_mock):

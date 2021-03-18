@@ -33,7 +33,7 @@ class TestOrganization():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert attributes in output Device object.
+        # Assert attributes in output Organization object.
         assert isinstance(o, dt.Organization)
 
     def test_list(self, request_mock):
@@ -52,7 +52,7 @@ class TestOrganization():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert instances of Organization in output list.
         for o in orgs:
             assert isinstance(o, dt.Organization)
 
@@ -72,7 +72,7 @@ class TestOrganization():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert instances of Member in output list.
         for m in members:
             assert isinstance(m, dt.outputs.Member)
 
@@ -100,7 +100,7 @@ class TestOrganization():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert output is instances of Member.
         assert isinstance(member, dt.outputs.Member)
 
     def test_get_member(self, request_mock):
@@ -122,7 +122,7 @@ class TestOrganization():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert output is instances of Member.
         assert isinstance(member, dt.outputs.Member)
 
     def test_remove_member(self, request_mock):
@@ -144,7 +144,7 @@ class TestOrganization():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert output is None.
         assert response is None
 
     def test_get_member_invite_url(self, request_mock):
@@ -168,11 +168,11 @@ class TestOrganization():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert output matches response content.
         assert response == res['inviteUrl']
 
     def test_list_permissions(self, request_mock):
-        # Update the response with an email string.
+        # Update the response with list of permissions.
         request_mock.json = dtresponses.organization_permissions
 
         # Call the appropriate endpoint
@@ -192,6 +192,6 @@ class TestOrganization():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert instances of Project in output list.
+        # Assert only strings in output list.
         for permission in response:
             assert type(permission) == str
