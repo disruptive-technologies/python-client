@@ -216,6 +216,24 @@ class Device(dtoutputs.OutputBase):
                   value: str,
                   auth: Optional[BasicAuth | OAuth] = None,
                   ) -> None:
+        """
+        Add a label (key=value) for a single device.
+        If key already exists, the value is updated.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        device_id : str
+            Unique device ID.
+        key : str
+            Label key to be added.
+        value : str
+            Label value to be added.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be priotized over global authentication.
+        """
 
         # Use batch_update_labels for safer call.
         Device.batch_update_labels(
@@ -232,6 +250,23 @@ class Device(dtoutputs.OutputBase):
                      value: str,
                      auth: Optional[BasicAuth | OAuth] = None,
                      ) -> None:
+        """
+        Update a label (key=value) for a single device.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        device_id : str
+            Unique device ID.
+        key : str
+            Key of the label to be modified.
+        value : str
+            Label value to be modified.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be priotized over global authentication.
+        """
 
         # Use batch_update_labels for safer call.
         Device.batch_update_labels(
@@ -244,15 +279,30 @@ class Device(dtoutputs.OutputBase):
     @staticmethod
     def remove_label(project_id: str,
                      device_id: str,
-                     label: str,
+                     key: str,
                      auth: Optional[BasicAuth | OAuth] = None,
                      ) -> None:
+        """
+        Remove a label (key=value) from a single device.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        device_id : str
+            Unique device ID.
+        key : str
+            Key of the label to be removed.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be priotized over global authentication.
+        """
 
         # Use batch_update_labels for safer call.
         Device.batch_update_labels(
             project_id=project_id,
             device_ids=[device_id],
-            remove_labels=[label],
+            remove_labels=[key],
             auth=auth,
         )
 
@@ -262,6 +312,21 @@ class Device(dtoutputs.OutputBase):
                  device_ids: Sequence[str],
                  auth: Optional[BasicAuth | OAuth] = None,
                  ) -> None:
+        """
+        Transfer devices from one project to another.
+
+        Parameters
+        ----------
+        source_project_id : str
+            Unique ID of the source project.
+        target_project_id : str
+            Unique ID of the target project.
+        device_ids : list[str]
+            List of unique IDs for devices to be transferred.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be priotized over global authentication.
+        """
 
         # Construct list of devices.
         name = 'projects/{}/devices/{}'
