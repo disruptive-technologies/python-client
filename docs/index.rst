@@ -1,20 +1,14 @@
-Welcome to disruptive-python's documentation!
-=============================================
+Welcome!
+========
+
+Maybe write something here to get started?
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
-.. automodule:: disruptive.resources.device
-    :members:
-    :undoc-members:
-    :inherited-members:
-
-.. automodule:: disruptive.authentication
-    :members:
-    :undoc-members:
-    :inherited-members:
-
+   quickstart
+   api-reference
 
 
 Indices and tables
