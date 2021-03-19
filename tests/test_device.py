@@ -1,6 +1,3 @@
-# Standard library imports.
-import types
-
 # Project imports.
 import disruptive as dt
 import disruptive.events as dtevents
@@ -51,21 +48,6 @@ class TestDevice():
         for d in devices:
             assert isinstance(d, dt.Device)
 
-    def test_generator(self, request_mock):
-        # Update the response data with a list of device data.
-        request_mock.json = dtresponses.paginated_device_response
-
-        # Call the appropriate endpoint.
-        gen = dt.Device.generator('project_id')
-
-        # Assert function returns a generator.
-        assert isinstance(gen, types.GeneratorType)
-
-        # Assert generator output is as expected.
-        for device in gen:
-            # Each device should be an instance of Device.
-            assert isinstance(device, dt.Device)
-
     def test_no_reported_data(self, request_mock):
         # Update the response data with device data.
         request_mock.json = dtresponses.null_reported_sensor
@@ -75,6 +57,10 @@ class TestDevice():
 
         # Assert None for all reported datas.
         for key in dtevents.EVENTS_MAP:
+            # Skip labelsChanged
+            if key == 'labelsChanged':
+                continue
+
             attr = dtevents.EVENTS_MAP[key]['attr']
             assert getattr(d.reported, attr) is None
 
