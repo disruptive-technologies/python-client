@@ -38,7 +38,7 @@ class Device(dtoutputs.OutputBase):
 
     def __init__(self, device: dict) -> None:
         """
-        Constructs the Device class by unpacking the raw device object.
+        Constructs the Device object by unpacking the raw device object.
 
         Parameters
         ----------
@@ -131,6 +131,7 @@ class Device(dtoutputs.OutputBase):
         -------
         devices : list[Device]
             List of objects each representing a device.
+
         """
 
         # Construct parameters dictionary.
@@ -184,6 +185,7 @@ class Device(dtoutputs.OutputBase):
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be priotized over global authentication.
+
         """
 
         # Construct list of devices.
@@ -233,6 +235,7 @@ class Device(dtoutputs.OutputBase):
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be priotized over global authentication.
+
         """
 
         # Use batch_update_labels for safer call.
@@ -266,6 +269,7 @@ class Device(dtoutputs.OutputBase):
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be priotized over global authentication.
+
         """
 
         # Use batch_update_labels for safer call.
@@ -296,6 +300,7 @@ class Device(dtoutputs.OutputBase):
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be priotized over global authentication.
+
         """
 
         # Use batch_update_labels for safer call.
@@ -326,6 +331,7 @@ class Device(dtoutputs.OutputBase):
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be priotized over global authentication.
+
         """
 
         # Construct list of devices.
@@ -348,23 +354,82 @@ class Device(dtoutputs.OutputBase):
 
 
 class Reported(dtoutputs.OutputBase):
+    """
+    Represents the "reported" field for a device.
 
-    def __init__(self, reported_dict: dict) -> None:
+    It contains one attribute for each event type, initialized
+    to None. For each event type represented in the reported field,
+    the related attribute is updated with the appropriate DataClass child.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified dictionary of the "reported" field.
+    touch : Touch, None
+        Object representing reported touch event data.
+    temperature : Temperature, None
+        Object representing reported temperature event data.
+    object_present : ObjectPresent, None
+        Object representing reported objectPresent event data.
+    humidity : Humidity, None
+        Object representing reported humidity event data.
+    object_present_count : ObjectPresentCount, None
+        Object representing reported objectPresentCount event data.
+    touch_count : TouchCount, None
+        Object representing reported touchCount event data.
+    water_present : WaterPresent, None
+        Object representing reported waterPresent event data.
+    network_status : NetworkStatus, None
+        Object representing reported networkStatus event data.
+    battery_status : BatteryStatus, None
+        Object representing reported batteryStatus event data.
+    connection_status : ConnectionStatus, None
+        Object representing reported connectionStatus event data.
+    ethernet_status : EthernetStatus, None
+        Object representing reported ethernetStatus event data.
+    cellular_status : CellularStatus, None
+        Object representing reported cellularStatus event data.
+
+    """
+
+    def __init__(self, reported: dict) -> None:
+        """
+        Constructs the Reported object by unpacking each event in the field.
+
+        Parameters
+        ----------
+        reported : dict
+            Dictionary of the reported field for a device.
+
+        """
+
         # Inherit parent Event class init.
-        dtoutputs.OutputBase.__init__(self, reported_dict)
+        dtoutputs.OutputBase.__init__(self, reported)
 
         # Set default attribute values.
         for key in dtevents.EVENTS_MAP:
+            # Skip labelsChanged
+            if key == 'labelsChanged':
+                continue
+
+            # Set attribute to None.
             setattr(self, str(dtevents.EVENTS_MAP[key]['attr']), None)
 
         # Unpack the reported dictionary data.
         self.__unpack()
 
     def __unpack(self) -> None:
+        """
+        Iterates each field in the raw dictionary and set the
+        related attribute to the appropriate DataClass child object.
+        If an event type is not found, the attribute is left as None.
+
+        """
+
         # Iterate keys in reported dictionary.
         for key in self.raw.keys():
             # Fields can be None on emulated devices. Skip if that is the case.
-            if self.raw[key] is None:
+            if self.raw[key] is None or key == 'labelsChanged':
                 continue
 
             # Repack the data field in expected format.
