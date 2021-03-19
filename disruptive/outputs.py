@@ -6,11 +6,41 @@ import disruptive.transforms as dttrans
 
 
 class OutputBase():
+    """
+    Represents common features for all returnable objects.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified dictionary of data received from the REST API.
+
+    """
 
     def __init__(self, raw: dict) -> None:
+        """
+        Constructs the OutputBase object by setting raw attribute.
+
+        Parameters
+        ----------
+        raw : dict
+            Unmodified dictionary of data received from the REST API.
+
+        """
+
+        # Set attribute from input argument.
         self.raw = raw
 
     def pprint(self, n: int = 4) -> None:
+        """
+        Print the raw attribute using json.dumps() for formatting.
+
+        Parameters
+        ----------
+        n : int
+            Number of spaces in indent.
+
+        """
+
         print(json.dumps(self.raw, indent=n))
 
 
