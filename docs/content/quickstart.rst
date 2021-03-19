@@ -1,10 +1,10 @@
-
 Quickstart
 ==========
+
 This is how to get started.
 
-Authenticating the REST API
----------------------------
+Authenticate
+------------
 This can be done in 1, 2, 3.
 
 .. code-block:: python
@@ -17,3 +17,12 @@ This can be done in 1, 2, 3.
    dt.auth = OAuth(key_id, secret, email)      # OAuth
 
 See? Simple.
+
+List devices
+------------
+Assuming you've authenticated:
+
+.. code-block:: python
+
+   # Fetch devices from endpoint.
+   devices = dt.Device.list(project_id)

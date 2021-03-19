@@ -7,8 +7,8 @@ Maybe write something here to get started?
    :maxdepth: 4
    :caption: Contents:
 
-   quickstart
-   api-reference
+   content/quickstart
+   content/api-reference/api-index
 
 
 Indices and tables
