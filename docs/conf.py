@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'disruptive-python'
+project = 'Disruptive Python'
 copyright = '2021, Disruptive Technologies Research AS'
 author = 'Disruptive Technologies Research AS'
 
@@ -53,6 +53,8 @@ html_theme = 'alabaster'
 
 html_theme_options = {
     'font_family': 'open-sans',
+    # toc
+    'fixed_sidebar': True,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -65,3 +67,6 @@ html_static_path = ['_static']
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_use_ivar = True
+napoleon_use_rtype = True
+napoleon_use_param = True
+napoleon_include_init_with_doc = False
