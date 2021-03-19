@@ -74,7 +74,7 @@ class Device(dtoutputs.OutputBase):
             Unique device ID.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
-            Will be prioritized over project-wide settings if provided.
+            If provided it will be priotized over global authentication.
 
         Returns
         -------
@@ -103,6 +103,30 @@ class Device(dtoutputs.OutputBase):
              order_by: Optional[str] = None,
              auth: Optional[BasicAuth | OAuth] = None,
              ) -> List[Device]:
+        """
+        Gets a list of devices specified by a project id.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        query : str, optional
+            Keyword based search for device display name.
+        device_ids : list[str], optional
+            Specify devices by their unique IDs.
+        device_types : list[str], optional
+            Specify devices by type.
+        label_filters : list[str], optional
+            Specify devices by label keys and values.
+            Each entry takes the form "label_key=label_value".
+        order_by : str, optional
+            The field name you want to order the response by.
+            Referred to using dot notation, e.g. reported.temperature.value.
+            Default order is ascending, but can be flipped by prefixing a "~".
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be priotized over global authentication.
+        """
 
         # Construct parameters dictionary.
         params: dict = dict()
@@ -132,6 +156,9 @@ class Device(dtoutputs.OutputBase):
                   page_size: int = 100,
                   auth: Optional[BasicAuth | OAuth] = None,
                   ) -> Generator:
+        """
+        Gets devices by ;d
+        """
 
         # Construct URL
         url = dt.base_url + '/projects/{}/devices'.format(project_id)
