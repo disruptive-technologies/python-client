@@ -81,6 +81,13 @@ class Device(dtoutputs.OutputBase):
         device : Device
             Object representing the specified device.
 
+        Examples
+        --------
+        >>> device = dt.Device.get(
+        ...     project_id='...',
+        ...     device_id='...',
+        ... )
+
         """
 
         # Construct URL
