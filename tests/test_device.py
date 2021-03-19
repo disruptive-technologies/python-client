@@ -57,6 +57,10 @@ class TestDevice():
 
         # Assert None for all reported datas.
         for key in dtevents.EVENTS_MAP:
+            # Skip labelsChanged
+            if key == 'labelsChanged':
+                continue
+
             attr = dtevents.EVENTS_MAP[key]['attr']
             assert getattr(d.reported, attr) is None
 
