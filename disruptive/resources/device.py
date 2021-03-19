@@ -126,6 +126,11 @@ class Device(dtoutputs.OutputBase):
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be priotized over global authentication.
+
+        Returns
+        -------
+        devices : list[Device]
+            List of objects each representing a device.
         """
 
         # Construct parameters dictionary.
@@ -157,6 +162,29 @@ class Device(dtoutputs.OutputBase):
                             remove_labels: Optional[Sequence[str]] = None,
                             auth: Optional[BasicAuth | OAuth] = None,
                             ) -> None:
+        """
+        Add, update, or remove multiple labels (key=value) on multiple devices
+
+        Must provide either add_labels or remove_labels. If neither are
+        provided, a BadRequest error will be raised.
+
+        If a key provided with `add_labels` already exists for a
+        device, the value will be updated accordingly.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        device_ids : list[str]
+            Unique device IDs for which labels are modified.
+        add_labels : dict[str, str], optional
+            Key and value of labels to be added / updated.
+        remove_labels : list[str], optional
+            Label keys to be removed.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be priotized over global authentication.
+        """
 
         # Construct list of devices.
         name = 'projects/{}/devices/{}'
