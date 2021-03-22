@@ -69,9 +69,9 @@ class Device(dtoutputs.OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique project ID.
+            Unique ID of the target project.
         device_id : str
-            Unique device ID.
+            Unique ID of the target device.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -109,7 +109,7 @@ class Device(dtoutputs.OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique project ID.
+            Unique ID of the target project.
         query : str, optional
             Keyword based search for device display name.
         device_ids : list[str], optional
@@ -175,9 +175,9 @@ class Device(dtoutputs.OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique project ID.
+            Unique ID of target project.
         device_ids : list[str]
-            Unique device IDs for which labels are modified.
+            List of unique IDs for the target devices.
         add_labels : dict[str, str], optional
             Key and value of labels to be added / updated.
         remove_labels : list[str], optional
@@ -225,9 +225,9 @@ class Device(dtoutputs.OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique project ID.
+            Unique ID of the target project.
         device_id : str
-            Unique device ID.
+            Unique ID of the target device.
         key : str
             Label key to be added.
         value : str
@@ -259,9 +259,9 @@ class Device(dtoutputs.OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique project ID.
+            Unique ID of the target project.
         device_id : str
-            Unique device ID.
+            Unique ID of the target device.
         key : str
             Key of the label to be modified.
         value : str
@@ -292,9 +292,9 @@ class Device(dtoutputs.OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique project ID.
+            Unique ID of the target project.
         device_id : str
-            Unique device ID.
+            Unique ID of the target device.
         key : str
             Key of the label to be removed.
         auth: BasicAuth, OAuth, optional
@@ -327,7 +327,7 @@ class Device(dtoutputs.OutputBase):
         target_project_id : str
             Unique ID of the target project.
         device_ids : list[str]
-            List of unique IDs for devices to be transferred.
+            List of unique IDs for the target devices.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
