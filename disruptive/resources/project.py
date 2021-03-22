@@ -49,13 +49,10 @@ class Project(OutputBase):
 
         """
 
-        # Inherit from Response parent.
+        # Inherit from OutputBase parent.
         OutputBase.__init__(self, project)
 
-        # Unpack project dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
+        # Unpack attributes from dictionary.
         self.id = self.raw['name'].split('/')[-1]
         self.display_name = self.raw['displayName']
         self.organization_id = self.raw['organization'].split('/')[-1]
