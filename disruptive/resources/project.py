@@ -101,7 +101,7 @@ class Project(OutputBase):
              auth: Optional[BasicAuth | OAuth] = None
              ) -> List[Project]:
         """
-        Gets a list of projects in the specified organization.
+        List all available projects in the specified organization.
 
         Parameters
         ----------
@@ -223,7 +223,7 @@ class Project(OutputBase):
         Deletes the specified project.
 
         Only empty projects can be deleted. If the specified project contains
-        any devices or Data Connectors, a status code of 400 is returned.
+        any devices or Data Connectors, an error is raised.
 
         Parameters
         ----------
@@ -253,6 +253,23 @@ class Project(OutputBase):
     def list_members(project_id: str,
                      auth: Optional[BasicAuth | OAuth] = None,
                      ) -> List[Member]:
+        """
+        List all members in the specified project.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project to update.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        members : list[Member]
+            List of objects each representing a member.
+
+        """
 
         # Construct URL
         url = dt.base_url
@@ -272,6 +289,27 @@ class Project(OutputBase):
                    roles: Sequence[str],
                    auth: Optional[BasicAuth | OAuth] = None,
                    ) -> Member:
+        """
+        Add a new member to the specified project.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project to update.
+        email : str
+            Email of the user or Service Account to be added.
+        roles : list[str]
+            The role(s) to provide the new member in the project.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        member : Member
+            Object representing the newly added member.
+
+        """
 
         # Construct URL
         url = dt.base_url
@@ -294,6 +332,27 @@ class Project(OutputBase):
                    member_id: str,
                    auth: Optional[BasicAuth | OAuth] = None,
                    ) -> Member:
+        """
+        Get a member from the specified project.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project to update.
+        member_id : str
+            Unique ID of the member to get.
+            For Service Account members, this is the Service Account ID.
+            For User members, this is the unique User ID.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        member : Member
+            Object representing the member.
+
+        """
 
         # Construct URL
         url = dt.base_url
@@ -314,6 +373,29 @@ class Project(OutputBase):
                       roles: Optional[Sequence[str]] = None,
                       auth: Optional[BasicAuth | OAuth] = None,
                       ) -> Member:
+        """
+        Update the role(s) of the specified member.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project to update.
+        member_id : str
+            Unique ID of the member to get.
+            For Service Account members, this is the Service Account ID.
+            For User members, this is the unique User ID.
+        roles : list[str], optional
+            List of new roles for the specified member.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        member : Member
+            Object representing the updated member.
+
+        """
 
         # Construct URL
         url = dt.base_url
@@ -339,6 +421,22 @@ class Project(OutputBase):
                       member_id: str,
                       auth: Optional[BasicAuth | OAuth] = None,
                       ) -> None:
+        """
+        Revoke a members membership in the specified project.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project to update.
+        member_id : str
+            Unique ID of the member to get.
+            For Service Account members, this is the Service Account ID.
+            For User members, this is the unique User ID.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        """
 
         # Construct URL
         url = dt.base_url
@@ -358,6 +456,30 @@ class Project(OutputBase):
                               member_id: str,
                               auth: Optional[BasicAuth | OAuth] = None,
                               ) -> None:
+        """
+        Get the invite URL for a member with pending invite.
+
+        This will only work if the invite is still pending. If the invite has
+        already been accepted, an error is raised.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project to update.
+        member_id : str
+            Unique ID of the member to get.
+            For Service Account members, this is the Service Account ID.
+            For User members, this is the unique User ID.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Raises
+        ------
+        BadRequest
+            If the invite has already been accepted.
+
+        """
 
         # Construct URL
         url = dt.base_url
@@ -376,6 +498,23 @@ class Project(OutputBase):
     def list_permissions(project_id: str,
                          auth: Optional[BasicAuth | OAuth] = None,
                          ) -> List[str]:
+        """
+        List permissions available in the specified project.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project to update.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        permissions : list[str]
+            List of available permissions.
+
+        """
 
         # Construct URL
         url = dt.base_url
