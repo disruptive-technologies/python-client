@@ -24,7 +24,7 @@ class Device(dtoutputs.OutputBase):
     raw : dict
         Unmodified device response dictionary.
     id : str
-        Device ID.
+        Unique device ID.
     project_id : str
         Project in which the device resides.
     type : str
