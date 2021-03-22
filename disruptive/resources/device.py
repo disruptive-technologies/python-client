@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import Sequence, List, Generator, Optional
+from typing import Generator, Optional
 
 # Project imports.
 import disruptive as dt
@@ -29,11 +29,11 @@ class Device(dtoutputs.OutputBase):
         self.reported = Reported(self.raw['reported'])
 
     @classmethod
-    def get(cls,
-            project_id: str,
-            device_id: str,
-            auth: Optional[BasicAuth | OAuth] = None,
-            ) -> Device:
+    def get_device(cls,
+                   project_id: str,
+                   device_id: str,
+                   auth: Optional[BasicAuth | OAuth] = None,
+                   ) -> Device:
 
         # Construct URL
         url = dt.base_url
@@ -46,15 +46,15 @@ class Device(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def list(cls,
-             project_id: str,
-             query: Optional[str] = None,
-             device_ids: Optional[Sequence[str]] = None,
-             device_types: Optional[Sequence[str]] = None,
-             label_filters: Optional[Sequence[str]] = None,
-             order_by: Optional[str] = None,
-             auth: Optional[BasicAuth | OAuth] = None,
-             ) -> List[Device]:
+    def list_devices(cls,
+                     project_id: str,
+                     query: Optional[str] = None,
+                     device_ids: Optional[list[str]] = None,
+                     device_types: Optional[list[str]] = None,
+                     label_filters: Optional[list[str]] = None,
+                     order_by: Optional[str] = None,
+                     auth: Optional[BasicAuth | OAuth] = None,
+                     ) -> list[Device]:
 
         # Construct parameters dictionary.
         params: dict = dict()
@@ -101,9 +101,9 @@ class Device(dtoutputs.OutputBase):
 
     @staticmethod
     def batch_update_labels(project_id: str,
-                            device_ids: Sequence[str],
+                            device_ids: list[str],
                             add_labels: Optional[dict[str, str]] = None,
-                            remove_labels: Optional[Sequence[str]] = None,
+                            remove_labels: Optional[list[str]] = None,
                             auth: Optional[BasicAuth | OAuth] = None,
                             ) -> None:
 
@@ -178,11 +178,11 @@ class Device(dtoutputs.OutputBase):
         )
 
     @staticmethod
-    def transfer(source_project_id: str,
-                 target_project_id: str,
-                 device_ids: Sequence[str],
-                 auth: Optional[BasicAuth | OAuth] = None,
-                 ) -> None:
+    def transfer_device(source_project_id: str,
+                        target_project_id: str,
+                        device_ids: list[str],
+                        auth: Optional[BasicAuth | OAuth] = None,
+                        ) -> None:
 
         # Construct list of devices.
         name = 'projects/{}/devices/{}'

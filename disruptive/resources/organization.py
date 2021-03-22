@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports
-from typing import List, Optional, Sequence
+from typing import Optional
 
 # Project imports.
 import disruptive as dt
@@ -24,10 +24,10 @@ class Organization(OutputBase):
         self.display_name = self.raw['displayName']
 
     @classmethod
-    def get(cls,
-            organization_id: str,
-            auth: Optional[BasicAuth | OAuth] = None,
-            ) -> Organization:
+    def get_organization(cls,
+                         organization_id: str,
+                         auth: Optional[BasicAuth | OAuth] = None,
+                         ) -> Organization:
 
         # Construct URL
         url = dt.base_url
@@ -40,9 +40,9 @@ class Organization(OutputBase):
         ))
 
     @classmethod
-    def list(cls,
-             auth: Optional[BasicAuth | OAuth] = None,
-             ) -> List[Organization]:
+    def list_organizations(cls,
+                           auth: Optional[BasicAuth | OAuth] = None,
+                           ) -> list[Organization]:
 
         # Return list of Organization objects of paginated GET response.
         orgs = dtrequests.auto_paginated_list(
@@ -55,7 +55,7 @@ class Organization(OutputBase):
     @staticmethod
     def list_members(organization_id: str,
                      auth: Optional[BasicAuth | OAuth] = None,
-                     ) -> List[Member]:
+                     ) -> list[Member]:
 
         # Construct URL
         url = dt.base_url
@@ -72,7 +72,7 @@ class Organization(OutputBase):
     @staticmethod
     def add_member(organization_id: str,
                    email: str,
-                   roles: Sequence[str],
+                   roles: list[str],
                    auth: Optional[BasicAuth | OAuth] = None,
                    ) -> Member:
 
@@ -152,7 +152,7 @@ class Organization(OutputBase):
     @staticmethod
     def list_permissions(organization_id: str,
                          auth: Optional[BasicAuth | OAuth] = None,
-                         ) -> List[str]:
+                         ) -> list[str]:
 
         # Construct URL
         url = dt.base_url

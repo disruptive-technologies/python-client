@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import List, Sequence, Optional
+from typing import Optional
 
 # Project imports.
 import disruptive as dt
@@ -26,11 +26,11 @@ class DataConnector():
         self.display_name = self.raw['displayName']
 
     @classmethod
-    def get(cls,
-            project_id: str,
-            dataconnector_id: str,
-            auth: Optional[BasicAuth | OAuth] = None
-            ) -> DataConnector:
+    def get_dataconnector(cls,
+                          project_id: str,
+                          dataconnector_id: str,
+                          auth: Optional[BasicAuth | OAuth] = None
+                          ) -> DataConnector:
 
         # Construct URL
         url = dt.base_url
@@ -44,10 +44,10 @@ class DataConnector():
         ))
 
     @classmethod
-    def list(cls,
-             project_id: str,
-             auth: Optional[BasicAuth | OAuth] = None
-             ) -> List[DataConnector]:
+    def list_dataconnectors(cls,
+                            project_id: str,
+                            auth: Optional[BasicAuth | OAuth] = None
+                            ) -> list[DataConnector]:
 
         # Return list of DataConnector objects of paginated GET response.
         dataconnectors = dtrequests.auto_paginated_list(
@@ -58,18 +58,18 @@ class DataConnector():
         return [cls(dcon) for dcon in dataconnectors]
 
     @classmethod
-    def create(cls,
-               project_id: str,
-               url: str,
-               dataconnector_type: str,
-               display_name: str = '',
-               status: str = 'ACTIVE',
-               events: Sequence[str] = [],
-               signature_secret: str = '',
-               headers: dict[str, str] = {},
-               labels: Sequence[str] = [],
-               auth: Optional[BasicAuth | OAuth] = None,
-               ) -> DataConnector:
+    def create_dataconnector(cls,
+                             project_id: str,
+                             url: str,
+                             dataconnector_type: str,
+                             display_name: str = '',
+                             status: str = 'ACTIVE',
+                             events: list[str] = [],
+                             signature_secret: str = '',
+                             headers: dict[str, str] = {},
+                             labels: list[str] = [],
+                             auth: Optional[BasicAuth | OAuth] = None,
+                             ) -> DataConnector:
 
         # Construct request body dictionary.
         body: dict = dict()
@@ -96,18 +96,18 @@ class DataConnector():
         ))
 
     @classmethod
-    def update(cls,
-               project_id: str,
-               dataconnector_id: str,
-               display_name: Optional[str] = None,
-               status: Optional[str] = None,
-               events: Optional[Sequence[str]] = None,
-               labels: Optional[Sequence[str]] = None,
-               url: Optional[str] = None,
-               signature_secret: Optional[str] = None,
-               headers: Optional[dict[str, str]] = None,
-               auth: Optional[BasicAuth | OAuth] = None,
-               ) -> DataConnector:
+    def update_dataconnector(cls,
+                             project_id: str,
+                             dataconnector_id: str,
+                             display_name: Optional[str] = None,
+                             status: Optional[str] = None,
+                             events: Optional[list[str]] = None,
+                             labels: Optional[list[str]] = None,
+                             url: Optional[str] = None,
+                             signature_secret: Optional[str] = None,
+                             headers: Optional[dict[str, str]] = None,
+                             auth: Optional[BasicAuth | OAuth] = None,
+                             ) -> DataConnector:
 
         # Construct request body dictionary.
         body: dict = dict()
@@ -140,11 +140,11 @@ class DataConnector():
         ))
 
     @classmethod
-    def delete(cls,
-               project_id: str,
-               dataconnector_id: str,
-               auth: Optional[BasicAuth | OAuth] = None
-               ) -> None:
+    def delete_dataconnector(cls,
+                             project_id: str,
+                             dataconnector_id: str,
+                             auth: Optional[BasicAuth | OAuth] = None
+                             ) -> None:
 
         # Construct URL.
         url = dt.base_url
@@ -158,11 +158,11 @@ class DataConnector():
         )
 
     @classmethod
-    def metrics(cls,
-                project_id: str,
-                dataconnector_id: str,
-                auth: Optional[BasicAuth | OAuth] = None
-                ) -> Metric:
+    def dataconnector_metrics(cls,
+                              project_id: str,
+                              dataconnector_id: str,
+                              auth: Optional[BasicAuth | OAuth] = None
+                              ) -> Metric:
 
         # Construct URL.
         url = dt.base_url
@@ -177,11 +177,11 @@ class DataConnector():
         ))
 
     @classmethod
-    def sync(cls,
-             project_id: str,
-             dataconnector_id: str,
-             auth: Optional[BasicAuth | OAuth] = None
-             ) -> None:
+    def sync_dataconnector(cls,
+                           project_id: str,
+                           dataconnector_id: str,
+                           auth: Optional[BasicAuth | OAuth] = None
+                           ) -> None:
 
         # Construct URL.
         url = dt.base_url

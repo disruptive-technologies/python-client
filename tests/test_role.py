@@ -11,7 +11,7 @@ class TestRole():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        p = dt.Role.get('project.user')
+        p = dt.Role.get_role('project.user')
 
         # Assert attributes unpacked correctly.
         assert p.role == res['name'].split('/')[-1]
@@ -19,12 +19,12 @@ class TestRole():
         assert p.description == res['description']
         assert p.permissions == res['permissions']
 
-    def test_get(self, request_mock):
+    def test_get_role(self, request_mock):
         # Update the response data with role data.
         request_mock.json = dtresponses.project_developer_role
 
         # Call the appropriate endpoint.
-        r = dt.Role.get('project.developer')
+        r = dt.Role.get_role('project.developer')
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -38,12 +38,12 @@ class TestRole():
         # Assert output is instance of Role.
         assert isinstance(r, dt.Role)
 
-    def test_list(self, request_mock):
+    def test_list_roles(self, request_mock):
         # Update the response data with list of role data.
         request_mock.json = dtresponses.roles
 
         # Call the appropriate endpoint
-        roles = dt.Role.list()
+        roles = dt.Role.list_roles()
 
         # Verify request parameters.
         request_mock.assert_requested(
