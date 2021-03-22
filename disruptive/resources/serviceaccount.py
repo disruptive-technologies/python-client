@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import List, Optional
+from typing import Optional
 
 # Project imports.
 import disruptive as dt
@@ -29,11 +29,11 @@ class ServiceAccount(dtoutputs.OutputBase):
         self.update_time = dttrans.iso8601_to_datetime(self.raw['updateTime'])
 
     @classmethod
-    def get(cls,
-            project_id: str,
-            serviceaccount_id: str,
-            auth: Optional[BasicAuth | OAuth] = None
-            ) -> ServiceAccount:
+    def get_serviceaccount(cls,
+                           project_id: str,
+                           serviceaccount_id: str,
+                           auth: Optional[BasicAuth | OAuth] = None
+                           ) -> ServiceAccount:
 
         # Construct URL.
         url = dt.base_url
@@ -49,10 +49,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def list(cls,
-             project_id: str,
-             auth: Optional[BasicAuth | OAuth] = None,
-             ) -> List[ServiceAccount]:
+    def list_serviceaccounts(cls,
+                             project_id: str,
+                             auth: Optional[BasicAuth | OAuth] = None,
+                             ) -> list[ServiceAccount]:
 
         # Construct URL.
         url = dt.base_url
@@ -67,12 +67,12 @@ class ServiceAccount(dtoutputs.OutputBase):
         return [cls(sa) for sa in service_accounts]
 
     @classmethod
-    def create(cls,
-               project_id: str,
-               display_name: str = '',
-               basic_auth: bool = False,
-               auth: Optional[BasicAuth | OAuth] = None,
-               ):
+    def create_serviceaccount(cls,
+                              project_id: str,
+                              display_name: str = '',
+                              basic_auth: bool = False,
+                              auth: Optional[BasicAuth | OAuth] = None,
+                              ):
 
         # Construct URL.
         url = dt.base_url
@@ -92,13 +92,13 @@ class ServiceAccount(dtoutputs.OutputBase):
         )))
 
     @classmethod
-    def update(cls,
-               project_id: str,
-               serviceaccount_id: str,
-               display_name: Optional[str] = None,
-               basic_auth: Optional[bool] = None,
-               auth: Optional[BasicAuth | OAuth] = None,
-               ):
+    def update_serviceaccount(cls,
+                              project_id: str,
+                              serviceaccount_id: str,
+                              display_name: Optional[str] = None,
+                              basic_auth: Optional[bool] = None,
+                              auth: Optional[BasicAuth | OAuth] = None,
+                              ):
 
         # Construct URL.
         url = dt.base_url
@@ -122,11 +122,11 @@ class ServiceAccount(dtoutputs.OutputBase):
         )))
 
     @classmethod
-    def delete(cls,
-               project_id: str,
-               serviceaccount_id: str,
-               auth: Optional[BasicAuth | OAuth] = None,
-               ) -> None:
+    def delete_serviceaccount(cls,
+                              project_id: str,
+                              serviceaccount_id: str,
+                              auth: Optional[BasicAuth | OAuth] = None,
+                              ) -> None:
 
         # Construct URL.
         url = dt.base_url
@@ -163,7 +163,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def list_keys(project_id: str,
                   serviceaccount_id: str,
                   auth: Optional[BasicAuth | OAuth] = None,
-                  ) -> List[Key]:
+                  ) -> list[Key]:
 
         # Construct URL.
         url = dt.base_url

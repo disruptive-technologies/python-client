@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import Sequence, List, Optional, Generator
+from typing import Optional, Generator
 
 # Project imports.
 import disruptive as dt
@@ -13,13 +13,13 @@ from disruptive.authentication import BasicAuth, OAuth
 class EventHistory():
 
     @staticmethod
-    def list(project_id: str,
-             device_id: str,
-             event_types: Optional[Sequence[str]] = None,
-             start_time: Optional[str] = None,
-             end_time: Optional[str] = None,
-             auth: Optional[BasicAuth | OAuth] = None,
-             ) -> List[Event]:
+    def list_events(project_id: str,
+                    device_id: str,
+                    event_types: Optional[list[str]] = None,
+                    start_time: Optional[str] = None,
+                    end_time: Optional[str] = None,
+                    auth: Optional[BasicAuth | OAuth] = None,
+                    ) -> list[Event]:
 
         # Construct URL.
         url = dt.base_url
@@ -50,7 +50,7 @@ class EventHistory():
     def generator(project_id: str,
                   device_id: str,
                   page_size: int = 100,
-                  event_types: Optional[Sequence[str]] = None,
+                  event_types: Optional[list[str]] = None,
                   start_time: Optional[str] = None,
                   end_time: Optional[str] = None,
                   auth: Optional[BasicAuth | OAuth] = None,

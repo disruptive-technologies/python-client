@@ -11,18 +11,18 @@ class TestOrganization():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        o = dt.Organization.get('organization_id')
+        o = dt.Organization.get_organization('organization_id')
 
         # Assert attributes unpacked correctly.
         assert o.id == res['name'].split('/')[-1]
         assert o.display_name == res['displayName']
 
-    def test_get(self, request_mock):
+    def test_get_organization(self, request_mock):
         # Update the response data with organization data.
         request_mock.json = dtresponses.organization
 
         # Call the appropriate endpoint.
-        o = dt.Organization.get('organization_id')
+        o = dt.Organization.get_organization('organization_id')
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -36,12 +36,12 @@ class TestOrganization():
         # Assert attributes in output Organization object.
         assert isinstance(o, dt.Organization)
 
-    def test_list(self, request_mock):
+    def test_list_organizations(self, request_mock):
         # Update the response data with list of organization data.
         request_mock.json = dtresponses.organizations
 
         # Call the appropriate endpoint
-        orgs = dt.Organization.list()
+        orgs = dt.Organization.list_organizations()
 
         # Verify request parameters.
         request_mock.assert_requested(

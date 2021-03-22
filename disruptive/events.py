@@ -1,5 +1,4 @@
-# Standard library imports.
-from typing import List
+from __future__ import annotations
 
 # Project imports.
 import disruptive.transforms as dttrans
@@ -332,7 +331,7 @@ class Event(dtoutputs.OutputBase):
         )
 
     @classmethod
-    def from_mixed_list(cls, events: List[dict]):
+    def from_mixed_list(cls, events: list[dict]):
         # Initialise output list.
         object_list = []
 

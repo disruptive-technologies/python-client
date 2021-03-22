@@ -11,7 +11,7 @@ class TestProject():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        p = dt.Project.get('project_id')
+        p = dt.Project.get_project('project_id')
 
         # Assert attributes unpacked correctly.
         assert p.id == res['name'].split('/')[-1]
@@ -21,12 +21,12 @@ class TestProject():
         assert p.sensor_count == res['sensorCount']
         assert p.cloud_connector_count == res['cloudConnectorCount']
 
-    def test_get(self, request_mock):
+    def test_get_project(self, request_mock):
         # Update the response data with project data.
         request_mock.json = dtresponses.small_project
 
         # Call the appropriate endpoint.
-        p = dt.Project.get('project_id')
+        p = dt.Project.get_project('project_id')
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -40,12 +40,12 @@ class TestProject():
         # Assert output is instance of Project.
         assert isinstance(p, dt.Project)
 
-    def test_list(self, request_mock):
+    def test_list_projects(self, request_mock):
         # Update the response data with list of project data.
         request_mock.json = dtresponses.projects
 
         # Call the appropriate endpoint
-        projects = dt.Project.list()
+        projects = dt.Project.list_projects()
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -60,12 +60,12 @@ class TestProject():
         for p in projects:
             assert isinstance(p, dt.Project)
 
-    def test_create(self, request_mock):
+    def test_create_project(self, request_mock):
         # Update the response data with project data.
         request_mock.json = dtresponses.empty_project
 
         # Call the appropriate endpoint.
-        p = dt.Project.create('org', 'name')
+        p = dt.Project.create_project('org', 'name')
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -80,12 +80,12 @@ class TestProject():
         # Assert output is instance of Project.
         assert isinstance(p, dt.Project)
 
-    def test_update(self, request_mock):
+    def test_update_project(self, request_mock):
         # Update the response data with project data.
         request_mock.json = dtresponses.empty_project
 
         # Call the appropriate endpoint.
-        output = dt.Project.update('project_id', 'new-name')
+        output = dt.Project.update_project('project_id', 'new-name')
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -100,9 +100,9 @@ class TestProject():
         # Assert output is None.
         assert output is None
 
-    def test_delete(self, request_mock):
+    def test_delete_project(self, request_mock):
         # Call the appropriate endpoint.
-        output = dt.Project.delete('project_id')
+        output = dt.Project.delete_project('project_id')
 
         # Verify request parameters.
         request_mock.assert_requested(

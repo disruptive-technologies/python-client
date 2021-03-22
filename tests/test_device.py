@@ -15,18 +15,18 @@ class TestDevice():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        d = dt.Device.get('project_id', 'device_id')
+        d = dt.Device.get_device('project_id', 'device_id')
 
         # Assert attributes unpacked correctly.
         assert d.id == res['name'].split('/')[-1]
         assert d.type == res['type']
 
-    def test_get(self, request_mock):
+    def test_get_device(self, request_mock):
         # Update the response data with device data.
         request_mock.json = dtresponses.touch_sensor
 
         # Call the appropriate endpoint.
-        d = dt.Device.get('project_id', 'device_id')
+        d = dt.Device.get_device('project_id', 'device_id')
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -37,12 +37,12 @@ class TestDevice():
         # Assert instance of Device object.
         assert isinstance(d, dt.Device)
 
-    def test_list(self, request_mock):
+    def test_list_devices(self, request_mock):
         # Update the response data with a list of device data.
         request_mock.json = dtresponses.paginated_device_response
 
         # Call the appropriate endpoint.
-        devices = dt.Device.list('project_id')
+        devices = dt.Device.list_devices('project_id')
 
         # output should be list.
         assert type(devices) == list
@@ -71,7 +71,7 @@ class TestDevice():
         request_mock.json = dtresponses.null_reported_sensor
 
         # Call the appropriate endpoint.
-        d = dt.Device.get('project_id', 'device_id')
+        d = dt.Device.get_device('project_id', 'device_id')
 
         # Assert None for all reported datas.
         for key in dtevents.EVENTS_MAP:
@@ -83,7 +83,7 @@ class TestDevice():
         request_mock.json = dtresponses.touch_sensor
 
         # Call the appropriate endpoint.
-        d = dt.Device.get('project_id', 'device_id')
+        d = dt.Device.get_device('project_id', 'device_id')
 
         # Assert appropriate reported data instances.
         assert isinstance(d.reported.network_status, dtevents.NetworkStatus)

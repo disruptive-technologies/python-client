@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports
-from typing import Sequence, Generator, Optional
+from typing import Generator, Optional
 
 # Project Imports.
 import disruptive as dt
@@ -12,9 +12,9 @@ from disruptive.authentication import BasicAuth, OAuth
 class Stream():
 
     @staticmethod
-    def single(project_id: str,
+    def device(project_id: str,
                device_id: str,
-               event_types: Optional[Sequence[str]] = None,
+               event_types: Optional[list[str]] = None,
                auth: Optional[BasicAuth | OAuth] = None,
                ) -> Generator:
 
@@ -31,10 +31,10 @@ class Stream():
 
     @staticmethod
     def project(project_id,
-                device_ids: Optional[Sequence[str]] = None,
-                label_filters: Optional[Sequence[str]] = None,
-                device_types: Optional[Sequence[str]] = None,
-                event_types: Optional[Sequence[str]] = None,
+                device_ids: Optional[list[str]] = None,
+                label_filters: Optional[list[str]] = None,
+                device_types: Optional[list[str]] = None,
+                event_types: Optional[list[str]] = None,
                 auth: Optional[BasicAuth | OAuth] = None,
                 ):
 

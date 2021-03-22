@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import List, Optional, Sequence
+from typing import Optional
 
 # Project imports.
 import disruptive as dt
@@ -29,10 +29,10 @@ class Project(OutputBase):
         self.is_inventory = self.raw['inventory']
 
     @classmethod
-    def get(cls,
-            project_id: str,
-            auth: Optional[BasicAuth | OAuth] = None
-            ) -> Project:
+    def get_project(cls,
+                    project_id: str,
+                    auth: Optional[BasicAuth | OAuth] = None
+                    ) -> Project:
 
         # Construct URL.
         url = dt.base_url
@@ -45,11 +45,11 @@ class Project(OutputBase):
         ))
 
     @classmethod
-    def list(cls,
-             organization_id: Optional[str] = None,
-             query: Optional[str] = None,
-             auth: Optional[BasicAuth | OAuth] = None
-             ) -> List[Project]:
+    def list_projects(cls,
+                      organization_id: Optional[str] = None,
+                      query: Optional[str] = None,
+                      auth: Optional[BasicAuth | OAuth] = None
+                      ) -> list[Project]:
 
         # Construct URL.
         url = dt.base_url + '/projects'
@@ -71,11 +71,11 @@ class Project(OutputBase):
         return [cls(r) for r in responses]
 
     @classmethod
-    def create(cls,
-               organization_id: str,
-               display_name: str = '',
-               auth: Optional[BasicAuth | OAuth] = None
-               ) -> Project:
+    def create_project(cls,
+                       organization_id: str,
+                       display_name: str = '',
+                       auth: Optional[BasicAuth | OAuth] = None
+                       ) -> Project:
 
         # Construct URL.
         url = dt.base_url + '/projects'
@@ -93,10 +93,10 @@ class Project(OutputBase):
         ))
 
     @staticmethod
-    def update(project_id: str,
-               display_name: Optional[str] = None,
-               auth: Optional[BasicAuth | OAuth] = None
-               ) -> None:
+    def update_project(project_id: str,
+                       display_name: Optional[str] = None,
+                       auth: Optional[BasicAuth | OAuth] = None
+                       ) -> None:
 
         # Construct URL.
         url = dt.base_url + '/projects/' + project_id
@@ -114,9 +114,9 @@ class Project(OutputBase):
         )
 
     @staticmethod
-    def delete(project_id: str,
-               auth: Optional[BasicAuth | OAuth] = None
-               ) -> None:
+    def delete_project(project_id: str,
+                       auth: Optional[BasicAuth | OAuth] = None
+                       ) -> None:
 
         # Construct URL.
         url = dt.base_url + '/projects/' + project_id
@@ -130,7 +130,7 @@ class Project(OutputBase):
     @staticmethod
     def list_members(project_id: str,
                      auth: Optional[BasicAuth | OAuth] = None,
-                     ) -> List[Member]:
+                     ) -> list[Member]:
 
         # Construct URL
         url = dt.base_url
@@ -147,7 +147,7 @@ class Project(OutputBase):
     @staticmethod
     def add_member(project_id: str,
                    email: str,
-                   roles: Sequence[str],
+                   roles: list[str],
                    auth: Optional[BasicAuth | OAuth] = None,
                    ) -> Member:
 
@@ -189,7 +189,7 @@ class Project(OutputBase):
     @staticmethod
     def update_member(project_id: str,
                       member_id: str,
-                      roles: Optional[Sequence[str]] = None,
+                      roles: Optional[list[str]] = None,
                       auth: Optional[BasicAuth | OAuth] = None,
                       ) -> Member:
 
@@ -253,7 +253,7 @@ class Project(OutputBase):
     @staticmethod
     def list_permissions(project_id: str,
                          auth: Optional[BasicAuth | OAuth] = None,
-                         ) -> List[str]:
+                         ) -> list[str]:
 
         # Construct URL
         url = dt.base_url
