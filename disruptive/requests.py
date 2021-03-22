@@ -80,31 +80,6 @@ def auto_paginated_list(
     return results
 
 
-def generator_list(url: str,
-                   pagination_key: str,
-                   params: dict = {},
-                   page_size: int = 100,
-                   auth=None,
-                   ):
-
-    # Add page size to params dictionary.
-    params['pageSize'] = page_size
-
-    # Iterate until complete.
-    while True:
-        # Get response from API.
-        response = __construct_request("GET", url, params, auth=auth)
-
-        # Yield the response contents.
-        yield response[pagination_key]
-
-        # Update pagination token as required.
-        if len(response['nextPageToken']) > 0:
-            params['pageToken'] = response['nextPageToken']
-        else:
-            break
-
-
 def __construct_request(
         method: str,
         url: str,
