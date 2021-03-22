@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard library imports.
-from typing import Generator, Optional
+from typing import Optional
 
 # Project imports.
 import disruptive as dt
@@ -149,30 +149,6 @@ class Device(dtoutputs.OutputBase):
             auth=auth,
         )
         return [cls(device) for device in devices]
-
-    @classmethod
-    def generator(cls,
-                  project_id: str,
-                  page_size: int = 100,
-                  auth: Optional[BasicAuth | OAuth] = None,
-                  ) -> Generator:
-        """
-        Gets devices by ;d
-        """
-
-        # Construct URL
-        url = dt.base_url + '/projects/{}/devices'.format(project_id)
-
-        # Relay generator output, yielding Device objects of response.
-        for devices in dtrequests.generator_list(
-                url=url,
-                pagination_key='devices',
-                params={},
-                page_size=page_size,
-                auth=auth
-                ):
-            for device in devices:
-                yield cls(device)
 
     @staticmethod
     def batch_update_labels(project_id: str,
