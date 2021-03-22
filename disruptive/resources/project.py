@@ -11,12 +11,48 @@ from disruptive.authentication import BasicAuth, OAuth
 
 
 class Project(OutputBase):
+    """
+    Represents a project.
+
+    When a project response is received, the content is
+    unpacked and the related attributes are updated.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified project response dictionary.
+    id : str
+        Unique project ID.
+    display_name : str
+        The provided display name.
+    organization_id : str
+        Unique ID of parent organization.
+    organization_display_name : str
+        The provided display name to parent organization.
+    sensor_count : int
+        Number of sensors in project.
+    cloud_connector_count : int
+        Number of Cloud Connectors in project.
+    is_inventory : bool
+        True if project is organization inventory, otherwise False.
+
+    """
 
     def __init__(self, project: dict) -> None:
+        """
+        Constructs the Project object by unpacking the raw project response.
+
+        Parameters
+        ----------
+        project : dict
+            Unmodified project response dictionary.
+
+        """
+
         # Inherit from Response parent.
         OutputBase.__init__(self, project)
 
-        # Unpack organization json.
+        # Unpack project dictionary.
         self.__unpack()
 
     def __unpack(self) -> None:
