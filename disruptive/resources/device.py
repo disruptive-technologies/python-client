@@ -16,15 +16,15 @@ class Device(dtoutputs.OutputBase):
     """
     Represents sensors and cloud connectors.
 
-    When the REST API endpoint response contains a device object, the
-    content is unpacked and set to the related attributes.
+    When a device response is received, the content is
+    unpacked and the related attributes are updated.
 
     Attributes
     ----------
     raw : dict
-        Unmodified device object received from the REST API.
+        Unmodified device response dictionary.
     id : str
-        Device ID.
+        Unique device ID.
     project_id : str
         Project in which the device resides.
     type : str
@@ -38,16 +38,16 @@ class Device(dtoutputs.OutputBase):
 
     def __init__(self, device: dict) -> None:
         """
-        Constructs the Device object by unpacking the raw device object.
+        Constructs the Device object by unpacking the raw device response.
 
         Parameters
         ----------
         device : dict
-            Dictionary of device data returned by an endpoint.
+            Unmodified device response dictionary.
 
         """
 
-        # Inherit from Response parent.
+        # Inherit from OutputBase parent.
         dtoutputs.OutputBase.__init__(self, device)
 
         # Unpack attributes from dictionary.
@@ -64,7 +64,7 @@ class Device(dtoutputs.OutputBase):
                    auth: Optional[BasicAuth | OAuth] = None,
                    ) -> Device:
         """
-        Gets a device specified by its project and id.
+        Gets a device specified by its project and ID.
 
         Parameters
         ----------
@@ -74,7 +74,7 @@ class Device(dtoutputs.OutputBase):
             Unique device ID.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
-            If provided it will be priotized over global authentication.
+            If provided it will be prioritized over global authentication.
 
         Returns
         -------
@@ -104,7 +104,7 @@ class Device(dtoutputs.OutputBase):
                      auth: Optional[BasicAuth | OAuth] = None,
                      ) -> list[Device]:
         """
-        Gets a list of devices specified by a project id.
+        List all available devices in the specified project.
 
         Parameters
         ----------
@@ -125,7 +125,7 @@ class Device(dtoutputs.OutputBase):
             Default order is ascending, but can be flipped by prefixing a "~".
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
-            If provided it will be priotized over global authentication.
+            If provided it will be prioritized over global authentication.
 
         Returns
         -------
@@ -184,7 +184,7 @@ class Device(dtoutputs.OutputBase):
             Label keys to be removed.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
-            If provided it will be priotized over global authentication.
+            If provided it will be prioritized over global authentication.
 
         """
 
@@ -234,7 +234,7 @@ class Device(dtoutputs.OutputBase):
             Label value to be added.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
-            If provided it will be priotized over global authentication.
+            If provided it will be prioritized over global authentication.
 
         """
 
@@ -268,7 +268,7 @@ class Device(dtoutputs.OutputBase):
             Label value to be modified.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
-            If provided it will be priotized over global authentication.
+            If provided it will be prioritized over global authentication.
 
         """
 
@@ -299,7 +299,7 @@ class Device(dtoutputs.OutputBase):
             Key of the label to be removed.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
-            If provided it will be priotized over global authentication.
+            If provided it will be prioritized over global authentication.
 
         """
 
@@ -330,7 +330,7 @@ class Device(dtoutputs.OutputBase):
             List of unique IDs for devices to be transferred.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
-            If provided it will be priotized over global authentication.
+            If provided it will be prioritized over global authentication.
 
         """
 
@@ -357,9 +357,9 @@ class Reported(dtoutputs.OutputBase):
     """
     Represents the "reported" field for a device.
 
-    It contains one attribute for each event type, initialized
-    to None. For each event type represented in the reported field,
-    the related attribute is updated with the appropriate DataClass child.
+    Contains one attribute for each event type, initialized to None.
+    For each event type represented in the reported field, the related
+    attribute is updated with the appropriate DataClass child.
 
     Attributes
     ----------

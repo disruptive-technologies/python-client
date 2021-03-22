@@ -1,35 +1,58 @@
+class DTApiError(Exception):
+    def __init__(self, message: dict):
+        # If no message is provided, skip formatting.
+        if len(message) == 0:
+            msg = ''
+        else:
+            # Create message from dictionary contents.
+            msg = 'Status Code {}.\nError: {}.\nHelp:  {}.'.format(
+                message['code'],
+                message['error'],
+                message['help'],
+            )
+
+        # Call the base class constructor.
+        super().__init__(msg)
 
 
-class BadRequest(Exception):
-    pass
+class BadRequest(DTApiError):
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class Unauthenticated(Exception):
-    pass
+class Unauthenticated(DTApiError):
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class Forbidden(Exception):
-    pass
+class Forbidden(DTApiError):
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class NotFound(Exception):
-    pass
+class NotFound(DTApiError):
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class Conflict(Exception):
-    pass
+class Conflict(DTApiError):
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class TooManyRequests(Exception):
-    pass
+class TooManyRequests(DTApiError):
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class InternalServerError(Exception):
-    pass
+class InternalServerError(DTApiError):
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class ServerUnavailable(Exception):
-    pass
+class ServerUnavailable(DTApiError):
+    def __init__(self, message):
+        super().__init__(message)
 
 
 # Parses the status code, and returns (error, should_retry, retry_after)
