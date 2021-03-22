@@ -66,6 +66,23 @@ class Project(OutputBase):
             project_id: str,
             auth: Optional[BasicAuth | OAuth] = None
             ) -> Project:
+        """
+        Gets a project specified by its ID.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        project : Project
+            Object representing the specified project.
+
+        """
 
         # Construct URL.
         url = dt.base_url
@@ -83,6 +100,25 @@ class Project(OutputBase):
              query: Optional[str] = None,
              auth: Optional[BasicAuth | OAuth] = None
              ) -> List[Project]:
+        """
+        Gets a list of projects in the specified organization.
+
+        Parameters
+        ----------
+        organization_id : str
+            Unique organization ID.
+        query : str, optional
+            Keyword based search for project- and organization display names.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        projects : list[Project]
+            List of objects each representing a project.
+
+        """
 
         # Construct URL.
         url = dt.base_url + '/projects'
@@ -109,6 +145,25 @@ class Project(OutputBase):
                display_name: str = '',
                auth: Optional[BasicAuth | OAuth] = None
                ) -> Project:
+        """
+        Create a new project in the specified organization.
+
+        Parameters
+        ----------
+        organization_id : str
+            Unique organization ID.
+        display_name : str, optional
+            Sets a display name for the project.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        project : Project
+            Object representing the newly created project.
+
+        """
 
         # Construct URL.
         url = dt.base_url + '/projects'
@@ -130,6 +185,20 @@ class Project(OutputBase):
                display_name: Optional[str] = None,
                auth: Optional[BasicAuth | OAuth] = None
                ) -> None:
+        """
+        Updates the display name a specified project.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project to update.
+        display_name : str, optional
+            If provided, updates the project display name.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        """
 
         # Construct URL.
         url = dt.base_url + '/projects/' + project_id
@@ -150,6 +219,26 @@ class Project(OutputBase):
     def delete(project_id: str,
                auth: Optional[BasicAuth | OAuth] = None
                ) -> None:
+        """
+        Deletes the specified project.
+
+        Only empty projects can be deleted. If the specified project contains
+        any devices or Data Connectors, a status code of 400 is returned.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project to update.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Raises
+        ------
+        BadRequest
+            If the specified project contains devices or Data Connectors.
+
+        """
 
         # Construct URL.
         url = dt.base_url + '/projects/' + project_id
