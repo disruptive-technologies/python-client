@@ -228,7 +228,7 @@ class Project(OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique ID of the project to update.
+            Unique ID of the project to delete.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
