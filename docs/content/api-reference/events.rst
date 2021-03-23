@@ -6,13 +6,10 @@ Event Class
 
 .. autoclass:: disruptive.events.Event
 
+.. _Event Data:
+
 Event Data
 ----------
-
-.. autoclass:: disruptive.events.EventData
-
-Type-Specific
-^^^^^^^^^^^^^
 
 .. autoclass:: disruptive.events.Touch
 .. autoclass:: disruptive.events.Temperature
