@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Type
+
 # Project imports.
 import disruptive.transforms as dttrans
 import disruptive.outputs as dtoutputs
@@ -478,7 +480,7 @@ class Event(dtoutputs.OutputBase):
         Unique ID of the source device.
     project_id : str
         Unique ID of the source project.
-    data : EventData
+    data : :ref:`Event Data`
         An object representing type-specific event data.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
