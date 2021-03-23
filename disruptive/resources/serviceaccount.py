@@ -268,7 +268,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
         Get the key of a serviceaccount.
 
-        Parameters:
+        Parameters
         ----------
         project_id : str
             Unique ID of the target project.
@@ -309,7 +309,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
         Get a list of all keys for a serviceaccount.
 
-        Parameters:
+        Parameters
         ----------
         project_id : str
             Unique ID of the target project.
