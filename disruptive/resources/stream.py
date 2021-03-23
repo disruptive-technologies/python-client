@@ -10,6 +10,11 @@ from disruptive.authentication import BasicAuth, OAuth
 
 
 class Stream():
+    """
+    Contains staticmethods for streaming events.
+    Used for namespacing only and thus does not have a constructor
+
+    """
 
     @staticmethod
     def device(project_id: str,
@@ -17,6 +22,29 @@ class Stream():
                event_types: Optional[list[str]] = None,
                auth: Optional[BasicAuth | OAuth] = None,
                ) -> Generator:
+        """
+        Streams events for a single device.
+
+        Implements a basic retry-routine. If connection is lost, the stream
+        will attempt to reconnect with an exponential backoff. Potential
+        lost events while reconnecting are, however, not acocunted for.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the target project.
+        device_id : str
+            Unique ID of the target device.
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        stream : Generator
+            A python Generator type that yields each new event in the stream.
+
+        """
 
         # Construct parameters dictionary.
         params: dict = dict()
@@ -36,7 +64,36 @@ class Stream():
                 device_types: Optional[list[str]] = None,
                 event_types: Optional[list[str]] = None,
                 auth: Optional[BasicAuth | OAuth] = None,
-                ):
+                ) -> Generator:
+        """
+        Streams events for a multiple devices in a project.
+
+        Implements a basic retry-routine. If connection is lost, the stream
+        will attempt to reconnect with an exponential backoff. Potential
+        lost events while reconnecting are, however, not acocunted for.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the target project.
+        device_ids : list[str], optional
+            Only includes events from the specified device(s).
+        label_filters : list[str], optional
+            Only includes events from devices with specified label(s).
+        device_types : list[str], optional
+            Only includes events from devices with specified type(s).
+        event_types : list[str], optional
+            Only includes events of the specified type(s).
+        auth: BasicAuth, OAuth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        stream : Generator
+            A python Generator type that yields each new event in the stream.
+
+        """
 
         # Construct parameters dictionary.
         params: dict = dict()
