@@ -7,13 +7,37 @@ import disruptive.log as dtlog
 
 
 class DataClass(dtoutputs.OutputBase):
+    """
+    Parent class for all the different event data field types.
+
+    Attributes are mainly inherited from OutputBase, and otherwise
+    contains a few convenience methods for setting the correct child.
+
+    """
 
     def __init__(self, data: dict) -> None:
+        """
+        Constructs the DataClass object by inheriting parent.
+
+        """
+
         # Inherit parent Event class init.
         dtoutputs.OutputBase.__init__(self, data)
 
     @classmethod
     def from_event_type(cls, data: dict, event_type: str):
+        """
+        Constructs the appropriate child class from the provided event type.
+
+        Parameters
+        ----------
+        data : dict
+            Dictionary of the data field found in the source event.
+        event_type : str
+            The event type of the source event.
+
+        """
+
         # From the type, select the appropriate child class.
         child, key = cls.__child_map(event_type)
 
@@ -30,6 +54,17 @@ class DataClass(dtoutputs.OutputBase):
 
     @staticmethod
     def __child_map(event_type: str):
+        """
+        Based on provided event type, returns the
+        child class and supporting information.
+
+        Parameters
+        ----------
+        event_type : str
+            The event type of the source event.
+
+        """
+
         # Initialize the correct object.
         if event_type in EVENTS_MAP:
             out = (
@@ -38,11 +73,20 @@ class DataClass(dtoutputs.OutputBase):
             )
             return out
         else:
-            dtlog.log('Unknown event type {}. Skipping.'.format(event_type))
+            dtlog.log('Skipping unknown event type {}.'.format(event_type))
             return None, None
 
 
 class Touch(DataClass):
+    """
+    Represents the data found in a touch event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified touch event data dictionary.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -50,6 +94,17 @@ class Touch(DataClass):
 
 
 class Temperature(DataClass):
+    """
+    Represents the data found in a temperature event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified temperature event data dictionary.
+    temperature : float
+        Temperature in degress Celsius.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -59,10 +114,21 @@ class Temperature(DataClass):
         self.__unpack()
 
     def __unpack(self) -> None:
-        self.value = self.raw['value']
+        self.temperature = self.raw['value']
 
 
 class ObjectPresent(DataClass):
+    """
+    Represents the data found in an objectPresent event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified objectPresent event data dictionary.
+    state : str
+        Whether the event reported PRESENT or NOT_PRESENT.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -77,6 +143,19 @@ class ObjectPresent(DataClass):
 
 
 class Humidity(DataClass):
+    """
+    Represents the data found in an humidity event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified humidity event data dictionary.
+    temperature : float
+        Temperature in degress Celsius.
+    humidity : int
+        Relative humidity percentage.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -92,6 +171,18 @@ class Humidity(DataClass):
 
 
 class ObjectPresentCount(DataClass):
+    """
+    Represents the data found in an objectPresentCount event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified objectPresentCount event data dictionary.
+    total : int
+        Total number of times the sensor has detected the appearance
+        or disappearance of an object over its lifetime.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -106,6 +197,18 @@ class ObjectPresentCount(DataClass):
 
 
 class TouchCount(DataClass):
+    """
+    Represents the data found in an touchCount event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified touchCount event data dictionary.
+    total : int
+        The total number of times the sensor
+        has been touched over its lifetime.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -120,6 +223,17 @@ class TouchCount(DataClass):
 
 
 class WaterPresent(DataClass):
+    """
+    Represents the data found in an waterPresent event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified waterPresent event data dictionary.
+    state : str
+        Indicates whether water is PRESENT or NOT_PRESENT.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -134,16 +248,35 @@ class WaterPresent(DataClass):
 
 
 class NetworkStatus(DataClass):
+    """
+    Represents the data found in a networkStatus event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified networkStatus event data dictionary.
+    signal_strength : int
+        Percentage signal strength of the strongest Cloud Connector.
+    rssi : float
+        RSSI of the strongest Cloud Connector.
+    transmission_mode : str
+        Indicates whether the sensor is in
+        LOW_POWER_STANDARD_MODE or HIGH_POWER_BOOST_MODE.
+    cloud_connectors : list[str]
+        Lists the ID of the Cloud Connector that relayed the event.
+
+    """
 
     def __init__(self, data: dict):
+        """
+        Constructs the NetworkStatus object by unpacking the raw response.
+
+        """
+
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.signal_strength = self.raw['signalStrength']
         self.rssi = self.raw['rssi']
         self.transmission_mode = self.raw['transmissionMode']
@@ -157,20 +290,47 @@ class NetworkStatus(DataClass):
 
 
 class BatteryStatus(DataClass):
+    """
+    Represents the data found in a batteryStatus event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified networkStatus event data dictionary.
+    percentage : int
+        Percentage estimate of remaining battery.
+
+    """
 
     def __init__(self, data: dict):
+        """
+        Constructs the BatteryStatus object by unpacking the raw response.
+
+        """
+
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.percentage = self.raw['percentage']
 
 
 class LabelsChanged(DataClass):
+    """
+    Represents the data found in an labelsChanged event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified waterPresent event data dictionary.
+    added : dict[str, str]
+        Keys and values of new labels added.
+    modified : dict[str, str]
+        New keys and values of modified labels.
+    removed : list[str]
+        List of keys of removed labels.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -187,6 +347,19 @@ class LabelsChanged(DataClass):
 
 
 class ConnectionStatus(DataClass):
+    """
+    Represents the data found in a connectionStatus event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified connectionStatus event data dictionary.
+    connection : str
+        Whether the Cloud Connector is on ETHERNET, CELLULAR, or OFFLINE.
+    available : str
+        Lists available connections. Can contain ETHERNET, CELLULAR, or both.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -202,6 +375,19 @@ class ConnectionStatus(DataClass):
 
 
 class EthernetStatus(DataClass):
+    """
+    Represents the data found in a ethernetStatus event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified connectionStatus event data dictionary.
+    mac_address : str
+        MAC address of the local network interface.
+    ip_address : str
+        IP address of the Cloud Connector on the local network.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
@@ -217,6 +403,17 @@ class EthernetStatus(DataClass):
 
 
 class CellularStatus(DataClass):
+    """
+    Represents the data found in a cellularStatus event.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified connectionStatus event data dictionary.
+    signal_strength : int
+        Cloud Connector cellular reception percentage.
+
+    """
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
