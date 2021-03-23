@@ -1,4 +1,9 @@
 class DTApiError(Exception):
+    """
+    Represents errors raised from the REST API.
+
+    """
+
     def __init__(self, message: dict):
         # If no message is provided, skip formatting.
         if len(message) == 0:
@@ -16,41 +21,74 @@ class DTApiError(Exception):
 
 
 class BadRequest(DTApiError):
+    """
+    The response contained a status code of 400.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class Unauthenticated(DTApiError):
+    """
+    The response contained a status code of 401.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class Forbidden(DTApiError):
+    """
+    The response contained a status code of 403.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class NotFound(DTApiError):
+    """
+    The response contained a status code of 404.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class Conflict(DTApiError):
+    """
+    The response contained a status code of 409.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class TooManyRequests(DTApiError):
+    """
+    The response contained a status code of 429.
+
+    This entails that too many requests were made in
+    too short of a timeframe.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class InternalServerError(DTApiError):
-    def __init__(self, message):
-        super().__init__(message)
+    """
+    The response contained a status code of 500.
 
+    """
 
-class ServerUnavailable(DTApiError):
     def __init__(self, message):
         super().__init__(message)
 
