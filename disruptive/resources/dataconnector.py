@@ -297,11 +297,11 @@ class DataConnector():
         )
 
     @classmethod
-    def dataconnector_metrics(cls,
-                              project_id: str,
-                              dataconnector_id: str,
-                              auth: Optional[BasicAuth | OAuth] = None
-                              ) -> Metric:
+    def get_metrics(cls,
+                    project_id: str,
+                    dataconnector_id: str,
+                    auth: Optional[BasicAuth | OAuth] = None
+                    ) -> Metric:
         """
         Get the metrics of the last 3 hours for a dataconnector.
 
