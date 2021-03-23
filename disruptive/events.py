@@ -110,10 +110,7 @@ class Temperature(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
+        # Unpack attributes from dictionary.
         self.temperature = self.raw['value']
 
 
@@ -134,11 +131,7 @@ class ObjectPresent(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.state = self.raw['state']
 
 
@@ -161,11 +154,7 @@ class Humidity(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.temperature = self.raw['temperature']
         self.humidity = self.raw['relativeHumidity']
 
@@ -188,11 +177,7 @@ class ObjectPresentCount(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.total = self.raw['total']
 
 
@@ -214,11 +199,7 @@ class TouchCount(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.total = self.raw['total']
 
 
@@ -239,11 +220,7 @@ class WaterPresent(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.state = self.raw['state']
 
 
@@ -336,11 +313,7 @@ class LabelsChanged(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.added = self.raw['added']
         self.modified = self.raw['modified']
         self.removed = self.raw['removed']
@@ -365,11 +338,7 @@ class ConnectionStatus(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.connection = self.raw['connection']
         self.available = self.raw['available']
 
@@ -393,11 +362,7 @@ class EthernetStatus(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.mac_address = self.raw['macAddress']
         self.ip_address = self.raw['ipAddress']
 
@@ -419,11 +384,7 @@ class CellularStatus(DataClass):
         # Inherit parent Event class init.
         DataClass.__init__(self, data)
 
-        # Unpack type-specific data in event dictionary.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        # Set attributes.
+        # Unpack attributes from dictionary.
         self.signal_strength = self.raw['signalStrength']
 
 
@@ -502,6 +463,27 @@ EVENTS_MAP = {
 
 
 class Event(dtoutputs.OutputBase):
+    """
+    Represents device events.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified event response dictionary.
+    id : str
+        Unique event ID.
+    type : str
+        Event type.
+    device_id : str
+        Unique ID of the source device.
+    project_id : str
+        Unique ID of the source project.
+    data : child of DataClass
+        An object representing type-specific event data.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
+
+    """
 
     def __init__(self, event: dict):
         # Inherit attributes from ResponseBase parent.
@@ -529,6 +511,21 @@ class Event(dtoutputs.OutputBase):
 
     @classmethod
     def from_mixed_list(cls, events: list[dict]):
+        """
+        Construct Event objects for each event in list.
+
+        Parameters
+        ----------
+        events : list[dict]
+            List of raw event response dictionaries.
+
+        Returns
+        -------
+        events : list[Event]
+            List of constructed event objects.
+
+        """
+
         # Initialise output list.
         object_list = []
 
