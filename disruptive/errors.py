@@ -1,4 +1,9 @@
 class DTApiError(Exception):
+    """
+    Represents errors raised from the REST API.
+
+    """
+
     def __init__(self, message: dict):
         # If no message is provided, skip formatting.
         if len(message) == 0:
@@ -16,47 +21,101 @@ class DTApiError(Exception):
 
 
 class BadRequest(DTApiError):
+    """
+    The response contained a status code of 400.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class Unauthenticated(DTApiError):
+    """
+    The response contained a status code of 401.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class Forbidden(DTApiError):
+    """
+    The response contained a status code of 403.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class NotFound(DTApiError):
+    """
+    The response contained a status code of 404.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class Conflict(DTApiError):
+    """
+    The response contained a status code of 409.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class TooManyRequests(DTApiError):
+    """
+    The response contained a status code of 429.
+
+    This entails that too many requests were made in
+    too short of a timeframe.
+
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class InternalServerError(DTApiError):
-    def __init__(self, message):
-        super().__init__(message)
+    """
+    The response contained a status code of 500.
 
+    """
 
-class ServerUnavailable(DTApiError):
     def __init__(self, message):
         super().__init__(message)
 
 
 # Parses the status code, and returns (error, should_retry, retry_after)
 def parse_error(status_code: int, headers: dict, retry_count: int):
+    """
+    Evaluates the status code and returns instructions for
+    how to deal with the error in a request.
+
+    Parameters
+    ----------
+    status_code : int
+        Status code included in the request response.
+    headers : dict
+        Dictionary of headers included in the request response.
+    retry_count : int
+        Number of times the request has already been retried.
+
+    Returns
+    -------
+    tuple : tuple
+        The error to be raised, a bool whether to retry the request, and
+        an int defining how long to wait before retrying.
+
+    """
+
     if status_code == 200:
         return (None, False, None)
     elif status_code == 400:

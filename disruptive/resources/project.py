@@ -228,7 +228,7 @@ class Project(OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique ID of the project to update.
+            Unique ID of the project to delete.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -259,7 +259,7 @@ class Project(OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique ID of the project to update.
+            Unique ID of the project to get members from.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -295,7 +295,7 @@ class Project(OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique ID of the project to update.
+            Unique ID of the project to add a member to.
         email : str
             Email of the user or Service Account to be added.
         roles : list[str]
@@ -338,7 +338,7 @@ class Project(OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique ID of the project to update.
+            Unique ID of the project to get a member from.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
@@ -379,7 +379,7 @@ class Project(OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique ID of the project to update.
+            Unique ID of the project to update a member in.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
@@ -422,12 +422,12 @@ class Project(OutputBase):
                       auth: Optional[BasicAuth | OAuth] = None,
                       ) -> None:
         """
-        Revoke a members membership in the specified project.
+        Revoke a member's membership in the specified project.
 
         Parameters
         ----------
         project_id : str
-            Unique ID of the project to update.
+            Unique ID of the project to remove a member from.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
@@ -465,7 +465,7 @@ class Project(OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique ID of the project to update.
+            Unique ID of the project of the member to get the URL from.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
@@ -504,7 +504,7 @@ class Project(OutputBase):
         Parameters
         ----------
         project_id : str
-            Unique ID of the project to update.
+            Unique ID of the project to list permissions in.
         auth: BasicAuth, OAuth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
