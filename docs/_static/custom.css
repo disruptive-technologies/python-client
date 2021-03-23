@@ -1,9 +1,15 @@
 .method {
     margin-top: 50px;
     border-top: 1px solid black;
+    margin-bottom: 50px;
 }
 
 .class {
+    margin-top: 25px;
+    margin-bottom: 50px;
+}
+
+.exception {
     margin-top: 25px;
     margin-bottom: 50px;
 }

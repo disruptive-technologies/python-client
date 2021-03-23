@@ -5,7 +5,6 @@ Maybe write something here to get started?
 
 .. toctree::
    :maxdepth: 4
-   :caption: Contents:
 
    content/quickstart
    content/api-reference/api-index
