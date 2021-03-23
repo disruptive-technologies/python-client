@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Type
-
 # Project imports.
 import disruptive.transforms as dttrans
 import disruptive.outputs as dtoutputs
