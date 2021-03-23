@@ -366,7 +366,7 @@ class Reported(dtoutputs.OutputBase):
 
     Contains one attribute for each event type, initialized to None.
     For each event type represented in the reported field, the related
-    attribute is updated with the appropriate DataClass child.
+    attribute is updated with the appropriate EventData child.
 
     Attributes
     ----------
@@ -428,7 +428,7 @@ class Reported(dtoutputs.OutputBase):
     def __unpack(self) -> None:
         """
         Iterates each field in the raw dictionary and set the
-        related attribute to the appropriate DataClass child object.
+        related attribute to the appropriate EventData child object.
         If an event type is not found, the attribute is left as None.
 
         """
@@ -443,7 +443,7 @@ class Reported(dtoutputs.OutputBase):
             repacked = {key: self.raw[key]}
 
             # Initialize appropriate data instance.
-            data = dtevents.DataClass.from_event_type(repacked, key)
+            data = dtevents.EventData.from_event_type(repacked, key)
 
             # Set attribute according to event type.
             if key in dtevents.EVENTS_MAP:

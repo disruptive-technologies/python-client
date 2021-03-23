@@ -6,7 +6,7 @@ import disruptive.outputs as dtoutputs
 import disruptive.log as dtlog
 
 
-class DataClass(dtoutputs.OutputBase):
+class EventData(dtoutputs.OutputBase):
     """
     Parent class for all the different event data field types.
 
@@ -17,7 +17,7 @@ class DataClass(dtoutputs.OutputBase):
 
     def __init__(self, data: dict) -> None:
         """
-        Constructs the DataClass object by inheriting parent.
+        Constructs the EventData object by inheriting parent.
 
         """
 
@@ -77,7 +77,7 @@ class DataClass(dtoutputs.OutputBase):
             return None, None
 
 
-class Touch(DataClass):
+class Touch(EventData):
     """
     Represents the data found in a touch event.
 
@@ -90,10 +90,10 @@ class Touch(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
 
-class Temperature(DataClass):
+class Temperature(EventData):
     """
     Represents the data found in a temperature event.
 
@@ -108,13 +108,13 @@ class Temperature(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.temperature = self.raw['value']
 
 
-class ObjectPresent(DataClass):
+class ObjectPresent(EventData):
     """
     Represents the data found in an objectPresent event.
 
@@ -129,13 +129,13 @@ class ObjectPresent(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.state = self.raw['state']
 
 
-class Humidity(DataClass):
+class Humidity(EventData):
     """
     Represents the data found in an humidity event.
 
@@ -152,14 +152,14 @@ class Humidity(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.temperature = self.raw['temperature']
         self.humidity = self.raw['relativeHumidity']
 
 
-class ObjectPresentCount(DataClass):
+class ObjectPresentCount(EventData):
     """
     Represents the data found in an objectPresentCount event.
 
@@ -175,13 +175,13 @@ class ObjectPresentCount(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.total = self.raw['total']
 
 
-class TouchCount(DataClass):
+class TouchCount(EventData):
     """
     Represents the data found in an touchCount event.
 
@@ -197,13 +197,13 @@ class TouchCount(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.total = self.raw['total']
 
 
-class WaterPresent(DataClass):
+class WaterPresent(EventData):
     """
     Represents the data found in an waterPresent event.
 
@@ -218,13 +218,13 @@ class WaterPresent(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.state = self.raw['state']
 
 
-class NetworkStatus(DataClass):
+class NetworkStatus(EventData):
     """
     Represents the data found in a networkStatus event.
 
@@ -251,7 +251,7 @@ class NetworkStatus(DataClass):
         """
 
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.signal_strength = self.raw['signalStrength']
@@ -266,7 +266,7 @@ class NetworkStatus(DataClass):
             })
 
 
-class BatteryStatus(DataClass):
+class BatteryStatus(EventData):
     """
     Represents the data found in a batteryStatus event.
 
@@ -286,13 +286,13 @@ class BatteryStatus(DataClass):
         """
 
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.percentage = self.raw['percentage']
 
 
-class LabelsChanged(DataClass):
+class LabelsChanged(EventData):
     """
     Represents the data found in an labelsChanged event.
 
@@ -311,7 +311,7 @@ class LabelsChanged(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.added = self.raw['added']
@@ -319,7 +319,7 @@ class LabelsChanged(DataClass):
         self.removed = self.raw['removed']
 
 
-class ConnectionStatus(DataClass):
+class ConnectionStatus(EventData):
     """
     Represents the data found in a connectionStatus event.
 
@@ -336,14 +336,14 @@ class ConnectionStatus(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.connection = self.raw['connection']
         self.available = self.raw['available']
 
 
-class EthernetStatus(DataClass):
+class EthernetStatus(EventData):
     """
     Represents the data found in a ethernetStatus event.
 
@@ -360,14 +360,14 @@ class EthernetStatus(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.mac_address = self.raw['macAddress']
         self.ip_address = self.raw['ipAddress']
 
 
-class CellularStatus(DataClass):
+class CellularStatus(EventData):
     """
     Represents the data found in a cellularStatus event.
 
@@ -382,7 +382,7 @@ class CellularStatus(DataClass):
 
     def __init__(self, data: dict):
         # Inherit parent Event class init.
-        DataClass.__init__(self, data)
+        EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
         self.signal_strength = self.raw['signalStrength']
@@ -478,7 +478,7 @@ class Event(dtoutputs.OutputBase):
         Unique ID of the source device.
     project_id : str
         Unique ID of the source project.
-    data : child of DataClass
+    data : EventData
         An object representing type-specific event data.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
@@ -499,7 +499,7 @@ class Event(dtoutputs.OutputBase):
         self.project_id = self.raw['targetName'].split('/')[1]
 
         # Initialize the appropriate data class.
-        self.data = DataClass.from_event_type(
+        self.data = EventData.from_event_type(
             self.raw['data'],
             self.type
         )
