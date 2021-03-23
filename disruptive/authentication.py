@@ -73,10 +73,13 @@ class Auth():
 
         """
         raise dterrors.Unauthenticated(
-            'Authentication object not initialized.\n\n\
-            Set globally by calling one of the following methods:\n\
-            Basic Auth: dt.Auth.basic(key_id, secret)\n\
-            OAuth2:     dt.Auth.oauth(key_id, secret, email)'
+            {
+                'code': 401,
+                'error': 'Authentication object not initialized.',
+                'help': 'You can set global authentication by:\n'
+                + ' '*7 + 'Basic Auth: dt.BasicAuth(key_id, secret)\n'
+                + ' '*7 + 'OAuth2:     dt.OAuth(key_id, secret, email)',
+            }
         )
 
     def _verify_str_credentials(self, credentials: list[str]) -> None:
