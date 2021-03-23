@@ -95,6 +95,27 @@ class InternalServerError(DTApiError):
 
 # Parses the status code, and returns (error, should_retry, retry_after)
 def parse_error(status_code: int, headers: dict, retry_count: int):
+    """
+    Evaluates the status code and returns instructions for
+    how to deal with the error in a request.
+
+    Parameters
+    ----------
+    status_code : int
+        Status code included in the request response.
+    headers : dict
+        Dictionary of headers included in the request response.
+    retry_count : int
+        Number of times the request has already been retried.
+
+    Returns
+    -------
+    tuple : tuple
+        The error to be raised, a bool whether to retry the request, and
+        an int defining how long to wait before retrying.
+
+    """
+
     if status_code == 200:
         return (None, False, None)
     elif status_code == 400:
