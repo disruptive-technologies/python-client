@@ -1,39 +1,121 @@
+class DTApiError(Exception):
+    """
+    Represents errors raised from the REST API.
+
+    """
+
+    def __init__(self, message: dict):
+        # If no message is provided, skip formatting.
+        if len(message) == 0:
+            msg = ''
+        else:
+            # Create message from dictionary contents.
+            msg = 'Status Code {}\n\nError:\n{}\n\nHelp:\n{}'.format(
+                message['code'],
+                message['error'],
+                message['help'],
+            )
+
+        # Call the base class constructor.
+        super().__init__(msg)
 
 
-class BadRequest(Exception):
-    pass
+class BadRequest(DTApiError):
+    """
+    The response contained a status code of 400.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class Unauthenticated(Exception):
-    pass
+class Unauthenticated(DTApiError):
+    """
+    The response contained a status code of 401.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class Forbidden(Exception):
-    pass
+class Forbidden(DTApiError):
+    """
+    The response contained a status code of 403.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class NotFound(Exception):
-    pass
+class NotFound(DTApiError):
+    """
+    The response contained a status code of 404.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class Conflict(Exception):
-    pass
+class Conflict(DTApiError):
+    """
+    The response contained a status code of 409.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class TooManyRequests(Exception):
-    pass
+class TooManyRequests(DTApiError):
+    """
+    The response contained a status code of 429.
+
+    This entails that too many requests were made in
+    too short of a timeframe.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
 
 
-class InternalServerError(Exception):
-    pass
+class InternalServerError(DTApiError):
+    """
+    The response contained a status code of 500.
 
+    """
 
-class ServerUnavailable(Exception):
-    pass
+    def __init__(self, message):
+        super().__init__(message)
 
 
 # Parses the status code, and returns (error, should_retry, retry_after)
 def parse_error(status_code: int, headers: dict, retry_count: int):
+    """
+    Evaluates the status code and returns instructions for
+    how to deal with the error in a request.
+
+    Parameters
+    ----------
+    status_code : int
+        Status code included in the request response.
+    headers : dict
+        Dictionary of headers included in the request response.
+    retry_count : int
+        Number of times the request has already been retried.
+
+    Returns
+    -------
+    tuple : tuple
+        The error to be raised, a bool whether to retry the request, and
+        an int defining how long to wait before retrying.
+
+    """
+
     if status_code == 200:
         return (None, False, None)
     elif status_code == 400:

@@ -7,19 +7,47 @@ from typing import Optional
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import Metric
-from disruptive.authentication import BasicAuth, OAuth
+from disruptive.authentication import Auth
 
 
 class DataConnector():
+    """
+    Represents a dataconnector.
+
+    When a dataconnector response is received, the content
+    is unpacked and the related attributes are updated.
+
+    Attributes
+    ----------
+    raw : dict
+        Unmodified project response dictionary.
+    id : str
+        Unique dataconnector ID.
+    display_name : str
+        The provided display name.
+    type : str
+        Dataconnector type. Currently only HTTP_PUSH is available.
+    status : str
+        Whether the dataconnector is ACTIVE, USER_DISABLED, or SYSTEM_DISABLED.
+
+    """
 
     def __init__(self, dataconnector: dict) -> None:
+        """
+        Constructs the DataConnector object by unpacking
+        the raw dataconnector response.
+
+        Parameters
+        ----------
+        dataconnector : dict
+            Unmodified dataconnector response dictionary.
+
+        """
+
         # Inherit everything from Response parent.
         self.raw = dataconnector
 
-        # Unpack device json.
-        self.__unpack()
-
-    def __unpack(self) -> None:
+        # Unpack attributes from dictionary.
         self.id = self.raw['name'].split('/')[-1]
         self.type = self.raw['type']
         self.status = self.raw['status']
@@ -29,8 +57,27 @@ class DataConnector():
     def get_dataconnector(cls,
                           project_id: str,
                           dataconnector_id: str,
-                          auth: Optional[BasicAuth | OAuth] = None
+                          auth: Optional[Auth] = None
                           ) -> DataConnector:
+        """
+        Gets a dataconnector specified by its ID.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        dataconnector_id : str
+            Unique dataconnector ID.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        dataconnector : DataConnector
+            Object representing the specified dataconnector.
+
+        """
 
         # Construct URL
         url = dt.base_url
@@ -46,8 +93,25 @@ class DataConnector():
     @classmethod
     def list_dataconnectors(cls,
                             project_id: str,
-                            auth: Optional[BasicAuth | OAuth] = None
+                            auth: Optional[Auth] = None
                             ) -> list[DataConnector]:
+        """
+        List all available dataconnectors in the specified project.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        dataconnectors : list[DataConnector]
+            List of objects each representing a dataconnector.
+
+        """
 
         # Return list of DataConnector objects of paginated GET response.
         dataconnectors = dtrequests.auto_paginated_list(
@@ -68,8 +132,41 @@ class DataConnector():
                              signature_secret: str = '',
                              headers: dict[str, str] = {},
                              labels: list[str] = [],
-                             auth: Optional[BasicAuth | OAuth] = None,
+                             auth: Optional[Auth] = None,
                              ) -> DataConnector:
+        """
+        Create a new dataconnector in the specified project.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique project ID.
+        url : str
+            Endpoint URL towards which events are forwarded. Must be HTTPS.
+        dataconnector_type : {"HTTP_PUSH"} str, optional
+            Type of dataconnector to create. Currently only supports HTTP_PUSH.
+        display_name : str, optional
+            Sets a display name for the project.
+        status : {"ACTIVE", "USER_DISABLED"} strm optional
+            Status of the new dataconnector.
+        events : list[str], optional
+            List of event types the dataconnectors should forward.
+        signature_secret : str, optional
+            Secret with which each forwarded event is signed.
+        headers : dict[str, str], optional
+            Dictionary of headers to include with each forwarded event.
+        labels : list[str], optional
+            List of labels to forward with each event.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        dataconnector : DataConnector
+            Object representing the newly created dataconnector.
+
+        """
 
         # Construct request body dictionary.
         body: dict = dict()
@@ -106,8 +203,36 @@ class DataConnector():
                              url: Optional[str] = None,
                              signature_secret: Optional[str] = None,
                              headers: Optional[dict[str, str]] = None,
-                             auth: Optional[BasicAuth | OAuth] = None,
+                             auth: Optional[Auth] = None,
                              ) -> DataConnector:
+        """
+        Updates the attributes of a dataconnector.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project that contains the dataconnector.
+        dataconnector_id : str
+            Unique ID of the dataconnector to update.
+        url : str, optional
+            Endpoint URL towards which events are forwarded. Must be HTTPS.
+        display_name : str, optional
+            Sets a display name for the dataconnector.
+        status : {"ACTIVE", "USER_DISABLED"} str, optional
+            Status of the dataconnector.
+        events : list[str], optional
+            List of event types the dataconnectors should forward.
+        signature_secret : str, optional
+            Secret with which each forwarded event is signed.
+        headers : dict[str, str], optional
+            Dictionary of headers to include with each forwarded event.
+        labels : list[str], optional
+            List of labels to forward with each event.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        """
 
         # Construct request body dictionary.
         body: dict = dict()
@@ -143,8 +268,22 @@ class DataConnector():
     def delete_dataconnector(cls,
                              project_id: str,
                              dataconnector_id: str,
-                             auth: Optional[BasicAuth | OAuth] = None
+                             auth: Optional[Auth] = None
                              ) -> None:
+        """
+        Deletes the specified dataconnector.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project that contains the dataconnector.
+        dataconnector_id : str
+            Unique ID of the dataconnector to delete.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        """
 
         # Construct URL.
         url = dt.base_url
@@ -158,11 +297,30 @@ class DataConnector():
         )
 
     @classmethod
-    def dataconnector_metrics(cls,
-                              project_id: str,
-                              dataconnector_id: str,
-                              auth: Optional[BasicAuth | OAuth] = None
-                              ) -> Metric:
+    def get_metrics(cls,
+                    project_id: str,
+                    dataconnector_id: str,
+                    auth: Optional[Auth] = None
+                    ) -> Metric:
+        """
+        Get the metrics of the last 3 hours for a dataconnector.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project that contains the dataconnector.
+        dataconnector_id : str
+            Unique ID of the dataconnector to list metrics for.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        metric : Metric
+            Object representing the fetched metrics.
+
+        """
 
         # Construct URL.
         url = dt.base_url
@@ -180,8 +338,26 @@ class DataConnector():
     def sync_dataconnector(cls,
                            project_id: str,
                            dataconnector_id: str,
-                           auth: Optional[BasicAuth | OAuth] = None
+                           auth: Optional[Auth] = None
                            ) -> None:
+        """
+        Synchronizes the current dataconnector state.
+
+        This method let's you synchronize your cloud service with the current
+        state of the devices in your project. This entails pushing the most
+        recent event of each type for all devices in your project.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the project that contains the dataconnector.
+        dataconnector_id : str
+            Unique ID of the dataconnector to synchronize.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        """
 
         # Construct URL.
         url = dt.base_url

@@ -6,17 +6,45 @@ from typing import Generator, Optional
 # Project Imports.
 import disruptive as dt
 from disruptive.events import Event
-from disruptive.authentication import BasicAuth, OAuth
+from disruptive.authentication import Auth
 
 
 class Stream():
+    """
+    Contains staticmethods for streaming events.
+    Used for namespacing only and thus does not have a constructor
+
+    """
 
     @staticmethod
     def device(project_id: str,
                device_id: str,
                event_types: Optional[list[str]] = None,
-               auth: Optional[BasicAuth | OAuth] = None,
+               auth: Optional[Auth] = None,
                ) -> Generator:
+        """
+        Streams events for a single device.
+
+        Implements a basic retry-routine. If connection is lost, the stream
+        will attempt to reconnect with an exponential backoff. Potential
+        lost events while reconnecting are, however, not acocunted for.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the target project.
+        device_id : str
+            Unique ID of the target device.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        stream : Generator
+            A python Generator type that yields each new event in the stream.
+
+        """
 
         # Construct parameters dictionary.
         params: dict = dict()
@@ -35,8 +63,37 @@ class Stream():
                 label_filters: Optional[list[str]] = None,
                 device_types: Optional[list[str]] = None,
                 event_types: Optional[list[str]] = None,
-                auth: Optional[BasicAuth | OAuth] = None,
-                ):
+                auth: Optional[Auth] = None,
+                ) -> Generator:
+        """
+        Streams events for a multiple devices in a project.
+
+        Implements a basic retry-routine. If connection is lost, the stream
+        will attempt to reconnect with an exponential backoff. Potential
+        lost events while reconnecting are, however, not acocunted for.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the target project.
+        device_ids : list[str], optional
+            Only includes events from the specified device(s).
+        label_filters : list[str], optional
+            Only includes events from devices with specified label(s).
+        device_types : list[str], optional
+            Only includes events from devices with specified type(s).
+        event_types : list[str], optional
+            Only includes events of the specified type(s).
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+
+        Returns
+        -------
+        stream : Generator
+            A python Generator type that yields each new event in the stream.
+
+        """
 
         # Construct parameters dictionary.
         params: dict = dict()

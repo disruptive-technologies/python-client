@@ -10,12 +10,15 @@ help:
 	@echo - make lint
 	@echo - make all
 
-dev:
-	${PIP} install --upgrade pip flake8 pytest pytest-mock setuptools wheel mypy
+env:
+	${PIP} install -r requirements.txt
 
-build: dev
+build: env
 	${PYTHON} setup.py sdist bdist_wheel
 	${PIP} install -e .
+
+sphinx:
+	cd docs && ${MAKE} html
 
 test:
 	pytest
