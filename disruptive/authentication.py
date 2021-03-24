@@ -13,8 +13,35 @@ import disruptive.errors as dterrors
 
 
 class Auth():
+    """
+    Used to initialize and maintain authentication to the REST API.
+
+    Attributes
+    ----------
+    token : str
+        Access token provided in request header.
+    method : str
+        Authentication method used.
+    expiration : int
+        Unixtime of when the authentication expires.
+    credentials : dict[str, str]
+        Credentials provided for authenticating with the chosen method.
+
+    """
 
     def __init__(self, method: str, credentials: dict[str, str]) -> None:
+        """
+        Constructs the Auth object by validating and updating credentials.
+
+        Parameters
+        ----------
+        method : str
+            Authentication method chosen.
+        credentials : dict[str, str]
+            Credentials provided for authenticating with the chosen method.
+
+        """
+
         # Verify provided credentials are strings.
         self._verify_str_credentials(credentials)
 
@@ -32,6 +59,29 @@ class Auth():
                        secret: str,
                        email: str,
                        ) -> Auth:
+        """
+        Constructs the Auth object for authenticating using a serviceaccount.
+
+        This method uses an OAuth2 flow to authenticate. Using the provided
+        credentials, a JWT is created and exchanged for an access token which
+        is renewed every hour as required.
+
+        Parameters
+        ----------
+        key_id : str
+            Unique serviceaccount key ID.
+        secret : str
+            Serviceaccount secret.
+        email : str
+            Unique serviceaccount email address.
+
+        Returns
+        -------
+        auth : Auth
+            Object to initialize and maintain authentication to the REST API.
+
+        """
+
         # Construct Auth object with method and credentials.
         obj = cls(
             method='serviceaccount',
