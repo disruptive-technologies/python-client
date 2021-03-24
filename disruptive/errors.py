@@ -10,7 +10,7 @@ class DTApiError(Exception):
             msg = ''
         else:
             # Create message from dictionary contents.
-            msg = 'Status Code {}.\nError: {}.\nHelp:  {}.'.format(
+            msg = 'Status Code {}\n\nError:\n{}\n\nHelp:\n{}'.format(
                 message['code'],
                 message['error'],
                 message['help'],
