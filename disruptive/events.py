@@ -13,6 +13,11 @@ class EventData(dtoutputs.OutputBase):
     Attributes are mainly inherited from OutputBase, and otherwise
     contains a few convenience methods for setting the correct child.
 
+    Attributes
+    ----------
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
+
     """
 
     def __init__(self, data: dict) -> None:
@@ -23,6 +28,11 @@ class EventData(dtoutputs.OutputBase):
 
         # Inherit parent Event class init.
         dtoutputs.OutputBase.__init__(self, data)
+
+        # Convert ISO-8601 string to datetime format.
+        self.timestamp = dttrans.iso8601_to_datetime(
+            self.raw['updateTime']
+        )
 
     @classmethod
     def from_event_type(cls, data: dict, event_type: str):
@@ -85,6 +95,8 @@ class Touch(EventData):
     ----------
     raw : dict
         Unmodified touch event data dictionary.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -103,6 +115,8 @@ class Temperature(EventData):
         Unmodified temperature event data dictionary.
     temperature : float
         Temperature in degress Celsius.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -124,6 +138,8 @@ class ObjectPresent(EventData):
         Unmodified objectPresent event data dictionary.
     state : str
         Whether the event reported PRESENT or NOT_PRESENT.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -147,6 +163,8 @@ class Humidity(EventData):
         Temperature in degress Celsius.
     humidity : int
         Relative humidity percentage.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -170,6 +188,8 @@ class ObjectPresentCount(EventData):
     total : int
         Total number of times the sensor has detected the appearance
         or disappearance of an object over its lifetime.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -192,6 +212,8 @@ class TouchCount(EventData):
     total : int
         The total number of times the sensor
         has been touched over its lifetime.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -213,6 +235,8 @@ class WaterPresent(EventData):
         Unmodified waterPresent event data dictionary.
     state : str
         Indicates whether water is PRESENT or NOT_PRESENT.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -241,6 +265,8 @@ class NetworkStatus(EventData):
         LOW_POWER_STANDARD_MODE or HIGH_POWER_BOOST_MODE.
     cloud_connectors : list[str]
         Lists the ID of the Cloud Connector that relayed the event.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -276,6 +302,8 @@ class BatteryStatus(EventData):
         Unmodified networkStatus event data dictionary.
     percentage : int
         Percentage estimate of remaining battery.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -306,6 +334,8 @@ class LabelsChanged(EventData):
         New keys and values of modified labels.
     removed : list[str]
         List of keys of removed labels.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -331,6 +361,8 @@ class ConnectionStatus(EventData):
         Whether the Cloud Connector is on ETHERNET, CELLULAR, or OFFLINE.
     available : str
         Lists available connections. Can contain ETHERNET, CELLULAR, or both.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -355,6 +387,8 @@ class EthernetStatus(EventData):
         MAC address of the local network interface.
     ip_address : str
         IP address of the Cloud Connector on the local network.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -377,6 +411,8 @@ class CellularStatus(EventData):
         Unmodified connectionStatus event data dictionary.
     signal_strength : int
         Cloud Connector cellular reception percentage.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -480,8 +516,6 @@ class Event(dtoutputs.OutputBase):
         Unique ID of the source project.
     data : :ref:`Event Data`
         An object representing type-specific event data.
-    timestamp : datetime
-        Timestamp of when the event was received by a Cloud Connector.
 
     """
 
@@ -498,15 +532,16 @@ class Event(dtoutputs.OutputBase):
         self.device_id = self.raw['targetName'].split('/')[-1]
         self.project_id = self.raw['targetName'].split('/')[1]
 
+        # Since labelsChanged is the only event that does not
+        # contain an updateTime field in data, we provide the
+        # field as it is a massive convenience boost.
+        if self.type == 'labelsChanged':
+            self.raw['data']['updateTime'] = self.raw['timestamp']
+
         # Initialize the appropriate data class.
         self.data = EventData.from_event_type(
             self.raw['data'],
-            self.type
-        )
-
-        # Convert ISO-8601 string to datetime format.
-        self.timestamp = dttrans.iso8601_to_datetime(
-            self.raw['timestamp']
+            self.type,
         )
 
     @classmethod

@@ -415,7 +415,7 @@ class Reported(dtoutputs.OutputBase):
 
         # Set default attribute values.
         for key in dtevents.EVENTS_MAP:
-            # Skip labelsChanged
+            # Skip labelsChanged as it does not exist in reported.
             if key == 'labelsChanged':
                 continue
 
@@ -436,7 +436,11 @@ class Reported(dtoutputs.OutputBase):
         # Iterate keys in reported dictionary.
         for key in self.raw.keys():
             # Fields can be None on emulated devices. Skip if that is the case.
-            if self.raw[key] is None or key == 'labelsChanged':
+            if self.raw[key] is None:
+                continue
+
+            # Also skip labelsChanged key as it does not exist in reported.
+            if key == 'labelsChanged':
                 continue
 
             # Repack the data field in expected format.
