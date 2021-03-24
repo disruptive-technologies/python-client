@@ -1,13 +1,6 @@
 Authentication
 ==============
 
-BasicAuth
----------
-.. autoclass:: disruptive.BasicAuth
-.. autofunction:: disruptive.BasicAuth.__init__
+.. autoclass:: disruptive.Auth()
 
-OAuth
------
-.. autoclass:: disruptive.OAuth
-.. autofunction:: disruptive.OAuth.__init__
-
+   .. automethod:: disruptive.Auth.serviceaccount
