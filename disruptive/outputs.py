@@ -30,18 +30,8 @@ class OutputBase():
         # Set attribute from input argument.
         self.raw = raw
 
-    def pprint(self, n: int = 4) -> None:
-        """
-        Print the raw attribute using json.dumps() for formatting.
-
-        Parameters
-        ----------
-        n : int
-            Number of spaces in indent.
-
-        """
-
-        print(json.dumps(self.raw, indent=n))
+    def __str__(self):
+        return json.dumps(self.raw, indent=4)
 
 
 class Metric(OutputBase):
