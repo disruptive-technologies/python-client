@@ -9,7 +9,7 @@ import disruptive.requests as dtrequests
 import disruptive.events as dtevents
 import disruptive.errors as dterrors
 import disruptive.outputs as dtoutputs
-from disruptive.authentication import BasicAuth, OAuth
+from disruptive.authentication import Auth
 
 
 class Device(dtoutputs.OutputBase):
@@ -61,7 +61,7 @@ class Device(dtoutputs.OutputBase):
     def get_device(cls,
                    project_id: str,
                    device_id: str,
-                   auth: Optional[BasicAuth | OAuth] = None,
+                   auth: Optional[Auth] = None,
                    ) -> Device:
         """
         Gets a device specified by its project and ID.
@@ -72,7 +72,7 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -108,7 +108,7 @@ class Device(dtoutputs.OutputBase):
                      device_types: Optional[list[str]] = None,
                      label_filters: Optional[list[str]] = None,
                      order_by: Optional[str] = None,
-                     auth: Optional[BasicAuth | OAuth] = None,
+                     auth: Optional[Auth] = None,
                      ) -> list[Device]:
         """
         List all available devices in the specified project.
@@ -130,7 +130,7 @@ class Device(dtoutputs.OutputBase):
             The field name you want to order the response by.
             Referred to using dot notation, e.g. reported.temperature.value.
             Default order is ascending, but can be flipped by prefixing a "~".
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -168,7 +168,7 @@ class Device(dtoutputs.OutputBase):
                             device_ids: list[str],
                             add_labels: Optional[dict[str, str]] = None,
                             remove_labels: Optional[list[str]] = None,
-                            auth: Optional[BasicAuth | OAuth] = None,
+                            auth: Optional[Auth] = None,
                             ) -> None:
         """
         Add, update, or remove multiple labels (key=value) on multiple devices
@@ -189,7 +189,7 @@ class Device(dtoutputs.OutputBase):
             Key and value of labels to be added / updated.
         remove_labels : list[str], optional
             Label keys to be removed.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -223,7 +223,7 @@ class Device(dtoutputs.OutputBase):
                   device_id: str,
                   key: str,
                   value: str,
-                  auth: Optional[BasicAuth | OAuth] = None,
+                  auth: Optional[Auth] = None,
                   ) -> None:
         """
         Add a label (key=value) for a single device.
@@ -239,7 +239,7 @@ class Device(dtoutputs.OutputBase):
             Label key to be added.
         value : str
             Label value to be added.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -258,7 +258,7 @@ class Device(dtoutputs.OutputBase):
                      device_id: str,
                      key: str,
                      value: str,
-                     auth: Optional[BasicAuth | OAuth] = None,
+                     auth: Optional[Auth] = None,
                      ) -> None:
         """
         Update a label (key=value) for a single device.
@@ -273,7 +273,7 @@ class Device(dtoutputs.OutputBase):
             Key of the label to be modified.
         value : str
             Label value to be modified.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -291,7 +291,7 @@ class Device(dtoutputs.OutputBase):
     def remove_label(project_id: str,
                      device_id: str,
                      key: str,
-                     auth: Optional[BasicAuth | OAuth] = None,
+                     auth: Optional[Auth] = None,
                      ) -> None:
         """
         Remove a label (key=value) from a single device.
@@ -304,7 +304,7 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the target device.
         key : str
             Key of the label to be removed.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -322,7 +322,7 @@ class Device(dtoutputs.OutputBase):
     def transfer_device(source_project_id: str,
                         target_project_id: str,
                         device_ids: list[str],
-                        auth: Optional[BasicAuth | OAuth] = None,
+                        auth: Optional[Auth] = None,
                         ) -> None:
         """
         Transfer devices from one project to another.
@@ -335,7 +335,7 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the target project.
         device_ids : list[str]
             List of unique IDs for the target devices.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 

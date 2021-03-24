@@ -1,7 +1,7 @@
 # Project imports.
 import disruptive as dt
-import disruptive.authentication as dtauth
 import disruptive.responses as dtresponses
+from disruptive.authentication import Auth
 
 
 class RequestMock():
@@ -19,8 +19,8 @@ class RequestMock():
         )
 
         self.auth_expiration_patcher = self._mocker.patch.object(
-            dtauth.Auth,
-            'has_expired',
+            Auth,
+            '_has_expired',
             return_value=False,
         )
 

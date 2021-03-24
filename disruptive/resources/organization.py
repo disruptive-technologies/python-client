@@ -7,7 +7,7 @@ from typing import Optional
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase, Member
-from disruptive.authentication import BasicAuth, OAuth
+from disruptive.authentication import Auth
 
 
 class Organization(OutputBase):
@@ -52,7 +52,7 @@ class Organization(OutputBase):
     @classmethod
     def get_organization(cls,
                          organization_id: str,
-                         auth: Optional[BasicAuth | OAuth] = None,
+                         auth: Optional[Auth] = None,
                          ) -> Organization:
         """
         Gets an organization specified by its ID.
@@ -61,7 +61,7 @@ class Organization(OutputBase):
         ----------
         organization_id : str
             Unique organization ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -84,14 +84,14 @@ class Organization(OutputBase):
 
     @classmethod
     def list_organizations(cls,
-                           auth: Optional[BasicAuth | OAuth] = None,
+                           auth: Optional[Auth] = None,
                            ) -> list[Organization]:
         """
         List all available organizations.
 
         Parameters
         ----------
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -112,7 +112,7 @@ class Organization(OutputBase):
 
     @staticmethod
     def list_members(organization_id: str,
-                     auth: Optional[BasicAuth | OAuth] = None,
+                     auth: Optional[Auth] = None,
                      ) -> list[Member]:
         """
         List all members in the specified organization.
@@ -121,7 +121,7 @@ class Organization(OutputBase):
         ----------
         organization_id : str
             Unique ID of the organization to get members from.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -148,7 +148,7 @@ class Organization(OutputBase):
     def add_member(organization_id: str,
                    email: str,
                    roles: list[str],
-                   auth: Optional[BasicAuth | OAuth] = None,
+                   auth: Optional[Auth] = None,
                    ) -> Member:
         """
         Add a new member to the specified organization.
@@ -162,7 +162,7 @@ class Organization(OutputBase):
         roles : {["organization.admin"]} list[str]
             The role(s) to provide the new member in the organization.
             Currently only supports organization.admin.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -192,7 +192,7 @@ class Organization(OutputBase):
     @staticmethod
     def get_member(organization_id: str,
                    member_id: str,
-                   auth: Optional[BasicAuth | OAuth] = None,
+                   auth: Optional[Auth] = None,
                    ) -> Member:
         """
         Get a member from the specified organization.
@@ -205,7 +205,7 @@ class Organization(OutputBase):
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -232,7 +232,7 @@ class Organization(OutputBase):
     @staticmethod
     def remove_member(organization_id: str,
                       member_id: str,
-                      auth: Optional[BasicAuth | OAuth] = None,
+                      auth: Optional[Auth] = None,
                       ) -> None:
         """
         Revoke a member's membership in the specified organization.
@@ -245,7 +245,7 @@ class Organization(OutputBase):
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -267,7 +267,7 @@ class Organization(OutputBase):
     @staticmethod
     def get_member_invite_url(organization_id: str,
                               member_id: str,
-                              auth: Optional[BasicAuth | OAuth] = None,
+                              auth: Optional[Auth] = None,
                               ) -> None:
         """
         Get the invite URL for a member with pending invite.
@@ -283,7 +283,7 @@ class Organization(OutputBase):
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -309,7 +309,7 @@ class Organization(OutputBase):
 
     @staticmethod
     def list_permissions(organization_id: str,
-                         auth: Optional[BasicAuth | OAuth] = None,
+                         auth: Optional[Auth] = None,
                          ) -> list[str]:
         """
         List permissions available in the specified organization.
@@ -318,7 +318,7 @@ class Organization(OutputBase):
         ----------
         organization_id : str
             Unique ID of the organization to list permissions in.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 

@@ -7,7 +7,7 @@ from typing import Optional
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.events import Event
-from disruptive.authentication import BasicAuth, OAuth
+from disruptive.authentication import Auth
 
 
 class EventHistory():
@@ -23,7 +23,7 @@ class EventHistory():
                     event_types: Optional[list[str]] = None,
                     start_time: Optional[str] = None,
                     end_time: Optional[str] = None,
-                    auth: Optional[BasicAuth | OAuth] = None,
+                    auth: Optional[Auth] = None,
                     ) -> list[Event]:
         """
         Get the event history for a single device.
@@ -42,7 +42,7 @@ class EventHistory():
         end_time : str, optional
             Specified until when event history is fetched.
             Defaults to now.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 

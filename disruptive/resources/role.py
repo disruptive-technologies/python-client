@@ -7,7 +7,7 @@ from typing import Optional
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase
-from disruptive.authentication import BasicAuth, OAuth
+from disruptive.authentication import Auth
 
 
 class Role(OutputBase):
@@ -55,7 +55,7 @@ class Role(OutputBase):
     @classmethod
     def get_role(cls,
                  role: str,
-                 auth: Optional[BasicAuth | OAuth] = None,
+                 auth: Optional[Auth] = None,
                  ) -> Role:
         """
         Gets a role specified by its name.
@@ -64,7 +64,7 @@ class Role(OutputBase):
         ----------
         role : str
             Name of the role.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -83,7 +83,7 @@ class Role(OutputBase):
 
     @classmethod
     def list_roles(cls,
-                   auth: Optional[BasicAuth | OAuth] = None,
+                   auth: Optional[Auth] = None,
                    ) -> list[Role]:
         """
         List all available roles.

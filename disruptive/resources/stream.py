@@ -6,7 +6,7 @@ from typing import Generator, Optional
 # Project Imports.
 import disruptive as dt
 from disruptive.events import Event
-from disruptive.authentication import BasicAuth, OAuth
+from disruptive.authentication import Auth
 
 
 class Stream():
@@ -20,7 +20,7 @@ class Stream():
     def device(project_id: str,
                device_id: str,
                event_types: Optional[list[str]] = None,
-               auth: Optional[BasicAuth | OAuth] = None,
+               auth: Optional[Auth] = None,
                ) -> Generator:
         """
         Streams events for a single device.
@@ -35,7 +35,7 @@ class Stream():
             Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -63,7 +63,7 @@ class Stream():
                 label_filters: Optional[list[str]] = None,
                 device_types: Optional[list[str]] = None,
                 event_types: Optional[list[str]] = None,
-                auth: Optional[BasicAuth | OAuth] = None,
+                auth: Optional[Auth] = None,
                 ) -> Generator:
         """
         Streams events for a multiple devices in a project.
@@ -84,7 +84,7 @@ class Stream():
             Only includes events from devices with specified type(s).
         event_types : list[str], optional
             Only includes events of the specified type(s).
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 

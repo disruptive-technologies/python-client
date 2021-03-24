@@ -7,7 +7,7 @@ from typing import Optional
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import Metric
-from disruptive.authentication import BasicAuth, OAuth
+from disruptive.authentication import Auth
 
 
 class DataConnector():
@@ -57,7 +57,7 @@ class DataConnector():
     def get_dataconnector(cls,
                           project_id: str,
                           dataconnector_id: str,
-                          auth: Optional[BasicAuth | OAuth] = None
+                          auth: Optional[Auth] = None
                           ) -> DataConnector:
         """
         Gets a dataconnector specified by its ID.
@@ -68,7 +68,7 @@ class DataConnector():
             Unique project ID.
         dataconnector_id : str
             Unique dataconnector ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -93,7 +93,7 @@ class DataConnector():
     @classmethod
     def list_dataconnectors(cls,
                             project_id: str,
-                            auth: Optional[BasicAuth | OAuth] = None
+                            auth: Optional[Auth] = None
                             ) -> list[DataConnector]:
         """
         List all available dataconnectors in the specified project.
@@ -102,7 +102,7 @@ class DataConnector():
         ----------
         project_id : str
             Unique project ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -132,7 +132,7 @@ class DataConnector():
                              signature_secret: str = '',
                              headers: dict[str, str] = {},
                              labels: list[str] = [],
-                             auth: Optional[BasicAuth | OAuth] = None,
+                             auth: Optional[Auth] = None,
                              ) -> DataConnector:
         """
         Create a new dataconnector in the specified project.
@@ -157,7 +157,7 @@ class DataConnector():
             Dictionary of headers to include with each forwarded event.
         labels : list[str], optional
             List of labels to forward with each event.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -203,7 +203,7 @@ class DataConnector():
                              url: Optional[str] = None,
                              signature_secret: Optional[str] = None,
                              headers: Optional[dict[str, str]] = None,
-                             auth: Optional[BasicAuth | OAuth] = None,
+                             auth: Optional[Auth] = None,
                              ) -> DataConnector:
         """
         Updates the attributes of a dataconnector.
@@ -228,7 +228,7 @@ class DataConnector():
             Dictionary of headers to include with each forwarded event.
         labels : list[str], optional
             List of labels to forward with each event.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -268,7 +268,7 @@ class DataConnector():
     def delete_dataconnector(cls,
                              project_id: str,
                              dataconnector_id: str,
-                             auth: Optional[BasicAuth | OAuth] = None
+                             auth: Optional[Auth] = None
                              ) -> None:
         """
         Deletes the specified dataconnector.
@@ -279,7 +279,7 @@ class DataConnector():
             Unique ID of the project that contains the dataconnector.
         dataconnector_id : str
             Unique ID of the dataconnector to delete.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -300,7 +300,7 @@ class DataConnector():
     def get_metrics(cls,
                     project_id: str,
                     dataconnector_id: str,
-                    auth: Optional[BasicAuth | OAuth] = None
+                    auth: Optional[Auth] = None
                     ) -> Metric:
         """
         Get the metrics of the last 3 hours for a dataconnector.
@@ -311,7 +311,7 @@ class DataConnector():
             Unique ID of the project that contains the dataconnector.
         dataconnector_id : str
             Unique ID of the dataconnector to list metrics for.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -338,7 +338,7 @@ class DataConnector():
     def sync_dataconnector(cls,
                            project_id: str,
                            dataconnector_id: str,
-                           auth: Optional[BasicAuth | OAuth] = None
+                           auth: Optional[Auth] = None
                            ) -> None:
         """
         Synchronizes the current dataconnector state.
@@ -353,7 +353,7 @@ class DataConnector():
             Unique ID of the project that contains the dataconnector.
         dataconnector_id : str
             Unique ID of the dataconnector to synchronize.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 

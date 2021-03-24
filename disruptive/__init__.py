@@ -1,14 +1,20 @@
 
 # Authentication scheme.
-from disruptive.authentication import Auth, BasicAuth, OAuth  # noqa
+from disruptive.authentication import Auth  # noqa
 
 # When auth is an instance of Auth set with the default constructor,
-# the project is globally unauthorized, throwing an Unauthorized error at call.
-# To authorize globally, overwrite with one of the following classmethods.
+# the package is unauthenticated, throwing an Unauthorized error at call.
+# To authorize, either overwrite the global variable `auth` or provide
+# each individual method with the same auth object.
 #
-# auth = disruptive.Auth.basic(key_id, secret)
-# auth = disruptive.Auth.oauth(key_id, secret, email)
-auth = Auth()
+# Available authentication methods:
+# auth = disruptive.Auth.serviceaccount(key_id, secret, email)
+#
+# Initialize package with unauthenticated object.
+auth = Auth(
+    method='unauthenticated',
+    credentials={},
+)
 
 # Resources.
 from disruptive.resources.device import Device  # noqa

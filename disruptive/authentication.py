@@ -10,33 +10,67 @@ import jwt
 # Project imports
 import disruptive.requests as dtrequests
 import disruptive.errors as dterrors
-import disruptive.transforms as dttrans
 
 
 class Auth():
-    """
-    Parent class for authenticating the REST API.
 
-    Attributes
-    ----------
-    token : str
-        Access token added to the request header.
+    def __init__(self, method: str, credentials: dict[str, str]) -> None:
+        # Verify provided credentials are strings.
+        self._verify_str_credentials(credentials)
 
-    """
+        # Initialize attributes with nonset values.
+        self.token = ''
+        self.expiration = 0
 
-    def __init__(self) -> None:
+        # Set arguments as attributes
+        self.method = method
+        self.credentials = credentials
+
+    @classmethod
+    def serviceaccount(cls,
+                       key_id: str,
+                       secret: str,
+                       email: str,
+                       ) -> Auth:
+        # Construct Auth object with method and credentials.
+        obj = cls(
+            method='serviceaccount',
+            credentials={
+                'key_id': key_id,
+                'secret': secret,
+                'email': email,
+            },
+        )
+
+        # Patch the newly created object with method-specific methods.
+        setattr(obj, '_has_expired', obj.__serviceaccount_has_expired)
+        setattr(obj, 'refresh', obj.__serviceaccount_refresh)
+
+        # Return the patch object.
+        return obj
+
+    def _verify_str_credentials(self, credentials: dict) -> None:
         """
-        Constructs the Auth object by initializing token to empty string.
+        Verifies that the provided credentials are strings.
+
+        This check is added as people use environment variables, but
+        if for instance os.environ.get() does not find one, it silently
+        returns None. It's better to just check for it early.
 
         Parameters
         ----------
-        project : dict
-            Unmodified project response dictionary.
+        credentials : dict
+            Credentials used to authenticate the REST API.
 
         """
 
-        # Initialise attributes.
-        self.token = ''
+        for key in credentials:
+            if type(credentials[key]) != str:
+                raise TypeError(
+                    'Authentication credentials must be of type '
+                    + '<class \'str\'>, but received {}.'.format(
+                        type(credentials[key])
+                    ))
 
     def get_token(self) -> str:
         """
@@ -51,21 +85,13 @@ class Auth():
         """
 
         # Check expiration time.
-        if self.has_expired():
+        if self._has_expired():
             # Renew access token.
             self.refresh()
 
         return self.token
 
-    def refresh(self) -> None:
-        """
-        This function only exists as a placeholder for when unauthenticated
-        and should never be called until authentication has been set up.
-        Once authenticated it will be overwritten by the child class.
-        """
-        pass
-
-    def has_expired(self) -> bool:
+    def _has_expired(self) -> bool:
         """
         Raises an Unauthenticated error with some added information.
         If this function is called, the project has not yet been
@@ -74,145 +100,60 @@ class Auth():
         """
         raise dterrors.Unauthenticated(
             {
-                'code': 401,
-                'error': 'Authentication object not initialized.',
-                'help': 'You can set global authentication by:\n'
-                + ' '*7 + 'Basic Auth: dt.BasicAuth(key_id, secret)\n'
-                + ' '*7 + 'OAuth2:     dt.OAuth(key_id, secret, email)',
+                'code': None,
+                'error': 'No authentication method has been provided.',
+                'help': 'You can authenticate once for all endpoints:'
+                + '\n>>> import disruptive as dt'
+                + '\n>>> dt.auth = dt.Auth.serviceaccount'
+                + '(key_id, secret, email)'
+                + '\n\nOr authenticate each endpoint individually:'
+                + '\n>>> import disruptive as dt'
+                + '\n>>> dt.Resource.method(_, auth=dt.Auth.serviceaccount'
+                + '(key_id, secret, email))'
+                + '\n\nThe following authentication methods are available:'
+                + '\n>>> dt.Auth.serviceaccount'
+                + '(key_id, secret, email)'
             }
         )
 
-    def _verify_str_credentials(self, credentials: list[str]) -> None:
+    def refresh(self) -> None:
         """
-        Verifies that the provided credentials are strings.
-
-        This check is added as people use environment variables, but
-        if for instance os.environ.get() does not find one, it silently
-        returns None. It's better to just check for it early.
-
-        Parameters
-        ----------
-        credentials : list[str]
-            List of credentials used to initialize the authentication routine.
-
+        This function does nothing until an authenticate method has
+        been initialized. Until then, it acts as a name placeholder
+        which is replaced by a type-specific method.
         """
+        pass
 
-        for c in credentials:
-            if type(c) != str:
-                raise TypeError(
-                    'Authentication credentials must be of type '
-                    + '<class \'str\'>, but received {}.'.format(
-                        type(c)
-                    ))
-
-
-class BasicAuth(Auth):
-    """
-    Class for authenticating the REST API using Basic Auth scheme.
-
-    Attributes
-    ----------
-    token : str
-        Access token added to the request header.
-    key_id : str
-        Service Account Key ID.
-    secret : str
-        Service Account secret.
-
-    """
-
-    def __init__(self, key_id: str, secret: str) -> None:
+    def __serviceaccount_has_expired(self) -> bool:
         """
-        Constructs the BasicAuth object by inheriting parent, then
-        constructing the token from the provided credentials.
-
-        Parameters
-        ----------
-        key_id : str
-            Service Account Key ID.
-        secret : str
-            Service Account secret.
-
-        """
-
-        # Inherit everything from parent.
-        super().__init__()
-
-        # Set initial variables.
-        self._verify_str_credentials([key_id, secret])
-        self.key_id = key_id
-        self.secret = secret
-
-        # Construct token.
-        self.token = 'Basic {}'.format(
-            dttrans.base64_encode('{}:{}'.format(
-                self.key_id,
-                self.secret
-            ))
-        )
-
-    def has_expired(self) -> bool:
-        """
-        Returns False as Basic Auth token is static
-        and does not need to be refreshed.
+        Evaluates whether the access token has expired.
 
         Returns
         -------
-        false : bool
-            Always returns False.
-
-        """
-        return False
-
-
-class OAuth(Auth):
-    """
-    Class for authenticating the REST API using an OAuth2 scheme.
-
-    Attributes
-    ----------
-    token : str
-        Access token added to the request header.
-    key_id : str
-        Service Account Key ID.
-    secret : str
-        Service Account secret.
-    email : str
-        Service Account email address.
-    expiration : int
-        Unixtime of when the access token expires.
-
-    """
-
-    def __init__(self, key_id: str, secret: str, email: str) -> None:
-        """
-        Constructs the OAuth object by inheriting parent, then
-        initializing attributes needed for refresh scheme later.
-
-        Parameters
-        ----------
-        key_id : str
-            Service Account Key ID.
-        secret : str
-            Service Account secret.
-        email : str
-            Service Account email address.
+        has_expired : bool
+            True if the access token has expired, otherwise False.
 
         """
 
-        # Inherit everything from parent.
-        super().__init__()
+        if time.time() > self.expiration:
+            return True
+        else:
+            return False
 
-        # Verify str type and set input credential attributes.
-        self._verify_str_credentials([key_id, secret, email])
-        self.key_id = key_id
-        self.secret = secret
-        self.email = email
+    def __serviceaccount_refresh(self) -> None:
+        """
+        Refreshes the access token.
 
-        # Initialise new attributes.
-        self.expiration = 0
+        This first exchanges the JWT for an access token, then updates
+        the expiration and token attributes with the response.
 
-    def __get_access_token(self) -> dict:
+        """
+
+        response = self.__serviceaccount_get_access_token()
+        self.expiration = time.time() + response['expires_in']
+        self.token = 'Bearer {}'.format(response['access_token'])
+
+    def __serviceaccount_get_access_token(self) -> dict:
         """
         Constructs and exchanges the JWT for an access token.
 
@@ -229,7 +170,7 @@ class OAuth(Auth):
         # Construct the JWT header.
         jwt_headers = {
             'alg': 'HS256',
-            'kid': self.key_id,
+            'kid': self.credentials['key_id'],
         }
 
         # Construct the JWT payload.
@@ -237,13 +178,13 @@ class OAuth(Auth):
             'iat': int(time.time()),         # current unixtime
             'exp': int(time.time()) + 3600,  # expiration unixtime
             'aud': token_url,
-            'iss': self.email,
+            'iss': self.credentials['email'],
         }
 
         # Sign and encode JWT with the secret.
         encoded_jwt = jwt.encode(
             payload=jwt_payload,
-            key=self.secret,
+            key=self.credentials['secret'],
             algorithm='HS256',
             headers=jwt_headers,
         )
@@ -273,32 +214,3 @@ class OAuth(Auth):
 
         # Return the access token in the request.
         return access_token_response
-
-    def has_expired(self) -> bool:
-        """
-        Evaluates whether the access token has expired.
-
-        Returns
-        -------
-        has_expired : bool
-            True if the access token has expired, otherwise False.
-
-        """
-
-        if time.time() > self.expiration:
-            return True
-        else:
-            return False
-
-    def refresh(self) -> None:
-        """
-        Refreshes the access token.
-
-        This first exchanges the JWT for an access token, then updates
-        the expiration and token attributes with the response.
-
-        """
-
-        response = self.__get_access_token()
-        self.expiration = time.time() + response['expires_in']
-        self.token = 'Bearer {}'.format(response['access_token'])

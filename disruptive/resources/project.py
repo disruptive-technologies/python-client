@@ -7,7 +7,7 @@ from typing import Optional
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase, Member
-from disruptive.authentication import BasicAuth, OAuth
+from disruptive.authentication import Auth
 
 
 class Project(OutputBase):
@@ -64,7 +64,7 @@ class Project(OutputBase):
     @classmethod
     def get_project(cls,
                     project_id: str,
-                    auth: Optional[BasicAuth | OAuth] = None
+                    auth: Optional[Auth] = None
                     ) -> Project:
         """
         Gets a project specified by its ID.
@@ -73,7 +73,7 @@ class Project(OutputBase):
         ----------
         project_id : str
             Unique project ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -98,7 +98,7 @@ class Project(OutputBase):
     def list_projects(cls,
                       organization_id: Optional[str] = None,
                       query: Optional[str] = None,
-                      auth: Optional[BasicAuth | OAuth] = None
+                      auth: Optional[Auth] = None
                       ) -> list[Project]:
         """
         List all available projects in the specified organization.
@@ -109,7 +109,7 @@ class Project(OutputBase):
             Unique organization ID.
         query : str, optional
             Keyword based search for project- and organization display names.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -143,7 +143,7 @@ class Project(OutputBase):
     def create_project(cls,
                        organization_id: str,
                        display_name: str = '',
-                       auth: Optional[BasicAuth | OAuth] = None
+                       auth: Optional[Auth] = None
                        ) -> Project:
         """
         Create a new project in the specified organization.
@@ -154,7 +154,7 @@ class Project(OutputBase):
             Unique organization ID.
         display_name : str, optional
             Sets a display name for the project.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -183,7 +183,7 @@ class Project(OutputBase):
     @staticmethod
     def update_project(project_id: str,
                        display_name: Optional[str] = None,
-                       auth: Optional[BasicAuth | OAuth] = None
+                       auth: Optional[Auth] = None
                        ) -> None:
         """
         Updates the display name a specified project.
@@ -194,7 +194,7 @@ class Project(OutputBase):
             Unique ID of the project to update.
         display_name : str, optional
             If provided, updates the project display name.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -217,7 +217,7 @@ class Project(OutputBase):
 
     @staticmethod
     def delete_project(project_id: str,
-                       auth: Optional[BasicAuth | OAuth] = None
+                       auth: Optional[Auth] = None
                        ) -> None:
         """
         Deletes the specified project.
@@ -229,7 +229,7 @@ class Project(OutputBase):
         ----------
         project_id : str
             Unique ID of the project to delete.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -251,7 +251,7 @@ class Project(OutputBase):
 
     @staticmethod
     def list_members(project_id: str,
-                     auth: Optional[BasicAuth | OAuth] = None,
+                     auth: Optional[Auth] = None,
                      ) -> list[Member]:
         """
         List all members in the specified project.
@@ -260,7 +260,7 @@ class Project(OutputBase):
         ----------
         project_id : str
             Unique ID of the project to get members from.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -287,7 +287,7 @@ class Project(OutputBase):
     def add_member(project_id: str,
                    email: str,
                    roles: list[str],
-                   auth: Optional[BasicAuth | OAuth] = None,
+                   auth: Optional[Auth] = None,
                    ) -> Member:
         """
         Add a new member to the specified project.
@@ -300,7 +300,7 @@ class Project(OutputBase):
             Email of the user or Service Account to be added.
         roles : list[str]
             The role(s) to provide the new member in the project.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -330,7 +330,7 @@ class Project(OutputBase):
     @staticmethod
     def get_member(project_id: str,
                    member_id: str,
-                   auth: Optional[BasicAuth | OAuth] = None,
+                   auth: Optional[Auth] = None,
                    ) -> Member:
         """
         Get a member from the specified project.
@@ -343,7 +343,7 @@ class Project(OutputBase):
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -371,7 +371,7 @@ class Project(OutputBase):
     def update_member(project_id: str,
                       member_id: str,
                       roles: Optional[list[str]] = None,
-                      auth: Optional[BasicAuth | OAuth] = None,
+                      auth: Optional[Auth] = None,
                       ) -> Member:
         """
         Update the role(s) of the specified member.
@@ -386,7 +386,7 @@ class Project(OutputBase):
             For User members, this is the unique User ID.
         roles : list[str], optional
             List of new roles for the specified member.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -419,7 +419,7 @@ class Project(OutputBase):
     @staticmethod
     def remove_member(project_id: str,
                       member_id: str,
-                      auth: Optional[BasicAuth | OAuth] = None,
+                      auth: Optional[Auth] = None,
                       ) -> None:
         """
         Revoke a member's membership in the specified project.
@@ -432,7 +432,7 @@ class Project(OutputBase):
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -454,7 +454,7 @@ class Project(OutputBase):
     @staticmethod
     def get_member_invite_url(project_id: str,
                               member_id: str,
-                              auth: Optional[BasicAuth | OAuth] = None,
+                              auth: Optional[Auth] = None,
                               ) -> None:
         """
         Get the invite URL for a member with pending invite.
@@ -470,7 +470,7 @@ class Project(OutputBase):
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
@@ -496,7 +496,7 @@ class Project(OutputBase):
 
     @staticmethod
     def list_permissions(project_id: str,
-                         auth: Optional[BasicAuth | OAuth] = None,
+                         auth: Optional[Auth] = None,
                          ) -> list[str]:
         """
         List permissions available in the specified project.
@@ -505,7 +505,7 @@ class Project(OutputBase):
         ----------
         project_id : str
             Unique ID of the project to list permissions in.
-        auth: BasicAuth, OAuth, optional
+        auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
 
