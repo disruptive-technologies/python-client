@@ -1,9 +1,0 @@
-requests>=2.19.0
-pyjwt>=2.0.0
-flake8>=3.9.0
-pytest>=6.2.2
-pytest-mock>=3.5.1
-setuptools>=54.2.0
-wheel>=0.36.2
-mypy>=0.812
-sphinx==3.5.3

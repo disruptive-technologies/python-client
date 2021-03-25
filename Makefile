@@ -10,12 +10,11 @@ help:
 	@echo - make lint
 	@echo - make all
 
-env:
-	${PIP} install -r requirements.txt
+dev:
+	${PIP} install -e .[dev]
 
-build: env
+build: dev
 	${PYTHON} setup.py sdist bdist_wheel
-	${PIP} install -e .
 
 sphinx:
 	cd docs && ${MAKE} html
