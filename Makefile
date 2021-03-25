@@ -19,10 +19,10 @@ docs: venv
 	source ${VENV}/bin/activate && cd docs && ${MAKE} html
 
 test: venv
-	@${VENV}/bin/tox
+	source ${VENV}/bin/activate && pytest
 
 lint: venv
-	@${VENV}/bin/tox -e lint
+	source ${VENV}/bin/activate && mypy disruptive/ && mypy examples/ && flake8 disruptive/ && flake8 examples/
 
 clean-build:
 	rm -rf build/ dist/ pip-wheel-metadata/ *.egg-info
@@ -30,9 +30,6 @@ clean-build:
 clean-py:
 	find . -name '__pycache__' -exec rm --force --recursive {} +
 	rm -rf .pytest_cache/ .mypy_cache/
-
-clean-test:
-	rm -rf .tox/
 
 clean-venv:
 	rm -rf $(VENV)
