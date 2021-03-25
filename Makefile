@@ -2,6 +2,8 @@ PYTHON?=python3
 PIP?=pip3
 VENV?=venv
 
+SHELL := /bin/bash
+
 .PHONY: docs build venv VENV
 
 venv: $(VENV)/bin/activate
