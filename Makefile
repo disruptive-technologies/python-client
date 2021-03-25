@@ -1,34 +1,40 @@
 PYTHON?=python3
 PIP?=pip3
+VENV?=venv
 
-help:
-	@echo Usage:
-	@echo - make dev
-	@echo - make build
-	@echo - make test
-	@echo - make mypy
-	@echo - make lint
-	@echo - make all
+.PHONY: docs build venv VENV
 
-dev:
-	${PIP} install -e .[dev]
+venv: $(VENV)/bin/activate
 
-build: dev
-	${PYTHON} setup.py sdist bdist_wheel
+$(VENV)/bin/activate: setup.py
+	$(PIP) install --upgrade pip virtualenv
+	@test -d $(VENV) || $(PYTHON) -m virtualenv --clear $(VENV)
+	${VENV}/bin/python -m pip install --upgrade pip
+	${VENV}/bin/python -m pip install -e .[dev]
 
-sphinx:
-	cd docs && ${MAKE} html
+build: venv
+	${VENV}/bin/python setup.py sdist bdist_wheel
 
-test:
-	pytest
+docs: venv
+	source ${VENV}/bin/activate && cd docs && ${MAKE} html
 
-mypy:
-	mypy disruptive/
-	mypy examples/
+test: venv
+	@${VENV}/bin/tox
 
-lint:
-	flake8
+lint: venv
+	@${VENV}/bin/tox -p -e lint
 
-tests: test mypy lint
+clean-build:
+	rm -rf build/ dist/ pip-wheel-metadata/ *.egg-info
 
-all: build tests
+clean-py:
+	find . -name '__pycache__' -exec rm --force --recursive {} +
+	rm -rf .pytest_cache/ .mypy_cache/
+
+clean-test:
+	rm -rf .tox/
+
+clean-venv:
+	rm -rf $(VENV)
+
+clean: clean-build clean-py clean-test clean-venv
