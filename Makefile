@@ -22,7 +22,7 @@ test: venv
 	@${VENV}/bin/tox
 
 lint: venv
-	@${VENV}/bin/tox -p -e lint
+	@${VENV}/bin/tox -e lint
 
 clean-build:
 	rm -rf build/ dist/ pip-wheel-metadata/ *.egg-info
