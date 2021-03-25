@@ -14,12 +14,13 @@ on:
       - main
 
 jobs:
-  build:
 
-    runs-on: ubuntu-latest
+  tests:
+    runs-on: "${{ matrix.platform }}"
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        platform: ["ubuntu-latest"]
+        python-version: ["3.7", "3.8", "3.9"]
 
     steps:
     - uses: actions/checkout@v2
@@ -27,22 +28,40 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-        
-    - name: Install dependencies
+
+    - name: Install dependencies.
       run: |
-        make build
+          make
         
-    - name: Test with pytest
+    - name: Test with pytest.
       run: |
         make test
         
-    - name: Lint with Mypy
+    - name: Lint with mypy and flake8.
       run: |
-        make mypy
+        make lint
+  
+  package:
+    runs-on: "${{ matrix.platform }}"
+    strategy:
+      matrix:
+        platform: ["ubuntu-latest"]
+        python-version: ["3.8"]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies.
+      run: |
+          pip install --upgrade pip twine
         
-    - name: Lint with flake8
+    - name: Build the package.
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        make build
+
+    - name: Check twine.
+      run: python -m twine check dist/*
