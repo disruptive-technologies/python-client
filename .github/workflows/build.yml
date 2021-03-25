@@ -28,10 +28,18 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-        
-    - name: Test with pytest and lint with mypy and flake8.
+
+    - name: Install dependencies.
       run: |
-        make test lint
+          make
+        
+    - name: Test with pytest.
+      run: |
+        make test
+        
+    - name: Lint with mypy and flake8.
+      run: |
+        make lint
   
   package:
     runs-on: "${{ matrix.platform }}"
@@ -47,11 +55,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
+    - name: Install dependencies.
       run: |
           pip install --upgrade pip twine
         
-    - name: Test with pytest and lint with mypy and flake8.
+    - name: Build the package.
       run: |
         make build
 
