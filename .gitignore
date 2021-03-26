@@ -137,6 +137,11 @@ dmypy.json
 # profiling data
 .prof
 
+# Testbench for writing package.
 bench.py
+
+# Notes / todos.
 notes.md
-local-build.sh
+
+# Markdown preview output.
+README.pdf
