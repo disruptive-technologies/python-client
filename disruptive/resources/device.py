@@ -166,7 +166,7 @@ class Device(dtoutputs.OutputBase):
     @staticmethod
     def batch_update_labels(project_id: str,
                             device_ids: list[str],
-                            add_labels: Optional[dict[str, str]] = None,
+                            set_labels: Optional[dict[str, str]] = None,
                             remove_labels: Optional[list[str]] = None,
                             auth: Optional[Auth] = None,
                             ) -> None:
@@ -202,8 +202,8 @@ class Device(dtoutputs.OutputBase):
         # Construct request body dictionary.
         body: dict = dict()
         body['devices'] = devices
-        if add_labels is not None:
-            body['addLabels'] = add_labels
+        if set_labels is not None:
+            body['addLabels'] = set_labels
         if remove_labels is not None:
             body['removeLabels'] = remove_labels
 
@@ -219,7 +219,7 @@ class Device(dtoutputs.OutputBase):
         )
 
     @staticmethod
-    def add_label(project_id: str,
+    def set_label(project_id: str,
                   device_id: str,
                   key: str,
                   value: str,
@@ -249,41 +249,7 @@ class Device(dtoutputs.OutputBase):
         Device.batch_update_labels(
             project_id=project_id,
             device_ids=[device_id],
-            add_labels={key: value},
-            auth=auth,
-        )
-
-    @staticmethod
-    def update_label(project_id: str,
-                     device_id: str,
-                     key: str,
-                     value: str,
-                     auth: Optional[Auth] = None,
-                     ) -> None:
-        """
-        Update a label (key=value) for a single device.
-
-        Parameters
-        ----------
-        project_id : str
-            Unique ID of the target project.
-        device_id : str
-            Unique ID of the target device.
-        key : str
-            Key of the label to be modified.
-        value : str
-            Label value to be modified.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-
-        """
-
-        # Use batch_update_labels for safer call.
-        Device.batch_update_labels(
-            project_id=project_id,
-            device_ids=[device_id],
-            add_labels={key: value},
+            set_labels={key: value},
             auth=auth,
         )
 
