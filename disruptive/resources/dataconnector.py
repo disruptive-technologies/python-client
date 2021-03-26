@@ -6,11 +6,11 @@ from typing import Optional
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
+import disruptive.outputs as dtoutputs
 from disruptive.outputs import Metric
-from disruptive.authentication import Auth
 
 
-class DataConnector():
+class DataConnector(dtoutputs.OutputBase):
     """
     Represents a dataconnector.
 
@@ -44,8 +44,8 @@ class DataConnector():
 
         """
 
-        # Inherit everything from Response parent.
-        self.raw = dataconnector
+        # Inherit from OutputBase parent.
+        dtoutputs.OutputBase.__init__(self, dataconnector)
 
         # Unpack attributes from dictionary.
         self.id = self.raw['name'].split('/')[-1]
@@ -57,7 +57,7 @@ class DataConnector():
     def get_dataconnector(cls,
                           project_id: str,
                           dataconnector_id: str,
-                          auth: Optional[Auth] = None
+                          **kwargs,
                           ) -> DataConnector:
         """
         Gets a dataconnector specified by its ID.
@@ -71,6 +71,10 @@ class DataConnector():
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -85,15 +89,16 @@ class DataConnector():
         url = url.format(project_id, dataconnector_id)
 
         # Return DataConnector object of GET request response.
-        return cls(dtrequests.get(
+        return cls(dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth
+            **kwargs,
         ))
 
     @classmethod
     def list_dataconnectors(cls,
                             project_id: str,
-                            auth: Optional[Auth] = None
+                            **kwargs,
                             ) -> list[DataConnector]:
         """
         List all available dataconnectors in the specified project.
@@ -105,6 +110,10 @@ class DataConnector():
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -117,7 +126,7 @@ class DataConnector():
         dataconnectors = dtrequests.auto_paginated_list(
             url=dt.base_url + '/projects/{}/dataconnectors'.format(project_id),
             pagination_key='dataConnectors',
-            auth=auth,
+            **kwargs,
         )
         return [cls(dcon) for dcon in dataconnectors]
 
@@ -132,7 +141,7 @@ class DataConnector():
                              signature_secret: str = '',
                              headers: dict[str, str] = {},
                              labels: list[str] = [],
-                             auth: Optional[Auth] = None,
+                             **kwargs,
                              ) -> DataConnector:
         """
         Create a new dataconnector in the specified project.
@@ -160,6 +169,10 @@ class DataConnector():
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -186,10 +199,11 @@ class DataConnector():
         url += '/projects/{}/dataconnectors'.format(project_id)
 
         # Return DataConnector object of POST request response.
-        return cls(dtrequests.post(
+        return cls(dtrequests.generic_request(
+            method='POST',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         ))
 
     @classmethod
@@ -203,7 +217,7 @@ class DataConnector():
                              url: Optional[str] = None,
                              signature_secret: Optional[str] = None,
                              headers: Optional[dict[str, str]] = None,
-                             auth: Optional[Auth] = None,
+                             **kwargs,
                              ) -> DataConnector:
         """
         Updates the attributes of a dataconnector.
@@ -231,6 +245,10 @@ class DataConnector():
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -258,17 +276,18 @@ class DataConnector():
         url = url.format(project_id, dataconnector_id)
 
         # Return DataConnector object of PATCH request response.
-        return cls(dtrequests.patch(
+        return cls(dtrequests.generic_request(
+            method='PATCH',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         ))
 
     @classmethod
     def delete_dataconnector(cls,
                              project_id: str,
                              dataconnector_id: str,
-                             auth: Optional[Auth] = None
+                             **kwargs,
                              ) -> None:
         """
         Deletes the specified dataconnector.
@@ -282,6 +301,10 @@ class DataConnector():
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -291,16 +314,17 @@ class DataConnector():
         url = url.format(project_id, dataconnector_id)
 
         # Send DELETE request, but return nothing.
-        dtrequests.delete(
+        dtrequests.generic_request(
+            method='DELETE',
             url=url,
-            auth=auth,
+            **kwargs,
         )
 
     @classmethod
     def get_metrics(cls,
                     project_id: str,
                     dataconnector_id: str,
-                    auth: Optional[Auth] = None
+                    **kwargs,
                     ) -> Metric:
         """
         Get the metrics of the last 3 hours for a dataconnector.
@@ -314,6 +338,10 @@ class DataConnector():
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -329,16 +357,17 @@ class DataConnector():
         url += ':metrics'
 
         # Return Metric object of GET request response.
-        return Metric(dtrequests.get(
+        return Metric(dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth,
+            **kwargs,
         ))
 
     @classmethod
     def sync_dataconnector(cls,
                            project_id: str,
                            dataconnector_id: str,
-                           auth: Optional[Auth] = None
+                           **kwargs,
                            ) -> None:
         """
         Synchronizes the current dataconnector state.
@@ -356,6 +385,10 @@ class DataConnector():
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -366,7 +399,8 @@ class DataConnector():
         url += ':sync'
 
         # Send POST request, but return nothing.
-        dtrequests.post(
+        dtrequests.generic_request(
+            method='POST',
             url=url,
-            auth=auth,
+            **kwargs,
         )

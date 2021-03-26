@@ -7,7 +7,6 @@ from typing import Optional
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.events import Event
-from disruptive.authentication import Auth
 
 
 class EventHistory():
@@ -23,7 +22,7 @@ class EventHistory():
                     event_types: Optional[list[str]] = None,
                     start_time: Optional[str] = None,
                     end_time: Optional[str] = None,
-                    auth: Optional[Auth] = None,
+                    **kwargs,
                     ) -> list[Event]:
         """
         Get the event history for a single device.
@@ -45,6 +44,12 @@ class EventHistory():
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of events [1, 1000] to get per request. Defaults to 1000.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -72,7 +77,7 @@ class EventHistory():
             pagination_key='events',
             params=params,
             page_size=1000,
-            auth=auth,
+            **kwargs,
         )
 
         # Return list of Event objects of paginated GET response.

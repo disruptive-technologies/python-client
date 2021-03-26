@@ -1,13 +1,9 @@
 from __future__ import annotations
 
-# Standard library imports.
-from typing import Optional
-
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase
-from disruptive.authentication import Auth
 
 
 class Role(OutputBase):
@@ -55,7 +51,7 @@ class Role(OutputBase):
     @classmethod
     def get_role(cls,
                  role: str,
-                 auth: Optional[Auth] = None,
+                 **kwargs,
                  ) -> Role:
         """
         Gets a role specified by its name.
@@ -67,6 +63,10 @@ class Role(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -76,17 +76,30 @@ class Role(OutputBase):
         """
 
         # Return list of Role objects.
-        return cls(dtrequests.get(
+        return cls(dtrequests.generic_request(
+            method='GET',
             url=dt.base_url + '/roles/' + role,
-            auth=auth,
+            **kwargs,
         ))
 
     @classmethod
     def list_roles(cls,
-                   auth: Optional[Auth] = None,
+                   **kwargs,
                    ) -> list[Role]:
         """
         List all available roles.
+
+        Parameters
+        ----------
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of roles [1, 100] to get per request. Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -99,6 +112,6 @@ class Role(OutputBase):
         response = dtrequests.auto_paginated_list(
             url=dt.base_url + '/roles',
             pagination_key='roles',
-            auth=auth,
+            **kwargs,
         )
         return [cls(r) for r in response]
