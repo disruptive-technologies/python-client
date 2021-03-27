@@ -12,7 +12,7 @@ import requests
 import disruptive as dt
 import disruptive.log as dtlog
 import disruptive.errors as dterrors
-from disruptive.dtresponses import DTResponse
+from disruptive.responses import DTResponse
 
 
 def generic_request(method: str, url: str, **kwargs):
