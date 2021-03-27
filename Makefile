@@ -36,4 +36,4 @@ clean-py:
 clean-venv:
 	rm -rf $(VENV)
 
-clean: clean-build clean-py clean-test clean-venv
+clean: clean-build clean-py clean-venv
