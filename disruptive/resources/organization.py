@@ -1,13 +1,9 @@
 from __future__ import annotations
 
-# Standard library imports
-from typing import Optional
-
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase, Member
-from disruptive.authentication import Auth
 
 
 class Organization(OutputBase):
@@ -52,7 +48,7 @@ class Organization(OutputBase):
     @classmethod
     def get_organization(cls,
                          organization_id: str,
-                         auth: Optional[Auth] = None,
+                         **kwargs,
                          ) -> Organization:
         """
         Gets an organization specified by its ID.
@@ -64,6 +60,10 @@ class Organization(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -77,14 +77,15 @@ class Organization(OutputBase):
         url += '/organizations/{}'.format(organization_id)
 
         # Return Organization object of GET request response.
-        return cls(dtrequests.get(
+        return cls(dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth
+            **kwargs,
         ))
 
     @classmethod
     def list_organizations(cls,
-                           auth: Optional[Auth] = None,
+                           **kwargs,
                            ) -> list[Organization]:
         """
         List all available organizations.
@@ -94,6 +95,13 @@ class Organization(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of Organizations [1, 100] to get per request.
+            Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -106,13 +114,13 @@ class Organization(OutputBase):
         orgs = dtrequests.auto_paginated_list(
             url=dt.base_url + '/organizations',
             pagination_key='organizations',
-            auth=auth,
+            **kwargs,
         )
         return [cls(org) for org in orgs]
 
     @staticmethod
     def list_members(organization_id: str,
-                     auth: Optional[Auth] = None,
+                     **kwargs,
                      ) -> list[Member]:
         """
         List all members in the specified organization.
@@ -124,6 +132,12 @@ class Organization(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of members [1, 100] to get per request. Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -140,7 +154,7 @@ class Organization(OutputBase):
         members = dtrequests.auto_paginated_list(
             url=url,
             pagination_key='members',
-            auth=auth,
+            **kwargs,
         )
         return [Member(m) for m in members]
 
@@ -148,7 +162,7 @@ class Organization(OutputBase):
     def add_member(organization_id: str,
                    email: str,
                    roles: list[str],
-                   auth: Optional[Auth] = None,
+                   **kwargs,
                    ) -> Member:
         """
         Add a new member to the specified organization.
@@ -165,6 +179,10 @@ class Organization(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -183,16 +201,17 @@ class Organization(OutputBase):
         body['email'] = email
 
         # Return Member object of POST request response.
-        return Member(dtrequests.post(
+        return Member(dtrequests.generic_request(
+            method='POST',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         ))
 
     @staticmethod
     def get_member(organization_id: str,
                    member_id: str,
-                   auth: Optional[Auth] = None,
+                   **kwargs,
                    ) -> Member:
         """
         Get a member from the specified organization.
@@ -208,6 +227,10 @@ class Organization(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -224,15 +247,16 @@ class Organization(OutputBase):
         )
 
         # Return Member object of GET request response.
-        return Member(dtrequests.get(
+        return Member(dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth,
+            **kwargs,
         ))
 
     @staticmethod
     def remove_member(organization_id: str,
                       member_id: str,
-                      auth: Optional[Auth] = None,
+                      **kwargs,
                       ) -> None:
         """
         Revoke a member's membership in the specified organization.
@@ -248,6 +272,10 @@ class Organization(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -259,15 +287,16 @@ class Organization(OutputBase):
         )
 
         # Send DELETE request, but return nothing.
-        dtrequests.delete(
+        dtrequests.generic_request(
+            method='DELETE',
             url=url,
-            auth=auth,
+            **kwargs,
         )
 
     @staticmethod
     def get_member_invite_url(organization_id: str,
                               member_id: str,
-                              auth: Optional[Auth] = None,
+                              **kwargs,
                               ) -> None:
         """
         Get the invite URL for a member with pending invite.
@@ -286,6 +315,10 @@ class Organization(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Raises
         ------
@@ -302,14 +335,15 @@ class Organization(OutputBase):
         ) + ':getInviteUrl'
 
         # Return url string in GET response.
-        return dtrequests.get(
+        return dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth,
+            **kwargs,
         )['inviteUrl']
 
     @staticmethod
     def list_permissions(organization_id: str,
-                         auth: Optional[Auth] = None,
+                         **kwargs,
                          ) -> list[str]:
         """
         List permissions available in the specified organization.
@@ -321,6 +355,12 @@ class Organization(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of permissions [1, 100] to get per request. Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -337,5 +377,5 @@ class Organization(OutputBase):
         return dtrequests.auto_paginated_list(
             url=url,
             pagination_key='permissions',
-            auth=auth,
+            **kwargs,
         )

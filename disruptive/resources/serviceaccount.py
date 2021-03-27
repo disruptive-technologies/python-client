@@ -8,7 +8,6 @@ import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
-from disruptive.authentication import Auth
 
 
 class ServiceAccount(dtoutputs.OutputBase):
@@ -63,7 +62,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def get_serviceaccount(cls,
                            project_id: str,
                            serviceaccount_id: str,
-                           auth: Optional[Auth] = None
+                           **kwargs,
                            ) -> ServiceAccount:
         """
         Gets a serviceaccount specified by its ID.
@@ -77,6 +76,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -93,15 +96,16 @@ class ServiceAccount(dtoutputs.OutputBase):
         )
 
         # Return ServiceAccount object of GET request response.
-        return cls(dtrequests.get(
+        return cls(dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth
+            **kwargs,
         ))
 
     @classmethod
     def list_serviceaccounts(cls,
                              project_id: str,
-                             auth: Optional[Auth] = None,
+                             **kwargs,
                              ) -> list[ServiceAccount]:
         """
         List all available serviceaccounts in the specified project.
@@ -113,6 +117,13 @@ class ServiceAccount(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of serviceaccounts [1, 100] to get per request.
+            Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -129,7 +140,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         service_accounts = dtrequests.auto_paginated_list(
             url=url,
             pagination_key='serviceAccounts',
-            auth=auth,
+            **kwargs,
         )
         return [cls(sa) for sa in service_accounts]
 
@@ -138,7 +149,7 @@ class ServiceAccount(dtoutputs.OutputBase):
                               project_id: str,
                               display_name: str = '',
                               basic_auth: bool = False,
-                              auth: Optional[Auth] = None,
+                              **kwargs,
                               ) -> ServiceAccount:
         """
         Create a new serviceaccount in the specified project.
@@ -155,6 +166,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -174,10 +189,11 @@ class ServiceAccount(dtoutputs.OutputBase):
             body['displayName'] = display_name
 
         # Return ServiceAccount object of GET request response.
-        return cls(dtrequests.post(
+        return cls(dtrequests.generic_request(
+            method='POST',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         ))
 
     @classmethod
@@ -186,7 +202,7 @@ class ServiceAccount(dtoutputs.OutputBase):
                               serviceaccount_id: str,
                               display_name: Optional[str] = None,
                               basic_auth: Optional[bool] = None,
-                              auth: Optional[Auth] = None,
+                              **kwargs,
                               ) -> ServiceAccount:
         """
         Updates the attributes of a specified serviceaccount.
@@ -204,6 +220,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -222,17 +242,18 @@ class ServiceAccount(dtoutputs.OutputBase):
             body['enableBasicAuth'] = basic_auth
 
         # Return ServiceAccount object of GET request response.
-        return cls(dtrequests.patch(
+        return cls(dtrequests.generic_request(
+            method='PATCH',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         ))
 
     @classmethod
     def delete_serviceaccount(cls,
                               project_id: str,
                               serviceaccount_id: str,
-                              auth: Optional[Auth] = None,
+                              **kwargs,
                               ) -> None:
         """
         Deletes the specified serviceaccount.
@@ -246,6 +267,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -257,13 +282,17 @@ class ServiceAccount(dtoutputs.OutputBase):
         )
 
         # Send DELETE request, but return nothing.
-        dtrequests.delete(url=url)
+        dtrequests.generic_request(
+            method='DELETE',
+            url=url,
+            **kwargs,
+        )
 
     @staticmethod
     def get_key(project_id: str,
                 serviceaccount_id: str,
                 key_id: str,
-                auth: Optional[Auth] = None,
+                **kwargs,
                 ) -> Key:
         """
         Get the key of a serviceaccount.
@@ -279,6 +308,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -296,15 +329,16 @@ class ServiceAccount(dtoutputs.OutputBase):
         )
 
         # Return Key object of GET request response.
-        return Key(dtrequests.get(
+        return Key(dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth,
+            **kwargs,
         ))
 
     @staticmethod
     def list_keys(project_id: str,
                   serviceaccount_id: str,
-                  auth: Optional[Auth] = None,
+                  **kwargs,
                   ) -> list[Key]:
         """
         Get a list of all keys for a serviceaccount.
@@ -318,6 +352,12 @@ class ServiceAccount(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of keys [1, 100] to get per request. Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -337,14 +377,14 @@ class ServiceAccount(dtoutputs.OutputBase):
         keys = dtrequests.auto_paginated_list(
             url=url,
             pagination_key='keys',
-            auth=auth,
+            **kwargs,
         )
         return [Key(key) for key in keys]
 
     @staticmethod
     def create_key(project_id: str,
                    serviceaccount_id: str,
-                   auth: Optional[Auth] = None,
+                   **kwargs,
                    ) -> Key:
         """
         Create a new key for the specified serviceaccount.
@@ -358,6 +398,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -374,9 +418,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         )
 
         # Return Key object of POST request response.
-        response = dtrequests.post(
+        response = dtrequests.generic_request(
+            method='POST',
             url=url,
-            auth=auth,
+            **kwargs,
         )
         return Key._with_secret(response)
 
@@ -384,7 +429,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def delete_key(project_id: str,
                    serviceaccount_id: str,
                    key_id: str,
-                   auth: Optional[Auth] = None,
+                   **kwargs,
                    ) -> None:
         """
         Deletes a key in the specified serviceaccount.
@@ -400,6 +445,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -411,10 +460,11 @@ class ServiceAccount(dtoutputs.OutputBase):
             key_id,
         )
 
-        # Return Key object of POST request response.
-        dtrequests.delete(
+        # Send DELETE request, but return nothing.
+        dtrequests.generic_request(
+            method='DELETE',
             url=url,
-            auth=auth,
+            **kwargs,
         )
 
 

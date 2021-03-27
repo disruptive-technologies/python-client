@@ -7,7 +7,6 @@ from typing import Optional
 import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase, Member
-from disruptive.authentication import Auth
 
 
 class Project(OutputBase):
@@ -64,7 +63,7 @@ class Project(OutputBase):
     @classmethod
     def get_project(cls,
                     project_id: str,
-                    auth: Optional[Auth] = None
+                    **kwargs,
                     ) -> Project:
         """
         Gets a project specified by its ID.
@@ -76,6 +75,10 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -89,16 +92,17 @@ class Project(OutputBase):
         url += '/projects/{}'.format(project_id)
 
         # Return Project object of GET request response.
-        return cls(dtrequests.get(
+        return cls(dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth
+            **kwargs,
         ))
 
     @classmethod
     def list_projects(cls,
                       organization_id: Optional[str] = None,
                       query: Optional[str] = None,
-                      auth: Optional[Auth] = None
+                      **kwargs,
                       ) -> list[Project]:
         """
         List all available projects in the specified organization.
@@ -112,6 +116,12 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of projects [1, 100] to get per request. Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -135,7 +145,7 @@ class Project(OutputBase):
             url=url,
             pagination_key='projects',
             params=params,
-            auth=auth,
+            **kwargs,
         )
         return [cls(r) for r in responses]
 
@@ -143,7 +153,7 @@ class Project(OutputBase):
     def create_project(cls,
                        organization_id: str,
                        display_name: str = '',
-                       auth: Optional[Auth] = None
+                       **kwargs,
                        ) -> Project:
         """
         Create a new project in the specified organization.
@@ -157,6 +167,10 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -174,16 +188,17 @@ class Project(OutputBase):
         body['displayName'] = display_name
 
         # Return Project object of POST request response.
-        return cls(dtrequests.post(
+        return cls(dtrequests.generic_request(
+            method='POST',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         ))
 
     @staticmethod
     def update_project(project_id: str,
                        display_name: Optional[str] = None,
-                       auth: Optional[Auth] = None
+                       **kwargs,
                        ) -> None:
         """
         Updates the display name a specified project.
@@ -197,6 +212,10 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -209,15 +228,16 @@ class Project(OutputBase):
             body['displayName'] = display_name
 
         # Send PATCH request, but return nothing.
-        dtrequests.patch(
+        dtrequests.generic_request(
+            method='PATCH',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         )
 
     @staticmethod
     def delete_project(project_id: str,
-                       auth: Optional[Auth] = None
+                       **kwargs,
                        ) -> None:
         """
         Deletes the specified project.
@@ -232,6 +252,10 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Raises
         ------
@@ -244,14 +268,15 @@ class Project(OutputBase):
         url = dt.base_url + '/projects/' + project_id
 
         # Send DELETE request, but return nothing.
-        dtrequests.delete(
+        dtrequests.generic_request(
+            method='DELETE',
             url=url,
-            auth=auth,
+            **kwargs,
         )
 
     @staticmethod
     def list_members(project_id: str,
-                     auth: Optional[Auth] = None,
+                     **kwargs,
                      ) -> list[Member]:
         """
         List all members in the specified project.
@@ -263,6 +288,12 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of members [1, 100] to get per request. Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -279,7 +310,7 @@ class Project(OutputBase):
         members = dtrequests.auto_paginated_list(
             url=url,
             pagination_key='members',
-            auth=auth,
+            **kwargs,
         )
         return [Member(m) for m in members]
 
@@ -287,7 +318,7 @@ class Project(OutputBase):
     def add_member(project_id: str,
                    email: str,
                    roles: list[str],
-                   auth: Optional[Auth] = None,
+                   **kwargs,
                    ) -> Member:
         """
         Add a new member to the specified project.
@@ -303,6 +334,10 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -321,16 +356,17 @@ class Project(OutputBase):
         body['email'] = email
 
         # Return Member object of POST request response.
-        return Member(dtrequests.post(
+        return Member(dtrequests.generic_request(
+            method='POST',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         ))
 
     @staticmethod
     def get_member(project_id: str,
                    member_id: str,
-                   auth: Optional[Auth] = None,
+                   **kwargs,
                    ) -> Member:
         """
         Get a member from the specified project.
@@ -346,6 +382,10 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -362,16 +402,17 @@ class Project(OutputBase):
         )
 
         # Return Member object of GET request response.
-        return Member(dtrequests.get(
+        return Member(dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth,
+            **kwargs,
         ))
 
     @staticmethod
     def update_member(project_id: str,
                       member_id: str,
                       roles: Optional[list[str]] = None,
-                      auth: Optional[Auth] = None,
+                      **kwargs,
                       ) -> Member:
         """
         Update the role(s) of the specified member.
@@ -389,6 +430,10 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -410,16 +455,17 @@ class Project(OutputBase):
             body['roles'] = ['roles/' + r for r in roles]
 
         # Return updated Member object of PATCH request response.
-        return Member(dtrequests.patch(
+        return Member(dtrequests.generic_request(
+            method='PATCH',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         ))
 
     @staticmethod
     def remove_member(project_id: str,
                       member_id: str,
-                      auth: Optional[Auth] = None,
+                      **kwargs,
                       ) -> None:
         """
         Revoke a member's membership in the specified project.
@@ -435,6 +481,10 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -446,15 +496,16 @@ class Project(OutputBase):
         )
 
         # Send DELETE request, but return nothing.
-        dtrequests.delete(
+        dtrequests.generic_request(
+            method='DELETE',
             url=url,
-            auth=auth,
+            **kwargs,
         )
 
     @staticmethod
     def get_member_invite_url(project_id: str,
                               member_id: str,
-                              auth: Optional[Auth] = None,
+                              **kwargs,
                               ) -> None:
         """
         Get the invite URL for a member with pending invite.
@@ -473,6 +524,10 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Raises
         ------
@@ -489,14 +544,15 @@ class Project(OutputBase):
         ) + ':getInviteUrl'
 
         # Return url string in GET response.
-        return dtrequests.get(
+        return dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth,
+            **kwargs,
         )['inviteUrl']
 
     @staticmethod
     def list_permissions(project_id: str,
-                         auth: Optional[Auth] = None,
+                         **kwargs,
                          ) -> list[str]:
         """
         List permissions available in the specified project.
@@ -508,6 +564,12 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of permissions [1, 100] to get per request. Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -524,5 +586,5 @@ class Project(OutputBase):
         return dtrequests.auto_paginated_list(
             url=url,
             pagination_key='permissions',
-            auth=auth,
+            **kwargs,
         )

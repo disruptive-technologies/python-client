@@ -12,98 +12,75 @@ import requests
 import disruptive as dt
 import disruptive.log as dtlog
 import disruptive.errors as dterrors
-import disruptive.responses as dtresponses
+from disruptive.responses import DTResponse
 
 
-def get(url: str,
-        params: dict = {},
-        headers: dict = {},
-        timeout: Optional[int] = None,
-        auth=None
-        ) -> dict:
-    return __construct_request(
-        method="GET",
-        url=url,
-        params=params,
-        headers=headers,
-        timeout=timeout,
-        auth=auth
-    )
+def generic_request(method: str, url: str, **kwargs):
+    """
+    Generic request function used by most resource methods.
 
+    Parameters
+    ----------
+    method : str
+        Request method to use.
+    url : str
+        Target endpoint of request.
+    params : dict, optional
+        Parameters dictionary to include in request.
+    headers : dict, optional
+        Headers dictionary to include in request.
+    body : dict, optional
+        Body dictionary to include in request.
+    data : str, optional
+        Encoded data string to include in request.
+    request_timeout : int, optional
+        Number of seconds before request times out.
+        Overwrites dt.request_timeout settings if provided.
+    request_retries : int, optional
+        Number of times to retry a request.
+        Overwrites dt.request_retries settings if provided.
+    auth : Auth, optional
+        Object for authenticating the REST API.
+        Overwrites dt.auth if provided.
+    skip_auth : bool
+        If provided with a value of True, excludes authentication header.
 
-def post(url: str,
-         body: Optional[dict] = None,
-         data: Optional[str] = None,
-         headers: dict = {},
-         authorize: bool = True,
-         auth=None,
-         ):
-    return __construct_request(
-        method="POST",
-        url=url,
-        body=body,
-        data=data,
-        headers=headers,
-        authorize=authorize,
-        auth=auth,
-    )
+    Returns
+    -------
+    response : DTResponse
+        An object representing the response and its content.
 
+    """
 
-def patch(url: str, body: dict, auth=None):
-    return __construct_request("PATCH", url, body=body, auth=auth)
+    # Unpack all kwargs at once here for readability.
+    params = kwargs['params'] if 'params' in kwargs else {}
+    headers = kwargs['headers'] if 'headers' in kwargs else {}
+    body = kwargs['body'] if 'body' in kwargs else None
+    data = kwargs['data'] if 'data' in kwargs else None
+    if 'request_timeout' in kwargs:
+        request_timeout = kwargs['request_timeout']
+    else:
+        request_timeout = dt.request_timeout
+    if 'request_retries' in kwargs:
+        request_retries = kwargs['request_retries']
+    else:
+        request_retries = dt.request_retries
 
+    # If this is the first recursive depth, retry counter is set to 1.
+    # Adding it to kwargs like this is maybe a little weird, but is done as
+    # the function is called recursively, which may results
+    # in "double argument" problems if taken in as an argument.
+    # Also, it works just fine.
+    if 'retry_count' not in kwargs:
+        kwargs['retry_count'] = 1
 
-def delete(url: str, auth=None):
-    return __construct_request("DELETE", url, auth=auth)
-
-
-def auto_paginated_list(
-        url: str,
-        pagination_key: str,
-        params: dict = {},
-        page_size: Optional[int] = None,
-        auth=None,
-):
-    results = []
-    if page_size is not None:
-        params['pageSize'] = page_size
-
-    while True:
-        response = __construct_request("GET", url, params=params, auth=auth)
-        results += response[pagination_key]
-
-        if len(response['nextPageToken']) > 0:
-            params['pageToken'] = response['nextPageToken']
+    # Add authorization header to request except when explicitly told not to.
+    if 'skip_auth' not in kwargs or kwargs['skip_auth'] is False:
+        # If provided, override package-wide auth with argument.
+        if 'auth' in kwargs:
+            headers['Authorization'] = kwargs['auth'].get_token()
         else:
-            break
-
-    return results
-
-
-def __construct_request(
-        method: str,
-        url: str,
-        params: dict = {},
-        headers: dict = {},
-        body: Optional[dict] = None,
-        data: Optional[str] = None,
-        retry_count: int = 1,
-        timeout: Optional[int] = None,
-        authorize: bool = True,
-        auth=None,
-):
-    # Add headers to request
-    if authorize:
-        if auth is None:
-            headers["Authorization"] = dt.auth.get_token()
-        else:
-            headers["Authorization"] = auth.get_token()
-    for key in headers.keys():
-        headers[key] = headers[key]
-
-    # Set default timeout if explicitly provided.
-    if timeout is None:
-        timeout = dt.request_timeout
+            headers['Authorization'] = dt.auth.get_token()
 
     # Send request.
     dtlog.log('Request [{}] to {}.'.format(method, url))
@@ -114,7 +91,7 @@ def __construct_request(
         headers=headers,
         body=body,
         data=data,
-        timeout=timeout,
+        timeout=request_timeout,
     )
 
     # Parse errors.
@@ -124,15 +101,15 @@ def __construct_request(
         # status_code=response.status_code,
         status_code=response.status_code,
         headers=response.headers,
-        retry_count=retry_count,
+        retry_count=kwargs['retry_count'],
     )
 
-    # Check if retry is required
-    if should_retry and retry_count < dt.max_request_retries:
+    # Check if retry is required.
+    if should_retry and kwargs['retry_count'] < request_retries:
 
         dtlog.log("Got error {}. Will retry up to {} more times".format(
             error,
-            dt.max_request_retries - retry_count
+            dt.request_retries - kwargs['retry_count']
         ))
 
         # Sleep if necessary.
@@ -140,15 +117,11 @@ def __construct_request(
             time.sleep(retry_after)
 
         # Retry.
-        __construct_request(
+        kwargs['retry_count'] += 1
+        generic_request(
             method=method,
             url=url,
-            params=params,
-            headers=headers,
-            body=body,
-            data=data,
-            retry_count=retry_count + 1,
-            authorize=authorize,
+            **kwargs,
         )
 
     # Raise error if present.
@@ -158,43 +131,54 @@ def __construct_request(
     return response.data
 
 
-def __send_request(method: str,
-                   url: str,
-                   params: dict,
-                   headers: dict,
-                   body: Optional[dict],
-                   data: Optional[str],
-                   timeout: int,
-                   ):
-    response = requests.request(
-        method=method,
-        url=url,
-        params=params,
-        headers=headers,
-        json=body,
-        data=data,
-        timeout=timeout)
+def auto_paginated_list(url: str,
+                        pagination_key: str,
+                        params: dict[str, str] = {},
+                        **kwargs,
+                        ):
+    # Initialize output list.
+    results = []
 
-    return dtresponses.DTResponse(
-        response.json(),
-        response.status_code,
-        dict(response.headers),
-    )
+    # Unpack all kwargs at once here for readability.
+    params = kwargs['params'] if 'params' in kwargs else {}
+    if 'page_size' in kwargs:
+        params['pageSize'] = kwargs['page_size']
+
+    # Loop until paging has finished.
+    while True:
+        response = generic_request("GET", url, params=params, **kwargs)
+        results += response[pagination_key]
+
+        if len(response['nextPageToken']) > 0:
+            params['pageToken'] = response['nextPageToken']
+        else:
+            break
+
+    return results
 
 
-def stream(url: str, params: dict):
-    # Construct uURL.
-    url = dt.base_url + url
+def stream(url: str, **kwargs):
+    # Set ping parameters.
+    ping_interval = 10
+    ping_jitter = 2
 
-    # Set streaming parameters and headers.
-    params['ping_interval'] = '{}s'.format(dt.ping_interval)
-    headers = {
-        'Authorization': dt.auth.get_token()
-    }
+    # Unpack kwargs.
+    params = kwargs['params'] if 'params' in kwargs else {}
+    headers = kwargs['headers'] if 'headers' in kwargs else {}
+    if 'request_retries' in kwargs:
+        request_retries = kwargs['request_retries']
+    else:
+        request_retries = dt.request_retries
+
+    # If provided, override package-wide auth with argument.
+    if 'auth' in kwargs:
+        headers['Authorization'] = kwargs['auth'].get_token()
+    else:
+        headers['Authorization'] = dt.auth.get_token()
 
     # Set up a simple catch-all retry policy.
     nth_retry = 0
-    while nth_retry <= dt.max_request_retries:
+    while nth_retry <= request_retries:
         try:
             # Set up a stream connection.
             # Connection will timeout and reconnect if no single event
@@ -203,7 +187,7 @@ def stream(url: str, params: dict):
             stream = requests.get(
                 url=url,
                 stream=True,
-                timeout=dt.ping_interval + dt.ping_jitter,
+                timeout=ping_interval + ping_jitter,
                 params=params,
                 headers=headers,
             )
@@ -232,10 +216,10 @@ def stream(url: str, params: dict):
         except Exception as e:
             print(e)
             # Print the error and try again up to max_request_retries.
-            if nth_retry < dt.max_request_retries:
+            if nth_retry < request_retries:
                 dtlog.log('Connection lost. Retry {}/{}.'.format(
                     nth_retry+1,
-                    dt.max_request_retries,
+                    request_retries,
                 ))
 
                 # Exponential backoff in sleep time.
@@ -243,3 +227,27 @@ def stream(url: str, params: dict):
                 nth_retry += 1
             else:
                 break
+
+
+def __send_request(method: str,
+                   url: str,
+                   params: dict,
+                   headers: dict,
+                   body: Optional[dict],
+                   data: Optional[str],
+                   timeout: int,
+                   ):
+    response = requests.request(
+        method=method,
+        url=url,
+        params=params,
+        headers=headers,
+        json=body,
+        data=data,
+        timeout=timeout)
+
+    return DTResponse(
+        response.json(),
+        response.status_code,
+        dict(response.headers),
+    )

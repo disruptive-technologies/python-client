@@ -248,11 +248,12 @@ class Auth():
 
         # Exchange the JWT for an access token.
         try:
-            access_token_response = dtrequests.post(
+            access_token_response = dtrequests.generic_request(
+                method='POST',
                 url=token_url,
                 data=request_data,
                 headers={'Content-Type': 'application/x-www-form-urlencoded'},
-                authorize=False,
+                skip_auth=True,
             )
         except dterrors.BadRequest:
             # Re-raise exception with more specific information.

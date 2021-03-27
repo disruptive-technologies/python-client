@@ -18,7 +18,7 @@ build: venv
 	${VENV}/bin/python setup.py sdist bdist_wheel
 
 docs: venv
-	source ${VENV}/bin/activate && cd docs && ${MAKE} html
+	source ${VENV}/bin/activate && cd docs && ${MAKE} clean html
 
 test: venv
 	source ${VENV}/bin/activate && pytest
@@ -36,4 +36,4 @@ clean-py:
 clean-venv:
 	rm -rf $(VENV)
 
-clean: clean-build clean-py clean-test clean-venv
+clean: clean-build clean-py clean-venv

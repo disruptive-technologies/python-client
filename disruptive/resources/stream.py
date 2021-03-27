@@ -20,7 +20,7 @@ class Stream():
     def device(project_id: str,
                device_id: str,
                event_types: Optional[list[str]] = None,
-               auth: Optional[Auth] = None,
+               **kwargs,
                ) -> Generator:
         """
         Streams events for a single device.
@@ -46,15 +46,19 @@ class Stream():
 
         """
 
+        # Construct URL.
+        url = dt.base_url + '/projects/{}/devices/{}:stream'.format(
+            project_id,
+            device_id
+        )
+
         # Construct parameters dictionary.
         params: dict = dict()
-        params['ping_interval'] = '{}s'.format(dt.ping_interval)
         if event_types is not None:
             params['event_types'] = event_types
 
         # Relay generator output.
-        url = '/projects/{}/devices/{}:stream'.format(project_id, device_id)
-        for event in dt.requests.stream(url, params):
+        for event in dt.requests.stream(url, params=params, **kwargs):
             yield Event(event)
 
     @staticmethod
@@ -97,7 +101,6 @@ class Stream():
 
         # Construct parameters dictionary.
         params: dict = dict()
-        params['ping_interval'] = '{}s'.format(dt.ping_interval)
         if device_ids is not None:
             params['device_ids'] = device_ids
         if device_types is not None:
@@ -108,6 +111,6 @@ class Stream():
             params['event_types'] = event_types
 
         # Relay generator output.
-        url = '/projects/{}/devices:stream'.format(project_id)
-        for event in dt.requests.stream(url, params):
+        url = dt.base_url + '/projects/{}/devices:stream'.format(project_id)
+        for event in dt.requests.stream(url, params=params):
             yield Event(event)

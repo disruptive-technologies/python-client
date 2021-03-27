@@ -36,7 +36,5 @@ base_url = 'https://api.disruptive-technologies.com/v2'
 # The ping interval is set in the initial request that establishes a TCP
 # connection. By including a timeout with some jitter, the connection will
 # automatically reconnect if a ping is not heard within the expected range.
-ping_interval = 10
-ping_jitter = 2
-request_timeout = 3
-max_request_retries = 3
+request_timeout = 3  # seconds
+request_retries = 3  # attempts

@@ -9,7 +9,6 @@ import disruptive.requests as dtrequests
 import disruptive.events as dtevents
 import disruptive.errors as dterrors
 import disruptive.outputs as dtoutputs
-from disruptive.authentication import Auth
 
 
 class Device(dtoutputs.OutputBase):
@@ -61,7 +60,7 @@ class Device(dtoutputs.OutputBase):
     def get_device(cls,
                    project_id: str,
                    device_id: str,
-                   auth: Optional[Auth] = None,
+                   **kwargs,
                    ) -> Device:
         """
         Gets a device specified by its project and ID.
@@ -72,9 +71,16 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
+
+        Kwargs
+        ------
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -83,10 +89,7 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> device = dt.Device.get(
-        ...     project_id='...',
-        ...     device_id='...',
-        ... )
+        >>> device = dt.Device.get_device(project_id='...', device_id='...')
 
         """
 
@@ -95,9 +98,10 @@ class Device(dtoutputs.OutputBase):
         url += '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Return Device object of GET request response.
-        return cls(dtrequests.get(
+        return cls(dtrequests.generic_request(
+            method='GET',
             url=url,
-            auth=auth
+            **kwargs,
         ))
 
     @classmethod
@@ -108,7 +112,7 @@ class Device(dtoutputs.OutputBase):
                      device_types: Optional[list[str]] = None,
                      label_filters: Optional[list[str]] = None,
                      order_by: Optional[str] = None,
-                     auth: Optional[Auth] = None,
+                     **kwargs,
                      ) -> list[Device]:
         """
         List all available devices in the specified project.
@@ -133,6 +137,12 @@ class Device(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        page_size: int, optional
+            Number of devices [1, 100] to get per request. Defaults to 100.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         Returns
         -------
@@ -159,16 +169,16 @@ class Device(dtoutputs.OutputBase):
             url=dt.base_url + '/projects/{}/devices'.format(project_id),
             pagination_key='devices',
             params=params,
-            auth=auth,
+            **kwargs,
         )
         return [cls(device) for device in devices]
 
     @staticmethod
     def batch_update_labels(project_id: str,
                             device_ids: list[str],
-                            add_labels: Optional[dict[str, str]] = None,
+                            set_labels: Optional[dict[str, str]] = None,
                             remove_labels: Optional[list[str]] = None,
-                            auth: Optional[Auth] = None,
+                            **kwargs,
                             ) -> None:
         """
         Add, update, or remove multiple labels (key=value) on multiple devices
@@ -192,6 +202,10 @@ class Device(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -202,8 +216,8 @@ class Device(dtoutputs.OutputBase):
         # Construct request body dictionary.
         body: dict = dict()
         body['devices'] = devices
-        if add_labels is not None:
-            body['addLabels'] = add_labels
+        if set_labels is not None:
+            body['addLabels'] = set_labels
         if remove_labels is not None:
             body['removeLabels'] = remove_labels
 
@@ -212,18 +226,19 @@ class Device(dtoutputs.OutputBase):
         url += '/projects/{}/devices:batchUpdate'.format(project_id)
 
         # Sent POST request, but return nothing.
-        dtrequests.post(
+        dtrequests.generic_request(
+            method='POST',
             url=url,
             body=body,
-            auth=auth,
+            **kwargs,
         )
 
     @staticmethod
-    def add_label(project_id: str,
+    def set_label(project_id: str,
                   device_id: str,
                   key: str,
                   value: str,
-                  auth: Optional[Auth] = None,
+                  **kwargs,
                   ) -> None:
         """
         Add a label (key=value) for a single device.
@@ -242,6 +257,10 @@ class Device(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -249,49 +268,15 @@ class Device(dtoutputs.OutputBase):
         Device.batch_update_labels(
             project_id=project_id,
             device_ids=[device_id],
-            add_labels={key: value},
-            auth=auth,
-        )
-
-    @staticmethod
-    def update_label(project_id: str,
-                     device_id: str,
-                     key: str,
-                     value: str,
-                     auth: Optional[Auth] = None,
-                     ) -> None:
-        """
-        Update a label (key=value) for a single device.
-
-        Parameters
-        ----------
-        project_id : str
-            Unique ID of the target project.
-        device_id : str
-            Unique ID of the target device.
-        key : str
-            Key of the label to be modified.
-        value : str
-            Label value to be modified.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-
-        """
-
-        # Use batch_update_labels for safer call.
-        Device.batch_update_labels(
-            project_id=project_id,
-            device_ids=[device_id],
-            add_labels={key: value},
-            auth=auth,
+            set_labels={key: value},
+            **kwargs,
         )
 
     @staticmethod
     def remove_label(project_id: str,
                      device_id: str,
                      key: str,
-                     auth: Optional[Auth] = None,
+                     **kwargs,
                      ) -> None:
         """
         Remove a label (key=value) from a single device.
@@ -307,6 +292,10 @@ class Device(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -315,14 +304,14 @@ class Device(dtoutputs.OutputBase):
             project_id=project_id,
             device_ids=[device_id],
             remove_labels=[key],
-            auth=auth,
+            **kwargs,
         )
 
     @staticmethod
     def transfer_device(source_project_id: str,
                         target_project_id: str,
                         device_ids: list[str],
-                        auth: Optional[Auth] = None,
+                        **kwargs,
                         ) -> None:
         """
         Transfer devices from one project to another.
@@ -338,6 +327,10 @@ class Device(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
 
         """
 
@@ -351,12 +344,13 @@ class Device(dtoutputs.OutputBase):
         }
 
         # Sent POST request, but return nothing.
-        dtrequests.post(
+        dtrequests.generic_request(
+            method='POST',
             url=dt.base_url + '/projects/{}/devices:transfer'.format(
                 target_project_id
             ),
             body=body,
-            auth=auth,
+            **kwargs,
         )
 
 
