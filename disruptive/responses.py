@@ -15,7 +15,13 @@ class DTResponse():
 
     """
 
-    def __init__(self, data: dict, status_code: int, headers: dict) -> None:
+    def __init__(self,
+                 data: dict,
+                 status_code: int,
+                 headers: dict,
+                 caught_error=None,
+                 ) -> None:
         self.data = data
         self.status_code = status_code
         self.headers = headers
+        self.caught_error = caught_error
