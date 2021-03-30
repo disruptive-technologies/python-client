@@ -76,7 +76,6 @@ class EventHistory():
             url=url,
             pagination_key='events',
             params=params,
-            page_size=1000,
             **kwargs,
         )
 
