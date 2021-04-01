@@ -168,7 +168,11 @@ def parse_error(res: DTResponse, retry_count: int):
             return (Conflict(res.data), False, None)
         elif res.status_code == 429:
             if 'Retry-After' in res.headers:
-                return (TooManyRequests(res.data), True, int(res.headers['Retry-After']))
+                return (
+                    TooManyRequests(res.data),
+                    True,
+                    int(res.headers['Retry-After'])
+                )
             else:
                 return (TooManyRequests(res.data), False, None)
         elif res.status_code == 500:
