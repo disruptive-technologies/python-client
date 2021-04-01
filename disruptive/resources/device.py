@@ -71,9 +71,6 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
-
-        Kwargs
-        ------
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
