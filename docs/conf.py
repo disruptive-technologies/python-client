@@ -56,6 +56,11 @@ html_theme_options = {
     # toc
     'fixed_sidebar': True,
     'sidebar_collapse': False,
+    'github_user': 'disruptive-technologies',
+    'github_repo': 'disruptive-python',
+    'logo': 'logo.svg',
+    'description': 'Description coming soon.',
+    'show_powered_by': False,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

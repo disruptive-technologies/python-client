@@ -98,9 +98,7 @@ def generic_request(method: str, url: str, **kwargs):
     # If there is any hope at all that a retry might resolve the error,
     # should_retry will be True. (eg. a 401).
     error, should_retry, retry_after = dterrors.parse_error(
-        # status_code=response.status_code,
-        status_code=response.status_code,
-        headers=response.headers,
+        response,
         retry_count=kwargs['retry_count'],
     )
 
@@ -126,7 +124,7 @@ def generic_request(method: str, url: str, **kwargs):
 
     # Raise error if present.
     if error is not None:
-        raise error(response.data)
+        raise error
 
     return response.data
 
@@ -140,7 +138,6 @@ def auto_paginated_list(url: str,
     results = []
 
     # Unpack all kwargs at once here for readability.
-    params = kwargs['params'] if 'params' in kwargs else {}
     if 'page_size' in kwargs:
         params['pageSize'] = kwargs['page_size']
 
@@ -237,17 +234,23 @@ def __send_request(method: str,
                    data: Optional[str],
                    timeout: int,
                    ):
-    response = requests.request(
-        method=method,
-        url=url,
-        params=params,
-        headers=headers,
-        json=body,
-        data=data,
-        timeout=timeout)
+    try:
+        response = requests.request(
+            method=method,
+            url=url,
+            params=params,
+            headers=headers,
+            json=body,
+            data=data,
+            timeout=timeout
+        )
 
-    return DTResponse(
-        response.json(),
-        response.status_code,
-        dict(response.headers),
-    )
+        res = DTResponse(
+            response.json(),
+            response.status_code,
+            dict(response.headers),
+        )
+    except requests.exceptions.RequestException as e:
+        res = DTResponse({}, 0, {}, caught_error=e)
+
+    return res
