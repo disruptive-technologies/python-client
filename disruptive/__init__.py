@@ -25,12 +25,14 @@ from disruptive.resources.stream import Stream  # noqa
 from disruptive.resources.eventhistory import EventHistory  # noqa
 from disruptive.resources.serviceaccount import ServiceAccount  # noqa
 from disruptive.resources.role import Role  # noqa
+from disruptive.resources.emulator import Emulator  # noqa
 
 # If True, debug information is sent to stdout.
 log = False
 
-# REST API base URL of which all endpoints are an expansion.
-base_url = 'https://api.disruptive-technologies.com/v2'
+# REST API base URLs of which all endpoints are an expansion.
+api_url = 'https://api.disruptive-technologies.com/v2'
+emulator_url = 'https://emulator.disruptive-technologies.com/v2'
 
 # When streaming it is good practice to ping the connection periodically.
 # The ping interval is set in the initial request that establishes a TCP
