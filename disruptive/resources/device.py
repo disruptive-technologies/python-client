@@ -30,10 +30,11 @@ class Device(dtoutputs.OutputBase):
         Device type.
     labels : dict
         Label keys and values.
-    reported : Reported
-        Object containing the data from the most recent events.
     emulated : bool
         True if the device is emulated, otherwise False.
+    reported : Reported, None
+        Object containing the data from the most recent events.
+        If emulated is True, reported is None.
 
     """
 
@@ -56,8 +57,11 @@ class Device(dtoutputs.OutputBase):
         self.project_id = self.raw['name'].split('/')[1]
         self.type = self.raw['type']
         self.labels = self.raw['labels']
-        self.reported = Reported(self.raw['reported'])
         self.emulated = emulated
+        if emulated:
+            self.reported = None
+        else:
+            self.reported = Reported(self.raw['reported'])
 
     @classmethod
     def get_device(cls,
