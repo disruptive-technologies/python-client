@@ -89,7 +89,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/serviceaccounts/{}'.format(
             project_id,
             serviceaccount_id,
@@ -133,7 +133,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/serviceaccounts'.format(project_id)
 
         # Return list of ServiceAccount objects of paginated GET response.
@@ -179,7 +179,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/serviceaccounts'.format(project_id)
 
         # Construct body.
@@ -228,7 +228,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/serviceaccounts/{}'.format(
             project_id,
             serviceaccount_id,
@@ -275,7 +275,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/serviceaccounts/{}'.format(
             project_id,
             serviceaccount_id,
@@ -321,7 +321,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/serviceaccounts/{}/keys/{}'.format(
             project_id,
             serviceaccount_id,
@@ -367,7 +367,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/serviceaccounts/{}/keys'.format(
             project_id,
             serviceaccount_id,
@@ -411,7 +411,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/serviceaccounts/{}/keys'.format(
             project_id,
             serviceaccount_id,
@@ -453,7 +453,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/serviceaccounts/{}/keys/{}'.format(
             project_id,
             serviceaccount_id,

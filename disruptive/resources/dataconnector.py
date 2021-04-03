@@ -84,7 +84,7 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
@@ -124,7 +124,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Return list of DataConnector objects of paginated GET response.
         dataconnectors = dtrequests.auto_paginated_list(
-            url=dt.base_url + '/projects/{}/dataconnectors'.format(project_id),
+            url=dt.api_url + '/projects/{}/dataconnectors'.format(project_id),
             pagination_key='dataConnectors',
             **kwargs,
         )
@@ -195,7 +195,7 @@ class DataConnector(dtoutputs.OutputBase):
             body['displayName'] = display_name
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/dataconnectors'.format(project_id)
 
         # Return DataConnector object of POST request response.
@@ -271,7 +271,7 @@ class DataConnector(dtoutputs.OutputBase):
             body['headers'] = headers
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
@@ -309,7 +309,7 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
@@ -351,7 +351,7 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
         url += ':metrics'
@@ -393,7 +393,7 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
         url += ':sync'

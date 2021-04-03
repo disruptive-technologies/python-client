@@ -47,7 +47,7 @@ class Stream():
         """
 
         # Construct URL.
-        url = dt.base_url + '/projects/{}/devices/{}:stream'.format(
+        url = dt.api_url + '/projects/{}/devices/{}:stream'.format(
             project_id,
             device_id
         )
@@ -111,6 +111,6 @@ class Stream():
             params['event_types'] = event_types
 
         # Relay generator output.
-        url = dt.base_url + '/projects/{}/devices:stream'.format(project_id)
+        url = dt.api_url + '/projects/{}/devices:stream'.format(project_id)
         for event in dt.requests.stream(url, params=params):
             yield Event(event)

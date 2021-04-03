@@ -27,7 +27,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/organizations/organization_id',
+            url=dt.api_url+'/organizations/organization_id',
         )
 
         # Assert single request sent.
@@ -46,7 +46,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/organizations',
+            url=dt.api_url+'/organizations',
         )
 
         # Assert single request sent.
@@ -66,7 +66,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/organizations/org_id/members',
+            url=dt.api_url+'/organizations/org_id/members',
         )
 
         # Assert single request sent.
@@ -90,7 +90,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=dt.base_url+'/organizations/org_id/members',
+            url=dt.api_url+'/organizations/org_id/members',
             body={
                 'roles': ['roles/organization.admin'],
                 'email': 'serviceaccount_email@domain.com',
@@ -116,7 +116,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/organizations/org_id/members/member_id',
+            url=dt.api_url+'/organizations/org_id/members/member_id',
         )
 
         # Assert single request sent.
@@ -138,7 +138,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.base_url+'/organizations/org_id/members/member_id',
+            url=dt.api_url+'/organizations/org_id/members/member_id',
         )
 
         # Assert single request sent.
@@ -161,7 +161,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/organizations/org_id/members/'
+            url=dt.api_url+'/organizations/org_id/members/'
             + 'member_id:getInviteUrl',
         )
 
@@ -186,7 +186,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/organizations/org_id/permissions'
+            url=dt.api_url+'/organizations/org_id/permissions'
         )
 
         # Assert single request sent.

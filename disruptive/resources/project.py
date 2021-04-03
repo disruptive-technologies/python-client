@@ -88,7 +88,7 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}'.format(project_id)
 
         # Return Project object of GET request response.
@@ -131,7 +131,7 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url + '/projects'
+        url = dt.api_url + '/projects'
 
         # Construct parameters dictionary.
         params = {}
@@ -180,7 +180,7 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url + '/projects'
+        url = dt.api_url + '/projects'
 
         # Construct request body.
         body: dict = dict()
@@ -220,7 +220,7 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url + '/projects/' + project_id
+        url = dt.api_url + '/projects/' + project_id
 
         # Construct request body.
         body = {}
@@ -265,7 +265,7 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.base_url + '/projects/' + project_id
+        url = dt.api_url + '/projects/' + project_id
 
         # Send DELETE request, but return nothing.
         dtrequests.generic_request(
@@ -303,7 +303,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/members'.format(project_id)
 
         # Return list of Member objects of paginated GET response.
@@ -347,7 +347,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/members'.format(project_id)
 
         # Construct request body.
@@ -395,7 +395,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/members/{}'.format(
             project_id,
             member_id,
@@ -443,7 +443,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/members/{}'.format(
             project_id,
             member_id,
@@ -489,7 +489,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/members/{}'.format(
             project_id,
             member_id,
@@ -537,7 +537,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/members/{}'.format(
             project_id,
             member_id,
@@ -579,7 +579,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/permissions'.format(project_id)
 
         # Return list of permissions in GET response.

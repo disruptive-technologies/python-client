@@ -31,7 +31,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id',
+            url=dt.api_url+'/projects/project_id',
         )
 
         # Assert single request sent.
@@ -50,7 +50,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects',
+            url=dt.api_url+'/projects',
         )
 
         # Assert single request sent.
@@ -70,7 +70,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=dt.base_url+'/projects',
+            url=dt.api_url+'/projects',
             body={'organization': 'organizations/org', 'displayName': 'name'},
         )
 
@@ -90,7 +90,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='PATCH',
-            url=dt.base_url+'/projects/project_id',
+            url=dt.api_url+'/projects/project_id',
             body={'displayName': 'new-name'},
         )
 
@@ -107,7 +107,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.base_url+'/projects/project_id',
+            url=dt.api_url+'/projects/project_id',
         )
 
         # Assert single request sent.
@@ -126,7 +126,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id/members',
+            url=dt.api_url+'/projects/project_id/members',
         )
 
         # Assert single request sent.
@@ -151,7 +151,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=dt.base_url+'/projects/project_id/members',
+            url=dt.api_url+'/projects/project_id/members',
             body={
                 'roles': ['roles/project.developer'],
                 'email': 'serviceaccount_email@domain.com',
@@ -177,7 +177,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id/members/member_id',
+            url=dt.api_url+'/projects/project_id/members/member_id',
         )
 
         # Assert single request sent.
@@ -200,7 +200,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='PATCH',
-            url=dt.base_url+'/projects/project_id/members/member_id',
+            url=dt.api_url+'/projects/project_id/members/member_id',
             body={'roles': ['roles/project.developer']}
         )
 
@@ -223,7 +223,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.base_url+'/projects/project_id/members/member_id',
+            url=dt.api_url+'/projects/project_id/members/member_id',
         )
 
         # Assert single request sent.
@@ -246,7 +246,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id/members/'
+            url=dt.api_url+'/projects/project_id/members/'
             + 'member_id:getInviteUrl',
         )
 
@@ -271,7 +271,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id/permissions'
+            url=dt.api_url+'/projects/project_id/permissions'
         )
 
         # Assert single request sent.
