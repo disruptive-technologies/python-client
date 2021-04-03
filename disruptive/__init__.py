@@ -22,7 +22,7 @@ from disruptive.resources.dataconnector import DataConnector  # noqa
 from disruptive.resources.organization import Organization  # noqa
 from disruptive.resources.project import Project  # noqa
 from disruptive.resources.stream import Stream  # noqa
-from disruptive.resources.event_history import EventHistory  # noqa
+from disruptive.resources.eventhistory import EventHistory  # noqa
 from disruptive.resources.serviceaccount import ServiceAccount  # noqa
 from disruptive.resources.role import Role  # noqa
 
