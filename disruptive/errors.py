@@ -64,6 +64,16 @@ class NotFound(DTApiError):
         super().__init__(message)
 
 
+class MethodNotAllowed(DTApiError):
+    """
+    The response contained a status code of 405.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class Conflict(DTApiError):
     """
     The response contained a status code of 409.
@@ -164,6 +174,8 @@ def parse_error(res: DTResponse, retry_count: int):
             return (Forbidden(res.data), False, None)
         elif res.status_code == 404:
             return (NotFound(res.data), False, None)
+        elif res.status_code == 405:
+            return (MethodNotAllowed(res.data), False, None)
         elif res.status_code == 409:
             return (Conflict(res.data), False, None)
         elif res.status_code == 429:

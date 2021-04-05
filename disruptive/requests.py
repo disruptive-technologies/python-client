@@ -252,5 +252,8 @@ def __send_request(method: str,
         )
     except requests.exceptions.RequestException as e:
         res = DTResponse({}, 0, {}, caught_error=e)
+    except ValueError:
+        # Requests' .json() method fails when no json is returned (code 405).
+        res = DTResponse({}, response.status_code, dict(response.headers))
 
     return res
