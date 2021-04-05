@@ -39,7 +39,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id/'
+            url=dt.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id',
         )
 
@@ -61,7 +61,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id/serviceaccounts',
+            url=dt.api_url+'/projects/project_id/serviceaccounts',
         )
 
         # Verify single request sent.
@@ -85,7 +85,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=dt.base_url+'/projects/project_id/serviceaccounts',
+            url=dt.api_url+'/projects/project_id/serviceaccounts',
             body={'displayName': 'new-sa', 'enableBasicAuth': True},
         )
 
@@ -113,7 +113,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='PATCH',
-            url=dt.base_url+'/projects/project_id/'
+            url=dt.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id',
             body={'displayName': 'service-account-1', 'enableBasicAuth': False}
         )
@@ -137,7 +137,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.base_url+'/projects/project_id/'
+            url=dt.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id',
         )
 
@@ -186,7 +186,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id/'
+            url=dt.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id/keys/key_id',
         )
 
@@ -209,7 +209,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id/'
+            url=dt.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id/keys',
         )
 
@@ -233,7 +233,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=dt.base_url+'/projects/project_id/'
+            url=dt.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id/keys',
         )
 
@@ -257,7 +257,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.base_url+'/projects/project_id/'
+            url=dt.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id/keys/key_id',
         )
 

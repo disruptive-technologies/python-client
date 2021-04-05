@@ -73,7 +73,7 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/organizations/{}'.format(organization_id)
 
         # Return Organization object of GET request response.
@@ -112,7 +112,7 @@ class Organization(OutputBase):
 
         # Return list of Organization objects of paginated GET response.
         orgs = dtrequests.auto_paginated_list(
-            url=dt.base_url + '/organizations',
+            url=dt.api_url + '/organizations',
             pagination_key='organizations',
             **kwargs,
         )
@@ -147,7 +147,7 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/organizations/{}/members'.format(organization_id)
 
         # Return list of Member objects of paginated GET response.
@@ -192,7 +192,7 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/organizations/{}/members'.format(organization_id)
 
         # Construct request body.
@@ -240,7 +240,7 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/organizations/{}/members/{}'.format(
             organization_id,
             member_id,
@@ -280,7 +280,7 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/organizations/{}/members/{}'.format(
             organization_id,
             member_id,
@@ -328,7 +328,7 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/organizations/{}/members/{}'.format(
             organization_id,
             member_id,
@@ -370,7 +370,7 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/organizations/{}/permissions'.format(organization_id)
 
         # Return list of permissions in GET response.

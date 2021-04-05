@@ -30,12 +30,15 @@ class Device(dtoutputs.OutputBase):
         Device type.
     labels : dict
         Label keys and values.
-    reported : Reported
+    emulated : bool
+        True if the device is emulated, otherwise False.
+    reported : Reported, None
         Object containing the data from the most recent events.
+        If emulated is True, reported is None.
 
     """
 
-    def __init__(self, device: dict) -> None:
+    def __init__(self, device: dict, emulated: bool = False) -> None:
         """
         Constructs the Device object by unpacking the raw device response.
 
@@ -54,7 +57,11 @@ class Device(dtoutputs.OutputBase):
         self.project_id = self.raw['name'].split('/')[1]
         self.type = self.raw['type']
         self.labels = self.raw['labels']
-        self.reported = Reported(self.raw['reported'])
+        self.emulated = emulated
+        if emulated:
+            self.reported = None
+        else:
+            self.reported = Reported(self.raw['reported'])
 
     @classmethod
     def get_device(cls,
@@ -91,7 +98,7 @@ class Device(dtoutputs.OutputBase):
         """
 
         # Construct URL
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Return Device object of GET request response.
@@ -163,7 +170,7 @@ class Device(dtoutputs.OutputBase):
 
         # Return list of Device objects of paginated GET response.
         devices = dtrequests.auto_paginated_list(
-            url=dt.base_url + '/projects/{}/devices'.format(project_id),
+            url=dt.api_url + '/projects/{}/devices'.format(project_id),
             pagination_key='devices',
             params=params,
             **kwargs,
@@ -219,7 +226,7 @@ class Device(dtoutputs.OutputBase):
             body['removeLabels'] = remove_labels
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/devices:batchUpdate'.format(project_id)
 
         # Sent POST request, but return nothing.
@@ -343,7 +350,7 @@ class Device(dtoutputs.OutputBase):
         # Sent POST request, but return nothing.
         dtrequests.generic_request(
             method='POST',
-            url=dt.base_url + '/projects/{}/devices:transfer'.format(
+            url=dt.api_url + '/projects/{}/devices:transfer'.format(
                 target_project_id
             ),
             body=body,

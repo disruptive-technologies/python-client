@@ -28,7 +28,7 @@ class TestDevice():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/projects/project_id/devices/device_id',
+            url=dt.api_url+'/projects/project_id/devices/device_id',
         )
 
         # Assert instance of Device object.

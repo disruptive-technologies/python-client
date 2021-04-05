@@ -78,7 +78,7 @@ class Role(OutputBase):
         # Return list of Role objects.
         return cls(dtrequests.generic_request(
             method='GET',
-            url=dt.base_url + '/roles/' + role,
+            url=dt.api_url + '/roles/' + role,
             **kwargs,
         ))
 
@@ -110,7 +110,7 @@ class Role(OutputBase):
 
         # Return list of Role objects.
         response = dtrequests.auto_paginated_list(
-            url=dt.base_url + '/roles',
+            url=dt.api_url + '/roles',
             pagination_key='roles',
             **kwargs,
         )

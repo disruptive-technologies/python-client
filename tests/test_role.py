@@ -29,7 +29,7 @@ class TestRole():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/roles/project.developer',
+            url=dt.api_url+'/roles/project.developer',
         )
 
         # Assert single request sent.
@@ -48,7 +48,7 @@ class TestRole():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.base_url+'/roles',
+            url=dt.api_url+'/roles',
         )
 
         # Assert single request sent.

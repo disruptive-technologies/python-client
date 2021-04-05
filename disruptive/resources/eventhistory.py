@@ -59,7 +59,7 @@ class EventHistory():
         """
 
         # Construct URL.
-        url = dt.base_url
+        url = dt.api_url
         url += '/projects/{}/devices/{}/events'.format(project_id, device_id)
 
         # Construct parameters dictionary.
