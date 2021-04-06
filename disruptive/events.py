@@ -109,8 +109,6 @@ class Temperature(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified temperature event data dictionary.
     temperature : float
         Temperature in degress Celsius.
     timestamp : datetime
@@ -132,8 +130,6 @@ class ObjectPresent(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified objectPresent event data dictionary.
     state : str
         Whether the event reported PRESENT or NOT_PRESENT.
     timestamp : datetime
@@ -155,8 +151,6 @@ class Humidity(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified humidity event data dictionary.
     temperature : float
         Temperature in degress Celsius.
     humidity : int
@@ -181,8 +175,6 @@ class ObjectPresentCount(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified objectPresentCount event data dictionary.
     total : int
         Total number of times the sensor has detected the appearance
         or disappearance of an object over its lifetime.
@@ -205,8 +197,6 @@ class TouchCount(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified touchCount event data dictionary.
     total : int
         The total number of times the sensor
         has been touched over its lifetime.
@@ -229,8 +219,6 @@ class WaterPresent(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified waterPresent event data dictionary.
     state : str
         Indicates whether water is PRESENT or NOT_PRESENT.
     timestamp : datetime
@@ -252,8 +240,6 @@ class NetworkStatus(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified networkStatus event data dictionary.
     signal_strength : int
         Percentage signal strength of the strongest Cloud Connector.
     rssi : float
@@ -314,8 +300,6 @@ class BatteryStatus(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified networkStatus event data dictionary.
     percentage : int
         Percentage estimate of remaining battery.
     timestamp : datetime
@@ -342,8 +326,6 @@ class LabelsChanged(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified waterPresent event data dictionary.
     added : dict[str, str]
         Keys and values of new labels added.
     modified : dict[str, str]
@@ -371,8 +353,6 @@ class ConnectionStatus(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified connectionStatus event data dictionary.
     connection : str
         Whether the Cloud Connector is on ETHERNET, CELLULAR, or OFFLINE.
     available : str
@@ -397,8 +377,6 @@ class EthernetStatus(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified connectionStatus event data dictionary.
     mac_address : str
         MAC address of the local network interface.
     ip_address : str
@@ -423,8 +401,6 @@ class CellularStatus(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified connectionStatus event data dictionary.
     signal_strength : int
         Cloud Connector cellular reception percentage.
     timestamp : datetime
@@ -520,8 +496,6 @@ class Event(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified event response dictionary.
     id : str
         Unique event ID.
     type : str

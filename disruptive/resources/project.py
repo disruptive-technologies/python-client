@@ -18,8 +18,6 @@ class Project(OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified project response dictionary.
     id : str
         Unique project ID.
     display_name : str

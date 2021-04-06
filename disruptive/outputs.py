@@ -9,11 +9,6 @@ class OutputBase():
     """
     Represents common features for all returnable objects.
 
-    Attributes
-    ----------
-    raw : dict
-        Unmodified dictionary of data received from the REST API.
-
     """
 
     def __init__(self, raw: dict) -> None:
@@ -90,8 +85,6 @@ class Metric(OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified metric response dictionary.
     success_count : int
         Number of 2xx responses.
     error_count : int
@@ -122,8 +115,6 @@ class Member(OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified member response dictionary.
     display_name : str
         Provided member display name.
     roles : list[str]

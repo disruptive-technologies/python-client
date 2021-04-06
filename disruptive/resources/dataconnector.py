@@ -19,8 +19,6 @@ class DataConnector(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified project response dictionary.
     id : str
         Unique dataconnector ID.
     display_name : str

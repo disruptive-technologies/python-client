@@ -20,8 +20,6 @@ class Device(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified device response dictionary.
     id : str
         Unique device ID.
     project_id : str
@@ -368,8 +366,6 @@ class Reported(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified dictionary of the "reported" field.
     touch : Touch, None
         Object representing reported touch event data.
     temperature : Temperature, None

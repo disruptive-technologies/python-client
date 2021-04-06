@@ -15,8 +15,6 @@ class Role(OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified role response dictionary.
     role : str
         Name of the role.
     display_name : str

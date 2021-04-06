@@ -15,8 +15,6 @@ class Organization(OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified organization response dictionary.
     id : str
         Unique organization ID.
     display_name : str

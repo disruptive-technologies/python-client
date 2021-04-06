@@ -19,8 +19,6 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified serviceaccount response dictionary.
     id : str
         Unique serviceaccount ID.
     email : str
@@ -481,8 +479,6 @@ class Key(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Key response dictionary.
     id : str
         Unique key ID.
     secret : str, None
