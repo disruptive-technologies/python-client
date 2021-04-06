@@ -28,10 +28,60 @@ class OutputBase():
         """
 
         # Set attribute from input argument.
-        self.raw = raw
+        self._raw = raw
 
     def __str__(self):
-        return json.dumps(self.raw, indent=4)
+        out = self.__dump([], self, level=0)
+        return '\n'.join(out)
+
+    def __dump(self, out, obj, level):
+        # Set the two formatting indent levels.
+        n_spaces = 4
+        ls = level*' '*n_spaces
+
+        # Print name of the current object if level is 0.
+        if level == 0:
+            out.append(ls + str(self.__class__.__name__) + ' object:')
+            out.append(ls + '-'*len(out[-1]))
+
+        # Append the various public attributes recursively.
+        for a in vars(obj):
+            # Skip private attributes.
+            if a.startswith('_'):
+                continue
+
+            # Fetch and evaluate the attribute value / type.
+            val = getattr(obj, a)
+            if hasattr(val, '__dict__'):
+                # Class objects should be dumped recursively.
+                out.append('{}[{}] {}:'.format(ls, type(val).__name__, a))
+                self.__dump(out, val, level=level+2)
+
+            elif isinstance(val, list):
+                # Lists content should be iterated through.
+                out.append('{}[{}] {}:'.format(ls, type(val).__name__, a))
+                self.__dump_list(out, val, level+2)
+
+            else:
+                # Other types can be printed directly.
+                out.append('{}[{}] {}: {}'.format(
+                    ls, type(val).__name__, a, str(val)
+                ))
+
+        return out
+
+    def __dump_list(self, out, lst, level):
+        ls0 = level*'    '
+        ls1 = (level+1)*'    '
+        for val in lst:
+            if hasattr(val, '__dict__'):
+                out.append('{}[{}]:'.format(ls1, type(val).__name__))
+                self.__dump(out, val, level=level+2)
+            else:
+                out.append('{}[{}] {}'.format(
+                    ls1, type(val).__name__, val
+                ))
+        return out
 
 
 class Metric(OutputBase):
@@ -61,9 +111,9 @@ class Metric(OutputBase):
         OutputBase.__init__(self, metric)
 
         # Unpack attributes from dictionary.
-        self.success_count = self.raw['metrics']['successCount']
-        self.error_count = self.raw['metrics']['errorCount']
-        self.latency = self.raw['metrics']['latency99p']
+        self.success_count = metric['metrics']['successCount']
+        self.error_count = metric['metrics']['errorCount']
+        self.latency = metric['metrics']['latency99p']
 
 
 class Member(OutputBase):
@@ -99,9 +149,9 @@ class Member(OutputBase):
         OutputBase.__init__(self, member)
 
         # Unpack attributes from dictionary.
-        self.display_name = self.raw['displayName']
-        self.roles = [r.split('/')[-1] for r in self.raw['roles']]
-        self.status = self.raw['status']
-        self.email = self.raw['email']
-        self.account_type = self.raw['accountType']
-        self.create_time = dttrans.iso8601_to_datetime(self.raw['createTime'])
+        self.display_name = member['displayName']
+        self.roles = [r.split('/')[-1] for r in member['roles']]
+        self.status = member['status']
+        self.email = member['email']
+        self.account_type = member['accountType']
+        self.create_time = dttrans.iso8601_to_datetime(member['createTime'])
