@@ -31,7 +31,7 @@ class EventData(dtoutputs.OutputBase):
 
         # Convert ISO-8601 string to datetime format.
         self.timestamp = dttrans.iso8601_to_datetime(
-            self.raw['updateTime']
+            data['updateTime']
         )
 
     @classmethod
@@ -93,8 +93,6 @@ class Touch(EventData):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified touch event data dictionary.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
@@ -125,7 +123,7 @@ class Temperature(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.temperature = self.raw['value']
+        self.temperature = data['value']
 
 
 class ObjectPresent(EventData):
@@ -148,7 +146,7 @@ class ObjectPresent(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.state = self.raw['state']
+        self.state = data['state']
 
 
 class Humidity(EventData):
@@ -173,8 +171,8 @@ class Humidity(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.temperature = self.raw['temperature']
-        self.humidity = self.raw['relativeHumidity']
+        self.temperature = data['temperature']
+        self.humidity = data['relativeHumidity']
 
 
 class ObjectPresentCount(EventData):
@@ -198,7 +196,7 @@ class ObjectPresentCount(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.total = self.raw['total']
+        self.total = data['total']
 
 
 class TouchCount(EventData):
@@ -222,7 +220,7 @@ class TouchCount(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.total = self.raw['total']
+        self.total = data['total']
 
 
 class WaterPresent(EventData):
@@ -245,7 +243,7 @@ class WaterPresent(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.state = self.raw['state']
+        self.state = data['state']
 
 
 class NetworkStatus(EventData):
@@ -280,16 +278,34 @@ class NetworkStatus(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.signal_strength = self.raw['signalStrength']
-        self.rssi = self.raw['rssi']
-        self.transmission_mode = self.raw['transmissionMode']
+        self.signal_strength = data['signalStrength']
+        self.rssi = data['rssi']
+        self.transmission_mode = data['transmissionMode']
         self.cloud_connectors = []
-        for ccon in self.raw['cloudConnectors']:
-            self.cloud_connectors.append({
-                'id': ccon['id'],
-                'signalStrength': ccon['signalStrength'],
-                'rssi': ccon['rssi'],
-            })
+        for ccon in data['cloudConnectors']:
+            self.cloud_connectors.append(NetworkStatusCloudConnector(ccon))
+            # self.cloud_connectors.append({
+            #     'id': ccon['id'],
+            #     'signalStrength': ccon['signalStrength'],
+            #     'rssi': ccon['rssi'],
+            # })
+
+
+class NetworkStatusCloudConnector(dtoutputs.OutputBase):
+
+    def __init__(self, cloud_connector: dict):
+        """
+        Constructs the Cloud Connector object found in a NetworkStatus event.
+
+        """
+
+        # Inherit parent Event class init.
+        dtoutputs.OutputBase.__init__(self, cloud_connector)
+
+        # Unpack attributes.
+        self.id = cloud_connector['id']
+        self.signal_strength = cloud_connector['signalStrength']
+        self.rssi = cloud_connector['rssi']
 
 
 class BatteryStatus(EventData):
@@ -317,7 +333,7 @@ class BatteryStatus(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.percentage = self.raw['percentage']
+        self.percentage = data['percentage']
 
 
 class LabelsChanged(EventData):
@@ -344,9 +360,9 @@ class LabelsChanged(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.added = self.raw['added']
-        self.modified = self.raw['modified']
-        self.removed = self.raw['removed']
+        self.added = data['added']
+        self.modified = data['modified']
+        self.removed = data['removed']
 
 
 class ConnectionStatus(EventData):
@@ -371,8 +387,8 @@ class ConnectionStatus(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.connection = self.raw['connection']
-        self.available = self.raw['available']
+        self.connection = data['connection']
+        self.available = data['available']
 
 
 class EthernetStatus(EventData):
@@ -397,8 +413,8 @@ class EthernetStatus(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.mac_address = self.raw['macAddress']
-        self.ip_address = self.raw['ipAddress']
+        self.mac_address = data['macAddress']
+        self.ip_address = data['ipAddress']
 
 
 class CellularStatus(EventData):
@@ -421,7 +437,7 @@ class CellularStatus(EventData):
         EventData.__init__(self, data)
 
         # Unpack attributes from dictionary.
-        self.signal_strength = self.raw['signalStrength']
+        self.signal_strength = data['signalStrength']
 
 
 # This dictionary is created to bridge the three different naming conventions
@@ -523,24 +539,21 @@ class Event(dtoutputs.OutputBase):
         # Inherit attributes from ResponseBase parent.
         dtoutputs.OutputBase.__init__(self, event)
 
-        # Unpack parts of event that is common for all types.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        self.id = self.raw['eventId']
-        self.type = self.raw['eventType']
-        self.device_id = self.raw['targetName'].split('/')[-1]
-        self.project_id = self.raw['targetName'].split('/')[1]
+        # Unpack attributes from dictionary.
+        self.id = event['eventId']
+        self.type = event['eventType']
+        self.device_id = event['targetName'].split('/')[-1]
+        self.project_id = event['targetName'].split('/')[1]
 
         # Since labelsChanged is the only event that does not
         # contain an updateTime field in data, we provide the
         # field as it is a massive convenience boost.
         if self.type == 'labelsChanged':
-            self.raw['data']['updateTime'] = self.raw['timestamp']
+            event['data']['updateTime'] = event['timestamp']
 
         # Initialize the appropriate data class.
         self.data = EventData.from_event_type(
-            self.raw['data'],
+            event['data'],
             self.type,
         )
 
