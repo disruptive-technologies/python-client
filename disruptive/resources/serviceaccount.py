@@ -53,12 +53,8 @@ class ServiceAccount(dtoutputs.OutputBase):
         self.email = serviceaccount['email']
         self.display_name = serviceaccount['displayName']
         self.basic_auth = serviceaccount['enableBasicAuth']
-        self.create_time = dttrans.iso8601_to_datetime(
-            serviceaccount['createTime']
-        )
-        self.update_time = dttrans.iso8601_to_datetime(
-            serviceaccount['updateTime']
-        )
+        self.create_time = dttrans.to_datetime(serviceaccount['createTime'])
+        self.update_time = dttrans.to_datetime(serviceaccount['updateTime'])
 
     @classmethod
     def get_serviceaccount(cls,
@@ -508,7 +504,7 @@ class Key(dtoutputs.OutputBase):
 
         # Unpack attributes from dictionary.
         self.id = key['id']
-        self.create_time = dttrans.iso8601_to_datetime(key['createTime'])
+        self.create_time = dttrans.to_datetime(key['createTime'])
         if 'secret' in key:
             self.secret = key['secret']
 

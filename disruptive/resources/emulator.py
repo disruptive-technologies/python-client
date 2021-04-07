@@ -86,7 +86,9 @@ class Emulator():
 
         # Return list of Device objects of paginated GET response.
         devices = dtrequests.auto_paginated_list(
-            url=disruptive.emulator_url + '/projects/{}/devices'.format(project_id),
+            url=disruptive.emulator_url + '/projects/{}/devices'.format(
+                project_id
+            ),
             pagination_key='devices',
             params={},
             **kwargs,
