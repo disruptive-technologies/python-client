@@ -1,5 +1,6 @@
 # Standard-library imports.
 import json
+from datetime import datetime
 
 # Project imports.
 import disruptive.transforms as dttrans
@@ -37,6 +38,8 @@ class OutputBase():
         # Print name of the current object if level is 0.
         if level == 0:
             out.append(ls + str(self.__class__.__name__) + ' object:')
+            # out.insert(-1, ls + '_'*len(out[-1]))
+            out.insert(-1, '')
             out.append(ls + '-'*len(out[-1]))
 
         # Append the various public attributes recursively.
@@ -66,15 +69,15 @@ class OutputBase():
         return out
 
     def __dump_list(self, out, lst, level):
-        ls0 = level*'    '
-        ls1 = (level+1)*'    '
+        n_spaces = 4
+        ls = (level+1)*' '*n_spaces
         for val in lst:
             if hasattr(val, '__dict__'):
-                out.append('{}[{}]:'.format(ls1, type(val).__name__))
+                out.append('{}[{}]:'.format(ls, type(val).__name__))
                 self.__dump(out, val, level=level+2)
             else:
                 out.append('{}[{}] {}'.format(
-                    ls1, type(val).__name__, val
+                    ls, type(val).__name__, val
                 ))
         return out
 
