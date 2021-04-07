@@ -144,4 +144,4 @@ class Member(OutputBase):
         self.status = member['status']
         self.email = member['email']
         self.account_type = member['accountType']
-        self.create_time = dttrans.iso8601_to_datetime(member['createTime'])
+        self.create_time = dttrans.to_datetime(member['createTime'])
