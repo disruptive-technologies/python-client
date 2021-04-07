@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+# Standard library imports.
+from typing import Optional
+from datetime import datetime
+
 # Project imports.
-import disruptive.transforms as dttrans
 import disruptive.outputs as dtoutputs
+import disruptive.transforms as dttrans
 import disruptive.log as dtlog
 
 
-class EventData(dtoutputs.OutputBase):
+class _EventData(dtoutputs.OutputBase):
     """
     Parent class for all the different event data field types.
 
@@ -20,19 +24,36 @@ class EventData(dtoutputs.OutputBase):
 
     """
 
-    def __init__(self, data: dict) -> None:
+    def __init__(self, data: dict, event_type: str) -> None:
         """
-        Constructs the EventData object by inheriting parent.
+        Constructs the _EventData object by inheriting parent.
 
         """
 
-        # Inherit parent Event class init.
+        # If timestamp is provided, verify type and set attribute.
+        if 'updateTime' in data:
+            # Raw should be iso8601 str format, while
+            # attribute should be type datetime.
+            ts_iso8601 = dttrans.to_iso8601(data['updateTime'])
+            ts_datetime = dttrans.to_datetime(data['updateTime'])
+
+            # If we can not verify iso8601 format, remove field.
+            if ts_iso8601 is not None:
+                data['updateTime'] = ts_iso8601
+            else:
+                del data['updateTime']
+
+            # Set datetime return as timestamp attribute.
+            self.timestamp = ts_datetime
+        else:
+            # None timestamp if not provided.
+            self.timestamp = None
+
+        # Set other attributes.
+        self.event_type = event_type
+
+        # Inherit parent class.
         dtoutputs.OutputBase.__init__(self, data)
-
-        # Convert ISO-8601 string to datetime format.
-        self.timestamp = dttrans.iso8601_to_datetime(
-            data['updateTime']
-        )
 
     @classmethod
     def from_event_type(cls, data: dict, event_type: str):
@@ -57,10 +78,10 @@ class EventData(dtoutputs.OutputBase):
 
         # Return the initialized class instance.
         if key:
-            return child(data[event_type])
+            return child._from_raw(data[event_type])
         else:
             # Special case for labelsChanged event.
-            return child(data)
+            return child._from_raw(data)
 
     @staticmethod
     def __child_map(event_type: str):
@@ -87,7 +108,7 @@ class EventData(dtoutputs.OutputBase):
             return None, None
 
 
-class Touch(EventData):
+class Touch(_EventData):
     """
     Represents the data found in a touch event.
 
@@ -98,122 +119,440 @@ class Touch(EventData):
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self, timestamp: Optional[datetime | str] = None):
+        """
+        Constructs the Touch object, inheriting parent class
+        and setting the type-specific attributes.
+
+        Parameters
+        ----------
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'touch')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a Touch object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : Touch
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class Temperature(EventData):
+class Temperature(_EventData):
     """
     Represents the data found in a temperature event.
 
     Attributes
     ----------
     temperature : float
-        Temperature in degress Celsius.
+        Temperature value in Celsius.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 temperature: Optional[float] = None,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
+        """
+        Constructs the Temperature object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.temperature = data['value']
+        Parameters
+        ----------
+        temperature : float, optional
+            Temperature value in Celsius.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.temperature = temperature
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'temperature')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a Temperature object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : Temperature
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            temperature=data['value'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.temperature is not None:
+            data['value'] = self.temperature
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class ObjectPresent(EventData):
+class ObjectPresent(_EventData):
     """
     Represents the data found in an objectPresent event.
 
     Attributes
     ----------
     state : str
-        Whether the event reported PRESENT or NOT_PRESENT.
+        Indicates whether an object is PRESENT or NOT_PRESENT.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 state: str,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
+        """
+        Constructs the ObjectPresent object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.state = data['state']
+        Parameters
+        ----------
+        state : str
+            Indicates whether an object is PRESENT or NOT_PRESENT.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.state = state
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'objectPresent')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs an ObjectPresent object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : ObjectPresent
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            state=data['state'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.state is not None:
+            data['state'] = self.state
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class Humidity(EventData):
+class Humidity(_EventData):
     """
     Represents the data found in an humidity event.
 
     Attributes
     ----------
     temperature : float
-        Temperature in degress Celsius.
+        Temperature value in Celsius.
     humidity : int
-        Relative humidity percentage.
+        Relative humidity in percent.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 temperature: Optional[float] = None,
+                 humidity: Optional[float] = None,
+                 timestamp: Optional[datetime | str] = None,
+                 ):
+        """
+        Constructs the Humidity object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.temperature = data['temperature']
-        self.humidity = data['relativeHumidity']
+        Parameters
+        ----------
+        temperature : float, optional
+            Temperature value in Celsius.
+        humidity : float, optional
+            Relative humidity in percent.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.temperature = temperature
+        self.humidity = humidity
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'humidity')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a Humidity object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : Humidity
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            temperature=data['temperature'],
+            humidity=data['relativeHumidity'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.temperature is not None:
+            data['temperature'] = self.temperature
+        if self.humidity is not None:
+            data['relativeHumidity'] = self.humidity
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class ObjectPresentCount(EventData):
+class ObjectPresentCount(_EventData):
     """
     Represents the data found in an objectPresentCount event.
 
     Attributes
     ----------
     total : int
-        Total number of times the sensor has detected the appearance
+        The total number of times the sensor has detected the appearance
         or disappearance of an object over its lifetime.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 total: int,
+                 timestamp: Optional[datetime | str] = None,
+                 ):
+        """
+        Constructs the ObjectPresentCount object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.total = data['total']
+        Parameters
+        ----------
+        total : int
+            The total number of times the sensor has detected the appearance
+            or disappearance of an object over its lifetime.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.total = total
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'objectPresentCount')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a ObjectPresentCount object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : ObjectPresentCount
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            total=data['total'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        data['total'] = self.total
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class TouchCount(EventData):
+class TouchCount(_EventData):
     """
     Represents the data found in an touchCount event.
 
     Attributes
     ----------
     total : int
-        The total number of times the sensor
-        has been touched over its lifetime.
+        The total number of times the sensor has been
+        touched over its lifetime.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 total: int,
+                 timestamp: Optional[datetime | str] = None,
+                 ):
+        """
+        Constructs the TouchCount object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.total = data['total']
+        Parameters
+        ----------
+        total : int
+            The total number of times the sensor has been
+            touched over its lifetime.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.total = total
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'touchCount')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a TouchCount object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : TouchCount
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            total=data['total'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        data['total'] = self.total
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class WaterPresent(EventData):
+class WaterPresent(_EventData):
     """
     Represents the data found in an waterPresent event.
 
@@ -226,101 +565,341 @@ class WaterPresent(EventData):
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 state: str,
+                 timestamp: Optional[datetime | str] = None,
+                 ):
+        """
+        Constructs the WaterPresent object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.state = data['state']
+        Parameters
+        ----------
+        state : str
+            Indicates whether water is PRESENT or NOT_PRESENT.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.state = state
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'waterPresent')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a WaterPresent object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : WaterPresent
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            state=data['state'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        data['state'] = self.state
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class NetworkStatus(EventData):
+class NetworkStatus(_EventData):
     """
     Represents the data found in a networkStatus event.
 
     Attributes
     ----------
     signal_strength : int
-        Percentage signal strength of the strongest Cloud Connector.
+        The percentage signal strength (0% to 100%) of the strongest
+        Cloud Connector, derived directly from the RSSI value.
     rssi : float
-        RSSI of the strongest Cloud Connector.
+        Raw Received Signal Strength Indication (RSSI) as measured
+        by the strongest Cloud Connector.
     transmission_mode : str
-        Indicates whether the sensor is in
+        Indicated whether the sensor is in
         LOW_POWER_STANDARD_MODE or HIGH_POWER_BOOST_MODE.
-    cloud_connectors : list[str]
-        Lists the ID of the Cloud Connector that relayed the event.
+    cloud_connectors : list[NetworkStatusCloudConnector]
+        List of the Cloud Connector that forwarded the event.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
 
-    def __init__(self, data: dict):
+    def __init__(
+        self,
+        signal_strength: Optional[int] = None,
+        rssi: Optional[int] = None,
+        transmission_mode: Optional[str] = None,
+        cloud_connectors: Optional[list[NetworkStatusCloudConnector]] = None,
+        timestamp: Optional[datetime | str] = None
+    ) -> None:
         """
-        Constructs the NetworkStatus object by unpacking the raw response.
+        Constructs the NetworkStatus object, inheriting parent class
+        and setting the type-specific attributes.
+
+        Parameters
+        ----------
+        signal_strength : int, optional
+            The percentage signal strength (0% to 100%) of the strongest
+            Cloud Connector, derived directly from the RSSI value.
+        rssi : float, optional
+            Raw Received Signal Strength Indication (RSSI) as measured
+            by the strongest Cloud Connector.
+        transmission_mode : str, optional
+            Indicated whether the sensor is in
+            LOW_POWER_STANDARD_MODE or HIGH_POWER_BOOST_MODE.
+        cloud_connectors : list[NetworkStatusCloudConnector], optional
+            List of the Cloud Connector that forwarded the event.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
 
         """
 
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+        # Set attributes.
+        self.signal_strength = signal_strength
+        self.rssi = rssi
+        self.transmission_mode = transmission_mode
+        self.cloud_connectors = cloud_connectors
+        self.timestamp = timestamp
 
-        # Unpack attributes from dictionary.
-        self.signal_strength = data['signalStrength']
-        self.rssi = data['rssi']
-        self.transmission_mode = data['transmissionMode']
-        self.cloud_connectors = []
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'networkStatus')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a NetworkStatus object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : NetworkStatus
+            Object constructed from the API response data.
+
+        """
+
+        # Isolate list of NetworkStatusCloudConnector objects.
+        cloud_connectors = []
         for ccon in data['cloudConnectors']:
-            self.cloud_connectors.append(NetworkStatusCloudConnector(ccon))
-            # self.cloud_connectors.append({
-            #     'id': ccon['id'],
-            #     'signalStrength': ccon['signalStrength'],
-            #     'rssi': ccon['rssi'],
-            # })
+            cloud_connectors.append(
+                NetworkStatusCloudConnector._from_raw(ccon)
+            )
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            signal_strength=data['signalStrength'],
+            rssi=data['rssi'],
+            transmission_mode=data['transmissionMode'],
+            cloud_connectors=cloud_connectors,
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.signal_strength is not None:
+            data['signalStrength'] = self.signal_strength
+        if self.rssi is not None:
+            data['rssi'] = self.rssi
+        if self.transmission_mode is not None:
+            data['transmissionMode'] = self.transmission_mode
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        if self.cloud_connectors is not None:
+            data['cloud_connectors'] = []
+            for ccon in self.cloud_connectors:
+                ccon_data: dict = dict()
+                if ccon.id is not None:
+                    ccon_data['id'] = ccon.id
+                if ccon.signal_strength is not None:
+                    ccon_data['signalStrength'] = ccon.signal_strength
+                if len(ccon_data) > 0:
+                    data['cloud_connectors'].append(ccon_data)
+        return data
 
 
 class NetworkStatusCloudConnector(dtoutputs.OutputBase):
+    """
+    Represents a Cloud Connector found in the networkStatus event data.
 
-    def __init__(self, cloud_connector: dict):
+    Attributes
+    ----------
+    id : str
+        Cloud Connector identifier.
+    signal_strength : int
+        The percentage signal strength (0% to 100%) between
+        the sensor and Cloud Connector.
+    rssi : int
+        Raw Received Signal Strength Indication (RSSI) between
+        the sensor and Cloud Connector.
+
+    """
+
+    def __init__(self,
+                 cloud_connector_id: Optional[str] = None,
+                 signal_strength: Optional[int] = None,
+                 rssi: Optional[int] = None,
+                 ):
         """
-        Constructs the Cloud Connector object found in a NetworkStatus event.
+        Constructs the NetworkStatusCloudConnector object, inheriting
+        parent class and setting the type-specific attributes.
+
+        Parameters
+        ----------
+        id : str
+            Cloud Connector identifier.
+        signal_strength : int
+            The percentage signal strength (0% to 100%) between
+            the sensor and Cloud Connector.
+        rssi : int
+            Raw Received Signal Strength Indication (RSSI) between
+            the sensor and Cloud Connector.
 
         """
 
-        # Inherit parent Event class init.
-        dtoutputs.OutputBase.__init__(self, cloud_connector)
+        # Inherit parent OutputBase class init.
+        dtoutputs.OutputBase.__init__(self, {})
 
         # Unpack attributes.
-        self.id = cloud_connector['id']
-        self.signal_strength = cloud_connector['signalStrength']
-        self.rssi = cloud_connector['rssi']
+        self.id = cloud_connector_id
+        self.signal_strength = signal_strength
+        self.rssi = rssi
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a NetworkStatusCloudConnector object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : NetworkStatusCloudConnector
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            cloud_connector_id=data['id'],
+            signal_strength=data['signalStrength'],
+            rssi=data['rssi'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        dtoutputs.OutputBase.__init__(obj, data)
+
+        return obj
 
 
-class BatteryStatus(EventData):
+class BatteryStatus(_EventData):
     """
     Represents the data found in a batteryStatus event.
 
     Attributes
     ----------
     percentage : int
-        Percentage estimate of remaining battery.
+        A coarse percentage estimate (0% to 100%) of the remaining battery.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
 
-    def __init__(self, data: dict):
+    def __init__(self,
+                 percentage: Optional[int] = None,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
         """
-        Constructs the BatteryStatus object by unpacking the raw response.
+        Constructs the Temperature object, inheriting parent class
+        and setting the type-specific attributes.
+
+        Parameters
+        ----------
+        percentage : int, optional
+            A coarse percentage estimate (0% to 100%) of the remaining battery.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
 
         """
 
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+        # Inherit parent _EventData class init with repacked data dictionary.
+        self.percentage = percentage
+        self.timestamp = timestamp
 
-        # Unpack attributes from dictionary.
-        self.percentage = data['percentage']
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'batteryStatus')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a BatteryStatus object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : BatteryStatus
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            percentage=data['percentage'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.percentage is not None:
+            data['percentage'] = self.percentage
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class LabelsChanged(EventData):
+class LabelsChanged(_EventData):
     """
     Represents the data found in an labelsChanged event.
 
@@ -337,17 +916,82 @@ class LabelsChanged(EventData):
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 added: dict[str, str],
+                 modified: dict[str, str],
+                 removed: list[str],
+                 timestamp: Optional[datetime | str] = None,
+                 ):
+        """
+        Constructs the LabelsChanged object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.added = data['added']
-        self.modified = data['modified']
-        self.removed = data['removed']
+        Parameters
+        ----------
+        added : dict[str, str]
+            Keys and values of new labels added.
+        modified : dict[str, str]
+            New keys and values of modified labels.
+        removed : list[str]
+            List of keys of removed labels.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.added = added
+        self.modified = modified
+        self.removed = removed
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'labelsChanged')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a LabelsChanged object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : LabelsChanged
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            added=data['added'],
+            modified=data['modified'],
+            removed=data['removed'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.added is not None:
+            data['added'] = self.added
+        if self.modified is not None:
+            data['modified'] = self.modified
+        if self.removed is not None:
+            data['removed'] = self.removed
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class ConnectionStatus(EventData):
+class ConnectionStatus(_EventData):
     """
     Represents the data found in a connectionStatus event.
 
@@ -362,16 +1006,76 @@ class ConnectionStatus(EventData):
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 connection: Optional[str] = None,
+                 available: Optional[str] = None,
+                 timestamp: Optional[datetime | str] = None,
+                 ):
+        """
+        Constructs the ConnectionStatus object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.connection = data['connection']
-        self.available = data['available']
+        Parameters
+        ----------
+        connection : str, optional
+            Whether the Cloud Connector is on ETHERNET, CELLULAR, or OFFLINE.
+        available : str, optional
+            Lists available connections.
+            Can contain ETHERNET, CELLULAR, or both.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.connection = connection
+        self.available = available
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'connectionStatus')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a ConnectionStatus object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : ConnectionStatus
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            connection=data['connection'],
+            available=data['available'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.connection is not None:
+            data['connection'] = self.connection
+        if self.available is not None:
+            data['available'] = self.available
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class EthernetStatus(EventData):
+class EthernetStatus(_EventData):
     """
     Represents the data found in a ethernetStatus event.
 
@@ -386,16 +1090,75 @@ class EthernetStatus(EventData):
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 mac_address: Optional[str] = None,
+                 ip_address: Optional[str] = None,
+                 timestamp: Optional[datetime | str] = None,
+                 ):
+        """
+        Constructs the EthernetStatus object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.mac_address = data['macAddress']
-        self.ip_address = data['ipAddress']
+        Parameters
+        ----------
+        mac_address : str, optional
+            MAC address of the local network interface.
+        ip_address : str, optional
+            IP address of the Cloud Connector on the local network.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.mac_address = mac_address
+        self.ip_address = ip_address
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'ethernetStatus')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a EthernetStatus object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : EthernetStatus
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            mac_address=data['macAddress'],
+            ip_address=data['ipAddress'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.mac_address is not None:
+            data['macAddress'] = self.mac_address
+        if self.ip_address is not None:
+            data['ipAddress'] = self.ip_address
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
-class CellularStatus(EventData):
+class CellularStatus(_EventData):
     """
     Represents the data found in a cellularStatus event.
 
@@ -408,12 +1171,65 @@ class CellularStatus(EventData):
 
     """
 
-    def __init__(self, data: dict):
-        # Inherit parent Event class init.
-        EventData.__init__(self, data)
+    def __init__(self,
+                 signal_strength: Optional[int] = None,
+                 timestamp: Optional[datetime | str] = None,
+                 ):
+        """
+        Constructs the Temperature object, inheriting parent class
+        and setting the type-specific attributes.
 
-        # Unpack attributes from dictionary.
-        self.signal_strength = data['signalStrength']
+        Parameters
+        ----------
+        signal_strength : int, optional
+            Cloud Connector cellular reception percentage.
+        timestamp : datetime, str, optional
+            Timestamp of when the event was received by a Cloud Connector.
+
+        """
+
+        # Set parameter attributes.
+        self.signal_strength = signal_strength
+        self.timestamp = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'cellularStatus')
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a CellularStatus object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : CellularStatus
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            signal_strength=data['signalStrength'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent using a full raw dictionary.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self):
+        data: dict = dict()
+        if self.signal_strength is not None:
+            data['signalStrength'] = self.signal_strength
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
 
 
 # This dictionary is created to bridge the three different naming conventions
@@ -515,20 +1331,20 @@ class Event(dtoutputs.OutputBase):
 
         # Unpack attributes from dictionary.
         self.id = event['eventId']
-        self.type = event['eventType']
+        self.event_type = event['eventType']
         self.device_id = event['targetName'].split('/')[-1]
         self.project_id = event['targetName'].split('/')[1]
 
         # Since labelsChanged is the only event that does not
         # contain an updateTime field in data, we provide the
         # field as it is a massive convenience boost.
-        if self.type == 'labelsChanged':
+        if self.event_type == 'labelsChanged':
             event['data']['updateTime'] = event['timestamp']
 
         # Initialize the appropriate data class.
-        self.data = EventData.from_event_type(
+        self.data = _EventData.from_event_type(
             event['data'],
-            self.type,
+            self.event_type,
         )
 
     @classmethod
