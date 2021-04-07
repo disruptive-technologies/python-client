@@ -13,5 +13,4 @@ Resources
    role/role
    eventhistory/eventhistory
    stream/stream
-
-Say something interesting.
+   emulator/emulator
