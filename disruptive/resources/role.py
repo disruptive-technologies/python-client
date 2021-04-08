@@ -15,8 +15,6 @@ class Role(OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified role response dictionary.
     role : str
         Name of the role.
     display_name : str
@@ -43,10 +41,10 @@ class Role(OutputBase):
         OutputBase.__init__(self, role)
 
         # Unpack attributes from dictionary.
-        self.role = self.raw['name'].split('/')[-1]
-        self.display_name = self.raw['displayName']
-        self.description = self.raw['description']
-        self.permissions = self.raw['permissions']
+        self.role = role['name'].split('/')[-1]
+        self.display_name = role['displayName']
+        self.description = role['description']
+        self.permissions = role['permissions']
 
     @classmethod
     def get_role(cls,

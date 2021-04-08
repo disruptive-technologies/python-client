@@ -19,8 +19,6 @@ class DataConnector(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified project response dictionary.
     id : str
         Unique dataconnector ID.
     display_name : str
@@ -48,10 +46,10 @@ class DataConnector(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, dataconnector)
 
         # Unpack attributes from dictionary.
-        self.id = self.raw['name'].split('/')[-1]
-        self.type = self.raw['type']
-        self.status = self.raw['status']
-        self.display_name = self.raw['displayName']
+        self.id = dataconnector['name'].split('/')[-1]
+        self.type = dataconnector['type']
+        self.status = dataconnector['status']
+        self.display_name = dataconnector['displayName']
 
     @classmethod
     def get_dataconnector(cls,

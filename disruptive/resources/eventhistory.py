@@ -2,10 +2,12 @@ from __future__ import annotations
 
 # Standard library imports.
 from typing import Optional
+from datetime import datetime
 
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
+import disruptive.transforms as dttrans
 from disruptive.events import Event
 
 
@@ -20,8 +22,8 @@ class EventHistory():
     def list_events(project_id: str,
                     device_id: str,
                     event_types: Optional[list[str]] = None,
-                    start_time: Optional[str] = None,
-                    end_time: Optional[str] = None,
+                    start_time: Optional[str | datetime] = None,
+                    end_time: Optional[str | datetime] = None,
                     **kwargs,
                     ) -> list[Event]:
         """
@@ -35,10 +37,10 @@ class EventHistory():
             Unique ID of the target device.
         event_types : list[str], optional
             If provided, only the specified event types are fetched.
-        start_time : str, optional
+        start_time : str, datetime, optional
             Specifies from when event history is fetched.
             Defaults to 24 hours ago.
-        end_time : str, optional
+        end_time : str, datetime, optional
             Specified until when event history is fetched.
             Defaults to now.
         auth: Auth, optional
@@ -66,9 +68,13 @@ class EventHistory():
         params: dict = dict()
         if event_types is not None:
             params['eventTypes'] = event_types
-        if start_time is not None:
+
+        # Sanitize timestamps as they must be iso8601 format.
+        start_time_iso8601 = dttrans.to_iso8601(start_time)
+        if start_time_iso8601 is not None:
             params['startTime'] = start_time
-        if end_time is not None:
+        end_time_iso8601 = dttrans.to_iso8601(end_time)
+        if end_time_iso8601 is not None:
             params['endTime'] = end_time
 
         # Send paginated GET request.

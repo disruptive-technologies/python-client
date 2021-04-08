@@ -4,13 +4,12 @@ from __future__ import annotations
 from typing import Optional
 
 # Project imports.
-import disruptive as dt
-import disruptive.outputs as dtoutputs
+import disruptive
 import disruptive.requests as dtrequests
 from disruptive.resources.device import Device
 
 
-class Emulator(dtoutputs.OutputBase):
+class Emulator():
     """
     Contains staticmethods for the emulator resource.
     Used for namespacing only and thus does not have a constructor
@@ -47,7 +46,7 @@ class Emulator(dtoutputs.OutputBase):
         """
 
         # Construct URL
-        url = dt.emulator_url
+        url = disruptive.emulator_url
         url += '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Return Device object of GET request response.
@@ -87,7 +86,9 @@ class Emulator(dtoutputs.OutputBase):
 
         # Return list of Device objects of paginated GET response.
         devices = dtrequests.auto_paginated_list(
-            url=dt.emulator_url + '/projects/{}/devices'.format(project_id),
+            url=disruptive.emulator_url + '/projects/{}/devices'.format(
+                project_id
+            ),
             pagination_key='devices',
             params={},
             **kwargs,
@@ -131,7 +132,7 @@ class Emulator(dtoutputs.OutputBase):
         """
 
         # Construct URL
-        url = dt.emulator_url
+        url = disruptive.emulator_url
         url += '/projects/{}/devices'.format(project_id)
 
         # Construct body dictionary.
@@ -163,7 +164,7 @@ class Emulator(dtoutputs.OutputBase):
         ----------
         project_id : str
             Unique ID of the target project.
-        device_type : str
+        device_id : str
             Specifies which device type to delete.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
@@ -176,12 +177,78 @@ class Emulator(dtoutputs.OutputBase):
         """
 
         # Construct URL
-        url = dt.emulator_url
+        url = disruptive.emulator_url
         url += '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Send DELETE request, but return nothing.
         dtrequests.generic_request(
             method='DELETE',
             url=url,
+            **kwargs,
+        )
+
+    @staticmethod
+    def publish_event(project_id: str,
+                      device_id: str,
+                      data: disruptive.events.Touch |
+                      disruptive.events.Temperature |
+                      disruptive.events.ObjectPresent |
+                      disruptive.events.Humidity |
+                      disruptive.events.ObjectPresentCount |
+                      disruptive.events.TouchCount |
+                      disruptive.events.WaterPresent |
+                      disruptive.events.NetworkStatus |
+                      disruptive.events.BatteryStatus |
+                      disruptive.events.ConnectionStatus |
+                      disruptive.events.EthernetStatus |
+                      disruptive.events.CellularStatus,
+                      **kwargs,
+                      ) -> None:
+        """
+        From the specified device, publish an event of the given type.
+
+        Parameters
+        ----------
+        project_id : str
+            Unique ID of the target project.
+        device_id : str
+            Unique ID of the target device.
+        data : :ref:`Event Data`
+            An object representing the event data to be published.
+            Can be any of the listed :ref:`Event Data` classes.
+            labelsChanged is not supported when publishing emulated events.
+            The chosen :ref:`Event Data` must be supported by the device.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
+
+        """
+
+        # Construct URL
+        url = disruptive.emulator_url
+        url += '/projects/{}/devices/{}:publish'.format(project_id, device_id)
+
+        print()
+        print('----')
+        print('Data')
+        print(data)
+
+        body = {data.event_type: data._raw}
+
+        print()
+        print('----')
+        print('Body')
+        import json
+        print(json.dumps(body, indent=4))
+
+        # Send POST request, but return nothing.
+        dtrequests.generic_request(
+            method='POST',
+            url=url,
+            body={data.event_type: data._raw},
             **kwargs,
         )

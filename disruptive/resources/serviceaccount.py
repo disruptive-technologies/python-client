@@ -19,8 +19,6 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified serviceaccount response dictionary.
     id : str
         Unique serviceaccount ID.
     email : str
@@ -51,12 +49,12 @@ class ServiceAccount(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, serviceaccount)
 
         # Unpack attributes from dictionary.
-        self.id = self.raw['name'].split('/')[-1]
-        self.email = self.raw['email']
-        self.display_name = self.raw['displayName']
-        self.basic_auth = self.raw['enableBasicAuth']
-        self.create_time = dttrans.iso8601_to_datetime(self.raw['createTime'])
-        self.update_time = dttrans.iso8601_to_datetime(self.raw['updateTime'])
+        self.id = serviceaccount['name'].split('/')[-1]
+        self.email = serviceaccount['email']
+        self.display_name = serviceaccount['displayName']
+        self.basic_auth = serviceaccount['enableBasicAuth']
+        self.create_time = dttrans.to_datetime(serviceaccount['createTime'])
+        self.update_time = dttrans.to_datetime(serviceaccount['updateTime'])
 
     @classmethod
     def get_serviceaccount(cls,
@@ -477,8 +475,6 @@ class Key(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Key response dictionary.
     id : str
         Unique key ID.
     secret : str, None
@@ -507,10 +503,10 @@ class Key(dtoutputs.OutputBase):
         self.secret = None
 
         # Unpack attributes from dictionary.
-        self.id = self.raw['id']
-        self.create_time = dttrans.iso8601_to_datetime(self.raw['createTime'])
-        if 'secret' in self.raw:
-            self.secret = self.raw['secret']
+        self.id = key['id']
+        self.create_time = dttrans.to_datetime(key['createTime'])
+        if 'secret' in key:
+            self.secret = key['secret']
 
     @classmethod
     def _with_secret(cls, key: dict) -> Key:

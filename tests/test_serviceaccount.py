@@ -23,8 +23,8 @@ class TestServiceAccount():
         assert s.email == res['email']
         assert s.display_name == res['displayName']
         assert s.basic_auth == res['enableBasicAuth']
-        assert s.create_time == dttrans.iso8601_to_datetime(res['createTime'])
-        assert s.update_time == dttrans.iso8601_to_datetime(res['updateTime'])
+        assert s.create_time == dttrans.to_datetime(res['createTime'])
+        assert s.update_time == dttrans.to_datetime(res['updateTime'])
 
     def test_get_serviceaccount(self, request_mock):
         # Update the response data with serviceaccount data.
@@ -155,7 +155,7 @@ class TestServiceAccount():
 
         # Assert attributes unpacked correctly.
         assert k.id == res['name'].split('/')[-1]
-        assert k.create_time == dttrans.iso8601_to_datetime(res['createTime'])
+        assert k.create_time == dttrans.to_datetime(res['createTime'])
         assert k.secret is None
 
     def test_key_secret_set(self, request_mock):

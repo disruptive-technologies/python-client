@@ -64,6 +64,16 @@ class NotFound(DTApiError):
         super().__init__(message)
 
 
+class MethodNotAllowed(DTApiError):
+    """
+    The response contained a status code of 405.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class Conflict(DTApiError):
     """
     The response contained a status code of 409.
@@ -97,6 +107,16 @@ class InternalServerError(DTApiError):
         super().__init__(message)
 
 
+class ServiceUnavailable(DTApiError):
+    """
+    The response contained a status code of 501.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class ReadTimeout(Exception):
     """
     The server did not send any data in the allotted amount of time.
@@ -110,6 +130,16 @@ class ReadTimeout(Exception):
 class ConnectionError(Exception):
     """
     Could not establish connection to the server.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class FormatError(Exception):
+    """
+    Some formatting, usually timestamp strings, is wrong.
 
     """
 
@@ -164,6 +194,8 @@ def parse_error(res: DTResponse, retry_count: int):
             return (Forbidden(res.data), False, None)
         elif res.status_code == 404:
             return (NotFound(res.data), False, None)
+        elif res.status_code == 405:
+            return (MethodNotAllowed(res.data), False, None)
         elif res.status_code == 409:
             return (Conflict(res.data), False, None)
         elif res.status_code == 429:
@@ -177,7 +209,11 @@ def parse_error(res: DTResponse, retry_count: int):
                 return (TooManyRequests(res.data), False, None)
         elif res.status_code == 500:
             return (InternalServerError(res.data), True, retry_count**2)
+        elif res.status_code == 501:
+            return (ServiceUnavailable(res.data), False, None)
         elif res.status_code == 503:
             return (InternalServerError(res.data), True, retry_count**2)
         elif res.status_code == 504:
             return (InternalServerError(res.data), True, retry_count**2 + 9)
+        else:
+            return (Exception(res.data), False, None)

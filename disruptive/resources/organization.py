@@ -15,8 +15,6 @@ class Organization(OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified organization response dictionary.
     id : str
         Unique organization ID.
     display_name : str
@@ -38,12 +36,9 @@ class Organization(OutputBase):
         # Inherit from OutputBase parent.
         OutputBase.__init__(self, organization)
 
-        # Unpack organization json.
-        self.__unpack()
-
-    def __unpack(self) -> None:
-        self.id = self.raw['name'].split('/')[-1]
-        self.display_name = self.raw['displayName']
+        # Unpack attributes from dictionary.
+        self.id = organization['name'].split('/')[-1]
+        self.display_name = organization['displayName']
 
     @classmethod
     def get_organization(cls,

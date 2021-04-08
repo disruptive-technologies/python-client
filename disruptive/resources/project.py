@@ -18,8 +18,6 @@ class Project(OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified project response dictionary.
     id : str
         Unique project ID.
     display_name : str
@@ -52,13 +50,13 @@ class Project(OutputBase):
         OutputBase.__init__(self, project)
 
         # Unpack attributes from dictionary.
-        self.id = self.raw['name'].split('/')[-1]
-        self.display_name = self.raw['displayName']
-        self.organization_id = self.raw['organization'].split('/')[-1]
-        self.organization_display_name = self.raw['organizationDisplayName']
-        self.sensor_count = self.raw['sensorCount']
-        self.cloud_connector_count = self.raw['cloudConnectorCount']
-        self.is_inventory = self.raw['inventory']
+        self.id = project['name'].split('/')[-1]
+        self.display_name = project['displayName']
+        self.organization_id = project['organization'].split('/')[-1]
+        self.organization_display_name = project['organizationDisplayName']
+        self.sensor_count = project['sensorCount']
+        self.cloud_connector_count = project['cloudConnectorCount']
+        self.is_inventory = project['inventory']
 
     @classmethod
     def get_project(cls,

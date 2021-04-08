@@ -20,8 +20,6 @@ class Device(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    raw : dict
-        Unmodified device response dictionary.
     id : str
         Unique device ID.
     project_id : str
@@ -53,15 +51,15 @@ class Device(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, device)
 
         # Unpack attributes from dictionary.
-        self.id = self.raw['name'].split('/')[-1]
-        self.project_id = self.raw['name'].split('/')[1]
-        self.type = self.raw['type']
-        self.labels = self.raw['labels']
+        self.id = device['name'].split('/')[-1]
+        self.project_id = device['name'].split('/')[1]
+        self.type = device['type']
+        self.labels = device['labels']
         self.emulated = emulated
         if emulated:
             self.reported = None
         else:
-            self.reported = Reported(self.raw['reported'])
+            self.reported = Reported(device['reported'])
 
     @classmethod
     def get_device(cls,
@@ -364,12 +362,10 @@ class Reported(dtoutputs.OutputBase):
 
     Contains one attribute for each event type, initialized to None.
     For each event type represented in the reported field, the related
-    attribute is updated with the appropriate EventData child.
+    attribute is updated with the appropriate _EventData child.
 
     Attributes
     ----------
-    raw : dict
-        Unmodified dictionary of the "reported" field.
     touch : Touch, None
         Object representing reported touch event data.
     temperature : Temperature, None
@@ -426,15 +422,15 @@ class Reported(dtoutputs.OutputBase):
     def __unpack(self) -> None:
         """
         Iterates each field in the raw dictionary and set the
-        related attribute to the appropriate EventData child object.
+        related attribute to the appropriate _EventData child object.
         If an event type is not found, the attribute is left as None.
 
         """
 
         # Iterate keys in reported dictionary.
-        for key in self.raw.keys():
+        for key in self._raw.keys():
             # Fields can be None on emulated devices. Skip if that is the case.
-            if self.raw[key] is None:
+            if self._raw[key] is None:
                 continue
 
             # Also skip labelsChanged key as it does not exist in reported.
@@ -442,10 +438,10 @@ class Reported(dtoutputs.OutputBase):
                 continue
 
             # Repack the data field in expected format.
-            repacked = {key: self.raw[key]}
+            repacked = {key: self._raw[key]}
 
             # Initialize appropriate data instance.
-            data = dtevents.EventData.from_event_type(repacked, key)
+            data = dtevents._EventData.from_event_type(repacked, key)
 
             # Set attribute according to event type.
             if key in dtevents.EVENTS_MAP:
