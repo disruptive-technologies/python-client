@@ -72,10 +72,10 @@ class EventHistory():
         # Sanitize timestamps as they must be iso8601 format.
         start_time_iso8601 = dttrans.to_iso8601(start_time)
         if start_time_iso8601 is not None:
-            params['startTime'] = start_time
+            params['startTime'] = start_time_iso8601
         end_time_iso8601 = dttrans.to_iso8601(end_time)
         if end_time_iso8601 is not None:
-            params['endTime'] = end_time
+            params['endTime'] = end_time_iso8601
 
         # Send paginated GET request.
         res = dtrequests.auto_paginated_list(
