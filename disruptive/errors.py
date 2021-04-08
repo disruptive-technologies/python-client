@@ -8,20 +8,10 @@ class DTApiError(Exception):
 
     """
 
-    def __init__(self, message: dict):
-        # If no message is provided, skip formatting.
-        if len(message) == 0:
-            msg = ''
-        else:
-            # Create message from dictionary contents.
-            msg = 'Status Code {}\n\nError:\n{}\n\nHelp:\n{}'.format(
-                message['code'],
-                message['error'],
-                message['help'],
-            )
+    def __init__(self, message):
 
         # Call the base class constructor.
-        super().__init__(msg)
+        super().__init__(message)
 
 
 class BadRequest(DTApiError):
