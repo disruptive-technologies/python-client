@@ -5,10 +5,11 @@ from typing import Optional
 
 # Project imports.
 import disruptive as dt
+import disruptive.log as dtlog
 import disruptive.requests as dtrequests
 import disruptive.events as dtevents
-import disruptive.errors as dterrors
 import disruptive.outputs as dtoutputs
+from disruptive.types import EventTypes
 
 
 class Device(dtoutputs.OutputBase):
@@ -408,13 +409,13 @@ class Reported(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, reported)
 
         # Set default attribute values.
-        for key in dtevents.EVENTS_MAP:
+        for key in EventTypes._api_names:
             # Skip labelsChanged as it does not exist in reported.
             if key == 'labelsChanged':
                 continue
 
             # Set attribute to None.
-            setattr(self, str(dtevents.EVENTS_MAP[key]['attr']), None)
+            setattr(self, EventTypes._api_names[key].attr_name, None)
 
         # Unpack the reported dictionary data.
         self.__unpack()
@@ -444,7 +445,11 @@ class Reported(dtoutputs.OutputBase):
             data = dtevents._EventData.from_event_type(repacked, key)
 
             # Set attribute according to event type.
-            if key in dtevents.EVENTS_MAP:
-                setattr(self, str(dtevents.EVENTS_MAP[key]['attr']), data)
+            if key in EventTypes._api_names:
+                setattr(
+                    self,
+                    EventTypes._api_names[key].attr_name,
+                    data,
+                )
             else:
-                raise dterrors.NotFound('Unknown event type {}.'.format(key))
+                dtlog.log('Skipping unknown event type {}.'.format(key))

@@ -5,9 +5,11 @@ from typing import Optional
 from datetime import datetime
 
 # Project imports.
+import disruptive
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
 import disruptive.log as dtlog
+from disruptive.types import EventTypes
 
 
 class _EventData(dtoutputs.OutputBase):
@@ -97,15 +99,19 @@ class _EventData(dtoutputs.OutputBase):
         """
 
         # Initialize the correct object.
-        if event_type in EVENTS_MAP:
+        # if event_type in [t.value['api_name'] for t in EventTypes]:
+        if event_type in EventTypes._api_names:
             out = (
-                EVENTS_MAP[event_type]['class'],
-                EVENTS_MAP[event_type]['is_keyed'],
+                getattr(
+                    disruptive.events,
+                    EventTypes._api_names[event_type].class_name
+                ),
+                EventTypes._api_names[event_type].is_keyed,
             )
             return out
-        else:
-            dtlog.log('Skipping unknown event type {}.'.format(event_type))
-            return None, None
+
+        dtlog.log('Skipping unknown event type {}.'.format(event_type))
+        return None, None
 
 
 class Touch(_EventData):
@@ -1230,80 +1236,6 @@ class CellularStatus(_EventData):
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
         return data
-
-
-# This dictionary is created to bridge the three different naming conventions
-# used for every single event. The REST API returns events with camel case,
-# whereas in python we prefer snake casing, and classes fully cased. It also
-# prevent recreating long if-statements when choosing an event by type as it
-# lists all event-types currently known.
-EVENTS_MAP = {
-    'touch': {
-        'attr': 'touch',
-        'class': Touch,
-        'is_keyed': True,
-    },
-    'temperature': {
-        'attr': 'temperature',
-        'class': Temperature,
-        'is_keyed': True,
-    },
-    'objectPresent': {
-        'attr': 'object_present',
-        'class': ObjectPresent,
-        'is_keyed': True,
-    },
-    'humidity': {
-        'attr': 'humidity',
-        'class': Humidity,
-        'is_keyed': True,
-    },
-    'objectPresentCount': {
-        'attr': 'object_present_count',
-        'class': ObjectPresentCount,
-        'is_keyed': True,
-    },
-    'touchCount': {
-        'attr': 'touch_count',
-        'class': TouchCount,
-        'is_keyed': True,
-    },
-    'waterPresent': {
-        'attr': 'water_present',
-        'class': WaterPresent,
-        'is_keyed': True,
-    },
-    'networkStatus': {
-        'attr': 'network_status',
-        'class': NetworkStatus,
-        'is_keyed': True,
-    },
-    'batteryStatus': {
-        'attr': 'battery_status',
-        'class': BatteryStatus,
-        'is_keyed': True,
-    },
-    'labelsChanged': {
-        'attr': 'labels_changed',
-        'class': LabelsChanged,
-        'is_keyed': False,
-    },
-    'connectionStatus': {
-        'attr': 'connection_status',
-        'class': ConnectionStatus,
-        'is_keyed': True,
-    },
-    'ethernetStatus': {
-        'attr': 'ethernet_status',
-        'class': EthernetStatus,
-        'is_keyed': True,
-    },
-    'cellularStatus': {
-        'attr': 'cellular_status',
-        'class': CellularStatus,
-        'is_keyed': True,
-    },
-}
 
 
 class Event(dtoutputs.OutputBase):
