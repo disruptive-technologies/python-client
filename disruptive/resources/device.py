@@ -92,7 +92,7 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> device = dt.Device.get_device(project_id='...', device_id='...')
+        >>> device = dt.Device.get_device(project_id, device_id)
 
         """
 
@@ -362,8 +362,9 @@ class Reported(dtoutputs.OutputBase):
     Represents the "reported" field for a device.
 
     Contains one attribute for each event type, initialized to None.
-    For each event type represented in the reported field, the related
-    attribute is updated with the appropriate _EventData child.
+    For each event type represented in the reported field,
+    the related attribute is updated with the
+    appropriate :ref:`Event Data <Event Data>` class.
 
     Attributes
     ----------

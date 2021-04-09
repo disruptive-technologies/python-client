@@ -17,6 +17,11 @@ class EventHistory(dtoutputs.OutputBase):
     Contains staticmethods for fetching event history.
     Used for namespacing only and thus does not have a constructor
 
+    Attributes
+    ----------
+    events_list : list[Event]
+        List of all events fetched in history.
+
     """
     def __init__(self, events_list: list[Event]) -> None:
         """
@@ -73,8 +78,9 @@ class EventHistory(dtoutputs.OutputBase):
 
         Returns
         -------
-        events : list[Event]
-            List of objects each representing an event in fetched history.
+        history : EventHistory
+            Object containing each event in history in addition to a few
+            convenience functions.
 
         """
 
@@ -127,15 +133,31 @@ class EventHistory(dtoutputs.OutputBase):
                 out.append(e)
         return out
 
-    def get_axes(self, x, y=None, event_type=None):
+    def get_data_axes(self,
+                      x_name: str,
+                      y_name: Optional[str] = None,
+                      event_type: Optional[str] = None,
+                      ):
         """
         Returns filtered lists of the data axes as specified from
         event type in history.
 
         Parameters
         ----------
-        x : str
-            Name of .
+        x_name : str
+            Name of the first axis to isolate.
+        y_name : str, optional
+            Name of the second axis to isolate.
+        event_type : str, optional
+            Filter by event type. For instance, "state" exists for both
+            waterPresent and objectPresent event types.
+
+        Returns
+        -------
+        x_axis : list
+            List of values on the first axis.
+        y_axis : list
+            List of values on the second axis.
 
         """
 
@@ -143,15 +165,15 @@ class EventHistory(dtoutputs.OutputBase):
         y_axis = []
         for e in self.events_list:
             # Skip event if event_type mismatch.
-            if event_type is not None or event_type != e.event_type:
+            if event_type is not None and event_type != e.event_type:
                 continue
 
             # Tests passed, append timestamp and y-axis.
-            x_axis.append(getattr(e.data, x))
-            if y is not None:
-                y_axis.append(getattr(e.data, y))
+            x_axis.append(getattr(e.data, x_name))
+            if y_name is not None:
+                y_axis.append(getattr(e.data, y_name))
 
-        if y is not None:
+        if y_name is not None:
             return x_axis, y_axis
         else:
             return x_axis
