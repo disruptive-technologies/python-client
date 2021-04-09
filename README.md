@@ -19,7 +19,7 @@ pip install disruptive
 or from source:
 
 ```sh
-python setup.py install
+pip install .
 ```
 
 ### Requirements
