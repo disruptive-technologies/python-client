@@ -24,7 +24,7 @@ test: venv
 	source ${VENV}/bin/activate && pytest
 
 lint: venv
-	source ${VENV}/bin/activate && mypy disruptive/ && mypy examples/ && flake8 disruptive/ && flake8 examples/
+	source ${VENV}/bin/activate && mypy disruptive/ && flake8 disruptive/
 
 clean-build:
 	rm -rf build/ dist/ pip-wheel-metadata/ *.egg-info
