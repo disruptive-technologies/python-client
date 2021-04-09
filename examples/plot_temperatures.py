@@ -17,29 +17,32 @@ dt.auth = dt.Auth.serviceaccount(
 
 # Fetch all temperature sensors in a project.
 temp_sensors = dt.Device.list_devices(
-    project_id=os.environ.get('DT_PROJECT_ID', ''),
+    # project_id=os.environ.get('DT_PROJECT_ID', ''),
+    project_id='c10humqoss90036gu530',
     device_types=['temperature'],
 )
 
 # Iterate through each temperature sensor in fetched list.
 for sensor in temp_sensors:
     # Fetch temperature events over the last 7 days.
-    events_list = dt.EventHistory.list_events(
+    history = dt.EventHistory.list_events(
         project_id=sensor.project_id,
         device_id=sensor.id,
-        event_types=['temperature'],
+        event_types=[dt.EventTypes.temperature],
         start_time=datetime.today()-timedelta(days=7),
     )
 
-    # Each event in the list contains metadata about the event
-    # in addition to the sensor data itself. List comprehension can
-    # be used to quickly unwrap the information of interest.
-    plt.plot(
-        [e.data.timestamp for e in events_list],
-        [e.data.temperature for e in events_list],
-        label=sensor.id,
-    )
+    # Print how many events were fetched.
+    print('{}: {} events fetched.'.format(
+        sensor.id, len(history.events_list)
+    ))
+
+    # Isolate the timestamp- and temperature data axes and superimpose on plot.
+    timeaxis, temperature = history.get_data_axes('timestamp', 'temperature')
+    plt.plot(timeaxis, temperature, label=sensor.id)
 
 # Generated the plot.
 plt.legend()
+plt.xlabel('Timestamp')
+plt.ylabel('Temperature [C]')
 plt.show()
