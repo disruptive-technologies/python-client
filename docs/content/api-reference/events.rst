@@ -1,15 +1,18 @@
 Events
 ======
 
-Event Class
------------
+.. _Event Class:
+
+Class
+-----
 
 .. autoclass:: disruptive.events.Event
 
 .. _Event Data:
 
-Event Data
-----------
+Data
+----
+Each of the following classes represent one type of data that can be found in an event.
 
 .. autoclass:: disruptive.events.Touch
 .. autoclass:: disruptive.events.Temperature

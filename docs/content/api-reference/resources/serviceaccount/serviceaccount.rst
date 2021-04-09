@@ -1,19 +1,26 @@
 ServiceAccount
 --------------
+The ServiceAccount class can, among other things, be used to create, modified, and delete Service Accounts and their keys.
+
+API Methods
+^^^^^^^^^^^
+.. autofunction:: disruptive.ServiceAccount.get_serviceaccount
+.. autofunction:: disruptive.ServiceAccount.list_serviceaccounts
+.. autofunction:: disruptive.ServiceAccount.create_serviceaccount
+.. autofunction:: disruptive.ServiceAccount.update_serviceaccount
+.. autofunction:: disruptive.ServiceAccount.delete_serviceaccount
+.. autofunction:: disruptive.ServiceAccount.list_keys
+.. autofunction:: disruptive.ServiceAccount.get_key
+.. autofunction:: disruptive.ServiceAccount.create_key
+.. autofunction:: disruptive.ServiceAccount.delete_key
+
+Class
+^^^^^
 .. autoclass:: disruptive.ServiceAccount
 
-.. automethod:: disruptive.ServiceAccount.get_serviceaccount
-.. automethod:: disruptive.ServiceAccount.list_serviceaccounts
-.. automethod:: disruptive.ServiceAccount.create_serviceaccount
-.. automethod:: disruptive.ServiceAccount.update_serviceaccount
-.. automethod:: disruptive.ServiceAccount.delete_serviceaccount
-.. automethod:: disruptive.ServiceAccount.get_key
-.. automethod:: disruptive.ServiceAccount.list_keys
-.. automethod:: disruptive.ServiceAccount.create_key
-.. automethod:: disruptive.ServiceAccount.delete_key
-
 .. toctree::
+   :hidden:
    :maxdepth: 4
-   :caption: Support Classes:
+   :caption: Extras:
 
    key
