@@ -26,6 +26,7 @@ from disruptive.resources.eventhistory import EventHistory  # noqa
 from disruptive.resources.serviceaccount import ServiceAccount  # noqa
 from disruptive.resources.role import Role  # noqa
 from disruptive.resources.emulator import Emulator  # noqa
+from disruptive.types import EventTypes  # noqa
 
 # If True, debug information is sent to stdout.
 log = False

@@ -259,8 +259,8 @@ class Auth():
             # Re-raise exception with more specific information.
             raise dterrors.BadRequest(
                 'Could not authenticate with the provided credentials.\n'
-                + 'Read more: https://developer.d21s.com/docs/authentication'
-                + '/oauth2#common-errors'
+                'Read more: https://developer.d21s.com/docs/authentication'
+                '/oauth2#common-errors'
             )
 
         # Return the access token in the request.

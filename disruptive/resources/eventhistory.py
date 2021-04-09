@@ -7,25 +7,48 @@ from datetime import datetime
 # Project imports.
 import disruptive as dt
 import disruptive.requests as dtrequests
+import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
 from disruptive.events import Event
 
 
-class EventHistory():
+class EventHistory(dtoutputs.OutputBase):
     """
     Contains staticmethods for fetching event history.
     Used for namespacing only and thus does not have a constructor
 
-    """
+    Attributes
+    ----------
+    events_list : list[Event]
+        List of all events fetched in history.
 
-    @staticmethod
-    def list_events(project_id: str,
+    """
+    def __init__(self, events_list: list[Event]) -> None:
+        """
+        Constructs the EventHistory object from a list of events.
+
+        Parameters
+        ----------
+        events_list : list[Event]
+            A list of event objects, each representing a single event.
+
+        """
+
+        # Inherit from OutputBase parent.
+        dtoutputs.OutputBase.__init__(self, {})
+
+        # Set parameter attributes.
+        self.events_list = events_list
+
+    @classmethod
+    def list_events(cls,
+                    project_id: str,
                     device_id: str,
                     event_types: Optional[list[str]] = None,
                     start_time: Optional[str | datetime] = None,
                     end_time: Optional[str | datetime] = None,
                     **kwargs,
-                    ) -> list[Event]:
+                    ) -> EventHistory:
         """
         Get the event history for a single device.
 
@@ -55,8 +78,9 @@ class EventHistory():
 
         Returns
         -------
-        events : list[Event]
-            List of objects each representing an event in fetched history.
+        history : EventHistory
+            Object containing each event in history in addition to a few
+            convenience functions.
 
         """
 
@@ -72,10 +96,10 @@ class EventHistory():
         # Sanitize timestamps as they must be iso8601 format.
         start_time_iso8601 = dttrans.to_iso8601(start_time)
         if start_time_iso8601 is not None:
-            params['startTime'] = start_time
+            params['startTime'] = start_time_iso8601
         end_time_iso8601 = dttrans.to_iso8601(end_time)
         if end_time_iso8601 is not None:
-            params['endTime'] = end_time
+            params['endTime'] = end_time_iso8601
 
         # Send paginated GET request.
         res = dtrequests.auto_paginated_list(
@@ -86,4 +110,70 @@ class EventHistory():
         )
 
         # Return list of Event objects of paginated GET response.
-        return Event.from_mixed_list(res)
+        return cls(Event.from_mixed_list(res))
+
+    def get_events(self, event_type):
+        """
+        Returns a filtered list of events specified by type from history.
+
+        Parameters
+        ----------
+        event_type : str
+            The event type to be returned.
+
+        Returns
+        -------
+        events : list
+            List of event objects of the specified type.
+
+        """
+        out = []
+        for e in self.events_list:
+            if e.event_type == event_type:
+                out.append(e)
+        return out
+
+    def get_data_axes(self,
+                      x_name: str,
+                      y_name: Optional[str] = None,
+                      event_type: Optional[str] = None,
+                      ):
+        """
+        Returns filtered lists of the data axes as specified from
+        event type in history.
+
+        Parameters
+        ----------
+        x_name : str
+            Name of the first axis to isolate.
+        y_name : str, optional
+            Name of the second axis to isolate.
+        event_type : str, optional
+            Filter by event type. For instance, "state" exists for both
+            waterPresent and objectPresent event types.
+
+        Returns
+        -------
+        x_axis : list
+            List of values on the first axis.
+        y_axis : list
+            List of values on the second axis.
+
+        """
+
+        x_axis = []
+        y_axis = []
+        for e in self.events_list:
+            # Skip event if event_type mismatch.
+            if event_type is not None and event_type != e.event_type:
+                continue
+
+            # Tests passed, append timestamp and y-axis.
+            x_axis.append(getattr(e.data, x_name))
+            if y_name is not None:
+                y_axis.append(getattr(e.data, y_name))
+
+        if y_name is not None:
+            return x_axis, y_axis
+        else:
+            return x_axis

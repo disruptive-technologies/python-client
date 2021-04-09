@@ -22,7 +22,7 @@ copyright = '2021, Disruptive Technologies Research AS'
 author = 'Disruptive Technologies Research AS'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = '0.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -33,6 +33,7 @@ release = '0.1.0'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
+    'sphinx_autodoc_typehints',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

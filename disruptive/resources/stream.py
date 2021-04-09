@@ -44,6 +44,11 @@ class Stream():
         stream : Generator
             A python Generator type that yields each new event in the stream.
 
+        Examples
+        --------
+        >>> for event in dt.Stream.device(project_id, device_id):
+        ...     print(event)
+
         """
 
         # Construct URL.
@@ -96,6 +101,11 @@ class Stream():
         -------
         stream : Generator
             A python Generator type that yields each new event in the stream.
+
+        Examples
+        --------
+        >>> for event in dt.Stream.project(project_id):
+        ...     print(event)
 
         """
 
