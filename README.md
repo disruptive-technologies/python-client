@@ -6,7 +6,8 @@
 
 ## Documentation
 
-TBA
+- [Package Documentation](https://developer.disruptive-technologies.com/api/libraries/python/)
+- [Developer Documentation](https://developer.disruptive-technologies.com/docs/)
 
 ## Installation
 
@@ -26,18 +27,18 @@ pip install .
 
 - Python 3.7+
 
-## Example Usage
+## Authentication
 
-Authenticate the library using [Service Account](https://developer.disruptive-technologies.com/docs/service-accounts/creating-a-service-account) credentials by setting `dt.auth`:
+All methods in the package can be authenticated using Service Account credentials by setting `disruptive.auth`:
 
 ```python
 import disruptive as dt
 dt.auth = dt.Auth.serviceaccount(key_id, secret, email)
 ```
 
-Provided the account has sufficient [access rights](https://developer.disruptive-technologies.com/docs/service-accounts/managing-access-rights), the various resource methods can now be utilized.
+# Usage
 
-The following example showcases a few available methods.
+The following snippet showcases a few available methods.
 
 ```python
 # Fetch a specified temperature sensor from a project.
@@ -62,27 +63,6 @@ events = dt.EventHistory.list_events(
 for new_event in dt.Stream.device(sensor.project_id, sensor.id):
     # Print the data in new events as they arrive.
     print(new_event.data)
-```
-
-## Authentication Override
-
-While it is most convenient to authenticate the whole package at once, if a method is provided with an Auth object, this will take priority.
-
-```python
-import disruptive as dt
-
-# Package-wide authentication.
-dt.auth = dt.Auth.serviceaccount(key_id_1, email_1, secret_1)
-
-# Authenticate the call using a different serviceaccount.
-members = dt.Project.list_members(
-    project_id,
-    auth=dt.Auth.serviceaccount(
-        key_id_2,
-        secret_2,
-        email_2,
-    ),
-)
 ```
 
 ## Development
