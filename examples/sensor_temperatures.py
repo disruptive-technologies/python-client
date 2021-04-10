@@ -2,9 +2,6 @@
 import os
 from datetime import datetime, timedelta
 
-# Third party imports.
-import matplotlib.pyplot as plt
-
 # Import disruptive package.
 import disruptive as dt
 
@@ -37,12 +34,5 @@ for sensor in temp_sensors:
         sensor.id, len(history.events_list)
     ))
 
-    # Isolate the timestamp- and temperature data axes and superimpose on plot.
+    # Isolate timeaxis and temperature data which can be plotted directly.
     timeaxis, temperature = history.get_data_axes('timestamp', 'temperature')
-    plt.plot(timeaxis, temperature, label=sensor.id)
-
-# Generated the plot.
-plt.legend()
-plt.xlabel('Timestamp')
-plt.ylabel('Temperature [C]')
-plt.show()
