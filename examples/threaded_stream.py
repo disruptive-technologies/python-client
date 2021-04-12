@@ -21,7 +21,7 @@ dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 
 
 # Function which will be the target for our thread.
-def stream_worker(project_id):
+def stream_worker(project_id: str):
     # Create stream generator
     for new_event in dt.Stream.project(project_id):
         # When a new event arrives, lock buffer before writing.
@@ -34,7 +34,7 @@ def stream_worker(project_id):
 
 
 # Initialize the stream buffer list where we will store events.
-event_buffer = []
+event_buffer: list = []
 
 # Use locking to avoid corrupting data by writing simultaneously.
 buffer_lock = threading.Lock()
