@@ -59,12 +59,36 @@ def generic_request(method: str, url: str, **kwargs):
     data = kwargs['data'] if 'data' in kwargs else None
     if 'request_timeout' in kwargs:
         request_timeout = kwargs['request_timeout']
+        if request_timeout <= 0:
+            raise dterrors.ConfigurationError(
+                'Configuration parameter request_timeout has value {}, but '
+                'must be float greater than 0.'.format(request_timeout)
+            )
     else:
         request_timeout = dt.request_timeout
     if 'request_retries' in kwargs:
         request_retries = kwargs['request_retries']
+        if request_retries <= 0:
+            raise dterrors.ConfigurationError(
+                'Configuration parameter request_retries has value {}, but '
+                'must be integer greater than 0.'.format(request_retries)
+            )
     else:
         request_retries = dt.request_retries
+
+    # Check if the url is explicitly overriden by a user.
+    if 'api_url' in kwargs:
+        url = kwargs['api_url'] + url[len(dt.api_url)+1:]
+    elif 'emulator_url' in kwargs:
+        url = kwargs['emulator_url'] + url[len(dt.emulator_url)+1:]
+    elif 'auth_url' in kwargs:
+        url = kwargs['auth_url'] + url[len(dt.auth_url)+1:]
+
+    # Check if log is explicitly overriden by a user.
+    if 'log' in kwargs:
+        log_override = kwargs['log']
+    else:
+        log_override = dt.log
 
     # If this is the first recursive depth, retry counter is set to 1.
     # Adding it to kwargs like this is maybe a little weird, but is done as
@@ -76,14 +100,15 @@ def generic_request(method: str, url: str, **kwargs):
 
     # Add authorization header to request except when explicitly told not to.
     if 'skip_auth' not in kwargs or kwargs['skip_auth'] is False:
-        # If provided, override package-wide auth with argument.
+        # If provided, override the package-wide auth with provided object.
         if 'auth' in kwargs:
             headers['Authorization'] = kwargs['auth'].get_token()
+        # If not, use package-wide auth object.
         else:
             headers['Authorization'] = dt.auth.get_token()
 
     # Send request.
-    dtlog.log('Request [{}] to {}.'.format(method, url))
+    dtlog.log('Request [{}] to {}.'.format(method, url), override=log_override)
     response = __send_request(
         method=method,
         url=url,
@@ -93,6 +118,9 @@ def generic_request(method: str, url: str, **kwargs):
         data=data,
         timeout=request_timeout,
     )
+    dtlog.log('Response [{}].'.format(
+        response.status_code
+    ), override=log_override)
 
     # Parse errors.
     # If there is any hope at all that a retry might resolve the error,
@@ -107,8 +135,8 @@ def generic_request(method: str, url: str, **kwargs):
 
         dtlog.log("Got error {}. Will retry up to {} more times".format(
             error,
-            dt.request_retries - kwargs['retry_count']
-        ))
+            dt.request_retries - kwargs['retry_count'],
+        ), override=log_override)
 
         # Sleep if necessary.
         if retry_after is not None:
@@ -251,7 +279,7 @@ def __send_request(method: str,
             dict(response.headers),
         )
     except requests.exceptions.RequestException as e:
-        res = DTResponse({}, 0, {}, caught_error=e)
+        res = DTResponse({}, None, {}, caught_error=e)
     except ValueError:
         # Requests' .json() method fails when no json is returned (code 405).
         res = DTResponse({}, response.status_code, dict(response.headers))
