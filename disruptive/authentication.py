@@ -140,12 +140,12 @@ class Auth():
 
     def _has_expired(self) -> bool:
         """
-        Raises an Unauthenticated error with some added information.
+        Raises an Unauthorized error with some added information.
         If this function is called, the project has not yet been
         authenticated, and the user should be reminded to do so.
 
         """
-        raise dterrors.Unauthenticated(
+        raise dterrors.Unauthorized(
             'No authentication method has been set.\n'
             'Package-wide authentication can be set by:'
             + '\n>>> import disruptive as dt'
