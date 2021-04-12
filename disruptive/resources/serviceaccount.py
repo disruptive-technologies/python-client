@@ -19,7 +19,7 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    id : str
+    serviceaccount_id : str
         Unique serviceaccount ID.
     email : str
         Unique serviceaccount email.
@@ -49,7 +49,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, serviceaccount)
 
         # Unpack attributes from dictionary.
-        self.id = serviceaccount['name'].split('/')[-1]
+        self.serviceaccount_id = serviceaccount['name'].split('/')[-1]
         self.email = serviceaccount['email']
         self.display_name = serviceaccount['displayName']
         self.basic_auth = serviceaccount['enableBasicAuth']
@@ -475,7 +475,7 @@ class Key(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    id : str
+    key_id : str
         Unique key ID.
     secret : str, None
         If the Key object was constructed from a newly created key, i.e. from
@@ -503,7 +503,7 @@ class Key(dtoutputs.OutputBase):
         self.secret = None
 
         # Unpack attributes from dictionary.
-        self.id = key['id']
+        self.key_id = key['id']
         self.create_time = dttrans.to_datetime(key['createTime'])
         if 'secret' in key:
             self.secret = key['secret']

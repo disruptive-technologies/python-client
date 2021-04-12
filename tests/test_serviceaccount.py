@@ -19,7 +19,7 @@ class TestServiceAccount():
         )
 
         # Assert attributes unpacked correctly.
-        assert s.id == res['name'].split('/')[-1]
+        assert s.serviceaccount_id == res['name'].split('/')[-1]
         assert s.email == res['email']
         assert s.display_name == res['displayName']
         assert s.basic_auth == res['enableBasicAuth']
@@ -154,7 +154,7 @@ class TestServiceAccount():
         )
 
         # Assert attributes unpacked correctly.
-        assert k.id == res['name'].split('/')[-1]
+        assert k.key_id == res['name'].split('/')[-1]
         assert k.create_time == dttrans.to_datetime(res['createTime'])
         assert k.secret is None
 

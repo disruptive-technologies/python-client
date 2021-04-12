@@ -42,7 +42,7 @@ The following snippet showcases a few available methods.
 
 ```python
 # Fetch a specified temperature sensor from a project.
-sensor = dt.Device.get_device(project_id='...', device_id='...')
+sensor = dt.Device.get_device(project_id, device_id)
 
 # Set a label on the fetched device.
 dt.Device.set_label(
@@ -55,12 +55,12 @@ dt.Device.set_label(
 # Get historic touch- and temperature events the last 24h.
 events = dt.EventHistory.list_events(
     sensor.project_id,
-    sensor.id,
+    sensor.device_id,
     event_types=['touch', 'temperature'],
 )
 
 # Set up a real-time event stream for the sensor.
-for new_event in dt.Stream.device(sensor.project_id, sensor.id):
+for new_event in dt.Stream.device(sensor.project_id, sensor.device_id):
     # Print the data in new events as they arrive.
     print(new_event.data)
 ```

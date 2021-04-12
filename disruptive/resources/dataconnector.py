@@ -19,11 +19,11 @@ class DataConnector(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    id : str
+    dataconnector_id : str
         Unique dataconnector ID.
     display_name : str
         The provided display name.
-    type : str
+    dataconnector_type : str
         Dataconnector type. Currently only HTTP_PUSH is available.
     status : str
         Whether the dataconnector is ACTIVE, USER_DISABLED, or SYSTEM_DISABLED.
@@ -46,8 +46,8 @@ class DataConnector(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, dataconnector)
 
         # Unpack attributes from dictionary.
-        self.id = dataconnector['name'].split('/')[-1]
-        self.type = dataconnector['type']
+        self.dataconnector_id = dataconnector['name'].split('/')[-1]
+        self.dataconnector_type = dataconnector['type']
         self.status = dataconnector['status']
         self.display_name = dataconnector['displayName']
 

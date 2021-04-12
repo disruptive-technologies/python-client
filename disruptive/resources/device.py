@@ -21,7 +21,7 @@ class Device(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    id : str
+    device_id : str
         Unique device ID.
     project_id : str
         Project in which the device resides.
@@ -52,7 +52,7 @@ class Device(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, device)
 
         # Unpack attributes from dictionary.
-        self.id = device['name'].split('/')[-1]
+        self.device_id = device['name'].split('/')[-1]
         self.project_id = device['name'].split('/')[1]
         self.type = device['type']
         self.labels = device['labels']

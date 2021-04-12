@@ -23,15 +23,15 @@ for sensor in temp_sensors:
     # Fetch temperature events over the last 7 days.
     history = dt.EventHistory.list_events(
         project_id=sensor.project_id,
-        device_id=sensor.id,
+        device_id=sensor.device_id,
         event_types=[dt.EventTypes.temperature],
         start_time=datetime.today()-timedelta(days=7),
     )
 
     # Print how many events were fetched.
     print('{}: {} events fetched.'.format(
-        sensor.id, len(history.events_list)
+        sensor.device_id, len(history.events_list)
     ))
 
     # Isolate timeaxis and temperature data which can be plotted directly.
-    timeaxis, temperature = history.get_data_axes('timestamp', 'temperature')
+    timeaxis, temperature = history.get_data_axes('timestamp', 'celsius')

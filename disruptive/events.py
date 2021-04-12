@@ -769,8 +769,8 @@ class NetworkStatus(_EventData):
             data['cloud_connectors'] = []
             for ccon in self.cloud_connectors:
                 ccon_data: dict = dict()
-                if ccon.id is not None:
-                    ccon_data['id'] = ccon.id
+                if ccon.cloudconnector_id is not None:
+                    ccon_data['id'] = ccon.cloudconnector_id
                 if ccon.signal_strength is not None:
                     ccon_data['signalStrength'] = ccon.signal_strength
                 if len(ccon_data) > 0:
@@ -784,7 +784,7 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    id : str
+    cloudconnector_id : str
         Cloud Connector identifier.
     signal_strength : int
         The percentage signal strength (0% to 100%) between
@@ -796,7 +796,7 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
     """
 
     def __init__(self,
-                 cloud_connector_id: Optional[str] = None,
+                 cloudconnector_id: Optional[str] = None,
                  signal_strength: Optional[int] = None,
                  rssi: Optional[int] = None,
                  ):
@@ -821,7 +821,7 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, {})
 
         # Unpack attributes.
-        self.id = cloud_connector_id
+        self.cloudconnector_id = cloudconnector_id
         self.signal_strength = signal_strength
         self.rssi = rssi
 
@@ -844,7 +844,7 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            cloud_connector_id=data['id'],
+            cloudconnector_id=data['id'],
             signal_strength=data['signalStrength'],
             rssi=data['rssi'],
         )
@@ -1268,9 +1268,9 @@ class Event(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    id : str
+    event_id : str
         Unique event ID.
-    type : str
+    event_type : str
         Event type.
     device_id : str
         Unique ID of the source device.
@@ -1286,7 +1286,7 @@ class Event(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, event)
 
         # Unpack attributes from dictionary.
-        self.id = event['eventId']
+        self.event_id = event['eventId']
         self.event_type = event['eventType']
         self.device_id = event['targetName'].split('/')[-1]
         self.project_id = event['targetName'].split('/')[1]
