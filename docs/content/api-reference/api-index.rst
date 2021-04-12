@@ -23,3 +23,4 @@ The examples provided with methods in the following modules assume that the disr
    resources/resources
    events
    exceptions
+   configuration
