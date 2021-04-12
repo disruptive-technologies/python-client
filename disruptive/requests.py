@@ -239,7 +239,7 @@ def stream(url: str, **kwargs):
             break
 
         except Exception as e:
-            dtlog.log(e)
+            dtlog.log(str(e))
             # Print the error and try again up to max_request_retries.
             if nth_retry < request_retries:
                 dtlog.log('Connection lost. Retry {}/{}.'.format(
