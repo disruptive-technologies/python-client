@@ -36,7 +36,7 @@ import disruptive as dt
 dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 ```
 
-# Usage
+## Usage
 
 The following snippet showcases a few available methods.
 
@@ -64,6 +64,9 @@ for new_event in dt.Stream.device(sensor.project_id, sensor.device_id):
     # Print the data in new events as they arrive.
     print(new_event.data)
 ```
+
+## Exceptions
+If a request is unsuccessful or has been provided with invalid parameters, an exception is raised. A list of available exceptions are available in the API Reference.
 
 ## Development
 
