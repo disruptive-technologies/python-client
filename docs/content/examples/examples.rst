@@ -9,3 +9,4 @@ Examples
    
    get-device
    plot-temperatures
+   threaded-stream

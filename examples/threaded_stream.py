@@ -1,8 +1,6 @@
-# This exampel shows how one can use the built-in multiprocessing
-# package to initialize a stream in a separate thread where it
-# can sit and listen for events while we do other things in the code.
-# This is useful as we often don't want to have the main parts of our
-# program inside the stream generator.
+# This examples shows how one can use the built-in `threading` package to
+# stream events in a separate thread where a buffer list is appended as new
+# events arrive independently of the main loop.
 
 # Standard library imports.
 import os
@@ -22,11 +20,11 @@ project_id = os.environ.get('DT_PROJECT_ID', '')
 dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 
 
-# Function that starts the stream generator we put in a separate thread.
+# Function which will be the target for our thread.
 def stream_worker(project_id):
     # Create stream generator
     for new_event in dt.Stream.project(project_id):
-        # When a new event arrives, lock the event_buffer before writing.
+        # When a new event arrives, lock buffer before writing.
         print('[Thread] New Event')
         with buffer_lock:
             print('\t- locked')
@@ -38,7 +36,7 @@ def stream_worker(project_id):
 # Initialize the stream buffer list where we will store events.
 event_buffer = []
 
-# Implement locking to avoid corrupting data by writing simultaneously.
+# Use locking to avoid corrupting data by writing simultaneously.
 buffer_lock = threading.Lock()
 
 # Start the stream worker in a separate thread.
@@ -48,17 +46,17 @@ t = threading.Thread(
 )
 t.start()
 
-# Do something else while stream is running in the background, here mocked as
-# an infinite while loop that prints and trims the buffer every 5 second.
+# Do something else while stream is running in the background.
+# Here we print and trim the buffer length every 5 second.
 while True:
     # Print length of the buffer.
     n_events = len(event_buffer)
-    print('[Main] Buffer length: {}/15. Popping {} oldest events.'.format(
+    print('[Main] Length: {}/15. Popping {} events.'.format(
         n_events,
         -1*(min(0, 15-n_events)),
     ))
 
-    # If there are more than 15 events in the buffer, drop the oldest ones.
+    # Pop older events until buffer is no longer than 15.
     while len(event_buffer) > 15:
         print('\t- pop')
         event_buffer.pop(0)
