@@ -19,7 +19,7 @@ Full Example
    import disruptive as dt
    
    # Authenticate the package using serviceaccount credentials.
-   dt.auth = dt.Auth.serviceaccount(
+   dt.default_auth = dt.Auth.serviceaccount(
        key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', ''),
        secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET', ''),
        email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', ''),
@@ -67,12 +67,12 @@ Environment variables are used for both fetching credentials and project ID. The
    # Import disruptive package.
    import disruptive as dt
 
-Using a Service Account's credentials, all endpoints in the package can be authenticated at once by updating the :code:`dt.auth` variable with an Auth object.
+Using a Service Account's credentials, all endpoints in the package can be authenticated at once by updating the :code:`dt.default_auth` variable with an Auth object.
 
 .. code-block:: python
 
    # Authenticate the package using serviceaccount credentials.
-   dt.auth = dt.Auth.serviceaccount(
+   dt.default_auth = dt.Auth.serviceaccount(
        key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', ''),
        secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET', ''),
        email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', ''),

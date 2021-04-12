@@ -29,11 +29,11 @@ pip install .
 
 ## Authentication
 
-All methods in the package can be authenticated using Service Account credentials by setting `disruptive.auth`:
+All methods in the package can be authenticated using Service Account credentials by setting `disruptive.default_auth` with the following method:
 
 ```python
 import disruptive as dt
-dt.auth = dt.Auth.serviceaccount(key_id, secret, email)
+dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 ```
 
 # Usage

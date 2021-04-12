@@ -2,18 +2,15 @@
 API-Reference
 *************
 
-The examples provided with methods in the following modules assume that the disruptive package has been imported and authenticated globally.
+Examples provided with the various API methods assumes the package has already been authenticated.
 
 .. code-block:: python
 
    # Import disruptive package.
    import disruptive as dt
 
-   # Authenticate globally using either OAuth (recommended) ...
-   dt.auth = dt.OAuth(key_id, secret, email)
-
-   # ... or BasicAuth
-   dt.auth = dt.BasicAuth(key_id, secret)
+   # Authenticate all API methods in package at once.
+   dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 
 .. toctree::
    :maxdepth: 4

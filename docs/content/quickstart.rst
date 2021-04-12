@@ -16,15 +16,15 @@ Python 3.7+ is currently supported.
 
 Authentication
 ==============
-Most of the provided functionality requires authentication to the API. Using Service Account credentials, the entire package can be authenticated at once with the following code.
+Most of the provided functionality requires authentication to the API. Using Service Account credentials, the entire package can be authenticated at once.
 
 .. code-block:: python
 
    # Import the disruptive package.
    import disruptive as dt
 
-   # Set global authentication variable.
-   dt.auth = dt.Auth.serviceaccount(key_id, secret, email)
+   # Authenticate all API methods in package at once.
+   dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 
 See the :ref:`Authentication` section for more details.
 
@@ -35,6 +35,6 @@ Assuming you've already authenticated, here is a few example of how to call vari
 .. code-block:: python
 
    # Fetch devices from endpoint.
-   devices = dt.Device.list(project_id)
+   devices = dt.Device.list_devices(project_id)
 
 See the :ref:`Examples` section for more in-depth usage.

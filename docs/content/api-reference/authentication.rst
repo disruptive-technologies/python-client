@@ -5,7 +5,7 @@ Authentication
 
 Most of the package functionality requires authentication towards the REST API.
 
-To authenticate the entire package at once, set the global variable :code:`dt.auth` with a :ref:`routine <routines>`:
+To authenticate the entire package at once, set the global variable :code:`dt.default_auth` with a :ref:`routine <routines>`:
 
 .. code-block:: python
 
@@ -13,7 +13,7 @@ To authenticate the entire package at once, set the global variable :code:`dt.au
    import disruptive as dt
 
    # Set package-wide authentication.
-   dt.auth = dt.Auth.serviceaccount(key_id, secret, email)
+   dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 
 Alternatively, each API method can be individually authenticated:
 

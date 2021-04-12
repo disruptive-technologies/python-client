@@ -41,7 +41,7 @@ def generic_request(method: str, url: str, **kwargs):
         Overwrites dt.request_retries settings if provided.
     auth : Auth, optional
         Object for authenticating the REST API.
-        Overwrites dt.auth if provided.
+        Overwrites dt.default_auth if provided.
     skip_auth : bool
         If provided with a value of True, excludes authentication header.
 
@@ -105,7 +105,7 @@ def generic_request(method: str, url: str, **kwargs):
             headers['Authorization'] = kwargs['auth'].get_token()
         # If not, use package-wide auth object.
         else:
-            headers['Authorization'] = dt.auth.get_token()
+            headers['Authorization'] = dt.default_auth.get_token()
 
     # Send request.
     dtlog.log('Request [{}] to {}.'.format(method, url), override=log_override)
@@ -199,7 +199,7 @@ def stream(url: str, **kwargs):
     if 'auth' in kwargs:
         headers['Authorization'] = kwargs['auth'].get_token()
     else:
-        headers['Authorization'] = dt.auth.get_token()
+        headers['Authorization'] = dt.default_auth.get_token()
 
     # Set up a simple catch-all retry policy.
     nth_retry = 0

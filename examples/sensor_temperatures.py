@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import disruptive as dt
 
 # Authenticate the package using serviceaccount credentials.
-dt.auth = dt.Auth.serviceaccount(
+dt.default_auth = dt.Auth.serviceaccount(
     key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', ''),
     secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET', ''),
     email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', ''),
@@ -14,8 +14,7 @@ dt.auth = dt.Auth.serviceaccount(
 
 # Fetch all temperature sensors in a project.
 temp_sensors = dt.Device.list_devices(
-    # project_id=os.environ.get('DT_PROJECT_ID', ''),
-    project_id='c10humqoss90036gu530',
+    project_id=os.environ.get('DT_PROJECT_ID', ''),
     device_types=['temperature'],
 )
 

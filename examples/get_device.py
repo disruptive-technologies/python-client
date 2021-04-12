@@ -5,7 +5,7 @@ import os
 import disruptive as dt
 
 # Authenticate the package using serviceaccount credentials.
-dt.auth = dt.Auth.serviceaccount(
+dt.default_auth = dt.Auth.serviceaccount(
     key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', ''),
     secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET', ''),
     email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', ''),
