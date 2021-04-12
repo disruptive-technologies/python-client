@@ -232,19 +232,6 @@ class Emulator():
         url = disruptive.emulator_url
         url += '/projects/{}/devices/{}:publish'.format(project_id, device_id)
 
-        print()
-        print('----')
-        print('Data')
-        print(data)
-
-        body = {data.event_type: data._raw}
-
-        print()
-        print('----')
-        print('Body')
-        import json
-        print(json.dumps(body, indent=4))
-
         # Send POST request, but return nothing.
         dtrequests.generic_request(
             method='POST',
