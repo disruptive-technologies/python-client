@@ -183,9 +183,29 @@ def auto_paginated_list(url: str,
 
 
 def stream(url: str, **kwargs):
-    # Set ping parameters.
-    ping_interval = 10
-    ping_jitter = 2
+    # Set ping constants.
+    PING_INTERVAL = 10
+    PING_JITTER = 2
+
+    # Set error variable that if not None, raise it.
+    error = None
+
+    def stream_retry_logic(nth_retry):
+        # Print the error and try again up to max_request_retries.
+        if nth_retry < request_retries:
+            dtlog.log('Connection lost. Retry {}/{}.'.format(
+                nth_retry+1,
+                request_retries,
+            ))
+
+            # Exponential backoff in sleep time.
+            time.sleep(2**nth_retry)
+
+            return nth_retry + 1, None
+        else:
+            return nth_retry, dterrors.ConnectionError(
+                'Stream retry attempts has been exhausted.'
+            )
 
     # Unpack kwargs.
     params = kwargs['params'] if 'params' in kwargs else {}
@@ -194,6 +214,9 @@ def stream(url: str, **kwargs):
         request_retries = kwargs['request_retries']
     else:
         request_retries = dt.request_retries
+
+    # Add ping parameter to dictionary.
+    params['ping_interval'] = str(PING_INTERVAL) + 's'
 
     # If provided, override package-wide auth with argument.
     if 'auth' in kwargs:
@@ -204,6 +227,10 @@ def stream(url: str, **kwargs):
     # Set up a simple catch-all retry policy.
     nth_retry = 0
     while nth_retry <= request_retries:
+        # Check if error is set.
+        if error is not None:
+            raise error
+
         try:
             # Set up a stream connection.
             # Connection will timeout and reconnect if no single event
@@ -212,7 +239,7 @@ def stream(url: str, **kwargs):
             stream = requests.get(
                 url=url,
                 stream=True,
-                timeout=ping_interval + ping_jitter,
+                timeout=PING_INTERVAL + PING_JITTER,
                 params=params,
                 headers=headers,
             )
@@ -230,28 +257,20 @@ def stream(url: str, **kwargs):
                 # Check for ping event.
                 event = payload['result']['event']
                 if event['eventType'] == 'ping':
-                    dtlog.log('Got ping')
+                    dtlog.log('Ping received.')
                     continue
 
+                # Yield event to generator.
                 yield event
 
         except KeyboardInterrupt:
             break
 
-        except Exception as e:
-            dtlog.log(str(e))
-            # Print the error and try again up to max_request_retries.
-            if nth_retry < request_retries:
-                dtlog.log('Connection lost. Retry {}/{}.'.format(
-                    nth_retry+1,
-                    request_retries,
-                ))
+        except requests.exceptions.ReadTimeout:
+            nth_retry, error = stream_retry_logic(nth_retry)
 
-                # Exponential backoff in sleep time.
-                time.sleep(2**nth_retry)
-                nth_retry += 1
-            else:
-                break
+        except requests.exceptions.ConnectionError:
+            nth_retry, error = stream_retry_logic(nth_retry)
 
 
 def __send_request(method: str,
