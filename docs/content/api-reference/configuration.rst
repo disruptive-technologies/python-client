@@ -1,3 +1,5 @@
+.. _configuration:
+
 Configuration
 =============
 While this package does not require any configuration from the user, certain variables have been explicitly exposed and can be changed to alter different behaviors should one be inclined.
@@ -5,6 +7,8 @@ While this package does not require any configuration from the user, certain var
 Package-Wide
 ------------
 The following snippet shows the various variables that can be configured and their default values. Setting a new value directly on the package itself, as shown below, will alter the behavior for all methods in the package at once.
+
+.. _config params:
 
 .. code-block:: python
 

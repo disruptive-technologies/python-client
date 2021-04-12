@@ -21,7 +21,7 @@ class TestResponseStatusCodes():
         request_mock.status_code = 401
 
         # Call the service, which will send a request to the server.
-        with pytest.raises(errors.Unauthenticated):
+        with pytest.raises(errors.Unauthorized):
             dt.Device.get_device('', '')
 
     def test_error_code_403(self, request_mock):
