@@ -8,7 +8,7 @@ class DTApiError(Exception):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
 
         # Call the base class constructor.
         super().__init__(message)
@@ -20,7 +20,7 @@ class BadRequest(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -30,7 +30,7 @@ class Unauthenticated(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -40,7 +40,7 @@ class Forbidden(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -50,7 +50,7 @@ class NotFound(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -60,7 +60,7 @@ class MethodNotAllowed(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -70,7 +70,7 @@ class Conflict(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -83,7 +83,7 @@ class TooManyRequests(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -93,7 +93,7 @@ class InternalServerError(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -103,7 +103,7 @@ class ServiceUnavailable(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -113,7 +113,7 @@ class ReadTimeout(Exception):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -123,7 +123,7 @@ class ConnectionError(Exception):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
         super().__init__(message)
 
 
@@ -133,7 +133,17 @@ class FormatError(Exception):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message=''):
+        super().__init__(message)
+
+
+class ConfigurationError(Exception):
+    """
+    Some configuration parameter is invalid.
+
+    """
+
+    def __init__(self, message=''):
         super().__init__(message)
 
 
