@@ -183,15 +183,17 @@ class Temperature(_EventData):
 
     Attributes
     ----------
-    temperature : float
+    celsius : float
         Temperature value in Celsius.
+    fahrenheit : float
+        Temperature value in Fahrenheit.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
 
     def __init__(self,
-                 temperature: Optional[float] = None,
+                 celsius: Optional[float] = None,
                  timestamp: Optional[datetime | str] = None,
                  ) -> None:
         """
@@ -200,7 +202,7 @@ class Temperature(_EventData):
 
         Parameters
         ----------
-        temperature : float, optional
+        celsius : float, optional
             Temperature value in Celsius.
         timestamp : datetime, str, optional
             Timestamp of when the event was received by a Cloud Connector.
@@ -208,7 +210,8 @@ class Temperature(_EventData):
         """
 
         # Set parameter attributes.
-        self.temperature = temperature
+        self.celsius = celsius
+        self.fahrenheit = self.__celsius_to_fahrenheit(celsius)
         self.timestamp = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
@@ -233,7 +236,7 @@ class Temperature(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            temperature=data['value'],
+            celsius=data['value'],
             timestamp=data['updateTime'],
         )
 
@@ -244,11 +247,32 @@ class Temperature(_EventData):
 
     def __repack(self):
         data: dict = dict()
-        if self.temperature is not None:
-            data['value'] = self.temperature
+        if self.celsius is not None:
+            data['value'] = self.celsius
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
         return data
+
+    def __celsius_to_fahrenheit(self, celsius: Optional[float]):
+        """
+        Converts Celsius temperature value to Fahrenheit.
+
+        Parameters
+        ----------
+        celsius : float, None
+            Temperature value in Celsius.
+
+        Returns
+        -------
+        fahrenheit : float, None
+            Temperature value in Fahrenheit if Celsius is not None.
+
+        """
+
+        if celsius is None:
+            return None
+        else:
+            return (celsius * (9/5)) + 32
 
 
 class ObjectPresent(_EventData):
