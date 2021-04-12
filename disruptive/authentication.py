@@ -30,14 +30,12 @@ class Auth():
 
     """
 
-    def __init__(self, method: str, credentials: dict[str, str]) -> None:
+    def __init__(self, credentials: dict[str, str]) -> None:
         """
         Constructs the Auth object by validating and updating credentials.
 
         Parameters
         ----------
-        method : str
-            Authentication method chosen.
         credentials : dict[str, str]
             Credentials provided for authenticating with the chosen method.
 
@@ -51,7 +49,6 @@ class Auth():
         self.expiration = 0
 
         # Set arguments as attributes
-        self.method = method
         self.credentials = credentials
 
     @classmethod
@@ -85,7 +82,6 @@ class Auth():
 
         # Construct Auth object with method and credentials.
         obj = cls(
-            method='serviceaccount',
             credentials={
                 'key_id': key_id,
                 'secret': secret,
@@ -150,21 +146,11 @@ class Auth():
 
         """
         raise dterrors.Unauthenticated(
-            {
-                'code': None,
-                'error': 'No authentication method has been provided.',
-                'help': 'You can authenticate once for all endpoints:'
-                + '\n>>> import disruptive as dt'
-                + '\n>>> dt.auth = dt.Auth.serviceaccount'
-                + '(key_id, secret, email)'
-                + '\n\nOr authenticate each endpoint individually:'
-                + '\n>>> import disruptive as dt'
-                + '\n>>> dt.Resource.method(_, auth=dt.Auth.serviceaccount'
-                + '(key_id, secret, email))'
-                + '\n\nThe following authentication methods are available:'
-                + '\n>>> dt.Auth.serviceaccount'
-                + '(key_id, secret, email)'
-            }
+            'No authentication method has been set.\n'
+            'Package-wide authentication can be set by:'
+            + '\n>>> import disruptive as dt'
+            + '\n>>> dt.default_auth = dt.Auth.serviceaccount'
+            + '(key_id, secret, email)'
         )
 
     def refresh(self) -> None:
