@@ -6,7 +6,7 @@
 
 ## Documentation
 
-- [Package Documentation](https://developer.disruptive-technologies.com/api/libraries/python/)
+- [Python API Reference](https://developer.disruptive-technologies.com/api/libraries/python/)
 - [Developer Documentation](https://developer.disruptive-technologies.com/docs/)
 
 ## Installation
