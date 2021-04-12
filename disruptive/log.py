@@ -1,4 +1,5 @@
 # Standard library imports
+from datetime import datetime
 from typing import Optional
 
 # Project imports.
@@ -28,4 +29,7 @@ def log(msg: str, override: Optional[bool] = None) -> None:
         should_log = override
 
     if should_log:
-        print('[Disruptive]: {}'.format(msg))
+        print('[{}]: {}'.format(
+            datetime.now(),
+            msg,
+        ))
