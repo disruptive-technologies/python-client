@@ -8,6 +8,7 @@ import urllib.parse
 import jwt
 
 # Project imports
+import disruptive
 import disruptive.requests as dtrequests
 import disruptive.errors as dterrors
 
@@ -215,7 +216,7 @@ class Auth():
         """
 
         # Set access token URL.
-        token_url = 'https://identity.disruptive-technologies.com/oauth2/token'
+        token_url = disruptive.auth_url
 
         # Construct the JWT header.
         jwt_headers = {

@@ -1,3 +1,5 @@
+# Standard library imports
+from typing import Optional
 
 
 class DTResponse():
@@ -17,7 +19,7 @@ class DTResponse():
 
     def __init__(self,
                  data: dict,
-                 status_code: int,
+                 status_code: Optional[int],
                  headers: dict,
                  caught_error=None,
                  ) -> None:
