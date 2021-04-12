@@ -78,11 +78,11 @@ def generic_request(method: str, url: str, **kwargs):
 
     # Check if the url is explicitly overriden by a user.
     if 'api_url' in kwargs:
-        url = kwargs['api_url'] + url[len(dt.api_url)+1:]
+        url = kwargs['api_url'] + url[len(dt.api_url):]
     elif 'emulator_url' in kwargs:
-        url = kwargs['emulator_url'] + url[len(dt.emulator_url)+1:]
+        url = kwargs['emulator_url'] + url[len(dt.emulator_url):]
     elif 'auth_url' in kwargs:
-        url = kwargs['auth_url'] + url[len(dt.auth_url)+1:]
+        url = kwargs['auth_url'] + url[len(dt.auth_url):]
 
     # Check if log is explicitly overriden by a user.
     if 'log' in kwargs:

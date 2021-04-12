@@ -11,10 +11,11 @@ from disruptive.authentication import Auth  # noqa
 # auth = disruptive.Auth.serviceaccount(key_id, secret, email)
 #
 # Initialize package with unauthenticated object.
-auth = Auth(
-    method='unauthenticated',
-    credentials={},
-)
+auth = None
+# auth = Auth(
+#     method='unauthenticated',
+#     credentials={},
+# )
 
 # Resources.
 from disruptive.resources.device import Device  # noqa

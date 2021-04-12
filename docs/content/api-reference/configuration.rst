@@ -40,7 +40,7 @@ Each API method in the package can also be configured individually with the afor
        project_id,
        # The following configurations are specific for this call.
        log=False,
-       api_url='https://api.d21s.com/v2/',
+       api_url='https://api.d21s.com/v2',
        request_retries=3,
        request_timeout=3,
    )
