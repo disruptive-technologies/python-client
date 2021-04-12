@@ -34,10 +34,10 @@ log = False
 # REST API base URLs of which all endpoints are an expansion.
 api_url = 'https://api.disruptive-technologies.com/v2'
 emulator_url = 'https://emulator.disruptive-technologies.com/v2'
+auth_url = 'https://identity.disruptive-technologies.com/oauth2/token'
 
-# When streaming it is good practice to ping the connection periodically.
-# The ping interval is set in the initial request that establishes a TCP
-# connection. By including a timeout with some jitter, the connection will
-# automatically reconnect if a ping is not heard within the expected range.
+# If a request response contains an error for which a series of retries is
+# worth considering, these variable determine how long to wait without an
+# answer, and how many times the package should retry before raising an error.
 request_timeout = 3  # seconds
 request_retries = 3  # attempts
