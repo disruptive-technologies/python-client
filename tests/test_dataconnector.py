@@ -15,9 +15,15 @@ class TestDataconnector():
 
         # Assert attributes unpacked correctly.
         assert d.dataconnector_id == res['name'].split('/')[-1]
+        assert d.project_id == res['name'].split('/')[1]
         assert d.dataconnector_type == res['type']
         assert d.status == res['status']
         assert d.display_name == res['displayName']
+        assert d.url == res['httpConfig']['url']
+        assert d.signature_secret == res['httpConfig']['signatureSecret']
+        assert d.headers == res['httpConfig']['headers']
+        assert d.event_types == res['events']
+        assert d.labels == res['labels']
 
     def test_get_dataconnector(self, request_mock):
         # Update the response json with a mock dataconnector response.

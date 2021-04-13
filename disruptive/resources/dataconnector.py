@@ -21,12 +21,27 @@ class DataConnector(dtoutputs.OutputBase):
     ----------
     dataconnector_id : str
         Unique dataconnector ID.
+    project_id : str
+        Unique ID of the project where the dataconnector recides.
     display_name : str
         The provided display name.
     dataconnector_type : str
         Dataconnector type. Currently only HTTP_PUSH is available.
     status : str
         Whether the dataconnector is ACTIVE, USER_DISABLED, or SYSTEM_DISABLED.
+    url : str
+        Endpoint url to which events are forwarded.
+    signature_secret : str
+        If set, signs the forwaded payload to that the content and origin
+        can be verified at the receiving end.
+    headers : dict[str, str]
+        Headers included in the outgoing requests.
+    event_Types : list[str]
+        List of event types that should be forwarded.
+        If empty, all event types are forwarded.
+    labels : list[str]
+        Device labels are not included by default and will only be forwarded
+        with the event if the key is specified in this list.
 
     """
 
@@ -45,11 +60,19 @@ class DataConnector(dtoutputs.OutputBase):
         # Inherit from OutputBase parent.
         dtoutputs.OutputBase.__init__(self, dataconnector)
 
+        print(dataconnector)
+
         # Unpack attributes from dictionary.
         self.dataconnector_id = dataconnector['name'].split('/')[-1]
+        self.project_id = dataconnector['name'].split('/')[1]
         self.dataconnector_type = dataconnector['type']
         self.status = dataconnector['status']
         self.display_name = dataconnector['displayName']
+        self.url = dataconnector['httpConfig']['url']
+        self.signature_secret = dataconnector['httpConfig']['signatureSecret']
+        self.headers = dataconnector['httpConfig']['headers']
+        self.event_types = dataconnector['events']
+        self.labels = dataconnector['labels']
 
     @classmethod
     def get_dataconnector(cls,
