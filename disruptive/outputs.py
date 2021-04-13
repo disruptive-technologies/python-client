@@ -49,12 +49,12 @@ class OutputBase():
             if hasattr(val, '__dict__'):
                 # Class objects should be dumped recursively.
                 out.append('{}[{}] {}:'.format(ls, type(val).__name__, a))
-                self.__dump(out, val, level=level+2)
+                self.__dump(out, val, level=level+1)
 
             elif isinstance(val, list):
                 # Lists content should be iterated through.
                 out.append('{}[{}] {}:'.format(ls, type(val).__name__, a))
-                self.__dump_list(out, val, level+2)
+                self.__dump_list(out, val, level+1)
 
             else:
                 # Other types can be printed directly.
