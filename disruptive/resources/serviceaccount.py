@@ -4,7 +4,6 @@ from __future__ import annotations
 from typing import Optional
 
 # Project imports.
-import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
@@ -87,15 +86,13 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/serviceaccounts/{}'.format(
+        url = '/projects/{}/serviceaccounts/{}'.format(
             project_id,
             serviceaccount_id,
         )
 
         # Return ServiceAccount object of GET request response.
-        return cls(dtrequests.generic_request(
-            method='GET',
+        return cls(dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         ))
@@ -131,11 +128,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/serviceaccounts'.format(project_id)
+        url = '/projects/{}/serviceaccounts'.format(project_id)
 
         # Return list of ServiceAccount objects of paginated GET response.
-        service_accounts = dtrequests.auto_paginated_list(
+        service_accounts = dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='serviceAccounts',
             **kwargs,
@@ -177,8 +173,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/serviceaccounts'.format(project_id)
+        url = '/projects/{}/serviceaccounts'.format(project_id)
 
         # Construct body.
         body: dict = dict()
@@ -187,8 +182,7 @@ class ServiceAccount(dtoutputs.OutputBase):
             body['displayName'] = display_name
 
         # Return ServiceAccount object of GET request response.
-        return cls(dtrequests.generic_request(
-            method='POST',
+        return cls(dtrequests.DTRequest.post(
             url=url,
             body=body,
             **kwargs,
@@ -226,8 +220,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/serviceaccounts/{}'.format(
+        url = '/projects/{}/serviceaccounts/{}'.format(
             project_id,
             serviceaccount_id,
         )
@@ -240,8 +233,7 @@ class ServiceAccount(dtoutputs.OutputBase):
             body['enableBasicAuth'] = basic_auth
 
         # Return ServiceAccount object of GET request response.
-        return cls(dtrequests.generic_request(
-            method='PATCH',
+        return cls(dtrequests.DTRequest.patch(
             url=url,
             body=body,
             **kwargs,
@@ -273,15 +265,13 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/serviceaccounts/{}'.format(
+        url = '/projects/{}/serviceaccounts/{}'.format(
             project_id,
             serviceaccount_id,
         )
 
         # Send DELETE request, but return nothing.
-        dtrequests.generic_request(
-            method='DELETE',
+        dtrequests.DTRequest.delete(
             url=url,
             **kwargs,
         )
@@ -319,16 +309,14 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/serviceaccounts/{}/keys/{}'.format(
+        url = '/projects/{}/serviceaccounts/{}/keys/{}'.format(
             project_id,
             serviceaccount_id,
             key_id,
         )
 
         # Return Key object of GET request response.
-        return Key(dtrequests.generic_request(
-            method='GET',
+        return Key(dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         ))
@@ -365,14 +353,13 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/serviceaccounts/{}/keys'.format(
+        url = '/projects/{}/serviceaccounts/{}/keys'.format(
             project_id,
             serviceaccount_id,
         )
 
         # Return list of Key objects of paginated GET response.
-        keys = dtrequests.auto_paginated_list(
+        keys = dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='keys',
             **kwargs,
@@ -409,15 +396,13 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/serviceaccounts/{}/keys'.format(
+        url = '/projects/{}/serviceaccounts/{}/keys'.format(
             project_id,
             serviceaccount_id,
         )
 
         # Return Key object of POST request response.
-        response = dtrequests.generic_request(
-            method='POST',
+        response = dtrequests.DTRequest.post(
             url=url,
             **kwargs,
         )
@@ -451,16 +436,14 @@ class ServiceAccount(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/serviceaccounts/{}/keys/{}'.format(
+        url = '/projects/{}/serviceaccounts/{}/keys/{}'.format(
             project_id,
             serviceaccount_id,
             key_id,
         )
 
         # Send DELETE request, but return nothing.
-        dtrequests.generic_request(
-            method='DELETE',
+        dtrequests.DTRequest.delete(
             url=url,
             **kwargs,
         )

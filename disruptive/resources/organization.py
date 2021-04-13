@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 # Project imports.
-import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase, Member
 
@@ -68,12 +67,10 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/organizations/{}'.format(organization_id)
+        url = '/organizations/{}'.format(organization_id)
 
         # Return Organization object of GET request response.
-        return cls(dtrequests.generic_request(
-            method='GET',
+        return cls(dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         ))
@@ -106,8 +103,8 @@ class Organization(OutputBase):
         """
 
         # Return list of Organization objects of paginated GET response.
-        orgs = dtrequests.auto_paginated_list(
-            url=dt.api_url + '/organizations',
+        orgs = dtrequests.DTRequest.paginated_get(
+            url='/organizations',
             pagination_key='organizations',
             **kwargs,
         )
@@ -142,11 +139,10 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/organizations/{}/members'.format(organization_id)
+        url = '/organizations/{}/members'.format(organization_id)
 
         # Return list of Member objects of paginated GET response.
-        members = dtrequests.auto_paginated_list(
+        members = dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='members',
             **kwargs,
@@ -187,8 +183,7 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/organizations/{}/members'.format(organization_id)
+        url = '/organizations/{}/members'.format(organization_id)
 
         # Construct request body.
         body: dict = dict()
@@ -196,8 +191,7 @@ class Organization(OutputBase):
         body['email'] = email
 
         # Return Member object of POST request response.
-        return Member(dtrequests.generic_request(
-            method='POST',
+        return Member(dtrequests.DTRequest.post(
             url=url,
             body=body,
             **kwargs,
@@ -235,15 +229,13 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/organizations/{}/members/{}'.format(
+        url = '/organizations/{}/members/{}'.format(
             organization_id,
             member_id,
         )
 
         # Return Member object of GET request response.
-        return Member(dtrequests.generic_request(
-            method='GET',
+        return Member(dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         ))
@@ -275,15 +267,13 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/organizations/{}/members/{}'.format(
+        url = '/organizations/{}/members/{}'.format(
             organization_id,
             member_id,
         )
 
         # Send DELETE request, but return nothing.
-        dtrequests.generic_request(
-            method='DELETE',
+        dtrequests.DTRequest.delete(
             url=url,
             **kwargs,
         )
@@ -323,15 +313,13 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/organizations/{}/members/{}'.format(
+        url = '/organizations/{}/members/{}'.format(
             organization_id,
             member_id,
         ) + ':getInviteUrl'
 
         # Return url string in GET response.
-        return dtrequests.generic_request(
-            method='GET',
+        return dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         )['inviteUrl']
@@ -365,11 +353,10 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/organizations/{}/permissions'.format(organization_id)
+        url = '/organizations/{}/permissions'.format(organization_id)
 
         # Return list of permissions in GET response.
-        return dtrequests.auto_paginated_list(
+        return dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='permissions',
             **kwargs,

@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Generator, Optional
 
 # Project Imports.
-import disruptive as dt
+import disruptive.requests as dtrequests
 from disruptive.events import Event
 from disruptive.authentication import Auth
 
@@ -52,7 +52,7 @@ class Stream():
         """
 
         # Construct URL.
-        url = dt.api_url + '/projects/{}/devices/{}:stream'.format(
+        url = '/projects/{}/devices/{}:stream'.format(
             project_id,
             device_id
         )
@@ -63,7 +63,7 @@ class Stream():
             params['event_types'] = event_types
 
         # Relay generator output.
-        for event in dt.requests.stream(url, params=params, **kwargs):
+        for event in dtrequests.DTRequest.stream(url, params=params, **kwargs):
             yield Event(event)
 
     @staticmethod
@@ -121,6 +121,6 @@ class Stream():
             params['event_types'] = event_types
 
         # Relay generator output.
-        url = dt.api_url + '/projects/{}/devices:stream'.format(project_id)
-        for event in dt.requests.stream(url, params=params):
+        url = '/projects/{}/devices:stream'.format(project_id)
+        for event in dtrequests.DTRequest.stream(url, params=params):
             yield Event(event)

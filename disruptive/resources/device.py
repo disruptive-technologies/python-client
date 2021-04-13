@@ -97,15 +97,10 @@ class Device(dtoutputs.OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/projects/{}/devices/{}'.format(project_id, device_id)
+        url = '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Return Device object of GET request response.
-        return cls(dtrequests.generic_request(
-            method='GET',
-            url=url,
-            **kwargs,
-        ))
+        return cls(dtrequests.DTRequest.get(url, **kwargs))
 
     @classmethod
     def list_devices(cls,
@@ -168,8 +163,8 @@ class Device(dtoutputs.OutputBase):
             params['order_by'] = order_by
 
         # Return list of Device objects of paginated GET response.
-        devices = dtrequests.auto_paginated_list(
-            url=dt.api_url + '/projects/{}/devices'.format(project_id),
+        devices = dtrequests.DTRequest.paginated_get(
+            url='/projects/{}/devices'.format(project_id),
             pagination_key='devices',
             params=params,
             **kwargs,
@@ -225,16 +220,10 @@ class Device(dtoutputs.OutputBase):
             body['removeLabels'] = remove_labels
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/devices:batchUpdate'.format(project_id)
+        url = '/projects/{}/devices:batchUpdate'.format(project_id)
 
         # Sent POST request, but return nothing.
-        dtrequests.generic_request(
-            method='POST',
-            url=url,
-            body=body,
-            **kwargs,
-        )
+        dtrequests.DTRequest.post(url, body=body, **kwargs)
 
     @staticmethod
     def set_label(project_id: str,
@@ -347,8 +336,7 @@ class Device(dtoutputs.OutputBase):
         }
 
         # Sent POST request, but return nothing.
-        dtrequests.generic_request(
-            method='POST',
+        dtrequests.DTRequest.post(
             url=dt.api_url + '/projects/{}/devices:transfer'.format(
                 target_project_id
             ),

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 # Project imports.
-import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase
 
@@ -74,9 +73,8 @@ class Role(OutputBase):
         """
 
         # Return list of Role objects.
-        return cls(dtrequests.generic_request(
-            method='GET',
-            url=dt.api_url + '/roles/' + role,
+        return cls(dtrequests.DTRequest.get(
+            url='/roles/' + role,
             **kwargs,
         ))
 
@@ -107,8 +105,8 @@ class Role(OutputBase):
         """
 
         # Return list of Role objects.
-        response = dtrequests.auto_paginated_list(
-            url=dt.api_url + '/roles',
+        response = dtrequests.DTRequest.paginated_get(
+            url='/roles',
             pagination_key='roles',
             **kwargs,
         )

@@ -5,7 +5,6 @@ from typing import Optional
 from datetime import datetime
 
 # Project imports.
-import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
@@ -85,8 +84,7 @@ class EventHistory(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/devices/{}/events'.format(project_id, device_id)
+        url = '/projects/{}/devices/{}/events'.format(project_id, device_id)
 
         # Construct parameters dictionary.
         params: dict = dict()
@@ -102,7 +100,7 @@ class EventHistory(dtoutputs.OutputBase):
             params['endTime'] = end_time_iso8601
 
         # Send paginated GET request.
-        res = dtrequests.auto_paginated_list(
+        res = dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='events',
             params=params,

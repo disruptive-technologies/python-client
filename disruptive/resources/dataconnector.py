@@ -4,7 +4,6 @@ from __future__ import annotations
 from typing import Optional
 
 # Project imports.
-import disruptive as dt
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
 from disruptive.outputs import Metric
@@ -105,13 +104,11 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/projects/{}/dataconnectors/{}'
+        url = '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
         # Return DataConnector object of GET request response.
-        return cls(dtrequests.generic_request(
-            method='GET',
+        return cls(dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         ))
@@ -144,8 +141,8 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Return list of DataConnector objects of paginated GET response.
-        dataconnectors = dtrequests.auto_paginated_list(
-            url=dt.api_url + '/projects/{}/dataconnectors'.format(project_id),
+        dataconnectors = dtrequests.DTRequest.paginated_get(
+            url='/projects/{}/dataconnectors'.format(project_id),
             pagination_key='dataConnectors',
             **kwargs,
         )
@@ -216,12 +213,10 @@ class DataConnector(dtoutputs.OutputBase):
             body['displayName'] = display_name
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/dataconnectors'.format(project_id)
+        url = '/projects/{}/dataconnectors'.format(project_id)
 
         # Return DataConnector object of POST request response.
-        return cls(dtrequests.generic_request(
-            method='POST',
+        return cls(dtrequests.DTRequest.post(
             url=url,
             body=body,
             **kwargs,
@@ -292,13 +287,11 @@ class DataConnector(dtoutputs.OutputBase):
             body['headers'] = headers
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/dataconnectors/{}'
+        url = '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
         # Return DataConnector object of PATCH request response.
-        return cls(dtrequests.generic_request(
-            method='PATCH',
+        return cls(dtrequests.DTRequest.patch(
             url=url,
             body=body,
             **kwargs,
@@ -330,13 +323,11 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/dataconnectors/{}'
+        url = '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
 
         # Send DELETE request, but return nothing.
-        dtrequests.generic_request(
-            method='DELETE',
+        dtrequests.DTRequest.delete(
             url=url,
             **kwargs,
         )
@@ -372,14 +363,12 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/dataconnectors/{}'
+        url = '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
         url += ':metrics'
 
         # Return Metric object of GET request response.
-        return Metric(dtrequests.generic_request(
-            method='GET',
+        return Metric(dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         ))
@@ -414,14 +403,12 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}/dataconnectors/{}'
+        url = '/projects/{}/dataconnectors/{}'
         url = url.format(project_id, dataconnector_id)
         url += ':sync'
 
         # Send POST request, but return nothing.
-        dtrequests.generic_request(
-            method='POST',
+        dtrequests.DTRequest.post(
             url=url,
             **kwargs,
         )
