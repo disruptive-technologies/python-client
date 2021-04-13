@@ -14,7 +14,7 @@ class RequestMock():
         self.headers = {}
 
         self.request_patcher = self._mocker.patch(
-            'disruptive.requests.__send_request',
+            'disruptive.requests._send_request',
             side_effect=self._patched_request
         )
 
