@@ -256,13 +256,16 @@ class Device(dtoutputs.OutputBase):
 
         """
 
-        # Use batch_update_labels for safer call.
-        Device.batch_update_labels(
-            project_id=project_id,
-            device_ids=[device_id],
-            set_labels={key: value},
-            **kwargs,
-        )
+        # Construct URL.
+        url = '/projects/{}/devices:batchUpdate'.format(project_id)
+
+        # Construct request body dictionary.
+        body: dict = dict()
+        body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
+        body['addLabels'] = {key: value}
+
+        # Sent POST request, but return nothing.
+        dtrequests.DTRequest.post(url, body=body, **kwargs)
 
     @staticmethod
     def remove_label(project_id: str,
@@ -291,13 +294,16 @@ class Device(dtoutputs.OutputBase):
 
         """
 
-        # Use batch_update_labels for safer call.
-        Device.batch_update_labels(
-            project_id=project_id,
-            device_ids=[device_id],
-            remove_labels=[key],
-            **kwargs,
-        )
+        # Construct URL.
+        url = '/projects/{}/devices:batchUpdate'.format(project_id)
+
+        # Construct request body dictionary.
+        body: dict = dict()
+        body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
+        body['removeLabels'] = [key]
+
+        # Sent POST request, but return nothing.
+        dtrequests.DTRequest.post(url, body=body, **kwargs)
 
     @staticmethod
     def transfer_device(source_project_id: str,
