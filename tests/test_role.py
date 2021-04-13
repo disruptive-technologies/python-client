@@ -1,13 +1,13 @@
 # Project imports.
 import disruptive as dt
-import tests.mock_responses as dtresponses
+import tests.api_responses as dtapiresponses
 
 
 class TestRole():
 
     def test_unpack(self, request_mock):
         # Update the response data with project data.
-        res = dtresponses.project_user_role
+        res = dtapiresponses.project_user_role
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -21,7 +21,7 @@ class TestRole():
 
     def test_get_role(self, request_mock):
         # Update the response data with role data.
-        request_mock.json = dtresponses.project_developer_role
+        request_mock.json = dtapiresponses.project_developer_role
 
         # Call the appropriate endpoint.
         r = dt.Role.get_role('project.developer')
@@ -40,7 +40,7 @@ class TestRole():
 
     def test_list_roles(self, request_mock):
         # Update the response data with list of role data.
-        request_mock.json = dtresponses.roles
+        request_mock.json = dtapiresponses.roles
 
         # Call the appropriate endpoint
         roles = dt.Role.list_roles()

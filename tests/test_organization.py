@@ -1,13 +1,13 @@
 # Project imports.
 import disruptive as dt
-import tests.mock_responses as dtresponses
+import tests.api_responses as dtapiresponses
 
 
 class TestOrganization():
 
     def test_unpack(self, request_mock):
         # Update the response data with organization data.
-        res = dtresponses.organization
+        res = dtapiresponses.organization
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -19,7 +19,7 @@ class TestOrganization():
 
     def test_get_organization(self, request_mock):
         # Update the response data with organization data.
-        request_mock.json = dtresponses.organization
+        request_mock.json = dtapiresponses.organization
 
         # Call the appropriate endpoint.
         o = dt.Organization.get_organization('organization_id')
@@ -38,7 +38,7 @@ class TestOrganization():
 
     def test_list_organizations(self, request_mock):
         # Update the response data with list of organization data.
-        request_mock.json = dtresponses.organizations
+        request_mock.json = dtapiresponses.organizations
 
         # Call the appropriate endpoint
         orgs = dt.Organization.list_organizations()
@@ -58,7 +58,7 @@ class TestOrganization():
 
     def test_list_members(self, request_mock):
         # Update the response data with list of member data.
-        request_mock.json = dtresponses.members
+        request_mock.json = dtapiresponses.members
 
         # Call the appropriate endpoint
         members = dt.Organization.list_members('org_id')
@@ -78,7 +78,7 @@ class TestOrganization():
 
     def test_add_member(self, request_mock):
         # Update the response data with member data.
-        request_mock.json = dtresponses.serviceaccount_member
+        request_mock.json = dtapiresponses.serviceaccount_member
 
         # Call the appropriate endpoint
         member = dt.Organization.add_member(
@@ -105,7 +105,7 @@ class TestOrganization():
 
     def test_get_member(self, request_mock):
         # Update the response data with member data.
-        request_mock.json = dtresponses.serviceaccount_member
+        request_mock.json = dtapiresponses.serviceaccount_member
 
         # Call the appropriate endpoint
         member = dt.Organization.get_member(
@@ -173,7 +173,7 @@ class TestOrganization():
 
     def test_list_permissions(self, request_mock):
         # Update the response with list of permissions.
-        request_mock.json = dtresponses.organization_permissions
+        request_mock.json = dtapiresponses.organization_permissions
 
         # Call the appropriate endpoint
         response = dt.Organization.list_permissions(

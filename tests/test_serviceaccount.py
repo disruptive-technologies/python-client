@@ -1,6 +1,6 @@
 # Project imports.
 import disruptive as dt
-import tests.mock_responses as dtresponses
+import tests.api_responses as dtapiresponses
 import disruptive.transforms as dttrans
 from disruptive.resources.serviceaccount import Key
 
@@ -9,7 +9,7 @@ class TestServiceAccount():
 
     def test_unpack(self, request_mock):
         # Update the response data with serviceaccount data.
-        res = dtresponses.serviceaccount1
+        res = dtapiresponses.serviceaccount1
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -28,7 +28,7 @@ class TestServiceAccount():
 
     def test_get_serviceaccount(self, request_mock):
         # Update the response data with serviceaccount data.
-        request_mock.json = dtresponses.serviceaccount1
+        request_mock.json = dtapiresponses.serviceaccount1
 
         # Call the appropriate endpoint.
         s = dt.ServiceAccount.get_serviceaccount(
@@ -51,7 +51,7 @@ class TestServiceAccount():
 
     def test_list_serviceaccounts(self, request_mock):
         # Update the response data with list of serviceaccount data.
-        request_mock.json = dtresponses.serviceaccounts
+        request_mock.json = dtapiresponses.serviceaccounts
 
         # Call the appropriate endpoint
         sas = dt.ServiceAccount.list_serviceaccounts(
@@ -73,7 +73,7 @@ class TestServiceAccount():
 
     def test_create_serviceaccount(self, request_mock):
         # Update the response data with serviceaccount data.
-        request_mock.json = dtresponses.serviceaccount1
+        request_mock.json = dtapiresponses.serviceaccount1
 
         # Call the appropriate endpoint.
         s = dt.ServiceAccount.create_serviceaccount(
@@ -97,7 +97,7 @@ class TestServiceAccount():
 
     def test_update_serviceaccount(self, request_mock):
         # Update the response data with serviceaccount data.
-        request_mock.json = dtresponses.serviceaccount1
+        request_mock.json = dtapiresponses.serviceaccount1
 
         # Call the appropriate endpoint.
         s = dt.ServiceAccount.update_serviceaccount(
@@ -143,7 +143,7 @@ class TestServiceAccount():
 
     def test_key_attributes(self, request_mock):
         # Update the response data with serviceaccount data.
-        res = dtresponses.key_without_secret
+        res = dtapiresponses.key_without_secret
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -160,7 +160,7 @@ class TestServiceAccount():
 
     def test_key_secret_set(self, request_mock):
         # Update the response data with serviceaccount data.
-        res = dtresponses.key_with_secret
+        res = dtapiresponses.key_with_secret
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -174,7 +174,7 @@ class TestServiceAccount():
 
     def test_get_key(self, request_mock):
         # Update the response data with serviceaccount data.
-        request_mock.json = dtresponses.key_without_secret
+        request_mock.json = dtapiresponses.key_without_secret
 
         # Call the appropriate endpoint.
         key = dt.ServiceAccount.get_key(
@@ -198,7 +198,7 @@ class TestServiceAccount():
 
     def test_list_keys(self, request_mock):
         # Update the response data with serviceaccount data.
-        request_mock.json = dtresponses.keys
+        request_mock.json = dtapiresponses.keys
 
         # Call the appropriate endpoint.
         keys = dt.ServiceAccount.list_keys(
@@ -222,7 +222,7 @@ class TestServiceAccount():
 
     def test_create_key(self, request_mock):
         # Update the response data with serviceaccount data.
-        request_mock.json = dtresponses.key_with_secret
+        request_mock.json = dtapiresponses.key_with_secret
 
         # Call the appropriate endpoint.
         key = dt.ServiceAccount.create_key(

@@ -1,13 +1,13 @@
 # Project imports.
 import disruptive as dt
-import tests.mock_responses as dtresponses
+import tests.api_responses as dtapiresponses
 
 
 class TestDataconnector():
 
     def test_attributes(self, request_mock):
         # Update the response json with a mock dataconnector response.
-        res = dtresponses.configured_dataconnector
+        res = dtapiresponses.configured_dataconnector
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -27,7 +27,7 @@ class TestDataconnector():
 
     def test_get_dataconnector(self, request_mock):
         # Update the response json with a mock dataconnector response.
-        request_mock.json = dtresponses.configured_dataconnector
+        request_mock.json = dtapiresponses.configured_dataconnector
 
         # Call the appropriate endpoint.
         d = dt.DataConnector.get_dataconnector('project_id', 'device_id')
@@ -40,7 +40,7 @@ class TestDataconnector():
 
     def test_list_dataconnectors(self, request_mock):
         # Update the response json with a mock dataconnector response.
-        request_mock.json = dtresponses.paginated_dataconnectors_response
+        request_mock.json = dtapiresponses.paginated_dataconnectors_response
 
         # Call the appropriate endpoint.
         dataconnectors = dt.DataConnector.list_dataconnectors('project_id')

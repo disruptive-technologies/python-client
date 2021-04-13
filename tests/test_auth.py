@@ -3,7 +3,7 @@ import pytest
 
 # Project imports.
 import disruptive as dt
-import tests.mock_responses as dtresponses
+import tests.api_responses as dtapiresponses
 from disruptive.authentication import Auth
 
 
@@ -11,7 +11,7 @@ class TestAuth():
 
     def test_serviceaccount_auth(self, request_mock):
         # Update the response json with a mock token response.
-        res = dtresponses.auth_token_fresh
+        res = dtapiresponses.auth_token_fresh
         request_mock.json = res
 
         # Call the two classmethod constructors.
@@ -25,7 +25,7 @@ class TestAuth():
 
     def test_token_refresh(self, request_mock):
         # Update the response json with an expired token response.
-        res = dtresponses.auth_token_expired
+        res = dtapiresponses.auth_token_expired
         request_mock.json = res
 
         # Create an authentication object.
@@ -35,7 +35,7 @@ class TestAuth():
         assert auth._has_expired()
 
         # Update the response json with a fresh token response.
-        res = dtresponses.auth_token_fresh
+        res = dtapiresponses.auth_token_fresh
         request_mock.json = res
 
         # Call the get_token method to force a refresh.

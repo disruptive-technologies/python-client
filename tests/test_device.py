@@ -1,7 +1,7 @@
 # Project imports.
 import disruptive as dt
 import disruptive.events as dtevents
-import tests.mock_responses as dtresponses
+import tests.api_responses as dtapiresponses
 from disruptive.types import EventTypes
 
 
@@ -9,7 +9,7 @@ class TestDevice():
 
     def test_unpack(self, request_mock):
         # Update the response data with device data.
-        res = dtresponses.touch_sensor
+        res = dtapiresponses.touch_sensor
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -21,7 +21,7 @@ class TestDevice():
 
     def test_get_device(self, request_mock):
         # Update the response data with device data.
-        request_mock.json = dtresponses.touch_sensor
+        request_mock.json = dtapiresponses.touch_sensor
 
         # Call the appropriate endpoint.
         d = dt.Device.get_device('project_id', 'device_id')
@@ -37,7 +37,7 @@ class TestDevice():
 
     def test_list_devices(self, request_mock):
         # Update the response data with a list of device data.
-        request_mock.json = dtresponses.paginated_device_response
+        request_mock.json = dtapiresponses.paginated_device_response
 
         # Call the appropriate endpoint.
         devices = dt.Device.list_devices('project_id')
@@ -51,7 +51,7 @@ class TestDevice():
 
     def test_no_reported_data(self, request_mock):
         # Update the response data with device data.
-        request_mock.json = dtresponses.null_reported_sensor
+        request_mock.json = dtapiresponses.null_reported_sensor
 
         # Call the appropriate endpoint.
         d = dt.Device.get_device('project_id', 'device_id')
@@ -67,7 +67,7 @@ class TestDevice():
 
     def test_reported_touch_data(self, request_mock):
         # Update the response data with device data.
-        request_mock.json = dtresponses.touch_sensor
+        request_mock.json = dtapiresponses.touch_sensor
 
         # Call the appropriate endpoint.
         d = dt.Device.get_device('project_id', 'device_id')

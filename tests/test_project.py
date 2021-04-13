@@ -1,13 +1,13 @@
 # Project imports.
 import disruptive as dt
-import tests.mock_responses as dtresponses
+import tests.api_responses as dtapiresponses
 
 
 class TestProject():
 
     def test_unpack(self, request_mock):
         # Update the response data with project data.
-        res = dtresponses.small_project
+        res = dtapiresponses.small_project
         request_mock.json = res
 
         # Call the appropriate endpoint.
@@ -23,7 +23,7 @@ class TestProject():
 
     def test_get_project(self, request_mock):
         # Update the response data with project data.
-        request_mock.json = dtresponses.small_project
+        request_mock.json = dtapiresponses.small_project
 
         # Call the appropriate endpoint.
         p = dt.Project.get_project('project_id')
@@ -42,7 +42,7 @@ class TestProject():
 
     def test_list_projects(self, request_mock):
         # Update the response data with list of project data.
-        request_mock.json = dtresponses.projects
+        request_mock.json = dtapiresponses.projects
 
         # Call the appropriate endpoint
         projects = dt.Project.list_projects()
@@ -62,7 +62,7 @@ class TestProject():
 
     def test_create_project(self, request_mock):
         # Update the response data with project data.
-        request_mock.json = dtresponses.empty_project
+        request_mock.json = dtapiresponses.empty_project
 
         # Call the appropriate endpoint.
         p = dt.Project.create_project('org', 'name')
@@ -82,7 +82,7 @@ class TestProject():
 
     def test_update_project(self, request_mock):
         # Update the response data with project data.
-        request_mock.json = dtresponses.empty_project
+        request_mock.json = dtapiresponses.empty_project
 
         # Call the appropriate endpoint.
         output = dt.Project.update_project('project_id', 'new-name')
@@ -118,7 +118,7 @@ class TestProject():
 
     def test_list_members(self, request_mock):
         # Update the response data with list of member data.
-        request_mock.json = dtresponses.members
+        request_mock.json = dtapiresponses.members
 
         # Call the appropriate endpoint
         members = dt.Project.list_members('project_id')
@@ -138,7 +138,7 @@ class TestProject():
 
     def test_add_member(self, request_mock):
         # Update the response data with member data.
-        res = dtresponses.user_member
+        res = dtapiresponses.user_member
         request_mock.json = res
 
         # Call the appropriate endpoint
@@ -166,7 +166,7 @@ class TestProject():
 
     def test_get_member(self, request_mock):
         # Update the response data with member data.
-        request_mock.json = dtresponses.user_member
+        request_mock.json = dtapiresponses.user_member
 
         # Call the appropriate endpoint
         member = dt.Project.get_member(
@@ -188,7 +188,7 @@ class TestProject():
 
     def test_update_member(self, request_mock):
         # Update the response data with member data.
-        request_mock.json = dtresponses.user_member
+        request_mock.json = dtapiresponses.user_member
 
         # Call the appropriate endpoint
         member = dt.Project.update_member(
@@ -258,7 +258,7 @@ class TestProject():
 
     def test_list_permissions(self, request_mock):
         # Update the response with list of permissions.
-        request_mock.json = dtresponses.project_permissions
+        request_mock.json = dtapiresponses.project_permissions
 
         # Call the appropriate endpoint
         response = dt.Project.list_permissions(
