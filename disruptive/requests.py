@@ -142,17 +142,14 @@ def generic_request(method: str, url: str, **kwargs):
         if retry_after is not None:
             time.sleep(retry_after)
 
-        # Retry.
+        # Attempt the request again, iterating counter.
         kwargs['retry_count'] += 1
-        generic_request(
-            method=method,
-            url=url,
-            **kwargs,
-        )
+        response.data = generic_request(method, url, **kwargs)
 
-    # Raise error if present.
-    if error is not None:
-        raise error
+    else:
+        # If set, raise the error chosen by dterrors.parse_error().
+        if error is not None:
+            raise error
 
     return response.data
 
