@@ -1,14 +1,14 @@
 # Project imports.
 import disruptive as dt
-import disruptive.responses as dtresponses
 import tests.api_responses as dtapiresponses
+from disruptive.requests import DTRequest, DTResponse
 
 
 class TestRequests():
 
     def test_first_recusion_depth_success(self, request_mock):
         def __patched_request(json, status_code, headers):
-            return dtresponses.DTResponse(json, status_code, headers)
+            return DTResponse(json, status_code, headers), None
 
         # Choose a response json to use.
         api_res = dtapiresponses.touch_count_sensor
@@ -16,8 +16,9 @@ class TestRequests():
         # Create a new request mock for request_mock object.
         # The default one is not recursive which we fix by
         # using an iterable side_effect which advances each call.
-        request_mock.request_patcher = request_mock._mocker.patch(
-            'disruptive.requests.__send_request',
+        request_mock.request_patcher = request_mock._mocker.patch.object(
+            DTRequest,
+            '_request_wrapper',
             side_effect=[
                 __patched_request(api_res, 200, {}),
                 __patched_request({}, 500, {}),  # <- This should not run.
@@ -35,7 +36,7 @@ class TestRequests():
 
     def test_second_recusion_depth_success(self, request_mock):
         def __patched_request(json, status_code, headers):
-            return dtresponses.DTResponse(json, status_code, headers)
+            return DTResponse(json, status_code, headers), None
 
         # Choose a response json to use.
         api_res = dtapiresponses.water_present_sensor
@@ -43,8 +44,9 @@ class TestRequests():
         # Create a new request mock for request_mock object.
         # The default one is not recursive which we fix by
         # using an iterable side_effect which advances each call.
-        request_mock.request_patcher = request_mock._mocker.patch(
-            'disruptive.requests.__send_request',
+        request_mock.request_patcher = request_mock._mocker.patch.object(
+            DTRequest,
+            '_request_wrapper',
             side_effect=[
                 __patched_request({}, 500, {}),
                 __patched_request(api_res, 200, {}),
@@ -62,7 +64,7 @@ class TestRequests():
 
     def test_third_recusion_depth_success(self, request_mock):
         def __patched_request(json, status_code, headers):
-            return dtresponses.DTResponse(json, status_code, headers)
+            return DTResponse(json, status_code, headers), None
 
         # Choose a response json to use.
         api_res = dtapiresponses.touch_sensor
@@ -70,8 +72,9 @@ class TestRequests():
         # Create a new request mock for request_mock object.
         # The default one is not recursive which we fix by
         # using an iterable side_effect which advances each call.
-        request_mock.request_patcher = request_mock._mocker.patch(
-            'disruptive.requests.__send_request',
+        request_mock.request_patcher = request_mock._mocker.patch.object(
+            DTRequest,
+            '_request_wrapper',
             side_effect=[
                 __patched_request({}, 500, {}),
                 __patched_request({}, 500, {}),
@@ -89,7 +92,7 @@ class TestRequests():
 
     def test_max_recursion_depth_success(self, request_mock):
         def __patched_request(json, status_code, headers):
-            return dtresponses.DTResponse(json, status_code, headers)
+            return DTResponse(json, status_code, headers), None
 
         # Choose a response json to use.
         api_res = dtapiresponses.temperature_sensor
@@ -106,10 +109,12 @@ class TestRequests():
         # Create a new request mock for request_mock object.
         # The default one is not recursive which we fix by
         # using an iterable side_effect which advances each call.
-        request_mock.request_patcher = request_mock._mocker.patch(
-            'disruptive.requests.__send_request',
+        request_mock.request_patcher = request_mock._mocker.patch.object(
+            DTRequest,
+            '_request_wrapper',
             side_effect=side_effects,
         )
+
         # Call dt.Device.get_device() to trigger the request chain.
         device = dt.Device.get_device('project_id', 'device_id')
 
@@ -118,3 +123,20 @@ class TestRequests():
 
         # Lastly, verify device object were built correctly.
         assert device._raw == api_res
+
+    def test_method_propagation(self, request_mock):
+        # Assert GET method propagates correctly.
+        DTRequest.get('/url')
+        request_mock.assert_requested('GET', dt.api_url+'/url')
+
+        # Assert POST method propagates correctly.
+        DTRequest.post('/url')
+        request_mock.assert_requested('POST', dt.api_url+'/url')
+
+        # Assert PATCH method propagates correctly.
+        DTRequest.patch('/url')
+        request_mock.assert_requested('PATCH', dt.api_url+'/url')
+
+        # Assert DELETE method propagates correctly.
+        DTRequest.delete('/url')
+        request_mock.assert_requested('DELETE', dt.api_url+'/url')

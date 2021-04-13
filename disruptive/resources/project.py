@@ -4,7 +4,6 @@ from __future__ import annotations
 from typing import Optional
 
 # Project imports.
-import disruptive as dt
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase, Member
 
@@ -86,12 +85,10 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url
-        url += '/projects/{}'.format(project_id)
+        url = '/projects/{}'.format(project_id)
 
         # Return Project object of GET request response.
-        return cls(dtrequests.generic_request(
-            method='GET',
+        return cls(dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         ))
@@ -129,7 +126,7 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url + '/projects'
+        url = '/projects'
 
         # Construct parameters dictionary.
         params = {}
@@ -139,7 +136,7 @@ class Project(OutputBase):
             params['query'] = query
 
         # Return list of Project objects of paginated GET response.
-        responses = dtrequests.auto_paginated_list(
+        responses = dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='projects',
             params=params,
@@ -178,7 +175,7 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url + '/projects'
+        url = '/projects'
 
         # Construct request body.
         body: dict = dict()
@@ -186,8 +183,7 @@ class Project(OutputBase):
         body['displayName'] = display_name
 
         # Return Project object of POST request response.
-        return cls(dtrequests.generic_request(
-            method='POST',
+        return cls(dtrequests.DTRequest.post(
             url=url,
             body=body,
             **kwargs,
@@ -218,7 +214,7 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url + '/projects/' + project_id
+        url = '/projects/' + project_id
 
         # Construct request body.
         body = {}
@@ -226,8 +222,7 @@ class Project(OutputBase):
             body['displayName'] = display_name
 
         # Send PATCH request, but return nothing.
-        dtrequests.generic_request(
-            method='PATCH',
+        dtrequests.DTRequest.patch(
             url=url,
             body=body,
             **kwargs,
@@ -263,11 +258,10 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = dt.api_url + '/projects/' + project_id
+        url = '/projects/' + project_id
 
         # Send DELETE request, but return nothing.
-        dtrequests.generic_request(
-            method='DELETE',
+        dtrequests.DTRequest.delete(
             url=url,
             **kwargs,
         )
@@ -301,11 +295,10 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/projects/{}/members'.format(project_id)
+        url = '/projects/{}/members'.format(project_id)
 
         # Return list of Member objects of paginated GET response.
-        members = dtrequests.auto_paginated_list(
+        members = dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='members',
             **kwargs,
@@ -345,8 +338,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/projects/{}/members'.format(project_id)
+        url = '/projects/{}/members'.format(project_id)
 
         # Construct request body.
         body: dict = dict()
@@ -354,8 +346,7 @@ class Project(OutputBase):
         body['email'] = email
 
         # Return Member object of POST request response.
-        return Member(dtrequests.generic_request(
-            method='POST',
+        return Member(dtrequests.DTRequest.post(
             url=url,
             body=body,
             **kwargs,
@@ -393,15 +384,13 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/projects/{}/members/{}'.format(
+        url = '/projects/{}/members/{}'.format(
             project_id,
             member_id,
         )
 
         # Return Member object of GET request response.
-        return Member(dtrequests.generic_request(
-            method='GET',
+        return Member(dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         ))
@@ -441,8 +430,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/projects/{}/members/{}'.format(
+        url = '/projects/{}/members/{}'.format(
             project_id,
             member_id,
         )
@@ -453,8 +441,7 @@ class Project(OutputBase):
             body['roles'] = ['roles/' + r for r in roles]
 
         # Return updated Member object of PATCH request response.
-        return Member(dtrequests.generic_request(
-            method='PATCH',
+        return Member(dtrequests.DTRequest.patch(
             url=url,
             body=body,
             **kwargs,
@@ -487,15 +474,13 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/projects/{}/members/{}'.format(
+        url = '/projects/{}/members/{}'.format(
             project_id,
             member_id,
         )
 
         # Send DELETE request, but return nothing.
-        dtrequests.generic_request(
-            method='DELETE',
+        dtrequests.DTRequest.delete(
             url=url,
             **kwargs,
         )
@@ -535,15 +520,13 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/projects/{}/members/{}'.format(
+        url = '/projects/{}/members/{}'.format(
             project_id,
             member_id,
         ) + ':getInviteUrl'
 
         # Return url string in GET response.
-        return dtrequests.generic_request(
-            method='GET',
+        return dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         )['inviteUrl']
@@ -577,11 +560,10 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = dt.api_url
-        url += '/projects/{}/permissions'.format(project_id)
+        url = '/projects/{}/permissions'.format(project_id)
 
         # Return list of permissions in GET response.
-        return dtrequests.auto_paginated_list(
+        return dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='permissions',
             **kwargs,

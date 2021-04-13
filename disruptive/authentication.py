@@ -235,9 +235,9 @@ class Auth():
 
         # Exchange the JWT for an access token.
         try:
-            access_token_response = dtrequests.generic_request(
-                method='POST',
-                url=token_url,
+            access_token_response = dtrequests.DTRequest.post(
+                url='',
+                base_url=token_url,
                 data=request_data,
                 headers={'Content-Type': 'application/x-www-form-urlencoded'},
                 skip_auth=True,

@@ -46,13 +46,12 @@ class Emulator():
         """
 
         # Construct URL
-        url = disruptive.emulator_url
-        url += '/projects/{}/devices/{}'.format(project_id, device_id)
+        url = '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Return Device object of GET request response.
-        return Device(dtrequests.generic_request(
-            method='GET',
+        return Device(dtrequests.DTRequest.get(
             url=url,
+            base_url=disruptive.emulator_url,
             **kwargs,
         ), emulated=True)
 
@@ -85,10 +84,11 @@ class Emulator():
         """
 
         # Return list of Device objects of paginated GET response.
-        devices = dtrequests.auto_paginated_list(
-            url=disruptive.emulator_url + '/projects/{}/devices'.format(
+        devices = dtrequests.DTRequest.paginated_get(
+            url='/projects/{}/devices'.format(
                 project_id
             ),
+            base_url=disruptive.emulator_url,
             pagination_key='devices',
             params={},
             **kwargs,
@@ -132,8 +132,7 @@ class Emulator():
         """
 
         # Construct URL
-        url = disruptive.emulator_url
-        url += '/projects/{}/devices'.format(project_id)
+        url = '/projects/{}/devices'.format(project_id)
 
         # Construct body dictionary.
         body: dict = dict()
@@ -145,9 +144,9 @@ class Emulator():
             body['labels']['name'] = display_name
 
         # Return Device object of GET request response.
-        return Device(dtrequests.generic_request(
-            method='POST',
+        return Device(dtrequests.DTRequest.post(
             url=url,
+            base_url=disruptive.emulator_url,
             body=body,
             **kwargs,
         ), emulated=True)
@@ -177,13 +176,12 @@ class Emulator():
         """
 
         # Construct URL
-        url = disruptive.emulator_url
-        url += '/projects/{}/devices/{}'.format(project_id, device_id)
+        url = '/projects/{}/devices/{}'.format(project_id, device_id)
 
         # Send DELETE request, but return nothing.
-        dtrequests.generic_request(
-            method='DELETE',
+        dtrequests.DTRequest.delete(
             url=url,
+            base_url=disruptive.emulator_url,
             **kwargs,
         )
 
@@ -229,13 +227,12 @@ class Emulator():
         """
 
         # Construct URL
-        url = disruptive.emulator_url
-        url += '/projects/{}/devices/{}:publish'.format(project_id, device_id)
+        url = '/projects/{}/devices/{}:publish'.format(project_id, device_id)
 
         # Send POST request, but return nothing.
-        dtrequests.generic_request(
-            method='POST',
+        dtrequests.DTRequest.post(
             url=url,
+            base_url=disruptive.emulator_url,
             body={data.event_type: data._raw},
             **kwargs,
         )
