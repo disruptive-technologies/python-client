@@ -169,45 +169,41 @@ def parse_error(res: DTResponse, retry_count: int):
     # Check for arleady caught errors.
     if res.caught_error is not None:
         if isinstance(res.caught_error, requests.exceptions.ReadTimeout):
-            return (ReadTimeout, True, retry_count**2)
+            return ReadTimeout, True, retry_count**2
         elif isinstance(res.caught_error, requests.exceptions.ConnectionError):
-            return (
-                ConnectionError('Failed to establish connection to server.'),
-                False,
-                None
-            )
+            return ConnectionError('Failed to establish connection.'), \
+                   False, \
+                   None
         else:
             return res.caught_error, False, None
     else:
         # Check for API errors.
         if res.status_code == 200:
-            return (None, False, None)
+            return None, False, None
         elif res.status_code == 400:
-            return (BadRequest(res.data), False, None)
+            return BadRequest(res.data), False, None
         elif res.status_code == 401:
             # The first retry is #1. Therefor, retry_count < 2 will
             # result in a a single retry attempt.
-            return (Unauthorized(res.data), retry_count < 2, None)
+            return Unauthorized(res.data), retry_count < 2, None
         elif res.status_code == 403:
-            return (Forbidden(res.data), False, None)
+            return Forbidden(res.data), False, None
         elif res.status_code == 404:
-            return (NotFound(res.data), False, None)
+            return NotFound(res.data), False, None
         elif res.status_code == 409:
-            return (Conflict(res.data), False, None)
+            return Conflict(res.data), False, None
         elif res.status_code == 429:
             if 'Retry-After' in res.headers:
-                return (
-                    TooManyRequests(res.data),
-                    True,
-                    int(res.headers['Retry-After'])
-                )
+                return TooManyRequests(res.data), \
+                       True, \
+                       int(res.headers['Retry-After'])
             else:
-                return (TooManyRequests(res.data), False, None)
+                return TooManyRequests(res.data), False, None
         elif res.status_code == 500:
-            return (InternalServerError(res.data), True, retry_count**2)
+            return InternalServerError(res.data), True, retry_count**2
         elif res.status_code == 503:
-            return (InternalServerError(res.data), True, retry_count**2)
+            return InternalServerError(res.data), True, retry_count**2
         elif res.status_code == 504:
-            return (InternalServerError(res.data), True, retry_count**2 + 9)
+            return InternalServerError(res.data), True, retry_count**2 + 9
         else:
-            return (UnknownError(res.data), False, None)
+            return UnknownError(res.data), False, None
