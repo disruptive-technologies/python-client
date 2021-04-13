@@ -109,7 +109,7 @@ def generic_request(method: str, url: str, **kwargs):
 
     # Send request.
     dtlog.log('Request [{}] to {}.'.format(method, url), override=log_override)
-    response = __send_request(
+    response = _send_request(
         method=method,
         url=url,
         params=params,
@@ -270,14 +270,14 @@ def stream(url: str, **kwargs):
             nth_retry, error = stream_retry_logic(nth_retry)
 
 
-def __send_request(method: str,
-                   url: str,
-                   params: dict,
-                   headers: dict,
-                   body: Optional[dict],
-                   data: Optional[str],
-                   timeout: int,
-                   ):
+def _send_request(method: str,
+                  url: str,
+                  params: dict,
+                  headers: dict,
+                  body: Optional[dict],
+                  data: Optional[str],
+                  timeout: int,
+                  ):
     try:
         response = requests.request(
             method=method,
