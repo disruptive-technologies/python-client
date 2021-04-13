@@ -252,7 +252,7 @@ proximity_counter_sensor = {
     }
 }
 
-touch_counter_sensor = {
+touch_count_sensor = {
     "name": "projects/c0md3mmpc7bet3vico8g/devices/emucp6e8dnlq0bgk44sg4c0",
     "type": "touchCounter",
     "labels": {
@@ -310,7 +310,7 @@ all_devices_list = [
     touch_sensor,
     water_present_sensor,
     proximity_counter_sensor,
-    touch_counter_sensor,
+    touch_count_sensor,
     null_reported_sensor,
 ]
 
