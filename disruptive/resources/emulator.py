@@ -53,7 +53,7 @@ class Emulator():
             url=url,
             base_url=disruptive.emulator_url,
             **kwargs,
-        ), emulated=True)
+        ))
 
     @staticmethod
     def list_devices(project_id: str,
@@ -93,7 +93,7 @@ class Emulator():
             params={},
             **kwargs,
         )
-        return [Device(device, emulated=True) for device in devices]
+        return [Device(device) for device in devices]
 
     @staticmethod
     def create_device(project_id: str,
@@ -149,7 +149,7 @@ class Emulator():
             base_url=disruptive.emulator_url,
             body=body,
             **kwargs,
-        ), emulated=True)
+        ))
 
     @staticmethod
     def delete_device(project_id: str,

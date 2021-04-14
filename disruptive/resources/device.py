@@ -29,15 +29,14 @@ class Device(dtoutputs.OutputBase):
         Device type.
     labels : dict
         Label keys and values.
-    emulated : bool
-        True if the device is emulated, otherwise False.
+    is_emulator : bool
+        True if the device is an emulator, otherwise False.
     reported : Reported, None
         Object containing the data from the most recent events.
-        If emulated is True, reported is None.
 
     """
 
-    def __init__(self, device: dict, emulated: bool = False) -> None:
+    def __init__(self, device: dict) -> None:
         """
         Constructs the Device object by unpacking the raw device response.
 
@@ -56,10 +55,16 @@ class Device(dtoutputs.OutputBase):
         self.project_id = device['name'].split('/')[1]
         self.type = device['type']
         self.labels = device['labels']
-        self.emulated = emulated
-        if emulated:
-            self.reported = None
+
+        # Determine if the device is an emulator by checking id prefix.
+        if self.device_id.startswith('emu'):
+            self.is_emulator = True
         else:
+            self.is_emulator = False
+
+        # If it exists, set the reported object.
+        self.reported = None
+        if 'reported' in device:
             self.reported = Reported(device['reported'])
 
     @classmethod
