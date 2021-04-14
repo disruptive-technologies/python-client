@@ -9,7 +9,6 @@ import disruptive
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
 import disruptive.log as dtlog
-from disruptive.types import EventTypes
 
 
 class _EventData(dtoutputs.OutputBase):
@@ -100,13 +99,13 @@ class _EventData(dtoutputs.OutputBase):
 
         # Initialize the correct object.
         # if event_type in [t.value['api_name'] for t in EventTypes]:
-        if event_type in EventTypes._api_names:
+        if event_type in _EVENTS_MAP._api_names:
             out = (
                 getattr(
                     disruptive.events,
-                    EventTypes._api_names[event_type].class_name
+                    _EVENTS_MAP._api_names[event_type].class_name
                 ),
-                EventTypes._api_names[event_type].is_keyed,
+                _EVENTS_MAP._api_names[event_type].is_keyed,
             )
             return out
 
@@ -655,6 +654,83 @@ class WaterPresent(_EventData):
         return data
 
 
+class NetworkStatusCloudConnector(dtoutputs.OutputBase):
+    """
+    Represents a Cloud Connector found in the networkStatus event data.
+
+    Attributes
+    ----------
+    cloudconnector_id : str
+        Cloud Connector identifier.
+    signal_strength : int
+        The percentage signal strength (0% to 100%) between
+        the sensor and Cloud Connector.
+    rssi : int
+        Raw Received Signal Strength Indication (RSSI) between
+        the sensor and Cloud Connector.
+
+    """
+
+    def __init__(self,
+                 cloudconnector_id: Optional[str] = None,
+                 signal_strength: Optional[int] = None,
+                 rssi: Optional[int] = None,
+                 ):
+        """
+        Constructs the NetworkStatusCloudConnector object, inheriting
+        parent class and setting the type-specific attributes.
+
+        Parameters
+        ----------
+        id : str
+            Cloud Connector identifier.
+        signal_strength : int
+            The percentage signal strength (0% to 100%) between
+            the sensor and Cloud Connector.
+        rssi : int
+            Raw Received Signal Strength Indication (RSSI) between
+            the sensor and Cloud Connector.
+
+        """
+
+        # Inherit parent OutputBase class init.
+        dtoutputs.OutputBase.__init__(self, {})
+
+        # Unpack attributes.
+        self.cloudconnector_id = cloudconnector_id
+        self.signal_strength = signal_strength
+        self.rssi = rssi
+
+    @classmethod
+    def _from_raw(cls, data: dict):
+        """
+        Constructs a NetworkStatusCloudConnector object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : NetworkStatusCloudConnector
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            cloudconnector_id=data['id'],
+            signal_strength=data['signalStrength'],
+            rssi=data['rssi'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        dtoutputs.OutputBase.__init__(obj, data)
+
+        return obj
+
+
 class NetworkStatus(_EventData):
     """
     Represents the data found in a networkStatus event.
@@ -776,83 +852,6 @@ class NetworkStatus(_EventData):
                 if len(ccon_data) > 0:
                     data['cloud_connectors'].append(ccon_data)
         return data
-
-
-class NetworkStatusCloudConnector(dtoutputs.OutputBase):
-    """
-    Represents a Cloud Connector found in the networkStatus event data.
-
-    Attributes
-    ----------
-    cloudconnector_id : str
-        Cloud Connector identifier.
-    signal_strength : int
-        The percentage signal strength (0% to 100%) between
-        the sensor and Cloud Connector.
-    rssi : int
-        Raw Received Signal Strength Indication (RSSI) between
-        the sensor and Cloud Connector.
-
-    """
-
-    def __init__(self,
-                 cloudconnector_id: Optional[str] = None,
-                 signal_strength: Optional[int] = None,
-                 rssi: Optional[int] = None,
-                 ):
-        """
-        Constructs the NetworkStatusCloudConnector object, inheriting
-        parent class and setting the type-specific attributes.
-
-        Parameters
-        ----------
-        id : str
-            Cloud Connector identifier.
-        signal_strength : int
-            The percentage signal strength (0% to 100%) between
-            the sensor and Cloud Connector.
-        rssi : int
-            Raw Received Signal Strength Indication (RSSI) between
-            the sensor and Cloud Connector.
-
-        """
-
-        # Inherit parent OutputBase class init.
-        dtoutputs.OutputBase.__init__(self, {})
-
-        # Unpack attributes.
-        self.cloudconnector_id = cloudconnector_id
-        self.signal_strength = signal_strength
-        self.rssi = rssi
-
-    @classmethod
-    def _from_raw(cls, data: dict):
-        """
-        Constructs a NetworkStatusCloudConnector object from API response data.
-
-        Parameters
-        ----------
-        data : dict
-            API response data dictionary.
-
-        Returns
-        -------
-        obj : NetworkStatusCloudConnector
-            Object constructed from the API response data.
-
-        """
-
-        # Construct the object with unpacked parameters.
-        obj = cls(
-            cloudconnector_id=data['id'],
-            signal_strength=data['signalStrength'],
-            rssi=data['rssi'],
-        )
-
-        # Re-inherit from parent, but now providing response data.
-        dtoutputs.OutputBase.__init__(obj, data)
-
-        return obj
 
 
 class BatteryStatus(_EventData):
@@ -1329,3 +1328,98 @@ class Event(dtoutputs.OutputBase):
             object_list.append(cls(event))
 
         return object_list
+
+
+class __EventsMap():
+
+    class __TypeNames():
+
+        def __init__(self, api_name, attr_name, class_name, is_keyed):
+            self.api_name = api_name
+            self.attr_name = attr_name
+            self.class_name = class_name
+            self.is_keyed = is_keyed
+
+    _api_names = {
+        'touch': __TypeNames(
+            api_name='touch',
+            attr_name='touch',
+            class_name='Touch',
+            is_keyed=True
+        ),
+        'temperature': __TypeNames(
+            api_name='temperature',
+            attr_name='temperature',
+            class_name='Temperature',
+            is_keyed=True
+        ),
+        'objectPresent': __TypeNames(
+            api_name='objectPresent',
+            attr_name='object_present',
+            class_name='ObjectPresent',
+            is_keyed=True
+        ),
+        'humidity': __TypeNames(
+            api_name='humidity',
+            attr_name='humidity',
+            class_name='Humidity',
+            is_keyed=True
+        ),
+        'objectPresentCount': __TypeNames(
+            api_name='objectPresentCount',
+            attr_name='object_present_count',
+            class_name='ObjectPresentCount',
+            is_keyed=True
+        ),
+        'touchCount': __TypeNames(
+            api_name='touchCount',
+            attr_name='touch_count',
+            class_name='TouchCount',
+            is_keyed=True
+        ),
+        'waterPresent': __TypeNames(
+            api_name='waterPresent',
+            attr_name='water_present',
+            class_name='WaterPresent',
+            is_keyed=True
+        ),
+        'networkStatus': __TypeNames(
+            api_name='networkStatus',
+            attr_name='network_status',
+            class_name='NetworkStatus',
+            is_keyed=True,
+        ),
+        'batteryStatus': __TypeNames(
+            api_name='batteryStatus',
+            attr_name='battery_status',
+            class_name='BatteryStatus',
+            is_keyed=True,
+        ),
+        'labelsChanged': __TypeNames(
+            api_name='labelsChanged',
+            attr_name='labels_changed',
+            class_name='LabelsChanged',
+            is_keyed=False,
+        ),
+        'connectionStatus': __TypeNames(
+            api_name='connectionStatus',
+            attr_name='connection_status',
+            class_name='ConnectionStatus',
+            is_keyed=True,
+        ),
+        'ethernetStatus': __TypeNames(
+            api_name='ethernetStatus',
+            attr_name='ethernet_status',
+            class_name='EthernetStatus',
+            is_keyed=True,
+        ),
+        'cellularStatus': __TypeNames(
+            api_name='cellularStatus',
+            attr_name='cellular_status',
+            class_name='CellularStatus',
+            is_keyed=True,
+        )
+    }
+
+
+_EVENTS_MAP = __EventsMap()
