@@ -147,7 +147,7 @@ class Project(OutputBase):
     @classmethod
     def create_project(cls,
                        organization_id: str,
-                       display_name: str = '',
+                       display_name: str,
                        **kwargs,
                        ) -> Project:
         """
@@ -157,7 +157,7 @@ class Project(OutputBase):
         ----------
         organization_id : str
             Unique organization ID.
-        display_name : str, optional
+        display_name : str
             Sets a display name for the project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
