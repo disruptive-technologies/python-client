@@ -29,7 +29,7 @@ pip install .
 
 ## Authentication
 
-Using [Service Account](https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts) credentials, the package can be authenticated by setting `disruptive.default_auth`:
+Using [Service Account](https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts) credentials, setting `disruptive.default_auth` authenticates the package:
 
 ```python
 import disruptive as dt
