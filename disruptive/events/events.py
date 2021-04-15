@@ -126,13 +126,13 @@ class Touch(_EventData):
 
     def __init__(self, timestamp: Optional[datetime | str] = None):
         """
-        Constructs the Touch object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the Touch object.
 
         Parameters
         ----------
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -192,19 +192,20 @@ class Temperature(_EventData):
     """
 
     def __init__(self,
-                 celsius: Optional[float] = None,
+                 celsius: float,
                  timestamp: Optional[datetime | str] = None,
                  ) -> None:
         """
-        Constructs the Temperature object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the Temperature object. The `fahrenheit` attribute is
+        calculated from the provided `celsius` parameter.
 
         Parameters
         ----------
-        celsius : float, optional
+        celsius : float
             Temperature value in Celsius.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -252,26 +253,23 @@ class Temperature(_EventData):
             data['updateTime'] = self.timestamp
         return data
 
-    def __celsius_to_fahrenheit(self, celsius: Optional[float]):
+    def __celsius_to_fahrenheit(self, celsius: float):
         """
         Converts Celsius temperature value to Fahrenheit.
 
         Parameters
         ----------
-        celsius : float, None
+        celsius : float
             Temperature value in Celsius.
 
         Returns
         -------
-        fahrenheit : float, None
+        fahrenheit : float
             Temperature value in Fahrenheit if Celsius is not None.
 
         """
 
-        if celsius is None:
-            return None
-        else:
-            return (celsius * (9/5)) + 32
+        return (celsius * (9/5)) + 32
 
 
 class ObjectPresent(_EventData):
@@ -281,7 +279,7 @@ class ObjectPresent(_EventData):
     Attributes
     ----------
     state : str
-        Indicates whether an object is PRESENT or NOT_PRESENT.
+        Indicates whether an object is "PRESENT" or "NOT_PRESENT".
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
@@ -298,9 +296,10 @@ class ObjectPresent(_EventData):
         Parameters
         ----------
         state : str
-            Indicates whether an object is PRESENT or NOT_PRESENT.
+            Indicates whether an object is "PRESENT" or "NOT_PRESENT".
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -364,22 +363,22 @@ class Humidity(_EventData):
     """
 
     def __init__(self,
-                 temperature: Optional[float] = None,
-                 humidity: Optional[float] = None,
+                 temperature: float,
+                 humidity: float,
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
-        Constructs the Humidity object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the Humidity object.
 
         Parameters
         ----------
-        temperature : float, optional
+        temperature : float
             Temperature value in Celsius.
-        humidity : float, optional
+        humidity : float
             Relative humidity in percent.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -450,8 +449,7 @@ class ObjectPresentCount(_EventData):
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
-        Constructs the ObjectPresentCount object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the ObjectPresentCount object.
 
         Parameters
         ----------
@@ -459,7 +457,8 @@ class ObjectPresentCount(_EventData):
             The total number of times the sensor has detected the appearance
             or disappearance of an object over its lifetime.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -525,8 +524,7 @@ class TouchCount(_EventData):
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
-        Constructs the TouchCount object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the TouchCount object.
 
         Parameters
         ----------
@@ -534,7 +532,8 @@ class TouchCount(_EventData):
             The total number of times the sensor has been
             touched over its lifetime.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -599,15 +598,15 @@ class WaterPresent(_EventData):
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
-        Constructs the WaterPresent object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the WaterPresent object.
 
         Parameters
         ----------
         state : str
-            Indicates whether water is PRESENT or NOT_PRESENT.
+            Indicates whether water is "PRESENT" or "NOT_PRESENT".
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -672,17 +671,16 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
     """
 
     def __init__(self,
-                 cloudconnector_id: Optional[str] = None,
-                 signal_strength: Optional[int] = None,
-                 rssi: Optional[int] = None,
+                 cloudconnector_id: str,
+                 signal_strength: int,
+                 rssi: int,
                  ):
         """
-        Constructs the NetworkStatusCloudConnector object, inheriting
-        parent class and setting the type-specific attributes.
+        Constructs the NetworkStatusCloudConnector object.
 
         Parameters
         ----------
-        id : str
+        cloudconnector_id : str
             Cloud Connector identifier.
         signal_strength : int
             The percentage signal strength (0% to 100%) between
@@ -755,31 +753,31 @@ class NetworkStatus(_EventData):
 
     def __init__(
         self,
-        signal_strength: Optional[int] = None,
-        rssi: Optional[int] = None,
-        transmission_mode: Optional[str] = None,
-        cloud_connectors: Optional[list[NetworkStatusCloudConnector]] = None,
+        signal_strength: int,
+        rssi: int,
+        transmission_mode: str,
+        cloud_connectors: list[NetworkStatusCloudConnector],
         timestamp: Optional[datetime | str] = None
     ) -> None:
         """
-        Constructs the NetworkStatus object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the NetworkStatus object.
 
         Parameters
         ----------
-        signal_strength : int, optional
+        signal_strength : int
             The percentage signal strength (0% to 100%) of the strongest
             Cloud Connector, derived directly from the RSSI value.
-        rssi : float, optional
+        rssi : float
             Raw Received Signal Strength Indication (RSSI) as measured
             by the strongest Cloud Connector.
-        transmission_mode : str, optional
+        transmission_mode : str
             Indicated whether the sensor is in
             LOW_POWER_STANDARD_MODE or HIGH_POWER_BOOST_MODE.
-        cloud_connectors : list[NetworkStatusCloudConnector], optional
+        cloud_connectors : list[NetworkStatusCloudConnector]
             List of the Cloud Connector that forwarded the event.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -868,19 +866,19 @@ class BatteryStatus(_EventData):
     """
 
     def __init__(self,
-                 percentage: Optional[int] = None,
+                 percentage: int,
                  timestamp: Optional[datetime | str] = None,
                  ) -> None:
         """
-        Constructs the Temperature object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the Temperature object.
 
         Parameters
         ----------
-        percentage : int, optional
+        percentage : int
             A coarse percentage estimate (0% to 100%) of the remaining battery.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -952,8 +950,7 @@ class LabelsChanged(_EventData):
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
-        Constructs the LabelsChanged object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the LabelsChanged object.
 
         Parameters
         ----------
@@ -964,7 +961,8 @@ class LabelsChanged(_EventData):
         removed : list[str]
             List of keys of removed labels.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -1027,32 +1025,34 @@ class ConnectionStatus(_EventData):
     Attributes
     ----------
     connection : str
-        Whether the Cloud Connector is on ETHERNET, CELLULAR, or OFFLINE.
+        Whether the Cloud Connector is on "ETHERNET", "CELLULAR", or "OFFLINE".
     available : str
-        Lists available connections. Can contain ETHERNET, CELLULAR, or both.
+        Lists available connections. Can contain
+        "ETHERNET", "CELLULAR", or both.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
 
     def __init__(self,
-                 connection: Optional[str] = None,
-                 available: Optional[str] = None,
+                 connection: str,
+                 available: str,
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
-        Constructs the ConnectionStatus object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the ConnectionStatus object.
 
         Parameters
         ----------
-        connection : str, optional
-            Whether the Cloud Connector is on ETHERNET, CELLULAR, or OFFLINE.
-        available : str, optional
+        connection : str
+            Whether the Cloud Connector is on
+            "ETHERNET", "CELLULAR", or "OFFLINE".
+        available : str
             Lists available connections.
-            Can contain ETHERNET, CELLULAR, or both.
+            Can contain "ETHERNET", "CELLULAR", or both.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -1120,8 +1120,8 @@ class EthernetStatus(_EventData):
     """
 
     def __init__(self,
-                 mac_address: Optional[str] = None,
-                 ip_address: Optional[str] = None,
+                 mac_address: str,
+                 ip_address: str,
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
@@ -1130,12 +1130,13 @@ class EthernetStatus(_EventData):
 
         Parameters
         ----------
-        mac_address : str, optional
+        mac_address : str
             MAC address of the local network interface.
-        ip_address : str, optional
+        ip_address : str
             IP address of the Cloud Connector on the local network.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
@@ -1201,19 +1202,19 @@ class CellularStatus(_EventData):
     """
 
     def __init__(self,
-                 signal_strength: Optional[int] = None,
+                 signal_strength: int,
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
-        Constructs the Temperature object, inheriting parent class
-        and setting the type-specific attributes.
+        Constructs the Temperature object.
 
         Parameters
         ----------
-        signal_strength : int, optional
+        signal_strength : int
             Cloud Connector cellular reception percentage.
         timestamp : datetime, str, optional
-            Timestamp of when the event was received by a Cloud Connector.
+            Timestamp in either datetime or string iso8601 format
+            (i.e. YYYY-MM-DDThh:mm:ssZ).
 
         """
 
