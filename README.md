@@ -42,23 +42,23 @@ API methods are grouped under various resource names on the form `disruptive.<Re
 
 ```python
 # Fetch a specific temperature sensor from a project.
-temp_sensor = dt.Device.get_device(device_id)
+sensor = dt.Device.get_device(device_id)
 
 # Print the sensor information, listing all available attributes.
-print(temp_sensor)
-
-# Isolate the device- and project ID of the sensor.
-sensor_id = temp_sensor.device_id
-project_id = temp_sensor.project_id
+print(sensor)
 
 # Set a new label on the sensor.
-dt.Device.set_label(sensor_id, project_id, key='room-number', value='99')
+dt.Device.set_label(sensor.device_id, sensor.project_id, key='nb#', value='99')
 
 # Get touch- and temperature event history the last 24 hours for the sensor.
-history = dt.EventHistory.list_events(sensor_id, project_id, event_types=['touch', 'temperature'])
+history = dt.EventHistory.list_events(
+    sensor.device_id,
+    sensor.project_id,
+    event_types=['touch', 'temperature']
+)
 
 # Set up a real-time event stream for the sensor.
-for new_event in dt.Stream.device(sensor_id, project_id):
+for new_event in dt.Stream.device(sensor.device_id, sensor.project_id):
     # Print the data in new events as they arrive.
     print(new_event.data)
 ```
