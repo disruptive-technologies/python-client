@@ -24,7 +24,7 @@ for sensor in temp_sensors:
     history = dt.EventHistory.list_events(
         project_id=sensor.project_id,
         device_id=sensor.device_id,
-        event_types=[dt.EventTypes.temperature],
+        event_types=[dt.types.events.temperature],
         start_time=datetime.today()-timedelta(days=7),
     )
 
