@@ -16,6 +16,12 @@ Class
 ^^^^^
 .. autoclass:: disruptive.DataConnector
 
+Type-Specific Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: disruptive.dataconnector_configs.HttpPush
+   
+   .. automethod:: disruptive.dataconnector_configs.HttpPush.__init__
+
 .. toctree::
    :hidden:
    :maxdepth: 1
