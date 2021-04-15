@@ -8,7 +8,7 @@ from datetime import datetime
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
-from disruptive.events import Event
+from disruptive.events.events import Event
 
 
 class EventHistory(dtoutputs.OutputBase):

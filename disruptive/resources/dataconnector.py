@@ -4,8 +4,10 @@ from __future__ import annotations
 from typing import Optional
 
 # Project imports.
+import disruptive
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
+import disruptive.dataconnector_configs.dataconnector_configs as dcon_configs
 from disruptive.outputs import Metric
 
 
@@ -27,14 +29,10 @@ class DataConnector(dtoutputs.OutputBase):
     dataconnector_type : str
         Dataconnector type. Currently only HTTP_PUSH is available.
     status : str
-        Whether the dataconnector is ACTIVE, USER_DISABLED, or SYSTEM_DISABLED.
-    url : str
-        Endpoint url to which events are forwarded.
-    signature_secret : str
-        If set, signs the forwaded payload to that the content and origin
-        can be verified at the receiving end.
-    headers : dict[str, str]
-        Headers included in the outgoing requests.
+        Whether the dataconnector is
+        "ACTIVE", "USER_DISABLED", or "SYSTEM_DISABLED".
+    config : HttpPush, None
+        An object representing the type-specific configuration.
     event_Types : list[str]
         List of event types that should be forwarded.
         If empty, all event types are forwarded.
@@ -59,19 +57,15 @@ class DataConnector(dtoutputs.OutputBase):
         # Inherit from OutputBase parent.
         dtoutputs.OutputBase.__init__(self, dataconnector)
 
-        print(dataconnector)
-
         # Unpack attributes from dictionary.
         self.dataconnector_id = dataconnector['name'].split('/')[-1]
         self.project_id = dataconnector['name'].split('/')[1]
-        self.dataconnector_type = dataconnector['type']
         self.status = dataconnector['status']
         self.display_name = dataconnector['displayName']
-        self.url = dataconnector['httpConfig']['url']
-        self.signature_secret = dataconnector['httpConfig']['signatureSecret']
-        self.headers = dataconnector['httpConfig']['headers']
         self.event_types = dataconnector['events']
         self.labels = dataconnector['labels']
+        self.dataconnector_type = dataconnector['type']
+        self.config = dcon_configs._from_dict(dataconnector)
 
     @classmethod
     def get_dataconnector(cls,
@@ -151,13 +145,10 @@ class DataConnector(dtoutputs.OutputBase):
     @classmethod
     def create_dataconnector(cls,
                              project_id: str,
-                             url: str,
-                             dataconnector_type: str,
+                             config: disruptive.dataconnector_configs.HttpPush,
                              display_name: str = '',
                              status: str = 'ACTIVE',
                              events: list[str] = [],
-                             signature_secret: str = '',
-                             headers: dict[str, str] = {},
                              labels: list[str] = [],
                              **kwargs,
                              ) -> DataConnector:
@@ -168,20 +159,14 @@ class DataConnector(dtoutputs.OutputBase):
         ----------
         project_id : str
             Unique project ID.
-        url : str
-            Endpoint URL towards which events are forwarded. Must be HTTPS.
-        dataconnector_type : {"HTTP_PUSH"} str, optional
-            Type of dataconnector to create. Currently only supports HTTP_PUSH.
+        config : HttpPush
+            An object representing the type-specific configuration.
         display_name : str, optional
             Sets a display name for the project.
         status : {"ACTIVE", "USER_DISABLED"} strm optional
             Status of the new dataconnector.
         events : list[str], optional
             List of event types the dataconnectors should forward.
-        signature_secret : str, optional
-            Secret with which each forwarded event is signed.
-        headers : dict[str, str], optional
-            Dictionary of headers to include with each forwarded event.
         labels : list[str], optional
             List of labels to forward with each event.
         auth: Auth, optional
@@ -201,16 +186,16 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Construct request body dictionary.
         body: dict = dict()
-        body['type'] = dataconnector_type
         body['status'] = status
         body['events'] = events
         body['labels'] = labels
-        body['httpConfig'] = dict()
-        body['httpConfig']['url'] = url
-        body['httpConfig']['headers'] = headers
-        body['httpConfig']['signatureSecret'] = signature_secret
         if len(display_name) > 0:
             body['displayName'] = display_name
+
+        # Add the appropriate field depending on config.
+        body['type'] = config.dataconnector_type
+        key, value = config._to_dict()
+        body[key] = value
 
         # Construct URL.
         url = '/projects/{}/dataconnectors'.format(project_id)
@@ -223,18 +208,17 @@ class DataConnector(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def update_dataconnector(cls,
-                             project_id: str,
-                             dataconnector_id: str,
-                             display_name: Optional[str] = None,
-                             status: Optional[str] = None,
-                             events: Optional[list[str]] = None,
-                             labels: Optional[list[str]] = None,
-                             url: Optional[str] = None,
-                             signature_secret: Optional[str] = None,
-                             headers: Optional[dict[str, str]] = None,
-                             **kwargs,
-                             ) -> DataConnector:
+    def update_dataconnector(
+        cls,
+        project_id: str,
+        dataconnector_id: str,
+        config: Optional[disruptive.dataconnector_configs.HttpPush] = None,
+        display_name: Optional[str] = None,
+        status: Optional[str] = None,
+        events: Optional[list[str]] = None,
+        labels: Optional[list[str]] = None,
+        **kwargs,
+    ) -> DataConnector:
         """
         Updates the attributes of a dataconnector.
 
@@ -244,18 +228,14 @@ class DataConnector(dtoutputs.OutputBase):
             Unique ID of the project that contains the dataconnector.
         dataconnector_id : str
             Unique ID of the dataconnector to update.
-        url : str, optional
-            Endpoint URL towards which events are forwarded. Must be HTTPS.
+        config : HttpPush, None
+            An object representing the type-specific configuration.
         display_name : str, optional
             Sets a display name for the dataconnector.
         status : {"ACTIVE", "USER_DISABLED"} str, optional
             Status of the dataconnector.
         events : list[str], optional
             List of event types the dataconnectors should forward.
-        signature_secret : str, optional
-            Secret with which each forwarded event is signed.
-        headers : dict[str, str], optional
-            Dictionary of headers to include with each forwarded event.
         labels : list[str], optional
             List of labels to forward with each event.
         auth: Auth, optional
@@ -270,7 +250,6 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Construct request body dictionary.
         body: dict = dict()
-        body['httpConfig'] = {}
         if display_name is not None:
             body['displayName'] = display_name
         if status is not None:
@@ -279,12 +258,11 @@ class DataConnector(dtoutputs.OutputBase):
             body['events'] = events
         if labels is not None:
             body['labels'] = labels
-        if url is not None:
-            body['httpConfig']['url'] = url
-        if signature_secret is not None:
-            body['httpConfig']['signatureSecret'] = signature_secret
-        if headers is not None:
-            body['headers'] = headers
+
+        # Add the appropriate field depending on config.
+        if config is not None:
+            key, value = config._to_dict()
+            body[key] = value
 
         # Construct URL.
         url = '/projects/{}/dataconnectors/{}'

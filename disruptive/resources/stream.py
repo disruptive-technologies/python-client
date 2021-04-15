@@ -5,7 +5,7 @@ from typing import Generator, Optional
 
 # Project Imports.
 import disruptive.requests as dtrequests
-from disruptive.events import Event
+from disruptive.events.events import Event
 from disruptive.authentication import Auth
 
 

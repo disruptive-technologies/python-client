@@ -1,8 +1,7 @@
 # Project imports.
 import disruptive as dt
-import disruptive.events as dtevents
+import disruptive.events.events as dtevents
 import tests.api_responses as dtapiresponses
-from disruptive.types import EventTypes
 
 
 class TestDevice():
@@ -57,12 +56,12 @@ class TestDevice():
         d = dt.Device.get_device('project_id', 'device_id')
 
         # Assert None for all reported datas.
-        for key in EventTypes._api_names:
+        for key in dtevents._EVENTS_MAP._api_names:
             # Skip labelsChanged
             if key == 'labelsChanged':
                 continue
 
-            attr = EventTypes._api_names[key].attr_name
+            attr = dtevents._EVENTS_MAP._api_names[key].attr_name
             assert getattr(d.reported, attr) is None
 
     def test_reported_touch_data(self, request_mock):

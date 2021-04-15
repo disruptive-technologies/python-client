@@ -1,5 +1,4 @@
 .method {
-    border-top: 1px solid black;
     margin-top: 50px;
     margin-bottom: 50px;
 }
@@ -11,6 +10,7 @@
 }
 
 .class {
+    border-top: 1px solid black;
     margin-top: 25px;
     margin-bottom: 50px;
 }
