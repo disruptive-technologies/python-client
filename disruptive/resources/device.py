@@ -68,8 +68,8 @@ class Device(dtoutputs.OutputBase):
 
     @classmethod
     def get_device(cls,
-                   project_id: str,
                    device_id: str,
+                   project_id: Optional[str] = None,
                    **kwargs,
                    ) -> Device:
         """
@@ -77,10 +77,12 @@ class Device(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
+        project_id : str, optional
+            Unique ID of the target project.
+            If this is not provided, a wildcard project will be used, resulting in a
+            search for the device through all available projects.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -99,6 +101,9 @@ class Device(dtoutputs.OutputBase):
         >>> device = dt.Device.get_device(project_id, device_id)
 
         """
+
+        if project_id is None:
+            project_id = '-'
 
         # Construct URL
         url = '/projects/{}/devices/{}'.format(project_id, device_id)
