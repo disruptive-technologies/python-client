@@ -45,7 +45,7 @@ class TestDataconnector():
         request_mock.json = dtapiresponses.configured_dataconnector
 
         # Call the appropriate endpoint.
-        d = dt.DataConnector.get_dataconnector('project_id', 'device_id')
+        d = dt.DataConnector.get_dataconnector('device_id', 'project_id')
 
         # Assert single request sent.
         request_mock.assert_request_count(1)

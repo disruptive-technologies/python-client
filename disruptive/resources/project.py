@@ -353,8 +353,8 @@ class Project(OutputBase):
         ))
 
     @staticmethod
-    def get_member(project_id: str,
-                   member_id: str,
+    def get_member(member_id: str,
+                   project_id: str,
                    **kwargs,
                    ) -> Member:
         """
@@ -362,12 +362,12 @@ class Project(OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the project to get a member from.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
+        project_id : str
+            Unique ID of the project to get a member from.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -396,8 +396,8 @@ class Project(OutputBase):
         ))
 
     @staticmethod
-    def update_member(project_id: str,
-                      member_id: str,
+    def update_member(member_id: str,
+                      project_id: str,
                       roles: Optional[list[str]] = None,
                       **kwargs,
                       ) -> Member:
@@ -406,12 +406,12 @@ class Project(OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the project to update a member in.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
+        project_id : str
+            Unique ID of the project to update a member in.
         roles : list[str], optional
             List of new roles for the specified member.
         auth: Auth, optional
@@ -448,8 +448,8 @@ class Project(OutputBase):
         ))
 
     @staticmethod
-    def remove_member(project_id: str,
-                      member_id: str,
+    def remove_member(member_id: str,
+                      project_id: str,
                       **kwargs,
                       ) -> None:
         """
@@ -457,12 +457,12 @@ class Project(OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the project to remove a member from.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
+        project_id : str
+            Unique ID of the project to remove a member from.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -486,8 +486,8 @@ class Project(OutputBase):
         )
 
     @staticmethod
-    def get_member_invite_url(project_id: str,
-                              member_id: str,
+    def get_member_invite_url(member_id: str,
+                              project_id: str,
                               **kwargs,
                               ) -> None:
         """
@@ -498,12 +498,12 @@ class Project(OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the project of the member to get the URL from.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
+        project_id : str
+            Unique ID of the project of the member to get the URL from.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.

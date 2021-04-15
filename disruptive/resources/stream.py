@@ -17,8 +17,8 @@ class Stream():
     """
 
     @staticmethod
-    def device(project_id: str,
-               device_id: str,
+    def device(device_id: str,
+               project_id: str,
                event_types: Optional[list[str]] = None,
                **kwargs,
                ) -> Generator:
@@ -31,10 +31,10 @@ class Stream():
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
+        project_id : str
+            Unique ID of the target project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -67,7 +67,7 @@ class Stream():
             yield Event(event)
 
     @staticmethod
-    def project(project_id,
+    def project(project_id: str,
                 device_ids: Optional[list[str]] = None,
                 label_filters: Optional[list[str]] = None,
                 device_types: Optional[list[str]] = None,

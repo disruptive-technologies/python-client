@@ -17,8 +17,8 @@ class Emulator():
     """
 
     @staticmethod
-    def get_device(project_id: str,
-                   device_id: str,
+    def get_device(device_id: str,
+                   project_id: str,
                    **kwargs,
                    ) -> Device:
         """
@@ -26,10 +26,10 @@ class Emulator():
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
+        project_id : str
+            Unique ID of the target project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -152,8 +152,8 @@ class Emulator():
         ))
 
     @staticmethod
-    def delete_device(project_id: str,
-                      device_id: str,
+    def delete_device(device_id: str,
+                      project_id: str,
                       **kwargs,
                       ) -> None:
         """
@@ -161,10 +161,10 @@ class Emulator():
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         device_id : str
             Specifies which device type to delete.
+        project_id : str
+            Unique ID of the target project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -186,8 +186,8 @@ class Emulator():
         )
 
     @staticmethod
-    def publish_event(project_id: str,
-                      device_id: str,
+    def publish_event(device_id: str,
+                      project_id: str,
                       data: disruptive.events.Touch |
                       disruptive.events.Temperature |
                       disruptive.events.ObjectPresent |
@@ -207,10 +207,10 @@ class Emulator():
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
+        project_id : str
+            Unique ID of the target project.
         data : :ref:`Event Data`
             An object representing the event data to be published.
             Can be any of the listed :ref:`Event Data` classes.

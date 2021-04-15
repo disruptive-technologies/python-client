@@ -12,7 +12,7 @@ class TestDevice():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        d = dt.Device.get_device('project_id', 'device_id')
+        d = dt.Device.get_device('device_id', 'project_id')
 
         # Assert attributes unpacked correctly.
         assert d.device_id == res['name'].split('/')[-1]
@@ -23,7 +23,7 @@ class TestDevice():
         request_mock.json = dtapiresponses.touch_sensor
 
         # Call the appropriate endpoint.
-        d = dt.Device.get_device('project_id', 'device_id')
+        d = dt.Device.get_device('device_id', 'project_id')
 
         # Verify request parameters.
         request_mock.assert_requested(
@@ -53,7 +53,7 @@ class TestDevice():
         request_mock.json = dtapiresponses.null_reported_sensor
 
         # Call the appropriate endpoint.
-        d = dt.Device.get_device('project_id', 'device_id')
+        d = dt.Device.get_device('device_id', 'project_id')
 
         # Assert None for all reported datas.
         for key in dtevents._EVENTS_MAP._api_names:
@@ -69,7 +69,7 @@ class TestDevice():
         request_mock.json = dtapiresponses.touch_sensor
 
         # Call the appropriate endpoint.
-        d = dt.Device.get_device('project_id', 'device_id')
+        d = dt.Device.get_device('device_id', 'project_id')
 
         # Assert appropriate reported data instances.
         assert isinstance(d.reported.network_status, dtevents.NetworkStatus)
