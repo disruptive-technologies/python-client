@@ -81,8 +81,8 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the target device.
         project_id : str, optional
             Unique ID of the target project.
-            If this is not provided, a wildcard project will be used, resulting in a
-            search for the device through all available projects.
+            If this is not provided, a wildcard project will be used, resulting
+            in a search for the device through all available projects.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -181,8 +181,8 @@ class Device(dtoutputs.OutputBase):
         return [cls(device) for device in devices]
 
     @staticmethod
-    def batch_update_labels(project_id: str,
-                            device_ids: list[str],
+    def batch_update_labels(device_ids: list[str],
+                            project_id: str,
                             set_labels: Optional[dict[str, str]] = None,
                             remove_labels: Optional[list[str]] = None,
                             **kwargs,
@@ -198,10 +198,10 @@ class Device(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of target project.
         device_ids : list[str]
             List of unique IDs for the target devices.
+        project_id : str
+            Unique ID of target project.
         add_labels : dict[str, str], optional
             Key and value of labels to be added / updated.
         remove_labels : list[str], optional
@@ -235,8 +235,8 @@ class Device(dtoutputs.OutputBase):
         dtrequests.DTRequest.post(url, body=body, **kwargs)
 
     @staticmethod
-    def set_label(project_id: str,
-                  device_id: str,
+    def set_label(device_id: str,
+                  project_id: str,
                   key: str,
                   value: str,
                   **kwargs,
@@ -247,10 +247,10 @@ class Device(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
+        project_id : str
+            Unique ID of the target project.
         key : str
             Label key to be added.
         value : str
@@ -277,8 +277,8 @@ class Device(dtoutputs.OutputBase):
         dtrequests.DTRequest.post(url, body=body, **kwargs)
 
     @staticmethod
-    def remove_label(project_id: str,
-                     device_id: str,
+    def remove_label(device_id: str,
+                     project_id: str,
                      key: str,
                      **kwargs,
                      ) -> None:
@@ -287,10 +287,10 @@ class Device(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
+        project_id : str
+            Unique ID of the target project.
         key : str
             Key of the label to be removed.
         auth: Auth, optional
@@ -315,9 +315,9 @@ class Device(dtoutputs.OutputBase):
         dtrequests.DTRequest.post(url, body=body, **kwargs)
 
     @staticmethod
-    def transfer_device(source_project_id: str,
+    def transfer_device(device_ids: list[str],
+                        source_project_id: str,
                         target_project_id: str,
-                        device_ids: list[str],
                         **kwargs,
                         ) -> None:
         """
@@ -325,12 +325,12 @@ class Device(dtoutputs.OutputBase):
 
         Parameters
         ----------
+        device_ids : list[str]
+            List of unique IDs for the target devices.
         source_project_id : str
             Unique ID of the source project.
         target_project_id : str
             Unique ID of the target project.
-        device_ids : list[str]
-            List of unique IDs for the target devices.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.

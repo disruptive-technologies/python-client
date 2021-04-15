@@ -198,8 +198,8 @@ class Organization(OutputBase):
         ))
 
     @staticmethod
-    def get_member(organization_id: str,
-                   member_id: str,
+    def get_member(member_id: str,
+                   organization_id: str,
                    **kwargs,
                    ) -> Member:
         """
@@ -207,12 +207,12 @@ class Organization(OutputBase):
 
         Parameters
         ----------
-        organization_id : str
-            Unique ID of the organization to get a member from.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
+        organization_id : str
+            Unique ID of the organization to get a member from.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -241,8 +241,8 @@ class Organization(OutputBase):
         ))
 
     @staticmethod
-    def remove_member(organization_id: str,
-                      member_id: str,
+    def remove_member(member_id: str,
+                      organization_id: str,
                       **kwargs,
                       ) -> None:
         """
@@ -250,12 +250,12 @@ class Organization(OutputBase):
 
         Parameters
         ----------
-        organization_id : str
-            Unique ID of the organization to remove a member from.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
+        organization_id : str
+            Unique ID of the organization to remove a member from.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -279,8 +279,8 @@ class Organization(OutputBase):
         )
 
     @staticmethod
-    def get_member_invite_url(organization_id: str,
-                              member_id: str,
+    def get_member_invite_url(member_id: str,
+                              organization_id: str,
                               **kwargs,
                               ) -> None:
         """
@@ -291,12 +291,12 @@ class Organization(OutputBase):
 
         Parameters
         ----------
-        organization_id : str
-            Unique ID of the organization of the member to get the URL from.
         member_id : str
             Unique ID of the member to get.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
+        organization_id : str
+            Unique ID of the organization of the member to get the URL from.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.

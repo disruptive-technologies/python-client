@@ -69,8 +69,8 @@ class DataConnector(dtoutputs.OutputBase):
 
     @classmethod
     def get_dataconnector(cls,
-                          project_id: str,
                           dataconnector_id: str,
+                          project_id: str,
                           **kwargs,
                           ) -> DataConnector:
         """
@@ -78,10 +78,10 @@ class DataConnector(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique project ID.
         dataconnector_id : str
             Unique dataconnector ID.
+        project_id : str
+            Unique project ID.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -210,8 +210,8 @@ class DataConnector(dtoutputs.OutputBase):
     @classmethod
     def update_dataconnector(
         cls,
-        project_id: str,
         dataconnector_id: str,
+        project_id: str,
         config: Optional[disruptive.dataconnector_configs.HttpPush] = None,
         display_name: Optional[str] = None,
         status: Optional[str] = None,
@@ -224,10 +224,10 @@ class DataConnector(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the project that contains the dataconnector.
         dataconnector_id : str
             Unique ID of the dataconnector to update.
+        project_id : str
+            Unique ID of the project that contains the dataconnector.
         config : HttpPush, None
             An object representing the type-specific configuration.
         display_name : str, optional
@@ -277,8 +277,8 @@ class DataConnector(dtoutputs.OutputBase):
 
     @classmethod
     def delete_dataconnector(cls,
-                             project_id: str,
                              dataconnector_id: str,
+                             project_id: str,
                              **kwargs,
                              ) -> None:
         """
@@ -286,10 +286,10 @@ class DataConnector(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the project that contains the dataconnector.
         dataconnector_id : str
             Unique ID of the dataconnector to delete.
+        project_id : str
+            Unique ID of the project that contains the dataconnector.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -312,8 +312,8 @@ class DataConnector(dtoutputs.OutputBase):
 
     @classmethod
     def get_metrics(cls,
-                    project_id: str,
                     dataconnector_id: str,
+                    project_id: str,
                     **kwargs,
                     ) -> Metric:
         """
@@ -321,10 +321,10 @@ class DataConnector(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the project that contains the dataconnector.
         dataconnector_id : str
             Unique ID of the dataconnector to list metrics for.
+        project_id : str
+            Unique ID of the project that contains the dataconnector.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -353,8 +353,8 @@ class DataConnector(dtoutputs.OutputBase):
 
     @classmethod
     def sync_dataconnector(cls,
-                           project_id: str,
                            dataconnector_id: str,
+                           project_id: str,
                            **kwargs,
                            ) -> None:
         """
@@ -366,10 +366,10 @@ class DataConnector(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the project that contains the dataconnector.
         dataconnector_id : str
             Unique ID of the dataconnector to synchronize.
+        project_id : str
+            Unique ID of the project that contains the dataconnector.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.

@@ -14,8 +14,8 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         s = dt.ServiceAccount.get_serviceaccount(
+            'serviceaccount_id',
             'project_id',
-            'serviceaccount_id'
         )
 
         # Assert attributes unpacked correctly.
@@ -32,8 +32,8 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         s = dt.ServiceAccount.get_serviceaccount(
-            'project_id',
             'serviceaccount_id',
+            'project_id',
         )
 
         # Verify request parameters.
@@ -101,8 +101,8 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         s = dt.ServiceAccount.update_serviceaccount(
-            project_id='project_id',
             serviceaccount_id='serviceaccount_id',
+            project_id='project_id',
             display_name='service-account-1',
             basic_auth=False,
         )
@@ -127,8 +127,8 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         dt.ServiceAccount.delete_serviceaccount(
-            project_id='project_id',
             serviceaccount_id='serviceaccount_id',
+            project_id='project_id',
         )
 
         # Verify single request sent.
@@ -148,9 +148,9 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         k = dt.ServiceAccount.get_key(
-            'project_id',
             'serviceaccount_id',
-            'key_id'
+            'key_id',
+            'project_id',
         )
 
         # Assert attributes unpacked correctly.
@@ -165,8 +165,8 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         k = dt.ServiceAccount.create_key(
-            'project_id',
             'serviceaccount_id',
+            'project_id',
         )
 
         # Assert attributes unpacked correctly.
@@ -178,9 +178,9 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         key = dt.ServiceAccount.get_key(
-            project_id='project_id',
             serviceaccount_id='serviceaccount_id',
             key_id='key_id',
+            project_id='project_id',
         )
 
         # Verify request parameters.
@@ -202,8 +202,8 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         keys = dt.ServiceAccount.list_keys(
-            project_id='project_id',
             serviceaccount_id='serviceaccount_id',
+            project_id='project_id',
         )
 
         # Verify request parameters.
@@ -226,8 +226,8 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         key = dt.ServiceAccount.create_key(
-            project_id='project_id',
             serviceaccount_id='serviceaccount_id',
+            project_id='project_id',
         )
 
         # Verify request parameters.
@@ -249,9 +249,9 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         dt.ServiceAccount.delete_key(
-            project_id='project_id',
             serviceaccount_id='serviceaccount_id',
             key_id='key_id',
+            project_id='project_id',
         )
 
         # Verify request parameters.

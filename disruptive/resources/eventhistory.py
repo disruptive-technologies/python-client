@@ -41,8 +41,8 @@ class EventHistory(dtoutputs.OutputBase):
 
     @classmethod
     def list_events(cls,
-                    project_id: str,
                     device_id: str,
+                    project_id: str,
                     event_types: Optional[list[str]] = None,
                     start_time: Optional[str | datetime] = None,
                     end_time: Optional[str | datetime] = None,
@@ -53,10 +53,10 @@ class EventHistory(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         device_id : str
             Unique ID of the target device.
+        project_id : str
+            Unique ID of the target project.
         event_types : list[str], optional
             If provided, only the specified event types are fetched.
         start_time : str, datetime, optional

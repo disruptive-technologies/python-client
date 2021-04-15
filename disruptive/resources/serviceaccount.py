@@ -57,8 +57,8 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     @classmethod
     def get_serviceaccount(cls,
-                           project_id: str,
                            serviceaccount_id: str,
+                           project_id: str,
                            **kwargs,
                            ) -> ServiceAccount:
         """
@@ -66,10 +66,10 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         serviceaccount_id : str
             Unique ID of the target serviceaccount.
+        project_id : str
+            Unique ID of the target project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -190,8 +190,8 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     @classmethod
     def update_serviceaccount(cls,
-                              project_id: str,
                               serviceaccount_id: str,
+                              project_id: str,
                               display_name: Optional[str] = None,
                               basic_auth: Optional[bool] = None,
                               **kwargs,
@@ -201,10 +201,10 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         serviceaccount_id : str
             Unique ID of the target serviceaccount.
+        project_id : str
+            Unique ID of the target project.
         display_name : str, optional
             Updates the serviceaccount display name.
         basic_auth : bool, optional
@@ -241,8 +241,8 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     @classmethod
     def delete_serviceaccount(cls,
-                              project_id: str,
                               serviceaccount_id: str,
+                              project_id: str,
                               **kwargs,
                               ) -> None:
         """
@@ -250,10 +250,10 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         serviceaccount_id : str
             Unique ID of the serviceaccount to delete.
+        project_id : str
+            Unique ID of the target project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -277,8 +277,8 @@ class ServiceAccount(dtoutputs.OutputBase):
         )
 
     @staticmethod
-    def get_key(project_id: str,
-                serviceaccount_id: str,
+    def get_key(serviceaccount_id: str,
+                project_id: str,
                 key_id: str,
                 **kwargs,
                 ) -> Key:
@@ -287,10 +287,10 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         serviceaccount_id : str
             Unique ID of the target serviceaccount.
+        project_id : str
+            Unique ID of the target project.
         key_id : str
             Unique ID of the target key.
         auth: Auth, optional
@@ -322,8 +322,8 @@ class ServiceAccount(dtoutputs.OutputBase):
         ))
 
     @staticmethod
-    def list_keys(project_id: str,
-                  serviceaccount_id: str,
+    def list_keys(serviceaccount_id: str,
+                  project_id: str,
                   **kwargs,
                   ) -> list[Key]:
         """
@@ -331,10 +331,10 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         serviceaccount_id : str
             Unique ID of the target serviceaccount.
+        project_id : str
+            Unique ID of the target project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -367,8 +367,8 @@ class ServiceAccount(dtoutputs.OutputBase):
         return [Key(key) for key in keys]
 
     @staticmethod
-    def create_key(project_id: str,
-                   serviceaccount_id: str,
+    def create_key(serviceaccount_id: str,
+                   project_id: str,
                    **kwargs,
                    ) -> Key:
         """
@@ -376,10 +376,10 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         serviceaccount_id : str
             Unique ID of the target serviceaccount.
+        project_id : str
+            Unique ID of the target project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -409,9 +409,9 @@ class ServiceAccount(dtoutputs.OutputBase):
         return Key._with_secret(response)
 
     @staticmethod
-    def delete_key(project_id: str,
-                   serviceaccount_id: str,
+    def delete_key(serviceaccount_id: str,
                    key_id: str,
+                   project_id: str,
                    **kwargs,
                    ) -> None:
         """
@@ -419,12 +419,12 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        project_id : str
-            Unique ID of the target project.
         serviceaccount_id : str
             Unique ID of the target serviceaccount.
         key_id : str
             Unique ID of the key to delete.
+        project_id : str
+            Unique ID of the target project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
