@@ -24,6 +24,9 @@ class Device(dtoutputs.OutputBase):
         Unique device ID.
     project_id : str
         Project in which the device resides.
+    display_name : str, None
+        Given device name if set through a label with key `name`.
+        Otherwise None.
     type : str
         Device type.
     labels : dict
@@ -54,6 +57,11 @@ class Device(dtoutputs.OutputBase):
         self.project_id = device['name'].split('/')[1]
         self.type = device['type']
         self.labels = device['labels']
+
+        # Set display_name if `name` label key exists.
+        self.display_name = None
+        if 'name' in self.labels:
+            self.display_name = self.labels['name']
 
         # Determine if the device is an emulator by checking id prefix.
         if self.device_id.startswith('emu'):
