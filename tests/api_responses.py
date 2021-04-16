@@ -336,6 +336,23 @@ simple_dataconnector = {
     }
 }
 
+unknown_dataconnector = {
+    "name": "projects/c0md3mm0c7pet3vico8g/"
+            + "dataconnectors/c16eegpdidie7lltpefg",
+    "displayName": "my-new-dcon",
+    "type": "unknown",
+    "status": "ACTIVE",
+    "events": [],
+    "labels": [
+        "name"
+    ],
+    "httpConfig": {
+        "url": "https://584087e0a1fa.eu.ngrok.io/api/endpoint",
+        "signatureSecret": "",
+        "headers": {}
+    }
+}
+
 configured_dataconnector = {
     "name": "projects/c0md3pm0p7bet3vico8g/"
             + "dataconnectors/c16pegipidie7lltrefg",

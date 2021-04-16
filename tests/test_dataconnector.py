@@ -136,6 +136,50 @@ class TestDataconnector():
         # Assert output is instance of DataConnector.
         assert isinstance(d, dt.DataConnector)
 
+    def test_create_dataconnector_http_push_config(self, request_mock):
+        """
+        Test that the creation of a dataconnector using HttpPush config
+        will set the expected type and request body.
+
+        """
+
+        # Mock the DataConnector constructor to do nothing as
+        # the response is not relevant to this test.
+        with patch('disruptive.DataConnector.__init__') as init_mock:
+            # Do nothing and return None.
+            init_mock.return_value = None
+
+            # Call DataConnector.create_dataconnector for type HTTP_PUSH.
+            dt.DataConnector.create_dataconnector(
+                project_id='project_id',
+                config=dt.dataconnector_configs.HttpPush(
+                    url='some-url',
+                    signature_secret='some-secret',
+                    headers={'name': 'value'},
+                ),
+            )
+
+        # Verify expected outgoing parameters in request.
+        # Especially the body is important here.
+        url = dt.api_url+'/projects/project_id/dataconnectors'
+        request_mock.assert_requested(
+            method='POST',
+            url=url,
+            body={
+                'status': 'ACTIVE',
+                'events': [],
+                'labels': [],
+                'type': 'HTTP_PUSH',
+                'httpConfig': {
+                    'url': 'some-url',
+                    'signatureSecret': 'some-secret',
+                    'headers': {
+                        'name': 'value',
+                    }
+                }
+            }
+        )
+
     def test_update_dataconnector(self, request_mock):
         # Update the response json with a mock dataconnector response.
         res = dtapiresponses.configured_dataconnector
