@@ -233,3 +233,27 @@ class TestDataconnector():
 
         # Assert that method returns nothing.
         assert d is None
+
+    def test_get_metrics(self, request_mock):
+        # Update the response json with a mock metric response.
+        request_mock.json = dtapiresponses.metrics
+
+        # Call DataConnector.get_metrics.
+        m = dt.DataConnector.get_metrics(
+            dataconnector_id='dataconnector_id',
+            project_id='project_id',
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = dt.api_url
+        url += '/projects/project_id/dataconnectors/dataconnector_id:metrics'
+        request_mock.assert_requested(
+            method='GET',
+            url=url,
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is instance of Metric.
+        assert isinstance(m, dt.resources.dataconnector.Metric)
