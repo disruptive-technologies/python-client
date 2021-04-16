@@ -167,7 +167,9 @@ class EventHistory(dtoutputs.OutputBase):
                 continue
 
             # Skip event if x- or y-name does not exist.
-            if not hasattr(e.data, x_name) or not hasattr(e.data, y_name):
+            if not hasattr(e.data, x_name):
+                continue
+            if y_name is not None and not hasattr(e.data, y_name):
                 continue
 
             # Tests passed, append timestamp and y-axis.
