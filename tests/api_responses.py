@@ -610,3 +610,187 @@ created_temperatur_emulator = {
         'virtual-sensor': '',
     }
 }
+
+event_history_each_type = {
+    'nextPageToken': '',
+    'events': [
+        {
+            "eventId": "01",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "touch",
+            "data": {
+                "touch": {
+                    "updateTime": "2019-05-16T08:13:15.361624Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "02",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "temperature",
+            "data": {
+                "temperature": {
+                    "value": 24.9,
+                    "updateTime": "2019-05-16T08:15:18.318751Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "03",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "objectPresent",
+            "data": {
+                "objectPresent": {
+                    "state": "NOT_PRESENT",
+                    "updateTime": "2019-05-16T08:37:10.711412Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "04",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "humidity",
+            "data": {
+                "humidity": {
+                    "temperature": 22.45,
+                    "relativeHumidity": 17,
+                    "updateTime": "2019-05-16T06:13:46.369000Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "05",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "objectPresentCount",
+            "data": {
+                "objectPresentCount": {
+                    "total": 4176,
+                    "updateTime": "2019-05-16T08:23:43.209000Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "06",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "touchCount",
+            "data": {
+                "touchCount": {
+                    "total": 469,
+                    "updateTime": "2019-05-16T08:25:21.604000Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "07",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "waterPresent",
+            "data": {
+                "waterPresent": {
+                    "state": "PRESENT",
+                    "updateTime": "2019-05-16T08:43:16.266000Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "08",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "networkStatus",
+            "data": {
+                "networkStatus": {
+                    "signalStrength": 45,
+                    "rssi": -83,
+                    "updateTime": "2019-05-16T08:21:21.076013Z",
+                    "cloudConnectors": [
+                        {
+                            "id": "bdkjbo2v0000uk377c4g",
+                            "signalStrength": 45,
+                            "rssi": -83
+                        }
+                    ],
+                    "transmissionMode": "LOW_POWER_STANDARD_MODE"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "09",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "batteryStatus",
+            "data": {
+                "batteryStatus": {
+                    "percentage": 100,
+                    "updateTime": "2019-05-16T08:21:21.076013Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "10",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "labelsChanged",
+            "data": {
+                "added": {
+                    "label-key": "label-value"
+                },
+                "modified": {
+                    "label-key": "new-label-value"
+                },
+                "removed": [
+                    "remove-key1",
+                    "remove-key2"
+                ]
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "11",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "connectionStatus",
+            "data": {
+                "connectionStatus": {
+                    "connection": "ETHERNET",
+                    "available": [
+                        "CELLULAR",
+                        "ETHERNET"
+                    ],
+                    "updateTime": "2019-05-16T08:21:21.076013Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "12",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "ethernetStatus",
+            "data": {
+                "ethernetStatus": {
+                    "macAddress": "f0:b5:b7:00:0a:08",
+                    "ipAddress": "10.0.0.1",
+                    "errors": [],
+                    "updateTime": "2019-05-16T08:21:21.076013Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+        {
+            "eventId": "13",
+            "targetName": "/projets/project_id/devices/device_id ",
+            "eventType": "cellularStatus",
+            "data": {
+                "cellularStatus": {
+                    "signalStrength": 80,
+                    "errors": [],
+                    "updateTime": "2019-05-16T08:21:21.076013Z"
+                }
+            },
+            "timestamp": "1970-01-01T00:00:00Z"
+        },
+    ]
+}
