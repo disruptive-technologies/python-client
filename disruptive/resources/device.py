@@ -24,6 +24,9 @@ class Device(dtoutputs.OutputBase):
         Unique device ID.
     project_id : str
         Project in which the device resides.
+    display_name : str, None
+        Given device name if set through a label with key `name`.
+        Otherwise None.
     type : str
         Device type.
     labels : dict
@@ -54,6 +57,11 @@ class Device(dtoutputs.OutputBase):
         self.project_id = device['name'].split('/')[1]
         self.type = device['type']
         self.labels = device['labels']
+
+        # Set display_name if `name` label key exists.
+        self.display_name = None
+        if 'name' in self.labels:
+            self.display_name = self.labels['name']
 
         # Determine if the device is an emulator by checking id prefix.
         if self.device_id.startswith('emu'):
@@ -117,7 +125,7 @@ class Device(dtoutputs.OutputBase):
                      query: Optional[str] = None,
                      device_ids: Optional[list[str]] = None,
                      device_types: Optional[list[str]] = None,
-                     label_filters: Optional[list[str]] = None,
+                     label_filters: Optional[dict[str, str]] = None,
                      order_by: Optional[str] = None,
                      **kwargs,
                      ) -> list[Device]:
@@ -134,9 +142,10 @@ class Device(dtoutputs.OutputBase):
             Specify devices by their unique IDs.
         device_types : list[str], optional
             Specify devices by type.
-        label_filters : list[str], optional
-            Specify devices by label keys and values.
-            Each entry takes the form "label_key=label_value".
+        label_filters : dict[str, str], optional
+            Specify devices by label keys and values (i.e. {"key": "value"}).
+            If a key is provided and value is set as an empty
+            string (i.e. {"key": ""}), all device with that key is fetched.
         order_by : str, optional
             The field name you want to order the response by.
             Referred to using dot notation, e.g. reported.temperature.value.
@@ -144,8 +153,6 @@ class Device(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
-        page_size: int, optional
-            Number of devices [1, 100] to get per request. Defaults to 100.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
         request_retries: int, optional
@@ -166,10 +173,15 @@ class Device(dtoutputs.OutputBase):
             params['device_ids'] = device_ids
         if device_types is not None:
             params['device_types'] = device_types
-        if label_filters is not None:
-            params['label_filters'] = label_filters
         if order_by is not None:
             params['order_by'] = order_by
+
+        # Convert label_filters dictionary to list of strings.
+        if label_filters is not None:
+            labels_list = []
+            for key in label_filters:
+                labels_list.append(key + '=' + label_filters[key])
+            params['label_filters'] = labels_list
 
         # Return list of Device objects of paginated GET response.
         devices = dtrequests.DTRequest.paginated_get(

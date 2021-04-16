@@ -111,8 +111,6 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
-        page_size: int, optional
-            Number of projects [1, 100] to get per request. Defaults to 100.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
         request_retries: int, optional
@@ -280,8 +278,6 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
-        page_size: int, optional
-            Number of members [1, 100] to get per request. Defaults to 100.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
         request_retries: int, optional
@@ -545,8 +541,6 @@ class Project(OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
-        page_size: int, optional
-            Number of permissions [1, 100] to get per request. Defaults to 100.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
         request_retries: int, optional

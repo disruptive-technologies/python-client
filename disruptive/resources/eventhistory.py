@@ -68,8 +68,6 @@ class EventHistory(dtoutputs.OutputBase):
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
-        page_size: int, optional
-            Number of events [1, 1000] to get per request. Defaults to 1000.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
         request_retries: int, optional

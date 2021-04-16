@@ -258,10 +258,6 @@ class DTRequest():
         # Initialize output list.
         results = []
 
-        # Unpack all kwargs at once here for readability.
-        if 'page_size' in kwargs:
-            params['pageSize'] = kwargs['page_size']
-
         # Loop until paging has finished.
         while True:
             response = cls.get(url, params=params, **kwargs)
