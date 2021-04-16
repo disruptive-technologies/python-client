@@ -95,6 +95,34 @@ class TestDevice():
         # Assert output is None.
         assert d is None
 
+    def test_set_label(self, request_mock):
+        # Call Device.set_label() method.
+        d = dt.Device.set_label(
+            device_id='device_id',
+            project_id='project_id',
+            key='key',
+            value='value',
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = dt.api_url+'/projects/project_id/devices:batchUpdate'
+        request_mock.assert_requested(
+            method='POST',
+            url=url,
+            body={
+                'devices': [
+                    'projects/project_id/devices/device_id',
+                ],
+                'addLabels': {'key': 'value'},
+            },
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert d is None
+
     def test_no_reported_data(self, request_mock):
         # Update the response data with device data.
         request_mock.json = dtapiresponses.null_reported_sensor
