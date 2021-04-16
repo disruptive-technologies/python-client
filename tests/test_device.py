@@ -123,6 +123,60 @@ class TestDevice():
         # Assert output is None.
         assert d is None
 
+    def test_remove_label(self, request_mock):
+        # Call Device.remove_label() method.
+        d = dt.Device.remove_label(
+            device_id='device_id',
+            project_id='project_id',
+            key='key',
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = dt.api_url+'/projects/project_id/devices:batchUpdate'
+        request_mock.assert_requested(
+            method='POST',
+            url=url,
+            body={
+                'devices': [
+                    'projects/project_id/devices/device_id',
+                ],
+                'removeLabels': ['key'],
+            },
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert d is None
+
+    def test_transfer_devices(self, request_mock):
+        # Call Device.remove_label() method.
+        d = dt.Device.transfer_devices(
+            device_ids=['device_id1', 'device_id2'],
+            source_project_id='source_project',
+            target_project_id='target_project',
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = dt.api_url+'/projects/target_project/devices:transfer'
+        request_mock.assert_requested(
+            method='POST',
+            url=url,
+            body={
+                'devices': [
+                    'projects/source_project/devices/device_id1',
+                    'projects/source_project/devices/device_id2',
+                ],
+            }
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert d is None
+
     def test_no_reported_data(self, request_mock):
         # Update the response data with device data.
         request_mock.json = dtapiresponses.null_reported_sensor
