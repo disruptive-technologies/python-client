@@ -53,7 +53,7 @@ class TestDataconnector():
             project_id='project_id',
         )
 
-        # Verify expected request outgoing parameters.
+        # Verify expected outgoing parameters in request.
         url = dt.api_url+'/projects/project_id/dataconnectors/dataconnector_id'
         request_mock.assert_requested(
             method='GET',
@@ -73,7 +73,7 @@ class TestDataconnector():
         # Call the appropriate endpoint.
         dataconnectors = dt.DataConnector.list_dataconnectors('project_id')
 
-        # Verify expected request outgoing parameters.
+        # Verify expected outgoing parameters in request.
         url = dt.api_url+'/projects/project_id/dataconnectors'
         request_mock.assert_requested(
             method='GET',
@@ -108,7 +108,7 @@ class TestDataconnector():
             )
         )
 
-        # Verify expected request outgoing parameters.
+        # Verify expected outgoing parameters in request.
         # Especially the body is important here.
         url = dt.api_url+'/projects/c0md3pm0p7bet3vico8g/dataconnectors'
         request_mock.assert_requested(
@@ -157,7 +157,7 @@ class TestDataconnector():
             )
         )
 
-        # Verify expected request outgoing parameters.
+        # Verify expected outgoing parameters in request.
         # Especially the body is important here.
         url = dt.api_url
         url += '/projects/c0md3pm0p7bet3vico8g'
@@ -213,3 +213,23 @@ class TestDataconnector():
             url=url,
             body={},
         )
+
+    def test_delete_dataconnector(self, request_mock):
+        # Call the DataConnector.delete_dataconnector() method.
+        d = dt.DataConnector.delete_dataconnector(
+            dataconnector_id='dataconnector_id',
+            project_id='project_id',
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = dt.api_url+'/projects/project_id/dataconnectors/dataconnector_id'
+        request_mock.assert_requested(
+            method='DELETE',
+            url=url,
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert that method returns nothing.
+        assert d is None
