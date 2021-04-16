@@ -32,8 +32,7 @@ class TestDataconnector():
 
     def test_unknown_config_type(self, request_mock):
         # Update the response json with a mock dataconnector of unknown type.
-        r = dtapiresponses.configured_dataconnector
-        r['type'] = 'unknown'
+        r = dtapiresponses.unknown_dataconnector
         request_mock.json = r
 
         # Call an endpoint to construct a dataconnector object.
@@ -322,3 +321,61 @@ class TestDataconnector():
 
         # Assert output is None.
         assert m is None
+
+    def test_http_push_config_inbound(self, request_mock):
+        """
+        Test that fetching a dataconnector with type `HTTP_PUSH` will
+        result in a config attribute of instance HttpPush.
+
+        """
+        # Update the response json with a mock dataconnector response.
+        r = dtapiresponses.configured_dataconnector
+        request_mock.json = r
+
+        # Call the appropriate endpoint.
+        d = dt.DataConnector.get_dataconnector(
+            dataconnector_id='c16eegpdidie7lltpefg',
+            project_id='c0md3mm0c7pet3vico8g',
+        )
+
+        # Assert type and config instance.
+        assert d.dataconnector_type == 'HTTP_PUSH'
+        assert isinstance(d.config, dt.dataconnector_configs.HttpPush)
+
+        # Assert HttpPush attributes are set properly.
+        assert d.config.url == r['httpConfig']['url']
+        assert d.config.signature_secret == r['httpConfig']['signatureSecret']
+        assert d.config.headers == r['httpConfig']['headers']
+
+    def test_http_push_config_outbound(self):
+        """
+        Test that creating a dataconnector with an HttpPush object will
+        result in the correct type- and request body construction.
+
+        """
+
+        # Construct a HttpPush object.
+        config = dt.dataconnector_configs.HttpPush(
+            url='some-url',
+            signature_secret='some-secret',
+            headers={
+                'h1': 'v1',
+                'h2': 'v2',
+            },
+        )
+
+        # Verify type attribute is correct.
+        assert config.dataconnector_type == 'HTTP_PUSH'
+
+        # Test that _to_dict() method returns expected format.
+        expected = {
+            'url': 'some-url',
+            'signatureSecret': 'some-secret',
+            'headers': {
+                'h1': 'v1',
+                'h2': 'v2',
+            }
+        }
+        key, value = config._to_dict()
+        assert key == 'httpConfig'
+        assert value == expected
