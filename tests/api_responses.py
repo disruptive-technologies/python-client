@@ -600,3 +600,13 @@ metrics = {
         'latency99p': '0.411s',
     }
 }
+
+created_temperatur_emulator = {
+    'name': 'projects/c14u9p094l47cdv1o3pg/devices/emuc1so7tgttn8sjobqvvug',
+    'type': 'temperature',
+    'labels': {
+        'key': 'value',
+        'name': 'new-device',
+        'virtual-sensor': '',
+    }
+}
