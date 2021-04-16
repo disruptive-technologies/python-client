@@ -575,3 +575,11 @@ roles = {
         project_developer_role,
     ]
 }
+
+metrics = {
+    'metrics': {
+        'successCount': 9,
+        'errorCount': 0,
+        'latency99p': '0.411s',
+    }
+}
