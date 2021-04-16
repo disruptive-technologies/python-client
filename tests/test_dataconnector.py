@@ -257,3 +257,24 @@ class TestDataconnector():
 
         # Assert output is instance of Metric.
         assert isinstance(m, dt.resources.dataconnector.Metric)
+
+    def test_sync_dataconnector(self, request_mock):
+        # Call DataConnector.sync_dataconnector.
+        m = dt.DataConnector.sync_dataconnector(
+            dataconnector_id='dataconnector_id',
+            project_id='project_id',
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = dt.api_url
+        url += '/projects/project_id/dataconnectors/dataconnector_id:sync'
+        request_mock.assert_requested(
+            method='POST',
+            url=url,
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert m is None
