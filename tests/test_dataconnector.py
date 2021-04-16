@@ -45,7 +45,17 @@ class TestDataconnector():
         request_mock.json = dtapiresponses.configured_dataconnector
 
         # Call the appropriate endpoint.
-        d = dt.DataConnector.get_dataconnector('device_id', 'project_id')
+        d = dt.DataConnector.get_dataconnector(
+            dataconnector_id='dataconnector_id',
+            project_id='project_id',
+        )
+
+        # Verify expected request outgoing parameters.
+        url = dt.api_url+'/projects/project_id/dataconnectors/dataconnector_id'
+        request_mock.assert_requested(
+            method='GET',
+            url=url,
+        )
 
         # Assert single request sent.
         request_mock.assert_request_count(1)
@@ -60,9 +70,17 @@ class TestDataconnector():
         # Call the appropriate endpoint.
         dataconnectors = dt.DataConnector.list_dataconnectors('project_id')
 
+        # Verify expected request outgoing parameters.
+        url = dt.api_url+'/projects/project_id/dataconnectors'
+        request_mock.assert_requested(
+            method='GET',
+            url=url,
+        )
+
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert output instance.
+        # Assert output as list of instances.
+        assert isinstance(dataconnectors, list)
         for d in dataconnectors:
             assert isinstance(d, dt.DataConnector)
