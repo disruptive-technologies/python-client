@@ -25,7 +25,7 @@ class TestDevice():
         # Call Device.get_device() method.
         d = dt.Device.get_device('device_id', 'project_id')
 
-        # Verify request parameters.
+        # Verify expected outgoing parameters in request.
         request_mock.assert_requested(
             method='GET',
             url=dt.api_url+'/projects/project_id/devices/device_id',
@@ -44,15 +44,56 @@ class TestDevice():
         # Call Device.list_devices() method.
         devices = dt.Device.list_devices('project_id')
 
+        # Verify expected outgoing parameters in request.
+        url = dt.api_url+'/projects/project_id/devices'
+        request_mock.assert_requested(
+            method='GET',
+            url=url,
+        )
+
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
         # output should be list.
         assert type(devices) == list
 
-        # Assert output instance for devices in list.
+        # Assert output is list of Device.
         for d in devices:
             assert isinstance(d, dt.Device)
+
+    def test_batch_update_labels(self, request_mock):
+        # Call Device.batch_update_labels() method.
+        d = dt.Device.batch_update_labels(
+            device_ids=['device_id1', 'device_id2', 'device_id3'],
+            project_id='project_id',
+            set_labels={
+                'key1': 'value1',
+                'key2': 'value2',
+            },
+            remove_labels=['remove-key'],
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = dt.api_url+'/projects/project_id/devices:batchUpdate'
+        request_mock.assert_requested(
+            method='POST',
+            url=url,
+            body={
+                'devices': [
+                    'projects/project_id/devices/device_id1',
+                    'projects/project_id/devices/device_id2',
+                    'projects/project_id/devices/device_id3',
+                ],
+                'addLabels': {'key1': 'value1', 'key2': 'value2'},
+                'removeLabels': ['remove-key'],
+            }
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert d is None
 
     def test_no_reported_data(self, request_mock):
         # Update the response data with device data.
