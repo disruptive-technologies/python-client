@@ -22,7 +22,7 @@ class TestDevice():
         # Update the response data with device data.
         request_mock.json = dtapiresponses.touch_sensor
 
-        # Call the appropriate endpoint.
+        # Call Device.get_device() method.
         d = dt.Device.get_device('device_id', 'project_id')
 
         # Verify request parameters.
@@ -31,6 +31,9 @@ class TestDevice():
             url=dt.api_url+'/projects/project_id/devices/device_id',
         )
 
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
         # Assert instance of Device object.
         assert isinstance(d, dt.Device)
 
@@ -38,8 +41,11 @@ class TestDevice():
         # Update the response data with a list of device data.
         request_mock.json = dtapiresponses.paginated_device_response
 
-        # Call the appropriate endpoint.
+        # Call Device.list_devices() method.
         devices = dt.Device.list_devices('project_id')
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
 
         # output should be list.
         assert type(devices) == list
@@ -57,7 +63,7 @@ class TestDevice():
 
         # Assert None for all reported datas.
         for key in dtevents._EVENTS_MAP._api_names:
-            # Skip labelsChanged
+            # Skip labelsChanged as it does not exist in reported.
             if key == 'labelsChanged':
                 continue
 
