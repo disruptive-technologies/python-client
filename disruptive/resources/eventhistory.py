@@ -22,6 +22,7 @@ class EventHistory(dtoutputs.OutputBase):
         List of all events fetched in history.
 
     """
+
     def __init__(self, events_list: list[Event]) -> None:
         """
         Constructs the EventHistory object from a list of events.
@@ -123,6 +124,7 @@ class EventHistory(dtoutputs.OutputBase):
             List of event objects of the specified type.
 
         """
+
         out = []
         for e in self.events_list:
             if e.event_type == event_type:
@@ -162,6 +164,12 @@ class EventHistory(dtoutputs.OutputBase):
         for e in self.events_list:
             # Skip event if event_type mismatch.
             if event_type is not None and event_type != e.event_type:
+                continue
+
+            # Skip event if x- or y-name does not exist.
+            if not hasattr(e.data, x_name):
+                continue
+            if y_name is not None and not hasattr(e.data, y_name):
                 continue
 
             # Tests passed, append timestamp and y-axis.

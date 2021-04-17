@@ -4,7 +4,6 @@ from __future__ import annotations
 from typing import Optional
 
 # Project imports.
-import disruptive as dt
 import disruptive.log as dtlog
 import disruptive.requests as dtrequests
 import disruptive.events.events as dtevents
@@ -327,11 +326,11 @@ class Device(dtoutputs.OutputBase):
         dtrequests.DTRequest.post(url, body=body, **kwargs)
 
     @staticmethod
-    def transfer_device(device_ids: list[str],
-                        source_project_id: str,
-                        target_project_id: str,
-                        **kwargs,
-                        ) -> None:
+    def transfer_devices(device_ids: list[str],
+                         source_project_id: str,
+                         target_project_id: str,
+                         **kwargs,
+                         ) -> None:
         """
         Transfer devices from one project to another.
 
@@ -364,7 +363,7 @@ class Device(dtoutputs.OutputBase):
 
         # Sent POST request, but return nothing.
         dtrequests.DTRequest.post(
-            url=dt.api_url + '/projects/{}/devices:transfer'.format(
+            url='/projects/{}/devices:transfer'.format(
                 target_project_id
             ),
             body=body,
