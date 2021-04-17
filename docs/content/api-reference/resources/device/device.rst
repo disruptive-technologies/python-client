@@ -9,7 +9,7 @@ API Methods
 .. autofunction:: disruptive.Device.batch_update_labels
 .. autofunction:: disruptive.Device.set_label
 .. autofunction:: disruptive.Device.remove_label
-.. autofunction:: disruptive.Device.transfer_device
+.. autofunction:: disruptive.Device.transfer_devices
 
 Class
 ^^^^^
