@@ -5,10 +5,7 @@ name: Publish PyPI Release
 
 on:
   release:
-    types:
-      - created
-      - prereleased
-      - edited
+    types: [created, prereleased, released, edited]
 
 jobs:
   deploy:
