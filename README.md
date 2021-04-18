@@ -63,8 +63,14 @@ for new_event in dt.Stream.device(sensor.device_id, sensor.project_id):
     print(new_event.data)
 ```
 
+## Logging
+Information about outbound requests and their response can be printed to console by setting:
+```python
+dt.log = True
+```
+
 ## Examples
-A few examples showcasing various uses for the package has been provided. They do not require additional dependencies and can, provided the package has been installed, run as a normal script:
+A few examples showcasing various uses for the package has been provided. They do not require additional dependencies and can, provided the package has been installed, be run by:
 ```sh
 python example_name.py
 ```
