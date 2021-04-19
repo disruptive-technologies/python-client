@@ -38,6 +38,7 @@ class OutputBase():
         n_spaces = 4
         l0 = level*' '*n_spaces
         l1 = (level+1)*' '*n_spaces
+        l2 = (level+2)*' '*n_spaces
 
         # At first recursive depth, print object name.
         if level == 0:
@@ -63,7 +64,7 @@ class OutputBase():
             elif isinstance(val, list):
                 out.append('{}{}: {} = {}'.format(
                     l1, a, type(val).__name__, '['))
-                self.__str__list(out, val, level+1, n_spaces, l1)
+                self.__str__list(out, val, level+1, n_spaces, l2)
                 out.append(l1 + '],')
 
             # Other types can be printed directly.
