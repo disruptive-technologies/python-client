@@ -1,5 +1,5 @@
 # Project imports.
-import disruptive as dt
+import disruptive
 import tests.api_responses as dtapiresponses
 import disruptive.transforms as dttrans
 from disruptive.resources.serviceaccount import Key
@@ -7,13 +7,28 @@ from disruptive.resources.serviceaccount import Key
 
 class TestServiceAccount():
 
+    def test_repr(self, request_mock):
+        # Update the response data with serviceaccount data.
+        res = dtapiresponses.serviceaccount1
+        request_mock.json = res
+
+        # Fetch a serviceaccount.
+        x = disruptive.ServiceAccount.get_serviceaccount(
+            serviceaccount_id='serviceaccount_id',
+            project_id='project_id',
+        )
+
+        # Evaluate __repr__ function and compare copy.
+        y = eval(repr(x))
+        assert x._raw == y._raw
+
     def test_unpack(self, request_mock):
         # Update the response data with serviceaccount data.
         res = dtapiresponses.serviceaccount1
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        s = dt.ServiceAccount.get_serviceaccount(
+        s = disruptive.ServiceAccount.get_serviceaccount(
             'serviceaccount_id',
             'project_id',
         )
@@ -31,7 +46,7 @@ class TestServiceAccount():
         request_mock.json = dtapiresponses.serviceaccount1
 
         # Call the appropriate endpoint.
-        s = dt.ServiceAccount.get_serviceaccount(
+        s = disruptive.ServiceAccount.get_serviceaccount(
             'serviceaccount_id',
             'project_id',
         )
@@ -39,7 +54,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects/project_id/'
+            url=disruptive.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id',
         )
 
@@ -47,21 +62,21 @@ class TestServiceAccount():
         request_mock.assert_request_count(1)
 
         # Assert attributes in output Device object.
-        assert isinstance(s, dt.ServiceAccount)
+        assert isinstance(s, disruptive.ServiceAccount)
 
     def test_list_serviceaccounts(self, request_mock):
         # Update the response data with list of serviceaccount data.
         request_mock.json = dtapiresponses.serviceaccounts
 
         # Call the appropriate endpoint
-        sas = dt.ServiceAccount.list_serviceaccounts(
+        sas = disruptive.ServiceAccount.list_serviceaccounts(
             'project_id',
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects/project_id/serviceaccounts',
+            url=disruptive.api_url+'/projects/project_id/serviceaccounts',
         )
 
         # Verify single request sent.
@@ -69,14 +84,14 @@ class TestServiceAccount():
 
         # Assert instances of Project in output list.
         for s in sas:
-            assert isinstance(s, dt.ServiceAccount)
+            assert isinstance(s, disruptive.ServiceAccount)
 
     def test_create_serviceaccount(self, request_mock):
         # Update the response data with serviceaccount data.
         request_mock.json = dtapiresponses.serviceaccount1
 
         # Call the appropriate endpoint.
-        s = dt.ServiceAccount.create_serviceaccount(
+        s = disruptive.ServiceAccount.create_serviceaccount(
             'project_id',
             'new-sa',
             True,
@@ -85,7 +100,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=dt.api_url+'/projects/project_id/serviceaccounts',
+            url=disruptive.api_url+'/projects/project_id/serviceaccounts',
             body={'displayName': 'new-sa', 'enableBasicAuth': True},
         )
 
@@ -93,14 +108,14 @@ class TestServiceAccount():
         request_mock.assert_request_count(1)
 
         # Assert attributes in output Device object.
-        assert isinstance(s, dt.ServiceAccount)
+        assert isinstance(s, disruptive.ServiceAccount)
 
     def test_update_serviceaccount(self, request_mock):
         # Update the response data with serviceaccount data.
         request_mock.json = dtapiresponses.serviceaccount1
 
         # Call the appropriate endpoint.
-        s = dt.ServiceAccount.update_serviceaccount(
+        s = disruptive.ServiceAccount.update_serviceaccount(
             serviceaccount_id='serviceaccount_id',
             project_id='project_id',
             display_name='service-account-1',
@@ -113,20 +128,20 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='PATCH',
-            url=dt.api_url+'/projects/project_id/'
+            url=disruptive.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id',
             body={'displayName': 'service-account-1', 'enableBasicAuth': False}
         )
 
         # Assert attributes in output Device object.
-        assert isinstance(s, dt.ServiceAccount)
+        assert isinstance(s, disruptive.ServiceAccount)
 
     def test_delete_serviceaccount(self, request_mock):
         # Update the response status code to 200.
         request_mock.status_code = 200
 
         # Call the appropriate endpoint.
-        dt.ServiceAccount.delete_serviceaccount(
+        disruptive.ServiceAccount.delete_serviceaccount(
             serviceaccount_id='serviceaccount_id',
             project_id='project_id',
         )
@@ -137,7 +152,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.api_url+'/projects/project_id/'
+            url=disruptive.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id',
         )
 
@@ -147,7 +162,7 @@ class TestServiceAccount():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        k = dt.ServiceAccount.get_key(
+        k = disruptive.ServiceAccount.get_key(
             'serviceaccount_id',
             'key_id',
             'project_id',
@@ -164,7 +179,7 @@ class TestServiceAccount():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        k = dt.ServiceAccount.create_key(
+        k = disruptive.ServiceAccount.create_key(
             'serviceaccount_id',
             'project_id',
         )
@@ -177,7 +192,7 @@ class TestServiceAccount():
         request_mock.json = dtapiresponses.key_without_secret
 
         # Call the appropriate endpoint.
-        key = dt.ServiceAccount.get_key(
+        key = disruptive.ServiceAccount.get_key(
             serviceaccount_id='serviceaccount_id',
             key_id='key_id',
             project_id='project_id',
@@ -186,7 +201,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects/project_id/'
+            url=disruptive.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id/keys/key_id',
         )
 
@@ -201,7 +216,7 @@ class TestServiceAccount():
         request_mock.json = dtapiresponses.keys
 
         # Call the appropriate endpoint.
-        keys = dt.ServiceAccount.list_keys(
+        keys = disruptive.ServiceAccount.list_keys(
             serviceaccount_id='serviceaccount_id',
             project_id='project_id',
         )
@@ -209,7 +224,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects/project_id/'
+            url=disruptive.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id/keys',
         )
 
@@ -225,7 +240,7 @@ class TestServiceAccount():
         request_mock.json = dtapiresponses.key_with_secret
 
         # Call the appropriate endpoint.
-        key = dt.ServiceAccount.create_key(
+        key = disruptive.ServiceAccount.create_key(
             serviceaccount_id='serviceaccount_id',
             project_id='project_id',
         )
@@ -233,7 +248,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=dt.api_url+'/projects/project_id/'
+            url=disruptive.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id/keys',
         )
 
@@ -248,7 +263,7 @@ class TestServiceAccount():
         request_mock.status_code = 200
 
         # Call the appropriate endpoint.
-        dt.ServiceAccount.delete_key(
+        disruptive.ServiceAccount.delete_key(
             serviceaccount_id='serviceaccount_id',
             key_id='key_id',
             project_id='project_id',
@@ -257,7 +272,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.api_url+'/projects/project_id/'
+            url=disruptive.api_url+'/projects/project_id/'
             + 'serviceaccounts/serviceaccount_id/keys/key_id',
         )
 

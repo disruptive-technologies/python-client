@@ -1,9 +1,23 @@
 # Project imports.
-import disruptive as dt
+import disruptive
 import tests.api_responses as dtapiresponses
 
 
 class TestProject():
+
+    def test_repr(self, request_mock):
+        # Update the response data with project data.
+        res = dtapiresponses.small_project
+        request_mock.json = res
+
+        # Fetch a project.
+        x = disruptive.Project.get_project(
+            project_id='project_id',
+        )
+
+        # Evaluate __repr__ function and compare copy.
+        y = eval(repr(x))
+        assert x._raw == y._raw
 
     def test_unpack(self, request_mock):
         # Update the response data with project data.
@@ -11,7 +25,7 @@ class TestProject():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        p = dt.Project.get_project('project_id')
+        p = disruptive.Project.get_project('project_id')
 
         # Assert attributes unpacked correctly.
         assert p.id == res['name'].split('/')[-1]
@@ -26,31 +40,31 @@ class TestProject():
         request_mock.json = dtapiresponses.small_project
 
         # Call the appropriate endpoint.
-        p = dt.Project.get_project('project_id')
+        p = disruptive.Project.get_project('project_id')
 
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects/project_id',
+            url=disruptive.api_url+'/projects/project_id',
         )
 
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
         # Assert output is instance of Project.
-        assert isinstance(p, dt.Project)
+        assert isinstance(p, disruptive.Project)
 
     def test_list_projects(self, request_mock):
         # Update the response data with list of project data.
         request_mock.json = dtapiresponses.projects
 
         # Call the appropriate endpoint
-        projects = dt.Project.list_projects()
+        projects = disruptive.Project.list_projects()
 
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects',
+            url=disruptive.api_url+'/projects',
         )
 
         # Assert single request sent.
@@ -58,19 +72,19 @@ class TestProject():
 
         # Assert instances of Project in output list.
         for p in projects:
-            assert isinstance(p, dt.Project)
+            assert isinstance(p, disruptive.Project)
 
     def test_create_project(self, request_mock):
         # Update the response data with project data.
         request_mock.json = dtapiresponses.empty_project
 
         # Call the appropriate endpoint.
-        p = dt.Project.create_project('org', 'name')
+        p = disruptive.Project.create_project('org', 'name')
 
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=dt.api_url+'/projects',
+            url=disruptive.api_url+'/projects',
             body={'organization': 'organizations/org', 'displayName': 'name'},
         )
 
@@ -78,19 +92,19 @@ class TestProject():
         request_mock.assert_request_count(1)
 
         # Assert output is instance of Project.
-        assert isinstance(p, dt.Project)
+        assert isinstance(p, disruptive.Project)
 
     def test_update_project(self, request_mock):
         # Update the response data with project data.
         request_mock.json = dtapiresponses.empty_project
 
         # Call the appropriate endpoint.
-        output = dt.Project.update_project('project_id', 'new-name')
+        output = disruptive.Project.update_project('project_id', 'new-name')
 
         # Verify request parameters.
         request_mock.assert_requested(
             method='PATCH',
-            url=dt.api_url+'/projects/project_id',
+            url=disruptive.api_url+'/projects/project_id',
             body={'displayName': 'new-name'},
         )
 
@@ -102,12 +116,12 @@ class TestProject():
 
     def test_delete_project(self, request_mock):
         # Call the appropriate endpoint.
-        output = dt.Project.delete_project('project_id')
+        output = disruptive.Project.delete_project('project_id')
 
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.api_url+'/projects/project_id',
+            url=disruptive.api_url+'/projects/project_id',
         )
 
         # Assert single request sent.
@@ -121,12 +135,12 @@ class TestProject():
         request_mock.json = dtapiresponses.members
 
         # Call the appropriate endpoint
-        members = dt.Project.list_members('project_id')
+        members = disruptive.Project.list_members('project_id')
 
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects/project_id/members',
+            url=disruptive.api_url+'/projects/project_id/members',
         )
 
         # Assert single request sent.
@@ -134,7 +148,7 @@ class TestProject():
 
         # Assert instances of Member in output list.
         for m in members:
-            assert isinstance(m, dt.outputs.Member)
+            assert isinstance(m, disruptive.outputs.Member)
 
     def test_add_member(self, request_mock):
         # Update the response data with member data.
@@ -142,7 +156,7 @@ class TestProject():
         request_mock.json = res
 
         # Call the appropriate endpoint
-        member = dt.Project.add_member(
+        member = disruptive.Project.add_member(
             project_id='project_id',
             email='serviceaccount_email@domain.com',
             roles=['project.developer'],
@@ -151,7 +165,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=dt.api_url+'/projects/project_id/members',
+            url=disruptive.api_url+'/projects/project_id/members',
             body={
                 'roles': ['roles/project.developer'],
                 'email': 'serviceaccount_email@domain.com',
@@ -162,14 +176,14 @@ class TestProject():
         request_mock.assert_request_count(1)
 
         # Assert output is instance of Member.
-        assert isinstance(member, dt.outputs.Member)
+        assert isinstance(member, disruptive.outputs.Member)
 
     def test_get_member(self, request_mock):
         # Update the response data with member data.
         request_mock.json = dtapiresponses.user_member
 
         # Call the appropriate endpoint
-        member = dt.Project.get_member(
+        member = disruptive.Project.get_member(
             project_id='project_id',
             member_id='member_id',
         )
@@ -177,21 +191,21 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects/project_id/members/member_id',
+            url=disruptive.api_url+'/projects/project_id/members/member_id',
         )
 
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
         # Assert output is instance of Member.
-        assert isinstance(member, dt.outputs.Member)
+        assert isinstance(member, disruptive.outputs.Member)
 
     def test_update_member(self, request_mock):
         # Update the response data with member data.
         request_mock.json = dtapiresponses.user_member
 
         # Call the appropriate endpoint
-        member = dt.Project.update_member(
+        member = disruptive.Project.update_member(
             project_id='project_id',
             member_id='member_id',
             roles=['project.developer'],
@@ -200,7 +214,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='PATCH',
-            url=dt.api_url+'/projects/project_id/members/member_id',
+            url=disruptive.api_url+'/projects/project_id/members/member_id',
             body={'roles': ['roles/project.developer']}
         )
 
@@ -208,14 +222,14 @@ class TestProject():
         request_mock.assert_request_count(1)
 
         # Assert output is instance of Member.
-        assert isinstance(member, dt.outputs.Member)
+        assert isinstance(member, disruptive.outputs.Member)
 
     def test_remove_member(self, request_mock):
         # Update the response with status code 200.
         request_mock.status_code = 200
 
         # Call the appropriate endpoint
-        response = dt.Project.remove_member(
+        response = disruptive.Project.remove_member(
             project_id='project_id',
             member_id='member_id',
         )
@@ -223,7 +237,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.api_url+'/projects/project_id/members/member_id',
+            url=disruptive.api_url+'/projects/project_id/members/member_id',
         )
 
         # Assert single request sent.
@@ -238,7 +252,7 @@ class TestProject():
         request_mock.json = res
 
         # Call the appropriate endpoint
-        response = dt.Project.get_member_invite_url(
+        response = disruptive.Project.get_member_invite_url(
             project_id='project_id',
             member_id='member_id',
         )
@@ -246,7 +260,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects/project_id/members/'
+            url=disruptive.api_url+'/projects/project_id/members/'
             + 'member_id:getInviteUrl',
         )
 
@@ -261,7 +275,7 @@ class TestProject():
         request_mock.json = dtapiresponses.project_permissions
 
         # Call the appropriate endpoint
-        response = dt.Project.list_permissions(
+        response = disruptive.Project.list_permissions(
             project_id='project_id',
         )
 
@@ -271,7 +285,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=dt.api_url+'/projects/project_id/permissions'
+            url=disruptive.api_url+'/projects/project_id/permissions'
         )
 
         # Assert single request sent.
