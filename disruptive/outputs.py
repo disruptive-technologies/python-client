@@ -23,10 +23,17 @@ class OutputBase():
         self._raw = raw
 
     def __repr__(self):
-        out = self.__dump([], self, level=0)
+        return '{}.{}({})'.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self._raw,
+        )
+
+    def __str__(self):
+        out = self.__str__recursive([], self, level=0)
         return '\n'.join(out)
 
-    def __dump(self, out, obj, level):
+    def __str__recursive(self, out, obj, level):
         # Set the indent level for formatting.
         n_spaces = 4
         l0 = level*' '*n_spaces
@@ -50,13 +57,13 @@ class OutputBase():
                 out.append('{}{}: {} = {}'.format(
                     l1, a, type(val).__name__,
                     str(val.__class__.__name__) + '('))
-                self.__dump(out, val, level=level+1)
+                self.__str__recursive(out, val, level=level+1)
 
             # Lists content should be iterated through.
             elif isinstance(val, list):
                 out.append('{}{}: {} = {}'.format(
                     l1, a, type(val).__name__, '['))
-                self.__dump_list(out, val, level+1, n_spaces, l1)
+                self.__str__list(out, val, level+1, n_spaces, l1)
                 out.append(l1 + '],')
 
             # Other types can be printed directly.
@@ -70,14 +77,14 @@ class OutputBase():
 
         return out
 
-    def __dump_list(self, out, lst, level, n_spaces, l1):
+    def __str__list(self, out, lst, level, n_spaces, l1):
         for val in lst:
             # Class objects should be dumped recursively.
             if hasattr(val, '__dict__'):
                 out.append('{}{}'.format(
                     l1, str(val.__class__.__name__) + '('
                 ))
-                self.__dump(out, val, level=level+2)
+                self.__str__recursive(out, val, level=level+2)
 
             # Everything else can be printed directly.
             else:
