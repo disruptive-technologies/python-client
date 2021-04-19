@@ -51,6 +51,13 @@ class Auth():
         # Set arguments as attributes
         self.credentials = credentials
 
+    def __repr__(self):
+        return '{}.{}({})'.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.credentials,
+        )
+
     @classmethod
     def serviceaccount(cls,
                        key_id: str,

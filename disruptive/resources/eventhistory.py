@@ -40,6 +40,13 @@ class EventHistory(dtoutputs.OutputBase):
         # Set parameter attributes.
         self.events_list = events_list
 
+    def __repr__(self):
+        return '{}.{}({})'.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.events_list,
+        )
+
     @classmethod
     def list_events(cls,
                     device_id: str,
