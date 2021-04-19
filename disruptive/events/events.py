@@ -142,6 +142,16 @@ class Touch(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'touch')
 
+    def __repr__(self):
+        string = '{}.{}('\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
     @classmethod
     def _from_raw(cls, data: dict):
         """
@@ -216,6 +226,18 @@ class Temperature(_EventData):
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'temperature')
+
+    def __repr__(self):
+        string = '{}.{}('\
+            'celsius={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.celsius,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
 
     @classmethod
     def _from_raw(cls, data: dict):
@@ -310,6 +332,18 @@ class ObjectPresent(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'objectPresent')
 
+    def __repr__(self):
+        string = '{}.{}('\
+            'state={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            repr(self.state),
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
     @classmethod
     def _from_raw(cls, data: dict):
         """
@@ -390,6 +424,20 @@ class Humidity(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'humidity')
 
+    def __repr__(self):
+        string = '{}.{}('\
+            'temperature={}, '\
+            'humidity={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.temperature,
+            self.humidity,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
     @classmethod
     def _from_raw(cls, data: dict):
         """
@@ -469,6 +517,18 @@ class ObjectPresentCount(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'objectPresentCount')
 
+    def __repr__(self):
+        string = '{}.{}('\
+            'total={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.total,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
     @classmethod
     def _from_raw(cls, data: dict):
         """
@@ -544,6 +604,18 @@ class TouchCount(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'touchCount')
 
+    def __repr__(self):
+        string = '{}.{}('\
+            'total={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.total,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
     @classmethod
     def _from_raw(cls, data: dict):
         """
@@ -616,6 +688,18 @@ class WaterPresent(_EventData):
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'waterPresent')
+
+    def __repr__(self):
+        string = '{}.{}('\
+            'state={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            repr(self.state),
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
 
     @classmethod
     def _from_raw(cls, data: dict):
@@ -698,6 +782,20 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
         self.cloudconnector_id = cloudconnector_id
         self.signal_strength = signal_strength
         self.rssi = rssi
+
+    def __repr__(self):
+        string = '{}.{}('\
+            'cloudconnector_id={}, '\
+            'signal_strength={}, '\
+            'rssi={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            repr(self.cloudconnector_id),
+            self.signal_strength,
+            self.rssi,
+        )
 
     @classmethod
     def _from_raw(cls, data: dict):
@@ -790,6 +888,24 @@ class NetworkStatus(_EventData):
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'networkStatus')
+
+    def __repr__(self):
+        string = '{}.{}('\
+            'signal_strength={}, '\
+            'rssi={}, '\
+            'transmission_mode={}, '\
+            'cloud_connectors={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.signal_strength,
+            self.rssi,
+            repr(self.transmission_mode),
+            self.cloud_connectors,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
 
     @classmethod
     def _from_raw(cls, data: dict):
@@ -889,6 +1005,18 @@ class BatteryStatus(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'batteryStatus')
 
+    def __repr__(self):
+        string = '{}.{}('\
+            'percentage={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.percentage,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
     @classmethod
     def _from_raw(cls, data: dict):
         """
@@ -974,6 +1102,22 @@ class LabelsChanged(_EventData):
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'labelsChanged')
+
+    def __repr__(self):
+        string = '{}.{}('\
+            'added={}, '\
+            'modified={}, '\
+            'removed={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.added,
+            self.modified,
+            self.removed,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
 
     @classmethod
     def _from_raw(cls, data: dict):
@@ -1064,6 +1208,20 @@ class ConnectionStatus(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'connectionStatus')
 
+    def __repr__(self):
+        string = '{}.{}('\
+            'connection={}, '\
+            'available={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            repr(self.connection),
+            repr(self.available),
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
     @classmethod
     def _from_raw(cls, data: dict):
         """
@@ -1148,6 +1306,20 @@ class EthernetStatus(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'ethernetStatus')
 
+    def __repr__(self):
+        string = '{}.{}('\
+            'mac_address={}, '\
+            'ip_address={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            repr(self.mac_address),
+            repr(self.ip_address),
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
     @classmethod
     def _from_raw(cls, data: dict):
         """
@@ -1224,6 +1396,18 @@ class CellularStatus(_EventData):
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'cellularStatus')
+
+    def __repr__(self):
+        string = '{}.{}('\
+            'signal_strength={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.signal_strength,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
 
     @classmethod
     def _from_raw(cls, data: dict):
