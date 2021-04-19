@@ -22,7 +22,7 @@ class OutputBase():
         # Set attribute from input argument.
         self._raw = raw
 
-    def __str__(self):
+    def __repr__(self):
         out = self.__dump([], self, level=0)
         return '\n'.join(out)
 
