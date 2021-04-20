@@ -26,7 +26,7 @@ class Device(dtoutputs.OutputBase):
     display_name : str, None
         Given device name if set through a label with key `name`.
         Otherwise None.
-    type : str
+    device_type : str
         Device type.
     labels : dict
         Label keys and values.
@@ -67,7 +67,7 @@ class Device(dtoutputs.OutputBase):
         # Unpack attributes from dictionary.
         self.device_id = device['name'].split('/')[-1]
         self.project_id = device['name'].split('/')[1]
-        self.type = device['type']
+        self.device_type = device['type']
         self.labels = device['labels']
 
         # Set display_name if `name` label key exists.
