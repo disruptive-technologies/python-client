@@ -76,10 +76,10 @@ class Device(dtoutputs.OutputBase):
             self.display_name = self.labels['name']
 
         # Determine if the device is an emulator by checking id prefix.
-        if self.device_id.startswith('emu'):
-            self.is_emulator = True
+        if self.device_id.startswith('emu') and len(self.device_id) == 23:
+            self.is_emulated = True
         else:
-            self.is_emulator = False
+            self.is_emulated = False
 
         # If it exists, set the reported object.
         self.reported = None
