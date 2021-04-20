@@ -97,8 +97,8 @@ class Auth():
         )
 
         # Patch the newly created object with method-specific methods.
-        setattr(obj, '_has_expired', obj.__serviceaccount_has_expired)
-        setattr(obj, 'refresh', obj.__serviceaccount_refresh)
+        setattr(obj, '_has_expired', obj._serviceaccount_has_expired)
+        setattr(obj, 'refresh', obj._serviceaccount_refresh)
 
         # Return the patch object.
         return obj
@@ -168,7 +168,7 @@ class Auth():
         """
         pass
 
-    def __serviceaccount_has_expired(self) -> bool:
+    def _serviceaccount_has_expired(self) -> bool:
         """
         Evaluates whether the access token has expired.
 
@@ -184,7 +184,7 @@ class Auth():
         else:
             return False
 
-    def __serviceaccount_refresh(self) -> None:
+    def _serviceaccount_refresh(self) -> None:
         """
         Refreshes the access token.
 
@@ -193,11 +193,11 @@ class Auth():
 
         """
 
-        response = self.__serviceaccount_get_access_token()
+        response = self._serviceaccount_get_access_token()
         self.expiration = time.time() + response['expires_in']
         self.token = 'Bearer {}'.format(response['access_token'])
 
-    def __serviceaccount_get_access_token(self) -> dict:
+    def _serviceaccount_get_access_token(self) -> dict:
         """
         Constructs and exchanges the JWT for an access token.
 
