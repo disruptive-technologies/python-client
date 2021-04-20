@@ -1,7 +1,21 @@
 # Project imports.
 import disruptive as dt
 from disruptive.authentication import Auth
-from disruptive.requests import DTRequest, DTResponse
+
+
+class RequestsReponseMock():
+    """
+    A simple class used to imitate an requests.Response object.
+
+    """
+
+    def __init__(self, json, status_code, headers):
+        self._json = json
+        self.status_code = status_code
+        self.headers = headers
+
+    def json(self):
+        return self._json
 
 
 class RequestMock():
@@ -14,10 +28,9 @@ class RequestMock():
         self.headers = {}
         self.req_error = None
 
-        self.request_patcher = self._mocker.patch.object(
-            DTRequest,
-            '_request_wrapper',
-            side_effect=self._patched_request_wrapper,
+        self.request_patcher = self._mocker.patch(
+            'requests.request',
+            side_effect=self._patched_requests_request,
         )
 
         self.auth_expiration_patcher = self._mocker.patch.object(
@@ -30,12 +43,8 @@ class RequestMock():
             'time.sleep',
         )
 
-    def _patched_request_wrapper(self, **kwargs):
-        return DTResponse(
-            self.json,
-            self.status_code,
-            self.headers
-        ), self.req_error
+    def _patched_requests_request(self, **kwargs):
+        return RequestsReponseMock(self.json, self.status_code, self.headers)
 
     def assert_request_count(self, n):
         if self.request_patcher.call_count != n:
@@ -55,7 +64,7 @@ class RequestMock():
             url=url,
             params=params,
             headers=headers,
-            body=body,
+            json=body,
             data=data,
             timeout=timeout,
         )

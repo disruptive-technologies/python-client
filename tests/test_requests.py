@@ -1,10 +1,11 @@
-# Standard library imports.
-from unittest.mock import patch
+# Third-party imports.
+import pytest
 
 # Project imports.
 import disruptive
 import tests.api_responses as dtapiresponses
 from disruptive.requests import DTRequest, DTResponse
+from tests.framework import RequestsReponseMock
 
 
 class TestRequests():
@@ -145,9 +146,6 @@ class TestRequests():
         request_mock.assert_requested('DELETE', disruptive.api_url+'/url')
 
     def test_pagination_early_exit(self, request_mock):
-        def __patched_request(json, status_code, headers):
-            return DTResponse(json, status_code, headers), None
-
         # Create a response we will update the page-token off.
         def __res(page_token: str):
             return {
@@ -162,15 +160,14 @@ class TestRequests():
         # Create a new request mock for request_mock object.
         # The default one is constant, which we fix by
         # using an iterable side_effect which advances each call.
-        request_mock.request_patcher = request_mock._mocker.patch.object(
-            DTRequest,
-            '_request_wrapper',
+        request_mock.request_patcher = request_mock._mocker.patch(
+            'requests.request',
             side_effect=[
-                __patched_request(__res('4'), 200, {}),
-                __patched_request(__res('3'), 200, {}),
-                __patched_request(__res(''), 200, {}),
-                __patched_request(__res('2'), 200, {}),  # <- should not run
-                __patched_request(__res('1'), 200, {}),  # <- should not run
+                RequestsReponseMock(__res('4'), 200, {}),
+                RequestsReponseMock(__res('3'), 200, {}),
+                RequestsReponseMock(__res(''), 200, {}),
+                RequestsReponseMock(__res('2'), 200, {}),  # <- should not run
+                RequestsReponseMock(__res('1'), 200, {}),  # <- should not run
             ],
         )
 
@@ -193,9 +190,6 @@ class TestRequests():
         )
 
     def test_pagination_max_depth(self, request_mock):
-        def __patched_request(json, status_code, headers):
-            return DTResponse(json, status_code, headers), None
-
         # Create a response we will update the page-token off.
         def __res(page_token: str):
             return {
@@ -210,15 +204,14 @@ class TestRequests():
         # Create a new request mock for request_mock object.
         # The default one is constant, which we fix by
         # using an iterable side_effect which advances each call.
-        request_mock.request_patcher = request_mock._mocker.patch.object(
-            DTRequest,
-            '_request_wrapper',
+        request_mock.request_patcher = request_mock._mocker.patch(
+            'requests.request',
             side_effect=[
-                __patched_request(__res('4'), 200, {}),
-                __patched_request(__res('3'), 200, {}),
-                __patched_request(__res('2'), 200, {}),
-                __patched_request(__res('1'), 200, {}),
-                __patched_request(__res(''), 200, {}),
+                RequestsReponseMock(__res('4'), 200, {}),
+                RequestsReponseMock(__res('3'), 200, {}),
+                RequestsReponseMock(__res('2'), 200, {}),
+                RequestsReponseMock(__res('1'), 200, {}),
+                RequestsReponseMock(__res(''), 200, {}),
             ],
         )
 
@@ -257,3 +250,18 @@ class TestRequests():
             url=url,
             timeout=99,
         )
+
+    def test_request_retries_override(self, request_mock):
+        # Set response status code to force error with retry attemps.
+        request_mock.status_code = 500
+
+        # Catch expected error as retries are exhausted.
+        with pytest.raises(disruptive.errors.InternalServerError):
+            # Call Device.get_device() with overriden retry count.
+            disruptive.Device.get_device(
+                device_id='device_id',
+                request_retries=99,
+            )
+
+        # Verify it did in fact retry that many times.
+        request_mock.assert_request_count(99)
