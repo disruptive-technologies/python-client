@@ -9,6 +9,9 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
   - Device attribute `is_emulator` renamed to `is_emulated`.
   - Humidity attribute `temperature` replaced with `celsius` and `fahrenheit`.
 
+### Fixed
+- [#29](https://github.com/disruptive-technologies/disruptive-python/pull/29) Log would show default `request_retries` even when it was overwritten.
+
 # V0.2.3
 _Released on 2020-04-20._
 ### Fixed
