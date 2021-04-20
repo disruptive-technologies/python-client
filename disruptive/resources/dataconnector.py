@@ -42,6 +42,10 @@ class DataConnector(dtoutputs.OutputBase):
 
     """
 
+    # Constants for the various dataconnector configuration types.
+    HTTP_PUSH = 'HttpPush'
+    DATACONNECTOR_TYPES = [HTTP_PUSH]
+
     def __init__(self, dataconnector: dict) -> None:
         """
         Constructs the DataConnector object by unpacking

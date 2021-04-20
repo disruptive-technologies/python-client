@@ -16,8 +16,15 @@ Class
 ^^^^^
 .. autoclass:: disruptive.DataConnector
 
-Type-Specific Configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   .. rubric:: Data Connector Type Constants
+   .. compound::
+      The DataConnector resources class contains one string constant for each configuration type available, including a list of all types.
+
+   .. autoattribute:: disruptive.DataConnector.HTTP_PUSH
+   .. autoattribute:: disruptive.DataConnector.DATACONNECTOR_TYPES
+
+Configuration Classes
+^^^^^^^^^^^^^^^^^^^^^
 .. autoclass:: disruptive.dataconnector_configs.HttpPush
    
    .. automethod:: disruptive.dataconnector_configs.HttpPush.__init__

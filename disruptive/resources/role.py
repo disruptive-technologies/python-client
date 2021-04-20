@@ -25,6 +25,14 @@ class Role(OutputBase):
 
     """
 
+    # Constants for the available roles.
+    PROJECT_USER = 'project.user'
+    PROJECT_DEVELOPER = 'project.developer'
+    PROJECT_ADMIN = 'project.admin'
+    ORGANIZATION_ADMIN = 'organization.admin'
+    ROLES = [PROJECT_USER, PROJECT_DEVELOPER, PROJECT_ADMIN,
+             ORGANIZATION_ADMIN]
+
     def __init__(self, role: dict) -> None:
         """
         Constructs the Role object by unpacking the raw role response.
