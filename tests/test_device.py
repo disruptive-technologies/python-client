@@ -28,7 +28,7 @@ class TestDevice():
 
         # Assert attributes unpacked correctly.
         assert d.device_id == res['name'].split('/')[-1]
-        assert d.type == res['type']
+        assert d.device_type == res['type']
 
     def test_get_device(self, request_mock):
         # Update the response data with device data.

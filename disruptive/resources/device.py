@@ -26,7 +26,7 @@ class Device(dtoutputs.OutputBase):
     display_name : str, None
         Given device name if set through a label with key `name`.
         Otherwise None.
-    type : str
+    device_type : str
         Device type.
     labels : dict
         Label keys and values.
@@ -67,7 +67,7 @@ class Device(dtoutputs.OutputBase):
         # Unpack attributes from dictionary.
         self.device_id = device['name'].split('/')[-1]
         self.project_id = device['name'].split('/')[1]
-        self.type = device['type']
+        self.device_type = device['type']
         self.labels = device['labels']
 
         # Set display_name if `name` label key exists.
@@ -76,10 +76,10 @@ class Device(dtoutputs.OutputBase):
             self.display_name = self.labels['name']
 
         # Determine if the device is an emulator by checking id prefix.
-        if self.device_id.startswith('emu'):
-            self.is_emulator = True
+        if self.device_id.startswith('emu') and len(self.device_id) == 23:
+            self.is_emulated = True
         else:
-            self.is_emulator = False
+            self.is_emulated = False
 
         # If it exists, set the reported object.
         self.reported = None

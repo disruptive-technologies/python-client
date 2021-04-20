@@ -112,6 +112,24 @@ class _EventData(dtoutputs.OutputBase):
         dtlog.log('Skipping unknown event type {}.'.format(event_type))
         return None, None
 
+    def _celsius_to_fahrenheit(self, celsius: float):
+        """
+        Converts Celsius temperature value to Fahrenheit.
+
+        Parameters
+        ----------
+        celsius : float
+            Temperature value in Celsius.
+
+        Returns
+        -------
+        fahrenheit : float
+            Temperature value in Fahrenheit if Celsius is not None.
+
+        """
+
+        return (celsius * (9/5)) + 32
+
 
 class Touch(_EventData):
     """
@@ -221,7 +239,7 @@ class Temperature(_EventData):
 
         # Set parameter attributes.
         self.celsius = celsius
-        self.fahrenheit = self.__celsius_to_fahrenheit(celsius)
+        self.fahrenheit = self._celsius_to_fahrenheit(celsius)
         self.timestamp = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
@@ -274,24 +292,6 @@ class Temperature(_EventData):
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
         return data
-
-    def __celsius_to_fahrenheit(self, celsius: float):
-        """
-        Converts Celsius temperature value to Fahrenheit.
-
-        Parameters
-        ----------
-        celsius : float
-            Temperature value in Celsius.
-
-        Returns
-        -------
-        fahrenheit : float
-            Temperature value in Fahrenheit if Celsius is not None.
-
-        """
-
-        return (celsius * (9/5)) + 32
 
 
 class ObjectPresent(_EventData):
@@ -397,7 +397,7 @@ class Humidity(_EventData):
     """
 
     def __init__(self,
-                 temperature: float,
+                 celsius: float,
                  humidity: float,
                  timestamp: Optional[datetime | str] = None,
                  ):
@@ -417,7 +417,8 @@ class Humidity(_EventData):
         """
 
         # Set parameter attributes.
-        self.temperature = temperature
+        self.celsius = celsius
+        self.fahrenheit = self._celsius_to_fahrenheit(celsius)
         self.humidity = humidity
         self.timestamp = timestamp
 
@@ -457,7 +458,7 @@ class Humidity(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            temperature=data['temperature'],
+            celsius=data['temperature'],
             humidity=data['relativeHumidity'],
             timestamp=data['updateTime'],
         )
@@ -469,8 +470,8 @@ class Humidity(_EventData):
 
     def __repack(self):
         data: dict = dict()
-        if self.temperature is not None:
-            data['temperature'] = self.temperature
+        if self.celsius is not None:
+            data['temperature'] = self.celsius
         if self.humidity is not None:
             data['relativeHumidity'] = self.humidity
         if self.timestamp is not None:
