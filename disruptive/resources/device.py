@@ -37,6 +37,19 @@ class Device(dtoutputs.OutputBase):
 
     """
 
+    # Constants for the various device types.
+    TEMPERATURE = 'temperature'
+    PROXIMITY = 'proximity'
+    TOUCH = 'touch'
+    HUMIDITY = 'humidity'
+    PROXIMITY_COUNTER = 'proximityCounter'
+    TOUCH_COUNTER = 'touchCounter'
+    WATER_DETECTOR = 'waterDetector'
+    DEVICE_TYPES = [
+        TEMPERATURE, PROXIMITY, TOUCH, HUMIDITY,
+        PROXIMITY_COUNTER, TOUCH_COUNTER, WATER_DETECTOR
+    ]
+
     def __init__(self, device: dict) -> None:
         """
         Constructs the Device object by unpacking the raw device response.
