@@ -23,17 +23,15 @@ docs: venv
 test: venv
 	source ${VENV}/bin/activate && pytest
 
+coverage: venv
+	source ${VENV}/bin/activate && pytest --cov=./ --cov-report=xml
+
 lint: venv
 	source ${VENV}/bin/activate && mypy disruptive/ && flake8 disruptive/
 
-clean-build:
+clean:
 	rm -rf build/ dist/ pip-wheel-metadata/ *.egg-info
-
-clean-py:
 	find . -name '__pycache__' -exec rm --force --recursive {} +
 	rm -rf .pytest_cache/ .mypy_cache/
-
-clean-venv:
 	rm -rf $(VENV)
-
-clean: clean-build clean-py clean-venv
+	rm -f coverage.xml
