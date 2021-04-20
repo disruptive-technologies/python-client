@@ -15,7 +15,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    runs-on: "${{ matrix.platform }}"
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         platform: ["ubuntu-latest"]
@@ -24,15 +24,21 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.8'
+
+    - name: Install dependencies
+      run: |
+          pip install --upgrade pip
+          pip install -e .
+          pip install pytest, pytest-mock, pytest-cov
           
     # Install coverage dependencies and generate report.
     - name: Generate coverage report
       run: |
-          make coverage
+          pytest --cov=disruptive --cov-report=xml tests/
 
     # Using the generated report, upload to codecov.
     - name: Upload coverage to Codecov

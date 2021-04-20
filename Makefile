@@ -21,10 +21,10 @@ docs: venv
 	source ${VENV}/bin/activate && cd docs && ${MAKE} clean html
 
 test: venv
-	source ${VENV}/bin/activate && pytest
+	source ${VENV}/bin/activate && pytest tests/
 
 coverage: venv
-	source ${VENV}/bin/activate && pytest --cov=./ --cov-report=xml
+	source ${VENV}/bin/activate && pytest --cov=disruptive tests/
 
 lint: venv
 	source ${VENV}/bin/activate && mypy disruptive/ && flake8 disruptive/
