@@ -1,3 +1,6 @@
+# Standard library imports.
+from unittest.mock import patch
+
 # Project imports.
 import disruptive
 import tests.api_responses as dtapiresponses
@@ -235,4 +238,22 @@ class TestRequests():
             method='GET',
             url=url,
             params={'pageToken': '1'},
+        )
+
+    def test_timeout_override(self, request_mock):
+        # Set response to contain device data.
+        request_mock.json = dtapiresponses.touch_sensor
+
+        # Call Device.get_device(), overriden all defaults with kwargs.
+        _ = disruptive.Device.get_device(
+            device_id='device_id',
+            request_timeout=99,
+        )
+
+        # Verify request were configured with new timeout.
+        url = disruptive.api_url + '/projects/-/devices/device_id'
+        request_mock.assert_requested(
+            method='GET',
+            url=url,
+            timeout=99,
         )
