@@ -161,7 +161,7 @@ class DTRequest():
 
             dtlog.log("Got error {}. Will retry up to {} more times".format(
                 error,
-                dt.request_retries - nth_attempt,
+                self.request_retries - nth_attempt,
             ), override=self.log)
 
             # Sleep if necessary.
