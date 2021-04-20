@@ -2,6 +2,13 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
+# Unreleased
+### Changed
+- [#27](https://github.com/disruptive-technologies/disruptive-python/pull/27) Various attributes has been changed.
+  - Device attribute `type` renamed to `device_type`.
+  - Device attribute `is_emulator` renamed to `is_emulated`.
+  - Humidity attribute `temperature` replaced with `celsius` and `fahrenheit`.
+
 # V0.2.3
 _Released on 2020-04-20._
 ### Fixed
