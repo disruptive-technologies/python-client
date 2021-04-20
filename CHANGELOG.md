@@ -2,7 +2,8 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# V0.2.3
+_Released on 2020-04-20._
 ### Fixed
 - [#25](https://github.com/disruptive-technologies/disruptive-python/pull/25) Double timezone info `(+00:00Z)` would break allowed format.
 ### Added
