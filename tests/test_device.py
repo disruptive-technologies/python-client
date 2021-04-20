@@ -49,6 +49,25 @@ class TestDevice():
         # Assert instance of Device object.
         assert isinstance(d, disruptive.Device)
 
+    def test_get_device_project_wildcard(self, request_mock):
+        # Update the response data with device data.
+        request_mock.json = dtapiresponses.touch_sensor
+
+        # Call Device.get_device() method without providing project_id.
+        d = disruptive.Device.get_device(device_id='device_id')
+
+        # Verify expected outgoing parameters in request.
+        request_mock.assert_requested(
+            method='GET',
+            url=disruptive.api_url+'/projects/-/devices/device_id',
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert instance of Device object.
+        assert isinstance(d, disruptive.Device)
+
     def test_list_devices(self, request_mock):
         # Update the response data with a list of device data.
         request_mock.json = dtapiresponses.paginated_device_response
