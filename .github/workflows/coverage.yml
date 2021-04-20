@@ -36,9 +36,7 @@ jobs:
       # Install coverage dependencies and generate report.
       - name: Generate coverage report
         run: |
-          pip install pytest
-          pip install pytest-cov
-          pytest --cov=./ --cov-report=xml
+            make coverage
 
       # Using the generated report, upload to codecov.
       - name: Upload coverage to Codecov
