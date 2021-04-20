@@ -133,9 +133,10 @@ class TestEventHistory():
             y_name='celsius',
         )
 
-        # There is a single temperature event in res.
-        assert len(timestamp) == 1
-        assert len(celsius) == 1
+        # There is one temperature and one humidity event in res.
+        # This should result in 2 celsius entries.
+        assert len(timestamp) == 2
+        assert len(celsius) == 2
 
         # Types should also match expected.
         assert isinstance(timestamp[0], datetime)
