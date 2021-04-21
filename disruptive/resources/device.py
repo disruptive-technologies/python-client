@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Optional
 
 # Project imports.
-import disruptive.log as dtlog
+import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.events.events as dtevents
 import disruptive.outputs as dtoutputs

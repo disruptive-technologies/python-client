@@ -794,3 +794,22 @@ event_history_each_type = {
         },
     ]
 }
+
+stream_ping = b'{"result":{"event":{"eventId":"c18tihhh9sn7fi2hur50",'\
+    b'"targetName":"projects/c14u9p094l47ccv1o3p9","eventType":'\
+    b'"ping","data":null,"timestamp":"2021-04-21T07:50:30.604786Z"}}}'
+
+stream_temperature_event = b'{"result":{"event":{"eventId":'\
+    b'"d1vtobtd83ut9sd2bj9g","targetName":"projects/914u9p094l47cdv1o3pg'\
+    b'/devices/emui17m69nlq0bgk44smcng","eventType":"temperature","data"'\
+    b':{"temperature":{"value":5,"updateTime":"2021-04-21T08:'\
+    b'15:43.512330Z"}},"timestamp":"2021-04-21T08:15:43.512330Z"}}}'
+
+stream_networkstatus_event = b'{"result":{"event":{"eventId":"c1vtubtd83it'\
+    b'9ud2bja0","targetName":"projects/c14u9p094l47cdb1oipg/devices/'\
+    b'emuc17m69nlq0bgk4osmcug","eventType":"networkStatus","data"'\
+    b':{"networkStatus":{"signalStrength":99,"rssi":0,"updateTime"'\
+    b':"2021-04-21T08:15:43.520167Z","cloudConnectors":[{"id":'\
+    b'"emulated-ccon","signalStrength":99,"rssi":0}],'\
+    b'"transmissionMode":"LOW_POWER_STANDARD_MODE"}},"timestamp":'\
+    b'"2021-04-21T08:15:43.520167Z"}}}'

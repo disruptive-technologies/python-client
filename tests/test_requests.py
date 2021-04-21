@@ -1,7 +1,11 @@
+# Third-party imports.
+import pytest
+
 # Project imports.
-import disruptive as dt
+import disruptive
 import tests.api_responses as dtapiresponses
 from disruptive.requests import DTRequest, DTResponse
+from tests.framework import RequestsReponseMock
 
 
 class TestRequests():
@@ -25,8 +29,8 @@ class TestRequests():
                 __patched_request({}, 500, {}),  # <- This should not run.
             ],
         )
-        # Call dt.Device.get_device() to trigger the request chain.
-        device = dt.Device.get_device('project_id', 'device_id')
+        # Call disruptive.Device.get_device() to trigger the request chain.
+        device = disruptive.Device.get_device('project_id', 'device_id')
 
         # Verify that recursive loop executed only 1 time.
         request_mock.assert_request_count(1)
@@ -53,8 +57,8 @@ class TestRequests():
                 __patched_request({}, 500, {}),  # <- This should not run.
             ],
         )
-        # Call dt.Device.get_device() to trigger the request chain.
-        device = dt.Device.get_device('project_id', 'device_id')
+        # Call disruptive.Device.get_device() to trigger the request chain.
+        device = disruptive.Device.get_device('project_id', 'device_id')
 
         # Verify that recursive loop executed 2 times.
         request_mock.assert_request_count(2)
@@ -81,8 +85,8 @@ class TestRequests():
                 __patched_request(api_res, 200, {}),
             ],
         )
-        # Call dt.Device.get_device() to trigger the request chain.
-        device = dt.Device.get_device('project_id', 'device_id')
+        # Call disruptive.Device.get_device() to trigger the request chain.
+        device = disruptive.Device.get_device('project_id', 'device_id')
 
         # Verify that recursive loop executed 3 times.
         request_mock.assert_request_count(3)
@@ -98,7 +102,7 @@ class TestRequests():
         api_res = dtapiresponses.temperature_sensor
 
         # As we want to test maxium depth, set n to package config variable.
-        n = dt.request_retries
+        n = disruptive.request_retries
 
         # Create in iterable side_effect for our mock.
         side_effects = [__patched_request({}, 500, {}) for i in range(n)]
@@ -115,10 +119,10 @@ class TestRequests():
             side_effect=side_effects,
         )
 
-        # Call dt.Device.get_device() to trigger the request chain.
-        device = dt.Device.get_device('project_id', 'device_id')
+        # Call disruptive.Device.get_device() to trigger the request chain.
+        device = disruptive.Device.get_device('project_id', 'device_id')
 
-        # Verify that recursive loop executed dt.request_retries times.
+        # Verify that recursive loop executed disruptive.request_retries times.
         request_mock.assert_request_count(n)
 
         # Lastly, verify device object were built correctly.
@@ -127,16 +131,137 @@ class TestRequests():
     def test_method_propagation(self, request_mock):
         # Assert GET method propagates correctly.
         DTRequest.get('/url')
-        request_mock.assert_requested('GET', dt.api_url+'/url')
+        request_mock.assert_requested('GET', disruptive.api_url+'/url')
 
         # Assert POST method propagates correctly.
         DTRequest.post('/url')
-        request_mock.assert_requested('POST', dt.api_url+'/url')
+        request_mock.assert_requested('POST', disruptive.api_url+'/url')
 
         # Assert PATCH method propagates correctly.
         DTRequest.patch('/url')
-        request_mock.assert_requested('PATCH', dt.api_url+'/url')
+        request_mock.assert_requested('PATCH', disruptive.api_url+'/url')
 
         # Assert DELETE method propagates correctly.
         DTRequest.delete('/url')
-        request_mock.assert_requested('DELETE', dt.api_url+'/url')
+        request_mock.assert_requested('DELETE', disruptive.api_url+'/url')
+
+    def test_pagination_early_exit(self, request_mock):
+        # Create a response we will update the page-token off.
+        def __res(page_token: str):
+            return {
+                'nextPageToken': page_token,
+                'events': [
+                    dtapiresponses.event_history_each_type['events'][0],
+                    dtapiresponses.event_history_each_type['events'][1],
+                    dtapiresponses.event_history_each_type['events'][2],
+                ]
+            }
+
+        # Create a new request mock for request_mock object.
+        # The default one is constant, which we fix by
+        # using an iterable side_effect which advances each call.
+        request_mock.request_patcher = request_mock._mocker.patch(
+            'requests.request',
+            side_effect=[
+                RequestsReponseMock(__res('4'), 200, {}),
+                RequestsReponseMock(__res('3'), 200, {}),
+                RequestsReponseMock(__res(''), 200, {}),
+                RequestsReponseMock(__res('2'), 200, {}),  # <- should not run
+                RequestsReponseMock(__res('1'), 200, {}),  # <- should not run
+            ],
+        )
+
+        # Call eventhistory method which should paginate 3 times.
+        _ = disruptive.EventHistory.list_events(
+            device_id='device_id',
+            project_id='project_id',
+        )
+
+        # Verify it ran exactly 3 times.
+        request_mock.assert_request_count(3)
+
+        # The last request should have been made with page-token == '3'.
+        url = disruptive.api_url
+        url += '/projects/project_id/devices/device_id/events'
+        request_mock.assert_requested(
+            method='GET',
+            url=url,
+            params={'pageToken': '3'},
+        )
+
+    def test_pagination_max_depth(self, request_mock):
+        # Create a response we will update the page-token off.
+        def __res(page_token: str):
+            return {
+                'nextPageToken': page_token,
+                'events': [
+                    dtapiresponses.event_history_each_type['events'][0],
+                    dtapiresponses.event_history_each_type['events'][1],
+                    dtapiresponses.event_history_each_type['events'][2],
+                ]
+            }
+
+        # Create a new request mock for request_mock object.
+        # The default one is constant, which we fix by
+        # using an iterable side_effect which advances each call.
+        request_mock.request_patcher = request_mock._mocker.patch(
+            'requests.request',
+            side_effect=[
+                RequestsReponseMock(__res('4'), 200, {}),
+                RequestsReponseMock(__res('3'), 200, {}),
+                RequestsReponseMock(__res('2'), 200, {}),
+                RequestsReponseMock(__res('1'), 200, {}),
+                RequestsReponseMock(__res(''), 200, {}),
+            ],
+        )
+
+        # Call eventhistory method which should paginate 5 times.
+        _ = disruptive.EventHistory.list_events(
+            device_id='device_id',
+            project_id='project_id',
+        )
+
+        # Verify it ran exactly 5 times.
+        request_mock.assert_request_count(5)
+
+        # The last request should have been made with page-token == '1'.
+        url = disruptive.api_url
+        url += '/projects/project_id/devices/device_id/events'
+        request_mock.assert_requested(
+            method='GET',
+            url=url,
+            params={'pageToken': '1'},
+        )
+
+    def test_timeout_override(self, request_mock):
+        # Set response to contain device data.
+        request_mock.json = dtapiresponses.touch_sensor
+
+        # Call Device.get_device(), overriden all defaults with kwargs.
+        _ = disruptive.Device.get_device(
+            device_id='device_id',
+            request_timeout=99,
+        )
+
+        # Verify request were configured with new timeout.
+        url = disruptive.api_url + '/projects/-/devices/device_id'
+        request_mock.assert_requested(
+            method='GET',
+            url=url,
+            timeout=99,
+        )
+
+    def test_request_retries_override(self, request_mock):
+        # Set response status code to force error with retry attemps.
+        request_mock.status_code = 500
+
+        # Catch expected error as retries are exhausted.
+        with pytest.raises(disruptive.errors.InternalServerError):
+            # Call Device.get_device() with overriden retry count.
+            disruptive.Device.get_device(
+                device_id='device_id',
+                request_retries=99,
+            )
+
+        # Verify it did in fact retry that many times.
+        request_mock.assert_request_count(99)

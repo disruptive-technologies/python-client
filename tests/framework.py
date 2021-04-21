@@ -1,7 +1,26 @@
 # Project imports.
 import disruptive as dt
 from disruptive.authentication import Auth
-from disruptive.requests import DTRequest, DTResponse
+
+
+class RequestsReponseMock():
+    """
+    A simple class used to imitate an requests.Response object.
+
+    """
+
+    def __init__(self, json, status_code, headers, iter_data=[]):
+        self._json = json
+        self.status_code = status_code
+        self.headers = headers
+        self.iter_data = iter_data
+
+    def json(self):
+        return self._json
+
+    def iter_lines(self):
+        for d in self.iter_data:
+            yield d
 
 
 class RequestMock():
@@ -13,11 +32,11 @@ class RequestMock():
         self.status_code = 200
         self.headers = {}
         self.req_error = None
+        self.iter_data = []
 
-        self.request_patcher = self._mocker.patch.object(
-            DTRequest,
-            '_request_wrapper',
-            side_effect=self._patched_request_wrapper,
+        self.request_patcher = self._mocker.patch(
+            'requests.request',
+            side_effect=self._patched_requests_request,
         )
 
         self.auth_expiration_patcher = self._mocker.patch.object(
@@ -30,12 +49,13 @@ class RequestMock():
             'time.sleep',
         )
 
-    def _patched_request_wrapper(self, **kwargs):
-        return DTResponse(
-            self.json,
-            self.status_code,
-            self.headers
-        ), self.req_error
+    def _patched_requests_request(self, **kwargs):
+        return RequestsReponseMock(
+            json=self.json,
+            status_code=self.status_code,
+            headers=self.headers,
+            iter_data=self.iter_data,
+        )
 
     def assert_request_count(self, n):
         if self.request_patcher.call_count != n:
@@ -49,13 +69,15 @@ class RequestMock():
                          body=None,
                          data=None,
                          timeout=dt.request_timeout,
+                         stream=False,
                          ):
         self.request_patcher.assert_called_with(
             method=method,
             url=url,
             params=params,
             headers=headers,
-            body=body,
+            json=body,
             data=data,
             timeout=timeout,
+            stream=stream,
         )

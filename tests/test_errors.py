@@ -1,4 +1,4 @@
-# Third-part imports.
+# Third-party imports.
 import pytest
 
 # Project imports.
