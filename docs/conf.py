@@ -54,12 +54,18 @@ exclude_patterns = []
 html_theme = 'alabaster'
 
 html_theme_options = {
-    'font_family': 'open-sans',
+    'font_family': '"Open Sans", Roboto, sans-serif',
+    'font_size': '15px',
+    'head_font_family': '"Open Sans", Roboto, sans-serif',
     # toc
     'fixed_sidebar': True,
     'sidebar_collapse': False,
+    'sidebar_header': False,
     'github_user': 'disruptive-technologies',
     'github_repo': 'disruptive-python',
+    'github_button': True,
+    'github_type': 'watch',
+    'github_count': False,
     'logo': 'logo.svg',
     'description': 'Description coming soon.',
     'show_powered_by': False,

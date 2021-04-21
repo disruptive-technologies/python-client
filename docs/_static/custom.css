@@ -1,25 +1,160 @@
-.method {
-    margin-top: 50px;
-    margin-bottom: 50px;
+html, body {
+    font-family: "Open Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f5f7f9;
+    color: #15394c;
 }
 
-.function {
-    border-top: 1px solid black;
-    margin-top: 50px;
-    margin-bottom: 50px;
+div.body h1 { 
+    margin-top: 0; 
+    padding-top: 0; 
+    font-size: 180%;
+    font-weight: 600;
+}
+div.body h2 { 
+    padding-top: 30px;
+    font-size: 140%;
+    font-weight: 600;
+    border-top: 1px solid #e5e7eb;
+}
+div.body h3 { font-size: 100%; }
+div.body h4 { font-size: 100%; }
+div.body h5 { font-size: 100%; }
+div.body h6 { font-size: 100%; }
+
+div.body {
+    box-shadow: 0 0 1px rgb(10 20 40 / 5%), 0 2px 6px -4px rgb(20 60 100 / 15%), 0 8px 20px -12px rgb(45 95 150 / 30%);
+    border: 1px solid #d4dadf;
+    padding: 40px;
+    border-radius: 6px;
 }
 
-.class {
-    border-top: 1px solid black;
+div.document {
+    max-width: 1040px;
+    width: 1040px;
+    margin: 50px auto 0 auto;
+}
+
+div.sphinxsidebar h3, div.sphinxsidebar h4 {
+    display: none;
+}
+
+#searchlabel {
+    display: block;
+    opacity: 0.7;
+    font-size: 100%;
+    margin-top: 24px;
+}
+
+div.sphinxsidebarwrapper {
+    padding: 0;
+}
+
+div.sphinxsidebarwrapper p.logo {
+    margin: 10px 0 20px 0;
+    text-align: left
+}
+
+img.logo {
+    max-width: 75%;
+}
+
+h1.logo {
+    display: none;
+}
+
+div.sphinxsidebar a {
+    border-bottom: none;
+}
+
+li a.current {
+    color: rgb(255, 83, 49);
+}
+
+div.body li::marker {
+    color: #3e4349aa;
+}
+
+.toctree-l2, .toctree-l3 {
+    padding-top: 6px;
+}
+
+div.sphinxsidebar #searchbox input[type="text"] {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    width: 65%;
+}
+
+div.sphinxsidebar #searchbox input[type="submit"] {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+pre {
+    background-color: #f6f8fa;
+    padding: 16px;
+    border-radius: 6px;
+}
+
+.highlight .c1 {
+    color: #6a737d;
+}
+
+tt, code {
+    padding: .2em .4em;
+    border-radius: 6px;
+    background-color: #f7fafc;
+    border: 1px solid #0000000d;
+}
+
+tt.descname, tt.descclassname, code.descname, code.descclassname {
+    padding: 0;
+    font-size: 1.05em;
+    border: none;
+}
+
+a {
+    color: rgb(255, 83, 49);
+}
+
+a.reference {
+    border-bottom: none;
+}
+
+div.body p, div.body dd, div.body li {
+    line-height: 1.5em;
+}
+
+li a.current {
+    font-weight: bold;
+}
+
+div.sphinxsidebar ul ul, div.sphinxsidebar ul.want-points {
+    list-style: none;
+}
+
+.exception, .function, .class, .method {
     margin-top: 25px;
-    margin-bottom: 50px;
-}
-
-.exception {
-    margin-top: 25px;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
 }
 
 dd {
-    margin-top: 0px;
+    margin-top: 14px;
+    margin-left: 14px;
+}
+
+dl.field-list > dt {
+    padding-left: 0;
+}
+
+#resources ul, ol {
+    margin: 0 0 10px 30px;
+}
+#resources .toctree-l1 {
+    margin-bottom: 18px;
+}
+
+div.footer {
+    text-align: center;
 }
