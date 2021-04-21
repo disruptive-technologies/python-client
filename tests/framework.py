@@ -69,6 +69,7 @@ class RequestMock():
                          body=None,
                          data=None,
                          timeout=dt.request_timeout,
+                         stream=False,
                          ):
         self.request_patcher.assert_called_with(
             method=method,
@@ -78,4 +79,5 @@ class RequestMock():
             json=body,
             data=data,
             timeout=timeout,
+            stream=stream,
         )
