@@ -794,3 +794,7 @@ event_history_each_type = {
         },
     ]
 }
+
+stream_ping = b'{"result":{"event":{"eventId":"c1vtihh69sn7fi2hur50",\
+            "targetName":"projects/c14u9p094l47cdv1o3pg","eventType":\
+            "ping","data":null,"timestamp":"2021-04-21T07:50:30.604786Z"}}}'

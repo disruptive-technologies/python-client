@@ -9,13 +9,18 @@ class RequestsReponseMock():
 
     """
 
-    def __init__(self, json, status_code, headers):
+    def __init__(self, json, status_code, headers, iter_data=[]):
         self._json = json
         self.status_code = status_code
         self.headers = headers
+        self.iter_data = iter_data
 
     def json(self):
         return self._json
+
+    def iter_lines(self):
+        for d in self.iter_data:
+            yield d
 
 
 class RequestMock():
@@ -27,6 +32,7 @@ class RequestMock():
         self.status_code = 200
         self.headers = {}
         self.req_error = None
+        self.iter_data = []
 
         self.request_patcher = self._mocker.patch(
             'requests.request',
@@ -44,7 +50,12 @@ class RequestMock():
         )
 
     def _patched_requests_request(self, **kwargs):
-        return RequestsReponseMock(self.json, self.status_code, self.headers)
+        return RequestsReponseMock(
+            json=self.json,
+            status_code=self.status_code,
+            headers=self.headers,
+            iter_data=self.iter_data,
+        )
 
     def assert_request_count(self, n):
         if self.request_patcher.call_count != n:
