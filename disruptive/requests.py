@@ -317,7 +317,7 @@ class DTRequest():
             headers['Authorization'] = dt.default_auth.get_token()
 
         # Set up a simple catch-all retry policy.
-        nth_attempt = 0
+        nth_attempt = 1
         while nth_attempt <= request_retries:
             # Check if error is set.
             if error is not None:
