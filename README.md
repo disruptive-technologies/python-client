@@ -32,7 +32,15 @@ pip install .
 Using [Service Account](https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts) credentials, setting `disruptive.default_auth` authenticates the package:
 
 ```python
+import os
 import disruptive as dt
+
+# Fetch credentials from the environment.
+key_id = os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', '')
+secret = os.environ.get('DT_SERVICE_ACCOUNT_SECRET', '')
+email = os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', '')
+
+# Set the default authentication variable.
 dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 ```
 
