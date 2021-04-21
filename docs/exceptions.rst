@@ -1,6 +1,7 @@
 Exceptions
 ==========
 
+.. _badrequest:
 .. autoexception:: disruptive.errors.BadRequest
 .. autoexception:: disruptive.errors.Unauthorized
 .. autoexception:: disruptive.errors.Forbidden

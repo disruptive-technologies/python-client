@@ -32,7 +32,7 @@ class Device(dtoutputs.OutputBase):
         Label keys and values.
     is_emulator : bool
         True if the device is an emulator, otherwise False.
-    reported : Reported, None
+    reported : Reported
         Object containing the data from the most recent events.
 
     """
@@ -93,7 +93,7 @@ class Device(dtoutputs.OutputBase):
                    **kwargs,
                    ) -> Device:
         """
-        Gets a device specified by its project and ID.
+        Gets the current state of a single device.
 
         Parameters
         ----------
@@ -101,7 +101,7 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the target device.
         project_id : str, optional
             Unique ID of the target project.
-            If this is not provided, a wildcard project will be used, resulting
+            If not provided, a wildcard project will be used, resulting
             in a search for the device through all available projects.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
@@ -118,7 +118,9 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> device = dt.Device.get_device(project_id, device_id)
+        >>> device = disruptive.Device.get_device(
+        ...     device_id='z19m68nlq0bgk84smxng',
+        ... )
 
         """
 
@@ -142,7 +144,8 @@ class Device(dtoutputs.OutputBase):
                      **kwargs,
                      ) -> list[Device]:
         """
-        List all available devices in the specified project.
+        Gets a list of the current state of all devices in a
+        project, including emulated devices.
 
         Parameters
         ----------
@@ -156,12 +159,12 @@ class Device(dtoutputs.OutputBase):
             Specify devices by type.
         label_filters : dict[str, str], optional
             Specify devices by label keys and values (i.e. {"key": "value"}).
-            If a key is provided and value is set as an empty
-            string (i.e. {"key": ""}), all device with that key is fetched.
+            If only a key is provided (i.e. {"key": ""}), all
+            device with that key is fetched.
         order_by : str, optional
             The field name you want to order the response by.
-            Referred to using dot notation, e.g. reported.temperature.value.
-            Default order is ascending, but can be flipped by prefixing a "~".
+            Referred to using dot notation (i.e. "reported.temperature.value").
+            Default order is ascending, but can be flipped by prefixing "-".
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -174,6 +177,12 @@ class Device(dtoutputs.OutputBase):
         -------
         devices : list[Device]
             List of objects each representing a device.
+
+        Examples
+        --------
+        >>> device_list = disruptive.Device.list_devices(
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
 
         """
 
@@ -205,152 +214,21 @@ class Device(dtoutputs.OutputBase):
         return [cls(device) for device in devices]
 
     @staticmethod
-    def batch_update_labels(device_ids: list[str],
-                            project_id: str,
-                            set_labels: Optional[dict[str, str]] = None,
-                            remove_labels: Optional[list[str]] = None,
-                            **kwargs,
-                            ) -> None:
-        """
-        Add, update, or remove multiple labels (key=value) on multiple devices
-
-        Must provide either add_labels or remove_labels. If neither are
-        provided, a BadRequest error will be raised.
-
-        If a key provided with `add_labels` already exists for a
-        device, the value will be updated accordingly.
-
-        Parameters
-        ----------
-        device_ids : list[str]
-            List of unique IDs for the target devices.
-        project_id : str
-            Unique ID of target project.
-        add_labels : dict[str, str], optional
-            Key and value of labels to be added / updated.
-        remove_labels : list[str], optional
-            Label keys to be removed.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
-
-        """
-
-        # Construct list of devices.
-        name = 'projects/{}/devices/{}'
-        devices = [name.format(project_id, xid) for xid in device_ids]
-
-        # Construct request body dictionary.
-        body: dict = dict()
-        body['devices'] = devices
-        if set_labels is not None:
-            body['addLabels'] = set_labels
-        if remove_labels is not None:
-            body['removeLabels'] = remove_labels
-
-        # Construct URL.
-        url = '/projects/{}/devices:batchUpdate'.format(project_id)
-
-        # Sent POST request, but return nothing.
-        dtrequests.DTRequest.post(url, body=body, **kwargs)
-
-    @staticmethod
-    def set_label(device_id: str,
-                  project_id: str,
-                  key: str,
-                  value: str,
-                  **kwargs,
-                  ) -> None:
-        """
-        Add a label (key=value) for a single device.
-        If key already exists, the value is updated.
-
-        Parameters
-        ----------
-        device_id : str
-            Unique ID of the target device.
-        project_id : str
-            Unique ID of the target project.
-        key : str
-            Label key to be added.
-        value : str
-            Label value to be added.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
-
-        """
-
-        # Construct URL.
-        url = '/projects/{}/devices:batchUpdate'.format(project_id)
-
-        # Construct request body dictionary.
-        body: dict = dict()
-        body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
-        body['addLabels'] = {key: value}
-
-        # Sent POST request, but return nothing.
-        dtrequests.DTRequest.post(url, body=body, **kwargs)
-
-    @staticmethod
-    def remove_label(device_id: str,
-                     project_id: str,
-                     key: str,
-                     **kwargs,
-                     ) -> None:
-        """
-        Remove a label (key=value) from a single device.
-
-        Parameters
-        ----------
-        device_id : str
-            Unique ID of the target device.
-        project_id : str
-            Unique ID of the target project.
-        key : str
-            Key of the label to be removed.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
-
-        """
-
-        # Construct URL.
-        url = '/projects/{}/devices:batchUpdate'.format(project_id)
-
-        # Construct request body dictionary.
-        body: dict = dict()
-        body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
-        body['removeLabels'] = [key]
-
-        # Sent POST request, but return nothing.
-        dtrequests.DTRequest.post(url, body=body, **kwargs)
-
-    @staticmethod
     def transfer_devices(device_ids: list[str],
                          source_project_id: str,
                          target_project_id: str,
                          **kwargs,
                          ) -> None:
         """
-        Transfer devices from one project to another.
+        Transfers all specified devices to the target project.
+
+        The caller must be have the permissions of either `project.admin` or
+        `organization.admin` in both the source- and target project.
 
         Parameters
         ----------
         device_ids : list[str]
-            List of unique IDs for the target devices.
+            Unique IDs for the devices to transfer.
         source_project_id : str
             Unique ID of the source project.
         target_project_id : str
@@ -362,6 +240,17 @@ class Device(dtoutputs.OutputBase):
             Seconds before giving up a request without an answer.
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
+
+        Examples
+        --------
+        >>> disruptive.Device.transfer_devices(
+        ...     device_ids=[
+        ...         'z19m68nlq0bgk84smxng',
+        ...         'z19m67nlqobgk77smuni',
+        ...     ],
+        ...     source_project_id='y14u8p094l37cdv1o0ug',
+        ...     target_project_id='y02u8p014l29cdv2i0uu',
+        ... )
 
         """
 
@@ -383,15 +272,169 @@ class Device(dtoutputs.OutputBase):
             **kwargs,
         )
 
+    @staticmethod
+    def set_label(device_id: str,
+                  project_id: str,
+                  key: str,
+                  value: str,
+                  **kwargs,
+                  ) -> None:
+        """
+        Set a label (key and value) for a single device.
+
+        If a label key already exists, the value is updated.
+
+        Parameters
+        ----------
+        device_id : str
+            Unique ID of the target device.
+        project_id : str
+            Unique ID of the target project.
+        key : str
+            Label key to be added.
+        value : str
+            Label value to be added.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
+
+        Examples
+        --------
+        >>> disruptive.Device.set_label(
+        ...     device_id='z19m68nlq0bgk84smxng',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     key='room-number',
+        ...     value='99',
+        ... )
+
+        """
+
+        # Construct URL.
+        url = '/projects/{}/devices:batchUpdate'.format(project_id)
+
+        # Construct request body dictionary.
+        body: dict = dict()
+        body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
+        body['addLabels'] = {key: value}
+
+        # Sent POST request, but return nothing.
+        dtrequests.DTRequest.post(url, body=body, **kwargs)
+
+    @staticmethod
+    def remove_label(device_id: str,
+                     project_id: str,
+                     key: str,
+                     **kwargs,
+                     ) -> None:
+        """
+        Remove a label (key and value) from a single device.
+
+        Parameters
+        ----------
+        device_id : str
+            Unique ID of the target device.
+        project_id : str
+            Unique ID of the target project.
+        key : str
+            Key of the label to be removed.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
+
+        Examples
+        --------
+        >>> disruptive.Device.remove_label(
+        ...     device_id='z19m68nlq0bgk84smxng',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     key='room-number',
+        ... )
+
+        """
+
+        # Construct URL.
+        url = '/projects/{}/devices:batchUpdate'.format(project_id)
+
+        # Construct request body dictionary.
+        body: dict = dict()
+        body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
+        body['removeLabels'] = [key]
+
+        # Sent POST request, but return nothing.
+        dtrequests.DTRequest.post(url, body=body, **kwargs)
+
+    @staticmethod
+    def batch_update_labels(device_ids: list[str],
+                            project_id: str,
+                            set_labels: Optional[dict[str, str]] = None,
+                            remove_labels: Optional[list[str]] = None,
+                            **kwargs,
+                            ) -> None:
+        """
+        Add, update, or remove multiple labels (key and value)
+        on multiple devices
+
+        Must provide either `add_labels` or `remove_labels`. If neither are
+        provided, a :ref:`BadRequest <badrequest>` error will be raised.
+
+        Parameters
+        ----------
+        device_ids : list[str]
+            List of unique IDs for the target devices.
+        project_id : str
+            Unique ID of target project.
+        add_labels : dict[str, str], optional
+            Key and value of labels to be added. If a label key
+            already exists, the value is updated.
+        remove_labels : list[str], optional
+            Label keys to be removed.
+        auth: Auth, optional
+            Authorization object used to authenticate the REST API.
+            If provided it will be prioritized over global authentication.
+        request_timeout: int, optional
+            Seconds before giving up a request without an answer.
+        request_retries: int, optional
+            Maximum number of times to retry a request before giving up.
+
+        Raises
+        ------
+        BadRequest
+            If neither `add_labels` nor `remove_labels` is provided.
+
+        """
+
+        # Construct list of devices.
+        name = 'projects/{}/devices/{}'
+        devices = [name.format(project_id, xid) for xid in device_ids]
+
+        # Construct request body dictionary.
+        body: dict = dict()
+        body['devices'] = devices
+        if set_labels is not None:
+            body['addLabels'] = set_labels
+        if remove_labels is not None:
+            body['removeLabels'] = remove_labels
+
+        # Construct URL.
+        url = '/projects/{}/devices:batchUpdate'.format(project_id)
+
+        # Sent POST request, but return nothing.
+        dtrequests.DTRequest.post(url, body=body, **kwargs)
+
 
 class Reported(dtoutputs.OutputBase):
     """
-    Represents the "reported" field for a device.
-
-    Contains one attribute for each event type, initialized to None.
-    For each event type represented in the reported field,
-    the related attribute is updated with the
-    appropriate :ref:`Event Data <Event Data>` class.
+    Represents the most recent :ref:`Event Data <Event Data>` of
+    each type for a single :ref:`Device <device>`.
+    If an event type has never been emitted or is not available to
+    the device type, the related attribute is `None`.
 
     Attributes
     ----------
