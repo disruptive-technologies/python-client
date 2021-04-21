@@ -6,7 +6,6 @@ from typing import Generator, Optional
 # Project Imports.
 import disruptive.requests as dtrequests
 from disruptive.events.events import Event
-from disruptive.authentication import Auth
 
 
 class Stream():
@@ -72,7 +71,7 @@ class Stream():
                 label_filters: Optional[list[str]] = None,
                 device_types: Optional[list[str]] = None,
                 event_types: Optional[list[str]] = None,
-                auth: Optional[Auth] = None,
+                **kwargs,
                 ) -> Generator:
         """
         Streams events for a multiple devices in a project.
@@ -122,5 +121,5 @@ class Stream():
 
         # Relay generator output.
         url = '/projects/{}/devices:stream'.format(project_id)
-        for event in dtrequests.DTRequest.stream(url, params=params):
+        for event in dtrequests.DTRequest.stream(url, params=params, **kwargs):
             yield Event(event)
