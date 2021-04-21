@@ -335,6 +335,8 @@ class DTRequest():
                     timeout=PING_INTERVAL + PING_JITTER,
                     params=params,
                     headers=headers,
+                    json=None,
+                    data=None,
                 )
 
                 # Iterate through the events as they come in (one per line).
