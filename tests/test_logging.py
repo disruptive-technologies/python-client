@@ -1,6 +1,5 @@
 # Standard library imports.
 from unittest.mock import patch
-from datetime import datetime
 
 # Project imports.
 import disruptive
