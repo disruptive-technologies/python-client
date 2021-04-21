@@ -109,7 +109,8 @@ class DTRequest():
                 headers=headers,
                 json=body,
                 data=data,
-                timeout=timeout
+                timeout=timeout,
+                stream=False,
             )
 
             # Isolate the data of interest in the response.
