@@ -151,11 +151,14 @@ class TestRequests():
             return {
                 'nextPageToken': page_token,
                 'events': [
-                    dtapiresponses.event_history_each_type['events'][0],
-                    dtapiresponses.event_history_each_type['events'][1],
-                    dtapiresponses.event_history_each_type['events'][2],
+                    history['events'][0],
+                    history['events'][1],
+                    history['events'][2],
                 ]
             }
+
+        # Fetch some event history data.
+        history = dtapiresponses.event_history_each_type
 
         # Create a new request mock for request_mock object.
         # The default one is constant, which we fix by
@@ -195,11 +198,14 @@ class TestRequests():
             return {
                 'nextPageToken': page_token,
                 'events': [
-                    dtapiresponses.event_history_each_type['events'][0],
-                    dtapiresponses.event_history_each_type['events'][1],
-                    dtapiresponses.event_history_each_type['events'][2],
+                    history['events'][0],
+                    history['events'][1],
+                    history['events'][2],
                 ]
             }
+
+        # Fetch some event history data.
+        history = dtapiresponses.event_history_each_type
 
         # Create a new request mock for request_mock object.
         # The default one is constant, which we fix by
