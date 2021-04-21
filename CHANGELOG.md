@@ -11,6 +11,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
 
 ### Fixed
 - [#29](https://github.com/disruptive-technologies/disruptive-python/pull/29) Log would show default `request_retries` even when it was overwritten.
+- [#30](https://github.com/disruptive-technologies/disruptive-python/pull/30) Stream.project() did not support `**kwargs`, which it should.
 
 # V0.2.3
 _Released on 2020-04-20._
