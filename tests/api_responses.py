@@ -115,12 +115,11 @@ proximity_sensor = {
 }
 
 temperature_sensor = {
-    "name": "projects/c0md3mm0c7pet3vico8g/devices/emuc0pppd1qdqebrvv1iqp0",
+    "name": "projects/c0md3mm0c7pet3vico8g/devices/c0pppd1qdqebrvv1iqp0",
     "type": "temperature",
     "labels": {
         "name": "temperature",
         "test": "2",
-        "virtual-sensor": ""
     },
     "reported": {
         "networkStatus": {
