@@ -9,20 +9,24 @@ This page will be expanded upon later. For now, head over to the :ref:`quickstar
    :hidden:
    :maxdepth: 1
 
-   content/quickstart
+   quickstart
 
 .. toctree::
    :hidden:
    :maxdepth: 1
 
-   content/examples/examples
+   examples/examples
 
 .. toctree::
    :titlesonly:
    :hidden:
    :maxdepth: 4
 
-   content/api-reference/api-index
+   authentication
+   resources/resources
+   events
+   exceptions
+   configuration
 
 
 Indices and Search
