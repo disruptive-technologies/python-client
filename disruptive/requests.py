@@ -10,7 +10,7 @@ import requests
 
 # Project imports
 import disruptive as dt
-import disruptive.log as dtlog
+import disruptive.logging as dtlog
 import disruptive.errors as dterrors
 
 
@@ -328,7 +328,8 @@ class DTRequest():
                 # Connection will timeout and reconnect if no single event
                 # is received in an interval of ping_interval + ping_jitter.
                 dtlog.log('Starting stream...')
-                stream = requests.get(
+                stream = requests.request(
+                    method='GET',
                     url=url,
                     stream=True,
                     timeout=PING_INTERVAL + PING_JITTER,
@@ -354,6 +355,9 @@ class DTRequest():
 
                     # Yield event to generator.
                     yield event
+
+                # If the stream finished, but without an error, break the loop.
+                break
 
             except KeyboardInterrupt:
                 break

@@ -1,5 +1,5 @@
 # Project imports
-import disruptive.log as dtlog
+import disruptive.logging as dtlog
 
 # Standard library imports.
 from typing import Optional
