@@ -8,7 +8,7 @@ from datetime import datetime
 import disruptive
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
-import disruptive.log as dtlog
+import disruptive.logging as dtlog
 
 
 class _EventData(dtoutputs.OutputBase):
