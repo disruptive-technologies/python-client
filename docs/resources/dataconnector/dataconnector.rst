@@ -23,11 +23,11 @@ Class
    .. autoattribute:: disruptive.DataConnector.HTTP_PUSH
    .. autoattribute:: disruptive.DataConnector.DATACONNECTOR_TYPES
 
-Configuration Classes
-^^^^^^^^^^^^^^^^^^^^^
-.. autoclass:: disruptive.dataconnector_configs.HttpPush
+Configurations
+^^^^^^^^^^^^^^
+.. autoclass:: disruptive.DataConnector.HttpPushConfig
    
-   .. automethod:: disruptive.dataconnector_configs.HttpPush.__init__
+   .. automethod:: disruptive.DataConnector.HttpPushConfig.__init__
 
 .. toctree::
    :hidden:
