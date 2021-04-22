@@ -3,32 +3,41 @@
 Authentication
 ==============
 
-Most of the package functionality requires authentication towards the REST API.
-
-To authenticate the entire package at once, set the global variable :code:`dt.default_auth` with a :ref:`routine <routines>`:
+Using `Service Account <https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts>`_ credentials, setting :code:`disruptive.default_auth` authenticates the package:
 
 .. code-block:: python
 
-   # Import the package.
+   import os
    import disruptive as dt
 
-   # Set package-wide authentication.
+   # Fetch credentials from environment.
+   key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', '')
+   secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET', '')
+   email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', '')
+   
+   # Authenticate the package by setting disruptive.default_auth.
    dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 
-Alternatively, each API method can be individually authenticated:
+Alternatively, if an API Method is directly provided with an instance of the :code:`Auth` class, this will be prioritized over :code:`disruptive.default_auth`.
 
 .. code-block:: python
 
-   # Create an auth object variable.
-   auth_obj = dt.Auth.serviceaccount(key_id, secret, email)
-   
-   # Provide the object directly to the API method.
-   device_list = dt.Device.list_devices(project_id, auth=auth_obj)
+   # Provide the API Method with an authentication object directly.
+   dt.Device.get_device(
+       device_id,
+       auth=dt.Auth.serviceaccount(
+           key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', ''),
+           secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET', ''),
+           email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', ''),
+       )
+   )
 
 .. _routines:
 
-Routines
-^^^^^^^^
+Authentication Methods
+^^^^^^^^^^^^^^^^^^^^^^
+There is currently one method of authenticating the API.
+.. _authmethods:
 .. autofunction:: disruptive.Auth.serviceaccount
 
 Class
