@@ -3,44 +3,43 @@
 **********
 Quickstart
 **********
+Our Python 3 API aims to be simple in use without compromising on functionality. Therefore, once authenticated, most tasks can be performed with only a single line of code.
 
 Authentication
 ==============
-Most of the provided functionality requires authentication to the API. Using Service Account credentials, the entire package can be authenticated at once.
+Using `Service Account <https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts>`_ credentials, setting :code:`disruptive.default_auth` authenticates the package:
 
 .. code-block:: python
 
    import os
    import disruptive as dt
 
-   # Fetch credentials from environment.
-   key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', '')
-   secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET', '')
-   email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', '')
+   # It is good practice to fetch credentials from an environment or file.
+   key_id = os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', '')
+   secret = os.environ.get('DT_SERVICE_ACCOUNT_SECRET', '')
+   email = os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', '')
    
-   # Authenticate the package by setting disruptive.default_auth.
+   # Using the fetched credentials, authenticate the package.
    dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 
 See the :ref:`Authentication` section for more details.
 
 Usage
 =====
-API methods are grouped under various resource names on the form :code:`disruptive.<Resource>.<method>()`.
+Most tasks are performed using methods that are grouped under various resource names on the form :code:`disruptive.<Resource>.<method>()`. Here we show a few quick examples.
 
 .. code-block:: python
 
-   # Fetch a specific temperature sensor from a project.
+   import disruptive as dt
+
+   # Fetch a specific sensor from a project.
    sensor = dt.Device.get_device(device_id)
    
-   # Print the sensor information, listing all available attributes.
+   # Print the sensor information wil list all attributes and values.
    print(sensor)
    
    # Set a new label on the sensor.
-   dt.Device.set_label(
-      device_id=sensor.device_id,
-      project_id=sensor.project_id,
-      key='nb#', value='99'
-   )
+   dt.Device.set_label(sensor.device_id, sensor.project_id, key='nb#', value='99')
    
    # Get touch- and temperature event history for the sensor.
    history = dt.EventHistory.list_events(
@@ -50,8 +49,8 @@ API methods are grouped under various resource names on the form :code:`disrupti
    )
    
    # Set up a real-time event stream for the sensor.
-   for e in dt.Stream.device(sensor.device_id, sensor.project_id):
+   for event in dt.Stream.device(sensor.device_id, sensor.project_id):
        # Print the data in new events as they arrive.
-       print(e.data)
+       print(event.data)
 
 See the :ref:`Examples` section for more in-depth usage.
