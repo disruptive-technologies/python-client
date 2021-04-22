@@ -41,15 +41,9 @@ Class
    .. autoattribute:: disruptive.DataConnector.HTTP_PUSH
    .. autoattribute:: disruptive.DataConnector.DATACONNECTOR_TYPES
 
-<<<<<<< HEAD
 Configurations
-^^^^^^^^^^^^^^
+--------------
 .. autoclass:: disruptive.DataConnector.HttpPushConfig
-=======
-Configuration Classes
----------------------
-.. autoclass:: disruptive.dataconnector_configs.HttpPush
->>>>>>> 6c47fd4 (expanding documentation)
    
    .. automethod:: disruptive.DataConnector.HttpPushConfig.__init__
 
