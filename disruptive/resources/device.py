@@ -12,10 +12,10 @@ import disruptive.outputs as dtoutputs
 
 class Device(dtoutputs.OutputBase):
     """
-    Represents sensors and cloud connectors.
+    Represents Sensors and Cloud Connectors, together referred to as devices.
 
     When a device response is received, the content is
-    unpacked and the related attributes are updated.
+    unpacked and the related attributes are set.
 
     Attributes
     ----------
@@ -114,7 +114,7 @@ class Device(dtoutputs.OutputBase):
         Returns
         -------
         device : Device
-            Object representing the specified device.
+            Object representing the target device.
 
         Examples
         --------
