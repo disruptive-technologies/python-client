@@ -5,9 +5,9 @@ from typing import Optional
 
 # Project imports.
 import disruptive
+import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
-import disruptive.dataconnector_configs.dataconnector_configs as dcon_configs
 from disruptive.outputs import Metric
 
 
@@ -69,7 +69,7 @@ class DataConnector(dtoutputs.OutputBase):
         self.event_types = dataconnector['events']
         self.labels = dataconnector['labels']
         self.dataconnector_type = dataconnector['type']
-        self.config = dcon_configs._from_dict(dataconnector)
+        self.config = self._from_dict(dataconnector)
 
     @classmethod
     def get_dataconnector(cls,
@@ -149,7 +149,7 @@ class DataConnector(dtoutputs.OutputBase):
     @classmethod
     def create_dataconnector(cls,
                              project_id: str,
-                             config: disruptive.dataconnector_configs.HttpPush,
+                             config: disruptive.DataConnector.HttpPushConfig,
                              display_name: str = '',
                              status: str = 'ACTIVE',
                              events: list[str] = [],
@@ -216,7 +216,7 @@ class DataConnector(dtoutputs.OutputBase):
         cls,
         dataconnector_id: str,
         project_id: str,
-        config: Optional[disruptive.dataconnector_configs.HttpPush] = None,
+        config: Optional[disruptive.DataConnector.HttpPushConfig] = None,
         display_name: Optional[str] = None,
         status: Optional[str] = None,
         events: Optional[list[str]] = None,
@@ -394,3 +394,76 @@ class DataConnector(dtoutputs.OutputBase):
             url=url,
             **kwargs,
         )
+
+    @classmethod
+    def _from_dict(cls, dataconnector: dict):
+        # Isolate the dataconnector type.
+        dataconnector_type = dataconnector['type']
+
+        # Select the appropriate config depending on type.
+        if dataconnector_type == 'HTTP_PUSH':
+            # Isolate config field.
+            config = dataconnector['httpConfig']
+
+            # Create and return an HttpPush object.
+            return cls.HttpPushConfig(
+                url=config['url'],
+                signature_secret=config['signatureSecret'],
+                headers=config['headers'],
+            )
+        else:
+            # If this else statement runs, no config is available for type.
+            dtlog.log('No config available for {} dataconnectors.'.format(
+                dataconnector_type
+            ))
+
+    class HttpPushConfig():
+        """
+        Type-specific configurations for the HTTP_PUSH dataconnector.
+
+        Attributes
+        ----------
+        url : str
+            Endpoint URL towards which events are forwarded. Must be HTTPS.
+        signature_secret : str
+            Secret with which each forwarded event is signed.
+        headers : dict[str, str]
+            Dictionary of headers to include with each forwarded event.
+
+        """
+
+        dataconnector_type = 'HTTP_PUSH'
+
+        def __init__(self,
+                     url: Optional[str] = None,
+                     signature_secret: Optional[str] = None,
+                     headers: Optional[dict] = None,
+                     ) -> None:
+            """
+            Constructs the HttpPush object.
+
+            Parameters
+            ----------
+            url : str, optional
+                Endpoint URL towards which events are forwarded. Must be HTTPS.
+            signature_secret : str, optional
+                Secret with which each forwarded event is signed.
+            headers : dict[str, str], optional
+                Dictionary of headers to include with each forwarded event.
+
+            """
+
+            # Set parameter attributes.
+            self.url = url
+            self.signature_secret = signature_secret
+            self.headers = headers
+
+        def _to_dict(self):
+            config: dict = dict()
+            if self.url is not None:
+                config['url'] = self.url
+            if self.signature_secret is not None:
+                config['signatureSecret'] = self.signature_secret
+            if self.headers is not None:
+                config['headers'] = self.headers
+            return 'httpConfig', config
