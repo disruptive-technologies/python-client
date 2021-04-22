@@ -8,6 +8,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
   - Device attribute `type` renamed to `device_type`.
   - Device attribute `is_emulator` renamed to `is_emulated`.
   - Humidity attribute `temperature` replaced with `celsius` and `fahrenheit`.
+- [#35](https://github.com/disruptive-technologies/disruptive-python/pull/35) Moved Data Connector configuration classes to the DataConnector resource.
 
 ### Fixed
 - [#29](https://github.com/disruptive-technologies/disruptive-python/pull/29) Log would show default `request_retries` even when it was overwritten.
