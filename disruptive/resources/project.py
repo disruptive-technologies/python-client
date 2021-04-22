@@ -13,7 +13,7 @@ class Project(OutputBase):
     Represents a project.
 
     When a project response is received, the content is
-    unpacked and the related attributes are updated.
+    unpacked and the related attributes are set.
 
     Attributes
     ----------
@@ -63,7 +63,7 @@ class Project(OutputBase):
                     **kwargs,
                     ) -> Project:
         """
-        Gets a project specified by its ID.
+        Gets the current state of a single project.
 
         Parameters
         ----------
@@ -81,6 +81,12 @@ class Project(OutputBase):
         -------
         project : Project
             Object representing the specified project.
+
+        Examples
+        --------
+        >>> project = disruptive.Project.get_project(
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
 
         """
 
@@ -100,7 +106,7 @@ class Project(OutputBase):
                       **kwargs,
                       ) -> list[Project]:
         """
-        List all available projects in the specified organization.
+        Gets a list of the current state of all available projects.
 
         Parameters
         ----------
@@ -120,6 +126,12 @@ class Project(OutputBase):
         -------
         projects : list[Project]
             List of objects each representing a project.
+
+        Examples
+        --------
+        >>> projects = disruptive.Project.list_projects(
+        ...     organization_id='c10humqous90136go54g',
+        ... )
 
         """
 
@@ -170,6 +182,13 @@ class Project(OutputBase):
         project : Project
             Object representing the newly created project.
 
+        Examples
+        --------
+        >>> project = disruptive.Project.create_project(
+        ...     organization_id='c10humqous90136go54g',
+        ...     display_name='my-new-project',
+        ... )
+
         """
 
         # Construct URL.
@@ -208,6 +227,13 @@ class Project(OutputBase):
             Seconds before giving up a request without an answer.
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
+
+        Examples
+        --------
+        >>> disruptive.Project.update_project(
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     display_name='new-name',
+        ... )
 
         """
 
@@ -253,6 +279,12 @@ class Project(OutputBase):
         BadRequest
             If the specified project contains devices or Data Connectors.
 
+        Examples
+        --------
+        >>> disruptive.Project.delete_project(
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
+
         """
 
         # Construct URL.
@@ -269,7 +301,7 @@ class Project(OutputBase):
                      **kwargs,
                      ) -> list[Member]:
         """
-        List all members in the specified project.
+        Gets a list of the current state of all members in a project.
 
         Parameters
         ----------
@@ -287,6 +319,12 @@ class Project(OutputBase):
         -------
         members : list[Member]
             List of objects each representing a member.
+
+        Examples
+        --------
+        >>> members = disruptive.Project.list_members(
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
 
         """
 
@@ -331,6 +369,14 @@ class Project(OutputBase):
         member : Member
             Object representing the newly added member.
 
+        Examples
+        --------
+        >>> member = disruptive.Project.add_members(
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     email='email@domain.com',
+        ...     roles=['project.developer'],
+        ... )
+
         """
 
         # Construct URL
@@ -354,7 +400,7 @@ class Project(OutputBase):
                    **kwargs,
                    ) -> Member:
         """
-        Get a member from the specified project.
+        Get the state of a member in the specified project.
 
         Parameters
         ----------
@@ -376,6 +422,13 @@ class Project(OutputBase):
         -------
         member : Member
             Object representing the member.
+
+        Examples
+        --------
+        >>> member = disruptive.Project.get_member(
+        ...     member_id='c15m9hn925ggo0c8levg',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
 
         """
 
@@ -423,6 +476,14 @@ class Project(OutputBase):
         member : Member
             Object representing the updated member.
 
+        Examples
+        --------
+        >>> member = disruptive.Project.update_member(
+        ...     member_id='c15m9hn925ggo0c8levg',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     roles=['project.user'],
+        ... )
+
         """
 
         # Construct URL
@@ -467,6 +528,13 @@ class Project(OutputBase):
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
 
+        Examples
+        --------
+        >>> disruptive.Project.remove_member(
+        ...     member_id='c15m9hn925ggo0c8levg',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
+
         """
 
         # Construct URL
@@ -485,7 +553,7 @@ class Project(OutputBase):
     def get_member_invite_url(member_id: str,
                               project_id: str,
                               **kwargs,
-                              ) -> None:
+                              ) -> str:
         """
         Get the invite URL for a member with pending invite.
 
@@ -508,10 +576,22 @@ class Project(OutputBase):
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
 
+        Returns
+        -------
+        invite_url : str
+            The invite url for the specified member.
+
         Raises
         ------
         BadRequest
             If the invite has already been accepted.
+
+        Examples
+        --------
+        >>> url = disruptive.Project.get_member_invite_url(
+        ...     member_id='c15m9hn925ggo0c8levg',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
 
         """
 
@@ -550,6 +630,12 @@ class Project(OutputBase):
         -------
         permissions : list[str]
             List of available permissions.
+
+        Examples
+        --------
+        >>> permissions = disruptive.Project.list_permissions(
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
 
         """
 
