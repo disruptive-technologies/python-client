@@ -1,32 +1,40 @@
 Welcome!
 ========
+This is the Disruptive Technologies Python 3 API. It is an extension of our `REST API <https://developer.disruptive-technologies.com/api>`_ with added quality-of-life features, making interacting with our services even easier.
 
-This is the Python 3 wrapper for the Disruptive Technologies REST API.
+Installation
+------------
+The package can be installed through pip:
 
-This page will be expanded upon later. For now, head over to the :ref:`quickstart`.
+.. code-block:: bash
+
+   pip install --upgrade disruptive
+
+Support is available for Python 3.7+.
 
 .. toctree::
    :hidden:
    :maxdepth: 1
 
-   content/quickstart
+   quickstart
 
 .. toctree::
    :hidden:
    :maxdepth: 1
 
-   content/examples/examples
+   examples/examples
 
 .. toctree::
    :titlesonly:
    :hidden:
    :maxdepth: 4
 
-   content/api-reference/api-index
+   authentication
+   resources/resources
+   events
+   exceptions
+   configuration
 
-
-Indices and Search
-==================
-
-* :ref:`genindex`
-* :ref:`search`
+Get Started!
+------------
+Head over to the :ref:`Quickstart <quickstart>` page to get started with only a few lines of code.

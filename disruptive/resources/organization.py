@@ -45,7 +45,7 @@ class Organization(OutputBase):
                          **kwargs,
                          ) -> Organization:
         """
-        Gets an organization specified by its ID.
+        Gets the current state of a single organization.
 
         Parameters
         ----------
@@ -80,7 +80,7 @@ class Organization(OutputBase):
                            **kwargs,
                            ) -> list[Organization]:
         """
-        List all available organizations.
+        Gets a list of the current state of all available organizations.
 
         Parameters
         ----------
@@ -112,7 +112,7 @@ class Organization(OutputBase):
                      **kwargs,
                      ) -> list[Member]:
         """
-        List all members in the specified organization.
+        Gets a list of the current state of all members in an organization.
 
         Parameters
         ----------

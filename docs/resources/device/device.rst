@@ -1,18 +1,42 @@
 Device
 ======
-The Device class can be used to fetch and manipulate your devices, from listing the ones in a project to setting labels.
+The Device resource can be used to interact with `Sensors and Cloud Connectors <https://developer.disruptive-technologies.com/docs/devices>`_, together referred to as devices. Various tasks can be performed by using the API Methods included in the class.
+
+- :ref:`get_device() <get_device>`
+- :ref:`list_device() <list_devices>`
+- :ref:`transfer_devices() <transfer_devices>`
+- :ref:`set_label() <set_label>`
+- :ref:`remove_label() <remove_label>`
+- :ref:`batch_update_labels() <batch_update_labels>`
+
+Each device fetched by an API Method is represented by an instance of the :ref:`Device <device>` class that is returned to the user.
+
 
 API Methods
 -----------
+.. _get_device:
 .. autofunction:: disruptive.Device.get_device
+.. _list_devices:
 .. autofunction:: disruptive.Device.list_devices
-.. autofunction:: disruptive.Device.batch_update_labels
-.. autofunction:: disruptive.Device.set_label
-.. autofunction:: disruptive.Device.remove_label
+.. _transfer_devices:
 .. autofunction:: disruptive.Device.transfer_devices
+.. _set_label:
+.. autofunction:: disruptive.Device.set_label
+.. _remove_label:
+.. autofunction:: disruptive.Device.remove_label
+.. _batch_update_labels:
+.. autofunction:: disruptive.Device.batch_update_labels
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+   :caption: Extras:
+
+   reported
 
 Class
 -----
+.. _device:
 .. autoclass:: disruptive.Device
 
    .. rubric:: Device Type Constants
@@ -38,10 +62,3 @@ Class
    .. autoattribute:: disruptive.Device.TOUCH_COUNTER
    .. autoattribute:: disruptive.Device.WATER_DETECTOR
    .. autoattribute:: disruptive.Device.DEVICE_TYPES
-
-.. toctree::
-   :hidden:
-   :maxdepth: 1
-   :caption: Extras:
-
-   reported

@@ -13,26 +13,27 @@ from disruptive.outputs import Metric
 
 class DataConnector(dtoutputs.OutputBase):
     """
-    Represents a dataconnector.
+    Represents a Data Connector.
 
-    When a dataconnector response is received, the content
-    is unpacked and the related attributes are updated.
+    When a Data Connector response is received, the content
+    is unpacked and the related attributes are set.
 
     Attributes
     ----------
     dataconnector_id : str
-        Unique dataconnector ID.
+        Unique Data Connector ID.
     project_id : str
-        Unique ID of the project where the dataconnector recides.
+        Unique ID of the project where the Data Connector resides.
     display_name : str
         The provided display name.
     dataconnector_type : str
-        Dataconnector type. Currently only HTTP_PUSH is available.
+        Dataconnector type. Currently, only HTTP_PUSH is available.
     status : str
         Whether the dataconnector is
         "ACTIVE", "USER_DISABLED", or "SYSTEM_DISABLED".
-    config : HttpPush, None
+    config : HttpPushConfig, None
         An object representing the type-specific configuration.
+        If an unknown Data Connector type is receiver, this is None.
     event_Types : list[str]
         List of event types that should be forwarded.
         If empty, all event types are forwarded.
@@ -43,7 +44,7 @@ class DataConnector(dtoutputs.OutputBase):
     """
 
     # Constants for the various dataconnector configuration types.
-    HTTP_PUSH = 'HttpPush'
+    HTTP_PUSH = 'HTTP_PUSH'
     DATACONNECTOR_TYPES = [HTTP_PUSH]
 
     def __init__(self, dataconnector: dict) -> None:
@@ -78,7 +79,7 @@ class DataConnector(dtoutputs.OutputBase):
                           **kwargs,
                           ) -> DataConnector:
         """
-        Gets a dataconnector specified by its ID.
+        Gets the current state of a single Data Connector.
 
         Parameters
         ----------
@@ -97,7 +98,14 @@ class DataConnector(dtoutputs.OutputBase):
         Returns
         -------
         dataconnector : DataConnector
-            Object representing the specified dataconnector.
+            Object representing the target Data Connector.
+
+        Examples
+        --------
+        >>> dcon = disruptive.DataConnector.get_dataconnector(
+        ...     dataconnector_id='z19m68nlq0bgk84smxng',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
 
         """
 
@@ -117,7 +125,7 @@ class DataConnector(dtoutputs.OutputBase):
                             **kwargs,
                             ) -> list[DataConnector]:
         """
-        List all available dataconnectors in the specified project.
+        Gets a list of the current state of all dataconnectors in a project.
 
         Parameters
         ----------
@@ -135,6 +143,12 @@ class DataConnector(dtoutputs.OutputBase):
         -------
         dataconnectors : list[DataConnector]
             List of objects each representing a dataconnector.
+
+        Examples
+        --------
+        >>> dcons = disruptive.DataConnector.list_dataconnectors(
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
 
         """
 
@@ -157,7 +171,7 @@ class DataConnector(dtoutputs.OutputBase):
                              **kwargs,
                              ) -> DataConnector:
         """
-        Create a new dataconnector in the specified project.
+        Creates a new dataconnector in the specified project.
 
         Parameters
         ----------
@@ -185,6 +199,17 @@ class DataConnector(dtoutputs.OutputBase):
         -------
         dataconnector : DataConnector
             Object representing the newly created dataconnector.
+
+        Examples
+        --------
+        >>> dcon = disruptive.DataConnector.create_dataconnector(
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     config=disruptive.dataconnector_configs.HttpPush(
+        ...         url='https://my-endpoint-url.com',
+        ...         signature_secret='very-good-secret',
+        ...     ),
+        ...     display_name='my-first-dcon',
+        ... )
 
         """
 
@@ -225,6 +250,7 @@ class DataConnector(dtoutputs.OutputBase):
     ) -> DataConnector:
         """
         Updates the attributes of a dataconnector.
+        All parameters that are provided will be updated.
 
         Parameters
         ----------
@@ -249,6 +275,20 @@ class DataConnector(dtoutputs.OutputBase):
             Seconds before giving up a request without an answer.
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
+
+        Returns
+        -------
+        dataconnector : DataConnector
+            Object representing the updated dataconnector.
+
+        Examples
+        --------
+        >>> dcon = disruptive.DataConnector.update_dataconnector(
+        ...     dataconnector_id='z19m68nlq0bgk84smxng',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     display_name='new-name',
+        ...     events=['temperature', 'touch'],
+        ... )
 
         """
 
@@ -302,6 +342,13 @@ class DataConnector(dtoutputs.OutputBase):
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
 
+        Examples
+        --------
+        >>> disruptive.DataConnector.delete_dataconnector(
+        ...     dataconnector_id='z19m68nlq0bgk84smxng',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
+
         """
 
         # Construct URL.
@@ -341,6 +388,13 @@ class DataConnector(dtoutputs.OutputBase):
         -------
         metric : Metric
             Object representing the fetched metrics.
+
+        Examples
+        --------
+        >>> metrics = disruptive.DataConnector.get_metrics(
+        ...     dataconnector_id='z19m68nlq0bgk84smxng',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
 
         """
 
@@ -382,6 +436,13 @@ class DataConnector(dtoutputs.OutputBase):
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
 
+        Examples
+        --------
+        >>> disruptive.DataConnector.sync_dataconnector(
+        ...     dataconnector_id='z19m68nlq0bgk84smxng',
+        ...     project_id='y14u8p094l37cdv1o0ug',
+        ... )
+
         """
 
         # Construct URL.
@@ -416,6 +477,7 @@ class DataConnector(dtoutputs.OutputBase):
             dtlog.log('No config available for {} dataconnectors.'.format(
                 dataconnector_type
             ))
+            return None
 
     class HttpPushConfig():
         """
@@ -440,7 +502,7 @@ class DataConnector(dtoutputs.OutputBase):
                      headers: Optional[dict] = None,
                      ) -> None:
             """
-            Constructs the HttpPush object.
+            Constructs the HttpPushConfig object.
 
             Parameters
             ----------

@@ -67,7 +67,6 @@ html_theme_options = {
     'github_type': 'watch',
     'github_count': False,
     'logo': 'logo.svg',
-    'description': 'Description coming soon.',
     'show_powered_by': False,
 }
 
