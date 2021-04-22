@@ -1,6 +1,6 @@
 Device
 ======
-The Device resource can be used to interact with `Sensors and Cloud Connectors <https://developer.disruptive-technologies.com/docs/devices>`_, together referred to as devices. Various actions can be performed by using the included API Methods.
+The Device resource can be used to interact with `Sensors and Cloud Connectors <https://developer.disruptive-technologies.com/docs/devices>`_, together referred to as devices. Various tasks can be performed by using the API Methods included in the class.
 
 - :ref:`get_device() <get_device>`
 - :ref:`list_device() <list_devices>`

@@ -1,19 +1,37 @@
 DataConnector
--------------
-The DataConnector class can, among other things, be used to create, modified, and delete Data Connectors.
+=============
+The DataConnector resource can be used to interact with `Data Connectors <https://developer.disruptive-technologies.com/docs/data-connectors/introduction-to-data-connector>`_. Various tasks can be performed by using the API Methods included in the class.
+
+- :ref:`get_dataconnector() <get_dataconnector>`
+- :ref:`list_dataconnectors() <list_dataconnectors>`
+- :ref:`create_dataconnector() <create_dataconnector>`
+- :ref:`update_dataconnector() <update_dataconnector>`
+- :ref:`delete_dataconnector() <delete_dataconnector>`
+- :ref:`sync_dataconnector() <sync_dataconnector>`
+- :ref:`get_metrics() <get_metrics>`
+
+Each Data Connector fetched by an API Method is represented by an instance of the :ref:`DataConnector <dataconnector>` class that is returned to the user.
 
 API Methods
-^^^^^^^^^^^
+-----------
+.. _get_dataconnector:
 .. autofunction:: disruptive.DataConnector.get_dataconnector
+.. _list_dataconnectors:
 .. autofunction:: disruptive.DataConnector.list_dataconnectors
+.. _create_dataconnector:
 .. autofunction:: disruptive.DataConnector.create_dataconnector
+.. _update_dataconnector:
 .. autofunction:: disruptive.DataConnector.update_dataconnector
+.. _delete_dataconnector:
 .. autofunction:: disruptive.DataConnector.delete_dataconnector
+.. _sync_dataconnector:
 .. autofunction:: disruptive.DataConnector.sync_dataconnector
+.. _get_metrics:
 .. autofunction:: disruptive.DataConnector.get_metrics
 
 Class
-^^^^^
+-----
+.. _dataconnector:
 .. autoclass:: disruptive.DataConnector
 
    .. rubric:: Data Connector Type Constants
@@ -23,9 +41,15 @@ Class
    .. autoattribute:: disruptive.DataConnector.HTTP_PUSH
    .. autoattribute:: disruptive.DataConnector.DATACONNECTOR_TYPES
 
+<<<<<<< HEAD
 Configurations
 ^^^^^^^^^^^^^^
 .. autoclass:: disruptive.DataConnector.HttpPushConfig
+=======
+Configuration Classes
+---------------------
+.. autoclass:: disruptive.dataconnector_configs.HttpPush
+>>>>>>> 6c47fd4 (expanding documentation)
    
    .. automethod:: disruptive.DataConnector.HttpPushConfig.__init__
 
