@@ -43,6 +43,20 @@ Class
 
 Configurations
 --------------
+When fetching a Data Connector, the `config` attribute holds its type-specific configuration. When creating or updating one, it must be specified with one of the following classes.
+
+.. code-block:: python
+
+   # Create an HTTP_PUSH Data Connector.
+   disruptive.DataConnector.create_dataconnector(
+       project_id='y14u8p094l37cdv1o0ug',
+       display_name='new-dataconnector',
+       config=dt.DataConnector.HttpPushConfig(
+           url='https://some-endpoint-url.com',
+           signature_secret='good-secret',
+       ),
+   )
+
 .. autoclass:: disruptive.DataConnector.HttpPushConfig
    
    .. automethod:: disruptive.DataConnector.HttpPushConfig.__init__

@@ -31,8 +31,9 @@ class DataConnector(dtoutputs.OutputBase):
     status : str
         Whether the dataconnector is
         "ACTIVE", "USER_DISABLED", or "SYSTEM_DISABLED".
-    config : HttpPush, None
+    config : HttpPushConfig, None
         An object representing the type-specific configuration.
+        If an unknown Data Connector type is receiver, this is None.
     event_Types : list[str]
         List of event types that should be forwarded.
         If empty, all event types are forwarded.
@@ -43,7 +44,7 @@ class DataConnector(dtoutputs.OutputBase):
     """
 
     # Constants for the various dataconnector configuration types.
-    HTTP_PUSH = 'HttpPush'
+    HTTP_PUSH = 'HTTP_PUSH'
     DATACONNECTOR_TYPES = [HTTP_PUSH]
 
     def __init__(self, dataconnector: dict) -> None:
@@ -476,6 +477,7 @@ class DataConnector(dtoutputs.OutputBase):
             dtlog.log('No config available for {} dataconnectors.'.format(
                 dataconnector_type
             ))
+            return None
 
     class HttpPushConfig():
         """
@@ -500,7 +502,7 @@ class DataConnector(dtoutputs.OutputBase):
                      headers: Optional[dict] = None,
                      ) -> None:
             """
-            Constructs the HttpPush object.
+            Constructs the HttpPushConfig object.
 
             Parameters
             ----------
