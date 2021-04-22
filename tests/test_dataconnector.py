@@ -4,7 +4,6 @@ from unittest.mock import patch
 # Project imports.
 import disruptive
 import tests.api_responses as dtapiresponses
-import disruptive.dataconnector_configs.dataconnector_configs as dcon_configs
 
 
 class TestDataconnector():
@@ -43,7 +42,7 @@ class TestDataconnector():
         assert d.event_types == r['events']
         assert d.labels == r['labels']
         assert d.dataconnector_type == r['type']
-        assert isinstance(d.config, dcon_configs.HttpPush)
+        assert isinstance(d.config, disruptive.DataConnector.HttpPushConfig)
         assert d.config.url == r['httpConfig']['url']
         assert d.config.signature_secret == r['httpConfig']['signatureSecret']
         assert d.config.headers == r['httpConfig']['headers']
@@ -121,7 +120,7 @@ class TestDataconnector():
             project_id='c0md3pm0p7bet3vico8g',
             display_name='my-new-dcon',
             labels=['name', 'custom-label-01', 'custom_label-02'],
-            config=disruptive.dataconnector_configs.HttpPush(
+            config=disruptive.DataConnector.HttpPushConfig(
                 url='https://584087e0a1fa.eu.ngrok.io/api/endpoint',
                 signature_secret='some-very-good-secret',
                 headers={
@@ -176,7 +175,7 @@ class TestDataconnector():
             # Call DataConnector.create_dataconnector for type HTTP_PUSH.
             disruptive.DataConnector.create_dataconnector(
                 project_id='project_id',
-                config=disruptive.dataconnector_configs.HttpPush(
+                config=disruptive.DataConnector.HttpPushConfig(
                     url='some-url',
                     signature_secret='some-secret',
                     headers={'name': 'value'},
@@ -215,7 +214,7 @@ class TestDataconnector():
             project_id='c0md3pm0p7bet3vico8g',
             display_name='my-new-dcon',
             labels=['name', 'custom-label-01', 'custom_label-02'],
-            config=disruptive.dataconnector_configs.HttpPush(
+            config=disruptive.DataConnector.HttpPushConfig(
                 url='https://584087e0a1fa.eu.ngrok.io/api/endpoint',
                 signature_secret='some-very-good-secret',
                 headers={
@@ -367,7 +366,7 @@ class TestDataconnector():
 
         # Assert type and config instance.
         assert d.dataconnector_type == 'HTTP_PUSH'
-        assert isinstance(d.config, disruptive.dataconnector_configs.HttpPush)
+        assert isinstance(d.config, disruptive.DataConnector.HttpPushConfig)
 
         # Assert HttpPush attributes are set properly.
         assert d.config.url == r['httpConfig']['url']
@@ -382,7 +381,7 @@ class TestDataconnector():
         """
 
         # Construct a HttpPush object.
-        config = disruptive.dataconnector_configs.HttpPush(
+        config = disruptive.DataConnector.HttpPushConfig(
             url='some-url',
             signature_secret='some-secret',
             headers={
