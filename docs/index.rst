@@ -1,9 +1,19 @@
 Welcome!
 ========
-
 This is the Python 3 wrapper for the Disruptive Technologies REST API.
 
-This page will be expanded upon later. For now, head over to the :ref:`quickstart`.
+Installation
+------------
+The package can be installed through pip:
+
+.. code-block:: bash
+
+   pip install --upgrade disruptive
+
+Requirements
+------------
+
+- Python 3.7+
 
 .. toctree::
    :hidden:
