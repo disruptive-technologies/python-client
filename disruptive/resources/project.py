@@ -84,8 +84,9 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Fetch information about a specific project.
         >>> project = disruptive.Project.get_project(
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -129,8 +130,9 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Fetch information about all projects in an organization.
         >>> projects = disruptive.Project.list_projects(
-        ...     organization_id='c10humqous90136go54g',
+        ...     organization_id='<ORGANIZATION_ID>',
         ... )
 
         """
@@ -184,8 +186,9 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Create a new project.
         >>> project = disruptive.Project.create_project(
-        ...     organization_id='c10humqous90136go54g',
+        ...     organization_id='<ORGANIZATION_ID>',
         ...     display_name='my-new-project',
         ... )
 
@@ -230,8 +233,9 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Update the display_name of a project.
         >>> disruptive.Project.update_project(
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ... )
 
@@ -281,8 +285,9 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Delete the specified project.
         >>> disruptive.Project.delete_project(
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -322,8 +327,9 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # List all members in a project.
         >>> members = disruptive.Project.list_members(
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -371,10 +377,11 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Add a new project.developer member to a project.
         >>> member = disruptive.Project.add_members(
-        ...     project_id='y14u8p094l37cdv1o0ug',
-        ...     email='email@domain.com',
-        ...     roles=['project.developer'],
+        ...     project_id='<PROJECT_ID>',
+        ...     email='<MEMBER_EMAIL_ADDRESS>',
+        ...     roles=[disruptive.Role.PROJECT_DEVELOPER],
         ... )
 
         """
@@ -425,9 +432,10 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Fetch information about the specified member.
         >>> member = disruptive.Project.get_member(
-        ...     member_id='c15m9hn925ggo0c8levg',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     member_id='<MEMBER_ID>',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -478,10 +486,11 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Update the role of a member.
         >>> member = disruptive.Project.update_member(
-        ...     member_id='c15m9hn925ggo0c8levg',
-        ...     project_id='y14u8p094l37cdv1o0ug',
-        ...     roles=['project.user'],
+        ...     member_id='<MEMBER_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ...     roles=[disruptive.Role.PROJECT_USER],
         ... )
 
         """
@@ -530,9 +539,10 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Remove the specified member from a project.
         >>> disruptive.Project.remove_member(
-        ...     member_id='c15m9hn925ggo0c8levg',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     member_id='<MEMBER_ID>',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -588,9 +598,10 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # Fetch the pending invite URL of a member.
         >>> url = disruptive.Project.get_member_invite_url(
-        ...     member_id='c15m9hn925ggo0c8levg',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     member_id='<MEMBER_ID>',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -633,8 +644,9 @@ class Project(OutputBase):
 
         Examples
         --------
+        >>> # List the available permissions in a project.
         >>> permissions = disruptive.Project.list_permissions(
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """

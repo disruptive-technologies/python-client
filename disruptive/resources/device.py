@@ -120,9 +120,8 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> device = disruptive.Device.get_device(
-        ...     device_id='z19m68nlq0bgk84smxng',
-        ... )
+        >>> # Fetch information about the specified device.
+        >>> device = disruptive.Device.get_device('<DEVICE_ID>')
 
         """
 
@@ -182,8 +181,9 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
+        >>> # List information about all devices in a project.
         >>> device_list = disruptive.Device.list_devices(
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -245,13 +245,14 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
+        >>> # Move a device from on project to another.
         >>> disruptive.Device.transfer_devices(
         ...     device_ids=[
-        ...         'z19m68nlq0bgk84smxng',
-        ...         'z19m67nlqobgk77smuni',
+        ...         '<DEVICE_ID_1>',
+        ...         '<DEVICE_ID_2',
         ...     ],
-        ...     source_project_id='y14u8p094l37cdv1o0ug',
-        ...     target_project_id='y02u8p014l29cdv2i0uu',
+        ...     source_project_id='<SOURCE_PROJECT_ID>',
+        ...     target_project_id='<TARGET_PROJECT_ID>',
         ... )
 
         """
@@ -306,9 +307,10 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
+        >>> # Add a new `room-number` label to a device.
         >>> disruptive.Device.set_label(
-        ...     device_id='z19m68nlq0bgk84smxng',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     device_id='<DEVICE_ID>',
+        ...     project_id='<PROJECT_ID>',
         ...     key='room-number',
         ...     value='99',
         ... )
@@ -353,9 +355,10 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
+        >>> # Remove the `room-number` label from a device.
         >>> disruptive.Device.remove_label(
-        ...     device_id='z19m68nlq0bgk84smxng',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     device_id='<DEVICE_ID>',
+        ...     project_id='<PROJECT_ID>',
         ...     key='room-number',
         ... )
 
@@ -409,6 +412,30 @@ class Device(dtoutputs.OutputBase):
         ------
         BadRequest
             If neither `add_labels` nor `remove_labels` is provided.
+
+        Examples
+        --------
+        >>> # Add 3 new labels to 2 different devices, and remove 1.
+        >>> disruptive.Device.batch_update_labels(
+        ...     device_ids=[
+        ...         '<DEVICE_ID_1>',
+        ...         '<DEVICE_ID_2>',
+        ...     ],
+        ...     project_id='<PROJECT_ID>',
+        ...     add_labels={
+        ...         'new-label-1': 'value-1',
+        ...         'new-label-2': 'value-2',
+        ...         'new-label-3': 'value-3',
+        ...     },
+        ... )
+
+        >>> # Add 1 and remove 1 label from a single device.
+        >>> disruptive.Device.batch_update_labels(
+        ...     device_ids=['<DEVICE_ID_1>']
+        ...     project_id='<PROJECT_ID>',
+        ...     add_labels={'new-label': 'new-value'},
+        ...     remove_labels=['old-label'],
+        ... )
 
         """
 
