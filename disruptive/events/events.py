@@ -1,14 +1,3 @@
-"""
-Contains the various event classes.
-
-Module variables:
-
-* TOUCH:
-* TEMPERATURE:
-* OBJECT_PRESENT:
-
-"""
-
 from __future__ import annotations
 
 # Standard library imports.
@@ -23,11 +12,7 @@ import disruptive.logging as dtlog
 
 # Event-type constants.
 TOUCH = 'touch'
-"""touch docs"""
-
 TEMPERATURE = 'temperature'
-"""temp docs"""
-
 OBJECT_PRESENT = 'objectPresent'
 HUMIDITY = 'humidity'
 OBJECT_PRESENT_COUNT = 'objectPresentCount'
