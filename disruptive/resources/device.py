@@ -45,9 +45,11 @@ class Device(dtoutputs.OutputBase):
     PROXIMITY_COUNTER = 'proximityCounter'
     TOUCH_COUNTER = 'touchCounter'
     WATER_DETECTOR = 'waterDetector'
+    CLOUD_CONNECTOR = 'ccon'
     DEVICE_TYPES = [
         TEMPERATURE, PROXIMITY, TOUCH, HUMIDITY,
-        PROXIMITY_COUNTER, TOUCH_COUNTER, WATER_DETECTOR
+        PROXIMITY_COUNTER, TOUCH_COUNTER, WATER_DETECTOR,
+        CLOUD_CONNECTOR,
     ]
 
     def __init__(self, device: dict) -> None:
