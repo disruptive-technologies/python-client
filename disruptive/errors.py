@@ -1,3 +1,5 @@
+# Third-party imports.
+import requests
 
 
 class DTApiError(Exception):
@@ -141,3 +143,59 @@ class UnknownError(DTApiError):
 
     def __init__(self, message):
         super().__init__(message)
+
+
+def parse_request_error(caught_error, data, nth_attempt):
+    # Read Timeouts should be attempted again.
+    if isinstance(caught_error, requests.exceptions.ReadTimeout):
+        return (
+            ReadTimeout('Connection timed out.'),
+            True,
+            nth_attempt**2,
+        )
+
+    # Connection errors should be attempted again.
+    elif isinstance(caught_error, requests.exceptions.ConnectionError):
+        return (
+            ConnectionError('Failed to establish connection.'),
+            True,
+            nth_attempt**2,
+        )
+    else:
+        # Uncategorized error has been raised.
+        return UnknownError(data), False, None
+
+
+def parse_api_status_code(status_code, data, headers, nth_attempt):
+    # Check for API errors.
+    if status_code == 200:
+        return None, False, None
+    elif status_code == 400:
+        return BadRequest(data), False, None
+    elif status_code == 401:
+        # The first retry is #1. Therefor, retry_count < 2 will
+        # result in a a single retry attempt.
+        return Unauthorized(data), nth_attempt < 2, None
+    elif status_code == 403:
+        return Forbidden(data), False, None
+    elif status_code == 404:
+        return NotFound(data), False, None
+    elif status_code == 409:
+        return Conflict(data), False, None
+    elif status_code == 429:
+        if 'Retry-After' in headers:
+            return (
+                TooManyRequests(data),
+                True,
+                int(headers['Retry-After']),
+            )
+        else:
+            return TooManyRequests(data), False, None
+    elif status_code == 500:
+        return InternalServerError(data), True, nth_attempt**2
+    elif status_code == 503:
+        return InternalServerError(data), True, nth_attempt**2
+    elif status_code == 504:
+        return InternalServerError(data), True, nth_attempt**2 + 9
+    else:
+        return UnknownError(data), False, None

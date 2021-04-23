@@ -146,28 +146,30 @@ class DTRequest():
 
         # If _request_wrapper raised an exception, the request failed.
         if req_error is not None:
-            error, should_retry, retry_after = self._parse_request_error(
+            error, should_retry, sleeptime = dterrors.parse_request_error(
                 req_error, res.data, nth_attempt
             )
         else:
             # Parse the status_code and select an appropriate error.
             # If there is any hope at all that a retry might resolve the error,
             # should_retry will be True. (eg. a 401).
-            error, should_retry, retry_after = self._parse_api_status_code(
+            error, should_retry, sleeptime = dterrors.parse_api_status_code(
                 res.status_code, res.data, res.headers, nth_attempt
             )
 
         # Check if retry is required.
         if should_retry and nth_attempt < self.request_retries:
 
-            dtlog.log("Got error {}. Will retry up to {} more times".format(
-                error,
-                self.request_retries - nth_attempt,
+            dtlog.log('Error: {}'.format(error))
+            dtlog.log('Attempting reconnect {}/{} in {}s.'.format(
+                nth_attempt,
+                self.request_retries,
+                sleeptime,
             ), override=self.log)
 
             # Sleep if necessary.
-            if retry_after is not None:
-                time.sleep(retry_after)
+            if sleeptime is not None:
+                time.sleep(sleeptime)
 
             # Attempt the request again recursively, iterating counter.
             res.data = self._send_request(nth_attempt+1)
@@ -178,56 +180,6 @@ class DTRequest():
                 raise error
 
         return res.data
-
-    def _parse_request_error(self, caught_error, data, nth_attempt):
-        # Read Timeouts should be attempted again.
-        if isinstance(caught_error, requests.exceptions.ReadTimeout):
-            return dterrors.ReadTimeout, True, nth_attempt**2
-
-        # Connection errors should be attempted again.
-        elif isinstance(caught_error, requests.exceptions.ConnectionError):
-            return (
-                ConnectionError('Failed to establish connection.'),
-                True,
-                nth_attempt**2,
-            )
-        else:
-            # Uncategorized error has been raised.
-            return dterrors.UnknownError(data), False, None
-
-    def _parse_api_status_code(self, status_code, data, headers, nth_attempt):
-        # Check for API errors.
-        if status_code == 200:
-            return None, False, None
-        elif status_code == 400:
-            return dterrors.BadRequest(data), False, None
-        elif status_code == 401:
-            # The first retry is #1. Therefor, retry_count < 2 will
-            # result in a a single retry attempt.
-            return dterrors.Unauthorized(data), nth_attempt < 2, None
-        elif status_code == 403:
-            return dterrors.Forbidden(data), False, None
-        elif status_code == 404:
-            return dterrors.NotFound(data), False, None
-        elif status_code == 409:
-            return dterrors.Conflict(data), False, None
-        elif status_code == 429:
-            if 'Retry-After' in headers:
-                return (
-                    dterrors.TooManyRequests(data),
-                    True,
-                    int(headers['Retry-After']),
-                )
-            else:
-                return dterrors.TooManyRequests(data), False, None
-        elif status_code == 500:
-            return dterrors.InternalServerError(data), True, nth_attempt**2
-        elif status_code == 503:
-            return dterrors.InternalServerError(data), True, nth_attempt**2
-        elif status_code == 504:
-            return dterrors.InternalServerError(data), True, nth_attempt**2 + 9
-        else:
-            return dterrors.UnknownError(data), False, None
 
     @classmethod
     def get(cls, url, **kwargs):
@@ -271,8 +223,8 @@ class DTRequest():
 
         return results
 
-    @classmethod
-    def stream(cls, url: str, **kwargs):
+    @staticmethod
+    def stream(url: str, **kwargs):
         # Set ping constants.
         PING_INTERVAL = 10
         PING_JITTER = 2
@@ -282,23 +234,6 @@ class DTRequest():
 
         # Set error variable that if not None, raise it.
         error = None
-
-        def stream_retry_logic(nth_attempt):
-            # Print the error and try again up to max_request_retries.
-            if nth_attempt < request_retries:
-                dtlog.log('Connection lost. Retry {}/{}.'.format(
-                    nth_attempt+1,
-                    request_retries,
-                ))
-
-                # Exponential backoff in sleep time.
-                time.sleep(2**nth_attempt)
-
-                return nth_attempt + 1, None
-            else:
-                return nth_attempt, dterrors.ConnectionError(
-                    'Stream retry attempts has been exhausted.'
-                )
 
         # Unpack kwargs.
         params = kwargs['params'] if 'params' in kwargs else {}
@@ -319,11 +254,7 @@ class DTRequest():
 
         # Set up a simple catch-all retry policy.
         nth_attempt = 1
-        while nth_attempt <= request_retries:
-            # Check if error is set.
-            if error is not None:
-                raise error
-
+        while True:
             try:
                 # Set up a stream connection.
                 # Connection will timeout and reconnect if no single event
@@ -348,7 +279,7 @@ class DTRequest():
                         break
 
                     # Reset retry counter.
-                    nth_attempt = 0
+                    nth_attempt = 1
 
                     # Check for ping event.
                     event = payload['result']['event']
@@ -365,11 +296,25 @@ class DTRequest():
             except KeyboardInterrupt:
                 break
 
-            except requests.exceptions.ReadTimeout:
-                nth_attempt, error = stream_retry_logic(nth_attempt)
+            except Exception as e:
+                error, should_retry, sleeptime = dterrors.parse_request_error(
+                    e, {}, nth_attempt)
 
-            except requests.exceptions.ConnectionError:
-                nth_attempt, error = stream_retry_logic(nth_attempt)
+                # Print the error and try again up to max_request_retries.
+                if nth_attempt < request_retries and should_retry:
+                    dtlog.log('Error: {}'.format(error))
+                    dtlog.log('Attempting reconnect {}/{} in {}s.'.format(
+                        nth_attempt,
+                        request_retries,
+                        nth_attempt**2,
+                    ))
+
+                    # Exponential backoff in sleep time.
+                    time.sleep(sleeptime)
+                    nth_attempt += 1
+
+                else:
+                    raise error
 
 
 class DTResponse():
