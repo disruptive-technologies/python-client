@@ -65,7 +65,7 @@ class TestResponseStatusCodes():
             dt.Device.get_device('', '')
 
         # Assert expected retry attempts.
-        request_mock.assert_request_count(3)
+        request_mock.assert_request_count(4)
 
     def test_error_code_503(self, request_mock):
         # Set response status code to represent test.
@@ -76,7 +76,7 @@ class TestResponseStatusCodes():
             dt.Device.get_device('', '')
 
         # Assert expected retry attempts.
-        request_mock.assert_request_count(3)
+        request_mock.assert_request_count(4)
 
     def test_error_code_504(self, request_mock):
         # Set response status code to represent test.
@@ -87,4 +87,4 @@ class TestResponseStatusCodes():
             dt.Device.get_device('', '')
 
         # Assert expected retry attempts.
-        request_mock.assert_request_count(3)
+        request_mock.assert_request_count(4)
