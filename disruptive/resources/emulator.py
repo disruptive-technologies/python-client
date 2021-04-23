@@ -50,6 +50,19 @@ class Emulator():
         device : Device
             Object representing the created emulated device.
 
+        Examples
+        --------
+        >>> # Create a new emulated humidity sensor.
+        >>> disruptive.Emulator.create_device(
+        ...     project_id='<PROJECT_ID>',
+        ...     device_type=disruptive.Device.HUMIDITY,
+        ...     display_name='new-humidity-sensor',
+        ...     labels={
+        ...         'room-number': '99',
+        ...         'customer': 'x7',
+        ...     },
+        ... )
+
         """
 
         # Construct URL
@@ -93,6 +106,11 @@ class Emulator():
             Seconds before giving up a request without an answer.
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
+
+        Examples
+        --------
+        >>> # Delete an emulated device.
+        >>> disruptive.Emulator.delete_device('<DEVICE_ID>', '<PROJECT_ID>')
 
         """
 
@@ -144,6 +162,18 @@ class Emulator():
             Seconds before giving up a request without an answer.
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
+
+        Examples
+        --------
+        >>> # Publish a Humidity event from an emulated device.
+        >>> disruptive.Emulator.publish_event(
+        ...     device_id='<DEVICE_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ...     data=disruptive.events.Humidity(
+        ...         celsius=23,
+        ...         humidity=76,
+        ...     ),
+        ... )
 
         """
 

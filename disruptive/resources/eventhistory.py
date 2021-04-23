@@ -87,6 +87,27 @@ class EventHistory(dtoutputs.OutputBase):
             Object containing each event in history in addition to a few
             convenience functions.
 
+        Examples
+        --------
+        >>> # Fetch all historic events the last 24 hours.
+        >>> history = disruptive.EventHistory.list_events(
+        ...     device_id='<DEVICE_ID>',
+        ...     project_id='<PROJECT_ID',
+        ... )
+        >>> print(history.events_list)
+
+        >>> # Create a datetime object for 7 days ago.
+        >>> from datetime import datetime, timedelta
+        >>> seven_days_ago = datetime.now() - timedelta(7)
+        >>>
+        >>> # Fetch objectPresent event history the last 7 days.
+        ... history = dt.EventHistory.list_events(
+        ...     device_id='<DEVICE_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ...     event_types=['objectPresent'],
+        ...     start_time=seven_days_ago,
+        ... )
+
         """
 
         # Construct URL.

@@ -45,7 +45,8 @@ class Stream():
 
         Examples
         --------
-        >>> for event in dt.Stream.device(project_id, device_id):
+        >>> # Stream real-time events from a single device.
+        >>> for event in dt.Stream.device('<DEVICE_ID>', '<PROJECT_ID>'):
         ...     print(event)
 
         """
@@ -103,8 +104,16 @@ class Stream():
 
         Examples
         --------
-        >>> for event in dt.Stream.project(project_id):
+        >>> # Stream real-time events from all devices in a project.
+        >>> for event in dt.Stream.project('<PROJECT_ID>'):
         ...     print(event)
+
+        >>> # Stream from all temperature- and touch sensors with a 'v1' label.
+        >>> for e in dt.Stream.project(project_id='<PROJECT_ID>',
+        ...                            device_types=['temperature', 'touch'],
+        ...                            label_filters=['v1'],
+        ...                            ):
+        ...     print(e.data)
 
         """
 
