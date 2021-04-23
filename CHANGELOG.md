@@ -3,6 +3,8 @@ All notable changes, fixes, and additions to the project is listed in this chang
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
 # Unreleased
+### Fixed
+- [#39](https://github.com/disruptive-technologies/disruptive-python/pull/39) Request retry logic ran 1 loop too few.
 ### Added
 - [#38](https://github.com/disruptive-technologies/disruptive-python/pull/38) Type constant `CLOUD_CONNECTOR` were missing on the Device resource.
 
