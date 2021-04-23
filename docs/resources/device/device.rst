@@ -51,6 +51,7 @@ Class
    .. autoattribute:: disruptive.Device.PROXIMITY_COUNTER
    .. autoattribute:: disruptive.Device.TOUCH_COUNTER
    .. autoattribute:: disruptive.Device.WATER_DETECTOR
+   .. autoattribute:: disruptive.Device.CLOUD_CONNECTOR
    .. autoattribute:: disruptive.Device.DEVICE_TYPES
 
    .. compound::
