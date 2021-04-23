@@ -10,6 +10,21 @@ import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
 import disruptive.logging as dtlog
 
+# Event-type constants.
+TOUCH = 'touch'
+TEMPERATURE = 'temperature'
+OBJECT_PRESENT = 'objectPresent'
+HUMIDITY = 'humidity'
+OBJECT_PRESENT_COUNT = 'objectPresentCount'
+TOUCH_COUNT = 'touchCount'
+WATER_PRESENT = 'waterPresent'
+NETWORK_STATUS = 'networkStatus'
+BATTERY_STATUS = 'batteryStatus'
+LABELS_CHANGED = 'labelsChanged'
+CONNECTION_STATUS = 'connectionStatus'
+ETHERNET_STATUS = 'ethernetStatus'
+CELLULAR_STATUS = 'cellularStatus'
+
 
 class _EventData(dtoutputs.OutputBase):
     """
