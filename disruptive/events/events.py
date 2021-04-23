@@ -1461,7 +1461,7 @@ class Event(dtoutputs.OutputBase):
         Unique ID of the source device.
     project_id : str
         Unique ID of the source project.
-    data : :ref:`Event Data`
+    data : :ref:`Event Data <eventdata>`
         An object representing type-specific event data.
 
     """

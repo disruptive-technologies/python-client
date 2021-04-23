@@ -1,11 +1,20 @@
 Role
-----
-The Role class can fetch the various roles available.
+====
+The Role resource can be used to fetch `roles <https://developer.disruptive-technologies.com/docs/devices>`_ information. This can be done by using the API Methods included in the class.
+
+- :ref:`get_role() <get_role>`
+- :ref:`list_roles() <list_roles>`
+
+Each role fetched by an API Method is represented by an instance of the :ref:`Role <role>` class that is returned to the user.
 
 API Methods
 ^^^^^^^^^^^
+.. _get_role:
 .. autofunction:: disruptive.Role.get_role
+.. _list_roles:
 .. autofunction:: disruptive.Role.list_roles
+
+.. _role:
 
 Class
 ^^^^^
@@ -15,6 +24,15 @@ Class
    .. compound::
       The Role resources class contains one string constant for each available role, including a list of all types.
 
+   .. autoattribute:: disruptive.Role.PROJECT_USER
+   .. autoattribute:: disruptive.Role.PROJECT_DEVELOPER
+   .. autoattribute:: disruptive.Role.PROJECT_ADMIN
+   .. autoattribute:: disruptive.Role.ORGANIZATION_ADMIN
+   .. autoattribute:: disruptive.Role.ROLES
+
+   .. compound::
+      This can be useful when filtering or comparing roles.
+
    .. code-block:: python
 
       # Add a new developer member to the specified project.
@@ -23,8 +41,3 @@ Class
           email,
           roles=[dt.Role.PROJECT_DEVELOPER],
       )
-
-   .. autoattribute:: disruptive.Role.PROJECT_USER
-   .. autoattribute:: disruptive.Role.PROJECT_DEVELOPER
-   .. autoattribute:: disruptive.Role.PROJECT_ADMIN
-   .. autoattribute:: disruptive.Role.ORGANIZATION_ADMIN

@@ -35,9 +35,10 @@ API Methods
 .. _delete_key:
 .. autofunction:: disruptive.ServiceAccount.delete_key
 
+.. _serviceaccount:
+
 Class
 ^^^^^
-.. _serviceaccount:
 .. autoclass:: disruptive.ServiceAccount
 
 .. toctree::

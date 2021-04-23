@@ -40,7 +40,7 @@ Each API method in the package can also be configured individually with the afor
 .. code-block:: python
 
    # Fetch all temperature sensors in a project.
-   sensors = dt.Device.list_devices(
+   devices = dt.Device.list_devices(
        project_id,
        # The following configurations are specific for this call.
        log=False,

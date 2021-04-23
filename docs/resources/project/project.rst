@@ -41,7 +41,8 @@ API Methods
 .. _list_permissions:
 .. autofunction:: disruptive.Project.list_permissions
 
+.. _project:
+
 Class
 ^^^^^
-.. _project:
 .. autoclass:: disruptive.Project

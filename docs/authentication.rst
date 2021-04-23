@@ -33,13 +33,12 @@ Each method can also be authenticated directly, which then ignores :code:`disrup
        )
    )
 
-.. _routines:
+.. _authmethods:
 
 Authentication Methods
 ----------------------
 There is currently one method of authenticating the API.
 
-.. _authmethods:
 .. autofunction:: disruptive.Auth.serviceaccount
 
 Class

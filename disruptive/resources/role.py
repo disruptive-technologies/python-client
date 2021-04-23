@@ -78,6 +78,10 @@ class Role(OutputBase):
         role : Role
             Object representing the specified role.
 
+        Examples
+        --------
+        >>> role = disruptive.Role.get_role('project.developer')
+
         """
 
         # Return list of Role objects.
@@ -107,6 +111,10 @@ class Role(OutputBase):
         -------
         roles : list[Role]
             List of objects each representing a role.
+
+        Examples
+        --------
+        >>> roles = disruptive.Role.list_roles()
 
         """
 

@@ -177,7 +177,7 @@ class DataConnector(dtoutputs.OutputBase):
         ----------
         project_id : str
             Unique project ID.
-        config : HttpPush
+        config : HttpPushConfig
             An object representing the type-specific configuration.
         display_name : str, optional
             Sets a display name for the project.
@@ -258,7 +258,7 @@ class DataConnector(dtoutputs.OutputBase):
             Unique ID of the dataconnector to update.
         project_id : str
             Unique ID of the project that contains the dataconnector.
-        config : HttpPush, None
+        config : HttpPushConfig, optional
             An object representing the type-specific configuration.
         display_name : str, optional
             Sets a display name for the dataconnector.
