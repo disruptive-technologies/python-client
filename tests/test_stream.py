@@ -127,8 +127,8 @@ class TestStream():
                     request_retries=8):
                 pass
 
-        # Verify request is attempted the set number of times.
-        request_mock.assert_request_count(8)
+        # Verify request is attempted the set number of times (+1).
+        request_mock.assert_request_count(9)
 
     def test_retry_logic_connectionerror(self, request_mock):
         def side_effect_override(**kwargs):
@@ -145,5 +145,5 @@ class TestStream():
                     request_retries=7):
                 pass
 
-        # Verify request is attempted the set number of times.
-        request_mock.assert_request_count(7)
+        # Verify request is attempted the set number of times (+1).
+        request_mock.assert_request_count(8)

@@ -158,7 +158,7 @@ class DTRequest():
             )
 
         # Check if retry is required.
-        if should_retry and nth_attempt < self.request_retries:
+        if should_retry and nth_attempt <= self.request_retries:
 
             dtlog.log('Error: {}'.format(error))
             dtlog.log('Attempting reconnect {}/{} in {}s.'.format(
@@ -301,7 +301,7 @@ class DTRequest():
                     e, {}, nth_attempt)
 
                 # Print the error and try again up to max_request_retries.
-                if nth_attempt < request_retries and should_retry:
+                if nth_attempt <= request_retries and should_retry:
                     dtlog.log('Error: {}'.format(error))
                     dtlog.log('Attempting reconnect {}/{} in {}s.'.format(
                         nth_attempt,

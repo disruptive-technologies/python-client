@@ -270,4 +270,4 @@ class TestRequests():
             )
 
         # Verify it did in fact retry that many times.
-        request_mock.assert_request_count(99)
+        request_mock.assert_request_count(100)
