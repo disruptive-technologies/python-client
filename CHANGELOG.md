@@ -7,6 +7,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
 - [#39](https://github.com/disruptive-technologies/disruptive-python/pull/39) Request retry logic ran 1 loop too few.
 ### Added
 - [#38](https://github.com/disruptive-technologies/disruptive-python/pull/38) Type constant `CLOUD_CONNECTOR` were missing on the Device resource.
+- [#41](https://github.com/disruptive-technologies/disruptive-python/pull/41) Added events module type constants on the form `disruptive.events.EVENT_TYPE`.
 
 # v0.3.0
 _Released on 2020-04-22._
