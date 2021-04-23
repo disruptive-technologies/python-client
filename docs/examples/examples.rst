@@ -8,5 +8,5 @@ Examples
    :maxdepth: 1
    
    get-device
-   plot-temperatures
+   sensor-temperatures
    threaded-stream
