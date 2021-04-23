@@ -29,9 +29,10 @@ API Methods
 .. _get_metrics:
 .. autofunction:: disruptive.DataConnector.get_metrics
 
+.. _dataconnector:
+
 Class
 -----
-.. _dataconnector:
 .. autoclass:: disruptive.DataConnector
 
    .. rubric:: Data Connector Type Constants
@@ -43,7 +44,11 @@ Class
 
 Configurations
 --------------
-When fetching a Data Connector, the `config` attribute holds its type-specific configuration. When creating or updating one, it must be specified with one of the following classes.
+The :ref:`DataConnector <dataconnector>` `config` attribute holds an instance of a type-specific configuration class.
+
+- :ref:`HttpPushConfig <httppush_config>`
+
+When fetching a Data Connector, this attribute is set automatically, but when :ref:`creating <create_dataconnector>` or :ref:`updating <update_dataconnector>` one, it must be provided.
 
 .. code-block:: python
 
@@ -57,6 +62,7 @@ When fetching a Data Connector, the `config` attribute holds its type-specific c
        ),
    )
 
+.. _httppush_config:
 .. autoclass:: disruptive.DataConnector.HttpPushConfig
    
    .. automethod:: disruptive.DataConnector.HttpPushConfig.__init__

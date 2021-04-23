@@ -1,11 +1,19 @@
+.. _eventhistory:
+
 EventHistory
 ------------
+The EventHistory resource can be used fetch historic event data for a device. This can be achieved by using the API Method included in the class.
 
-The EventHistory class can be used for fetching historic events for a device, returned as an instance of itself on which a few convenience functions can be found.
+- :ref:`list_events() <list_events>`
+
+All the fetched historic events are returned to the user as an instance of the :ref:`EventHistory <eventhistory_class>` class.
 
 API Methods
 ^^^^^^^^^^^
+.. _list_events:
 .. autofunction:: disruptive.EventHistory.list_events
+
+.. _eventhistory_class:
 
 Class
 ^^^^^

@@ -34,14 +34,27 @@ API Methods
 
    reported
 
+.. _device:
+
 Class
 -----
-.. _device:
 .. autoclass:: disruptive.Device
 
    .. rubric:: Device Type Constants
    .. compound::
       The Device resources class contains one string constant for each device type available, including a list of all types.
+
+   .. autoattribute:: disruptive.Device.TEMPERATURE
+   .. autoattribute:: disruptive.Device.PROXIMITY
+   .. autoattribute:: disruptive.Device.TOUCH
+   .. autoattribute:: disruptive.Device.HUMIDITY
+   .. autoattribute:: disruptive.Device.PROXIMITY_COUNTER
+   .. autoattribute:: disruptive.Device.TOUCH_COUNTER
+   .. autoattribute:: disruptive.Device.WATER_DETECTOR
+   .. autoattribute:: disruptive.Device.DEVICE_TYPES
+
+   .. compound::
+      This can be useful when filtering or comparing devices.
 
    .. code-block:: python
 
@@ -53,12 +66,3 @@ Class
               dt.Device.TOUCH,
           ],
       )
-
-   .. autoattribute:: disruptive.Device.TEMPERATURE
-   .. autoattribute:: disruptive.Device.PROXIMITY
-   .. autoattribute:: disruptive.Device.TOUCH
-   .. autoattribute:: disruptive.Device.HUMIDITY
-   .. autoattribute:: disruptive.Device.PROXIMITY_COUNTER
-   .. autoattribute:: disruptive.Device.TOUCH_COUNTER
-   .. autoattribute:: disruptive.Device.WATER_DETECTOR
-   .. autoattribute:: disruptive.Device.DEVICE_TYPES

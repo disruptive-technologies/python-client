@@ -29,7 +29,8 @@ API Methods
 .. _list_permissions:
 .. autofunction:: disruptive.Organization.list_permissions
 
+.. _organization:
+
 Class
 ^^^^^
-.. _organization:
 .. autoclass:: disruptive.Organization
