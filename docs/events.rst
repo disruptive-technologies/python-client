@@ -8,6 +8,38 @@ When interacting the :ref:`EventHistory <eventhistory>` or :ref:`Stream <stream>
 
 .. _eventdata:
 
+Type Constants
+--------------
+A constant for each event type is available in the `events` module.
+
+.. autoattribute:: disruptive.events.TOUCH
+.. autoattribute:: disruptive.events.TEMPERATURE
+.. autoattribute:: disruptive.events.OBJECT_PRESENT
+.. autoattribute:: disruptive.events.HUMIDITY
+.. autoattribute:: disruptive.events.OBJECT_PRESENT_COUNT
+.. autoattribute:: disruptive.events.TOUCH_COUNT
+.. autoattribute:: disruptive.events.WATER_PRESENT
+.. autoattribute:: disruptive.events.NETWORK_STATUS
+.. autoattribute:: disruptive.events.BATTERY_STATUS
+.. autoattribute:: disruptive.events.LABELS_CHANGED
+.. autoattribute:: disruptive.events.CONNECTION_STATUS
+.. autoattribute:: disruptive.events.ETHERNET_STATUS
+.. autoattribute:: disruptive.events.CELLULAR_STATUS
+
+This can be useful when using resource methods where one can filter on event types.
+
+.. code-block:: python
+
+   # Fetch touch- and humidity event history.
+   history = disruptive.EventHistory.list_events(
+      device_id='<DEVICE_ID>',
+      project_id='<PROJECT_ID>',
+      event_types=[
+         disruptive.events.TOUCH,
+         disruptive.events.HUMIDITY,
+      ],
+   )
+
 Event Data
 ----------
 The following classes each represent one type-specific event data that can be encountered. Instances are found in the `data` attribute of an :ref:`Event <event>` or the `reported` attribute of a :ref:`Device <device>`.
