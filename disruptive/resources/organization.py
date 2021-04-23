@@ -64,6 +64,11 @@ class Organization(OutputBase):
         organization : Organization
             Object representing the specified organization.
 
+        Examples
+        --------
+        >>> # Fetch information about a specific organization.
+        >>> org = disruptive.Organization.get_organization('<ORGANIZATION_ID>')
+
         """
 
         # Construct URL
@@ -96,6 +101,11 @@ class Organization(OutputBase):
         -------
         organizations : list[Organization]
             List of objects each representing an organization.
+
+        Examples
+        --------
+        >>> # Fetch information about all available organizations.
+        >>> orgs = disruptive.Organization.list_organizations()
 
         """
 
@@ -130,6 +140,11 @@ class Organization(OutputBase):
         -------
         members : list[Member]
             List of objects each representing a member.
+
+        Examples
+        --------
+        >>> # Fetch information about all members in an organization.
+        >>> members = disruptive.Organization.list_members('<ORGANIZATION_ID>')
 
         """
 
@@ -174,6 +189,15 @@ class Organization(OutputBase):
         -------
         member : Member
             Object representing the newly added member.
+
+        Examples
+        --------
+        >>> # Add a new member to an organization.
+        >>> member = disruptive.Organization.add_member(
+        ...     organization_id='<ORGANIZATION_ID>',
+        ...     email='<EMAIL_ADDRESS>',
+        ...     roles=[disruptive.Role.ORGANIZATION_ADMIN],
+        ... )
 
         """
 
@@ -221,6 +245,14 @@ class Organization(OutputBase):
         member : Member
             Object representing the member.
 
+        Examples
+        --------
+        >>> # Fetch information about a specific member in an organization.
+        >>> org = disruptive.Organization.get_organization(
+        ...     member_id='<MEMBER_ID>',
+        ...     organization_id='<ORGANIZATION_ID>',
+        ... )
+
         """
 
         # Construct URL
@@ -258,6 +290,14 @@ class Organization(OutputBase):
             Seconds before giving up a request without an answer.
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
+
+        Examples
+        --------
+        >>> # Revoke the membership of a member in an organization.
+        >>> org = disruptive.Organization.remove_member(
+        ...     member_id='<MEMBER_ID>',
+        ...     organization_id='<ORGANIZATION_ID>',
+        ... )
 
         """
 
@@ -305,6 +345,14 @@ class Organization(OutputBase):
         BadRequest
             If the invite has already been accepted.
 
+        Examples
+        --------
+        >>> # Fetch the pending invite URL for a member.
+        >>> org = disruptive.Organization.get_member_invite_url(
+        ...     member_id='<MEMBER_ID>',
+        ...     organization_id='<ORGANIZATION_ID>',
+        ... )
+
         """
 
         # Construct URL
@@ -342,6 +390,13 @@ class Organization(OutputBase):
         -------
         permissions : list[str]
             List of available permissions.
+
+        Examples
+        --------
+        >>> # List all available permissions in an organization.
+        >>> org = disruptive.Organization.list_permissions(
+        ...     organization_id='<ORGANIZATION_ID>',
+        ... )
 
         """
 

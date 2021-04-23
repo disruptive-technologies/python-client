@@ -11,25 +11,25 @@ import disruptive.transforms as dttrans
 
 class ServiceAccount(dtoutputs.OutputBase):
     """
-    Represents a serviceaccount.
+    Represents a Service Account.
 
-    When a serviceaccount response is received, the content is
+    When a Service Account response is received, the content is
     unpacked and the related attributes are updated.
 
     Attributes
     ----------
     serviceaccount_id : str
-        Unique serviceaccount ID.
+        Unique Service Account ID.
     email : str
-        Unique serviceaccount email.
+        Unique Service Account email.
     display_name : str
         The provided display name.
     basic_auth : bool
         True if Basic Auth is enabled, otherwise False.
     create_time : datetime
-        Timestamp of when the serviceaccount was created.
+        Timestamp of when the Service Account was created.
     update_time : datetime
-        Timestamp of when the serviceaccount was last updated.
+        Timestamp of when the Service Account was last updated.
 
     """
 
@@ -40,7 +40,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Parameters
         ----------
         serviceaccount : dict
-            Unmodified serviceaccount response dictionary.
+            Unmodified Service Account response dictionary.
 
         """
 
@@ -62,12 +62,12 @@ class ServiceAccount(dtoutputs.OutputBase):
                            **kwargs,
                            ) -> ServiceAccount:
         """
-        Gets a serviceaccount specified by its ID.
+        Gets the current state of a single Service Account.
 
         Parameters
         ----------
         serviceaccount_id : str
-            Unique ID of the target serviceaccount.
+            Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
         auth: Auth, optional
@@ -81,7 +81,15 @@ class ServiceAccount(dtoutputs.OutputBase):
         Returns
         -------
         serviceaccount : ServiceAccount
-            Object representing the target serviceaccount.
+            Object representing the target Service Account.
+
+        Examples
+        --------
+        >>> # Fetch information about a specific Service Account.
+        >>> sa = disruptive.ServiceAccount.get_serviceaccount(
+        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ... )
 
         """
 
@@ -103,7 +111,7 @@ class ServiceAccount(dtoutputs.OutputBase):
                              **kwargs,
                              ) -> list[ServiceAccount]:
         """
-        List all available serviceaccounts in the specified project.
+        Gets a list of the current state of all Service Accounts in a project.
 
         Parameters
         ----------
@@ -120,7 +128,14 @@ class ServiceAccount(dtoutputs.OutputBase):
         Returns
         -------
         serviceaccounts : list[ServiceAccount]
-            List of objects each representing a serviceaccount.
+            List of objects each representing a Service Account.
+
+        Examples
+        --------
+        >>> # Fetch a list of all Service Accounts in a project.
+        >>> sas = disruptive.ServiceAccount.list_serviceaccounts(
+        ...     project_id='<PROJECT_ID>',
+        ... )
 
         """
 
@@ -143,16 +158,16 @@ class ServiceAccount(dtoutputs.OutputBase):
                               **kwargs,
                               ) -> ServiceAccount:
         """
-        Create a new serviceaccount in the specified project.
+        Create a new Service Account in the specified project.
 
         Parameters
         ----------
         project_id : str
             Unique ID of the target project.
         display_name : str, optional
-            Sets a display name for the serviceaccount.
+            Sets a display name for the Service Account.
         basic_auth : bool, optional
-            Enables Basic Auth for the serviceaccount if True.
+            Enables Basic Auth for the Service Account if True.
             Defaults to False.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
@@ -165,7 +180,16 @@ class ServiceAccount(dtoutputs.OutputBase):
         Returns
         -------
         serviceaccount : ServiceAccount
-            Object representing the newly created serviceaccount.
+            Object representing the newly created Service Account.
+
+        Examples
+        --------
+        >>> # Create a new Service Account with basic auth enabled.
+        >>> sa = disruptive.ServiceAccount.create_serviceaccount(
+        ...     project_id='<PROJECT_ID>',
+        ...     display_name='new-serviceaccount',
+        ...     basic_auth=True,
+        ... )
 
         """
 
@@ -194,16 +218,16 @@ class ServiceAccount(dtoutputs.OutputBase):
                               **kwargs,
                               ) -> ServiceAccount:
         """
-        Updates the attributes of a specified serviceaccount.
+        Updates the attributes of a specified Service Account.
 
         Parameters
         ----------
         serviceaccount_id : str
-            Unique ID of the target serviceaccount.
+            Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
         display_name : str, optional
-            Updates the serviceaccount display name.
+            Updates the Service Account display name.
         basic_auth : bool, optional
             If True, enables Basic Auth while False disables it.
         auth: Auth, optional
@@ -213,6 +237,28 @@ class ServiceAccount(dtoutputs.OutputBase):
             Seconds before giving up a request without an answer.
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
+
+        Returns
+        -------
+        serviceaccount : ServiceAccount
+            Object representing the updated Service Account.
+
+        Examples
+        --------
+        >>> # Update only the `display_name` of a Service Account.
+        >>> sa = disruptive.ServiceAccount.update_serviceaccount(
+        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ...     display_name='new-name',
+        ... )
+
+        >>> # Update both `display_name` and `basic_auth` of a Service Account.
+        >>> sa = disruptive.ServiceAccount.update_serviceaccount(
+        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ...     display_name='new-name',
+        ...     basic_auth=False,
+        ... )
 
         """
 
@@ -243,12 +289,12 @@ class ServiceAccount(dtoutputs.OutputBase):
                               **kwargs,
                               ) -> None:
         """
-        Deletes the specified serviceaccount.
+        Deletes the specified Service Account.
 
         Parameters
         ----------
         serviceaccount_id : str
-            Unique ID of the serviceaccount to delete.
+            Unique ID of the Service Account to delete.
         project_id : str
             Unique ID of the target project.
         auth: Auth, optional
@@ -258,6 +304,14 @@ class ServiceAccount(dtoutputs.OutputBase):
             Seconds before giving up a request without an answer.
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
+
+        Examples
+        --------
+        >>> # Delete a single Service Account.
+        >>> disruptive.ServiceAccount.delete_serviceaccount(
+        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ... )
 
         """
 
@@ -274,22 +328,22 @@ class ServiceAccount(dtoutputs.OutputBase):
         )
 
     @staticmethod
-    def get_key(serviceaccount_id: str,
+    def get_key(key_id: str,
+                serviceaccount_id: str,
                 project_id: str,
-                key_id: str,
                 **kwargs,
                 ) -> Key:
         """
-        Get the key of a serviceaccount.
+        Get the key of a Service Account.
 
         Parameters
         ----------
-        serviceaccount_id : str
-            Unique ID of the target serviceaccount.
-        project_id : str
-            Unique ID of the target project.
         key_id : str
             Unique ID of the target key.
+        serviceaccount_id : str
+            Unique ID of the target Service Account.
+        project_id : str
+            Unique ID of the target project.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -302,6 +356,15 @@ class ServiceAccount(dtoutputs.OutputBase):
         -------
         key : Key
             Object representing the target key.
+
+        Examples
+        --------
+        >>> # Get information about a specific key.
+        >>> key = disruptive.ServiceAccount.get_key(
+        ...     key_id='<KEY_ID>',
+        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ... )
 
         """
 
@@ -324,12 +387,12 @@ class ServiceAccount(dtoutputs.OutputBase):
                   **kwargs,
                   ) -> list[Key]:
         """
-        Get a list of all keys for a serviceaccount.
+        Get a list of all keys for a Service Account.
 
         Parameters
         ----------
         serviceaccount_id : str
-            Unique ID of the target serviceaccount.
+            Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
         auth: Auth, optional
@@ -344,6 +407,14 @@ class ServiceAccount(dtoutputs.OutputBase):
         -------
         keys : list[Key]
             List of objects each representing a key.
+
+        Examples
+        --------
+        >>> # List all keys for a specific Service Account.
+        >>> keys = disruptive.ServiceAccount.list_keys(
+        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ... )
 
         """
 
@@ -367,12 +438,12 @@ class ServiceAccount(dtoutputs.OutputBase):
                    **kwargs,
                    ) -> Key:
         """
-        Create a new key for the specified serviceaccount.
+        Create a new key for the specified Service Account.
 
         Parameters
         ----------
         serviceaccount_id : str
-            Unique ID of the target serviceaccount.
+            Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
         auth: Auth, optional
@@ -387,6 +458,14 @@ class ServiceAccount(dtoutputs.OutputBase):
         -------
         key : Key
             Object representing the newly created key.
+
+        Examples
+        --------
+        >>> # Create a new key for a specific Service Account.
+        >>> key = disruptive.ServiceAccount.create_key(
+        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ... )
 
         """
 
@@ -404,20 +483,20 @@ class ServiceAccount(dtoutputs.OutputBase):
         return Key._with_secret(response)
 
     @staticmethod
-    def delete_key(serviceaccount_id: str,
-                   key_id: str,
+    def delete_key(key_id: str,
+                   serviceaccount_id: str,
                    project_id: str,
                    **kwargs,
                    ) -> None:
         """
-        Deletes a key in the specified serviceaccount.
+        Deletes a key in the specified Service Account.
 
         Parameters
         ----------
-        serviceaccount_id : str
-            Unique ID of the target serviceaccount.
         key_id : str
             Unique ID of the key to delete.
+        serviceaccount_id : str
+            Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
         auth: Auth, optional
@@ -427,6 +506,15 @@ class ServiceAccount(dtoutputs.OutputBase):
             Seconds before giving up a request without an answer.
         request_retries: int, optional
             Maximum number of times to retry a request before giving up.
+
+        Examples
+        --------
+        >>> # Delete a specific key on a Service Account.
+        >>> disruptive.ServiceAccount.delete_key(
+        ...     key_id='<KEY_ID',
+        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ... )
 
         """
 
@@ -446,7 +534,7 @@ class ServiceAccount(dtoutputs.OutputBase):
 
 class Key(dtoutputs.OutputBase):
     """
-    Represents a key in a serviceaccount.
+    Represents a key in a Service Account.
 
     When a key response is received, the content is
     unpacked and the related attributes are updated.
@@ -457,8 +545,8 @@ class Key(dtoutputs.OutputBase):
         Unique key ID.
     secret : str, None
         If the Key object was constructed from a newly created key, i.e. from
-        calling the create_key() method, this attributes contains the
-        key secret. This only displays once, and is otherwise None.
+        calling the :ref:`create_key() <create_key>` method, this attributes
+        contains the key secret. This is displayed once, and is otherwise None.
     create_time : datetime
         Timestamp of when the key was created.
 

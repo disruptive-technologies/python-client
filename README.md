@@ -32,15 +32,10 @@ pip install .
 Using [Service Account](https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts) credentials, setting `disruptive.default_auth` authenticates the package:
 
 ```python
-import os
 import disruptive as dt
 
 # Using serviceaccount credentials, authenticate the package.
-dt.default_auth = dt.Auth.serviceaccount(
-    key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', ''),
-    secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET', ''),
-    email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', ''),
-)
+dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 ```
 
 ## Usage
@@ -49,7 +44,7 @@ API methods are grouped under various resource names on the form `disruptive.<Re
 
 ```python
 # Fetch a specific temperature sensor from a project.
-sensor = dt.Device.get_device(device_id)
+sensor = dt.Device.get_device('<DEVICE_ID>')
 
 # Print the sensor information, listing all available attributes.
 print(sensor)

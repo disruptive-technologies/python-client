@@ -12,9 +12,6 @@ Full Example
    import os
    from datetime import datetime, timedelta
    
-   # Third party imports.
-   import matplotlib.pyplot as plt
-   
    # Import disruptive package.
    import disruptive as dt
    
@@ -36,23 +33,18 @@ Full Example
        # Fetch temperature events over the last 7 days.
        history = dt.EventHistory.list_events(
            project_id=sensor.project_id,
-           device_id=sensor.id,
-           event_types=[dt.EventTypes.temperature],
+           device_id=sensor.device_id,
+           event_types=[dt.types.events.temperature],
            start_time=datetime.today()-timedelta(days=7),
        )
    
        # Print how many events were fetched.
        print('{}: {} events fetched.'.format(
-           sensor.id, len(history.events_list)
+           sensor.device_id, len(history.events_list)
        ))
    
-       # Fetch the timestamp- and temperature data axes and superimpose on plot.
-       timeaxis, temperature = history.get_data_axes('timestamp', 'temperature')
-       plt.plot(timeaxis, temperature, label=sensor.id)
-   
-   # Generated the plot.
-   plt.legend()
-   plt.show()
+       # Isolate timeaxis and temperature data which can be plotted directly.
+       timeaxis, temperature = history.get_data_axes('timestamp', 'celsius')
 
 Step-By-Step
 ------------
@@ -63,6 +55,7 @@ Environment variables are used for both fetching credentials and project ID. The
 
    # Standard library imports.
    import os
+   from datetime import datetime, timedelta
    
    # Import disruptive package.
    import disruptive as dt
@@ -97,20 +90,19 @@ The 7-day event history can be fetched for each sensor by iterating the list of 
        # Fetch temperature events over the last 7 days.
        history = dt.EventHistory.list_events(
            project_id=sensor.project_id,
-           device_id=sensor.id,
-           event_types=[dt.EventTypes.temperature],
+           device_id=sensor.device_id,
+           event_types=[dt.types.events.temperature],
            start_time=datetime.today()-timedelta(days=7),
        )
 
-      # Print how many events were fetched.
-      print('{}: {} events fetched.'.format(
-          sensor.id, len(history.events_list)
-      ))
+       # Print how many events were fetched.
+       print('{}: {} events fetched.'.format(
+           sensor.device_id, len(history.events_list)
+       ))
 
 Once fetched, the returned EventHistory object contains a list of all events and their data.
 
 .. code-block:: python
 
     # Isolate the timestamp- and temperature data axes and superimpose on plot.
-    timeaxis, temperature = history.get_data_axes('timestamp', 'temperature')
-    plt.plot(timeaxis, temperature, label=sensor.id)
+    timeaxis, temperature = history.get_data_axes('timestamp', 'celsius')

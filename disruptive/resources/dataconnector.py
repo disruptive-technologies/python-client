@@ -27,9 +27,9 @@ class DataConnector(dtoutputs.OutputBase):
     display_name : str
         The provided display name.
     dataconnector_type : str
-        Dataconnector type. Currently, only HTTP_PUSH is available.
+        Data Connector type. Currently, only HTTP_PUSH is available.
     status : str
-        Whether the dataconnector is
+        Whether the Data Connector is
         "ACTIVE", "USER_DISABLED", or "SYSTEM_DISABLED".
     config : HttpPushConfig, None
         An object representing the type-specific configuration.
@@ -49,13 +49,13 @@ class DataConnector(dtoutputs.OutputBase):
 
     def __init__(self, dataconnector: dict) -> None:
         """
-        Constructs the DataConnector object by unpacking
-        the raw dataconnector response.
+        Constructs the Data Connector object by unpacking
+        the raw Data Connector response.
 
         Parameters
         ----------
         dataconnector : dict
-            Unmodified dataconnector response dictionary.
+            Unmodified Data Connector response dictionary.
 
         """
 
@@ -84,7 +84,7 @@ class DataConnector(dtoutputs.OutputBase):
         Parameters
         ----------
         dataconnector_id : str
-            Unique dataconnector ID.
+            Unique Data Connector ID.
         project_id : str
             Unique project ID.
         auth: Auth, optional
@@ -102,9 +102,10 @@ class DataConnector(dtoutputs.OutputBase):
 
         Examples
         --------
+        >>> # Fetch information about a specific Data Connector.
         >>> dcon = disruptive.DataConnector.get_dataconnector(
-        ...     dataconnector_id='z19m68nlq0bgk84smxng',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -125,7 +126,7 @@ class DataConnector(dtoutputs.OutputBase):
                             **kwargs,
                             ) -> list[DataConnector]:
         """
-        Gets a list of the current state of all dataconnectors in a project.
+        Gets a list of the current state of all Data Connectors in a project.
 
         Parameters
         ----------
@@ -142,12 +143,13 @@ class DataConnector(dtoutputs.OutputBase):
         Returns
         -------
         dataconnectors : list[DataConnector]
-            List of objects each representing a dataconnector.
+            List of objects each representing a Data Connector.
 
         Examples
         --------
+        >>> # List information about all Data Connectors in a project.
         >>> dcons = disruptive.DataConnector.list_dataconnectors(
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -171,7 +173,7 @@ class DataConnector(dtoutputs.OutputBase):
                              **kwargs,
                              ) -> DataConnector:
         """
-        Creates a new dataconnector in the specified project.
+        Creates a new Data Connector in the specified project.
 
         Parameters
         ----------
@@ -182,9 +184,9 @@ class DataConnector(dtoutputs.OutputBase):
         display_name : str, optional
             Sets a display name for the project.
         status : {"ACTIVE", "USER_DISABLED"} strm optional
-            Status of the new dataconnector.
+            Status of the new Data Connector.
         events : list[str], optional
-            List of event types the dataconnectors should forward.
+            List of event types the Data Connector should forward.
         labels : list[str], optional
             List of labels to forward with each event.
         auth: Auth, optional
@@ -198,15 +200,16 @@ class DataConnector(dtoutputs.OutputBase):
         Returns
         -------
         dataconnector : DataConnector
-            Object representing the newly created dataconnector.
+            Object representing the newly created Data Connector.
 
         Examples
         --------
+        >>> # Create a new Data Connector.
         >>> dcon = disruptive.DataConnector.create_dataconnector(
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     project_id='<PROJECT_ID>',
         ...     config=disruptive.dataconnector_configs.HttpPush(
-        ...         url='https://my-endpoint-url.com',
-        ...         signature_secret='very-good-secret',
+        ...         url='<HTTPS_ENDPOINT_URL>',
+        ...         signature_secret='some-good-secret',
         ...     ),
         ...     display_name='my-first-dcon',
         ... )
@@ -249,23 +252,23 @@ class DataConnector(dtoutputs.OutputBase):
         **kwargs,
     ) -> DataConnector:
         """
-        Updates the attributes of a dataconnector.
+        Updates the attributes of a Data Connector.
         All parameters that are provided will be updated.
 
         Parameters
         ----------
         dataconnector_id : str
-            Unique ID of the dataconnector to update.
+            Unique ID of the Data Connector to update.
         project_id : str
-            Unique ID of the project that contains the dataconnector.
+            Unique ID of the project that contains the Data Connector.
         config : HttpPushConfig, optional
             An object representing the type-specific configuration.
         display_name : str, optional
-            Sets a display name for the dataconnector.
+            Sets a display name for the Data Connector.
         status : {"ACTIVE", "USER_DISABLED"} str, optional
-            Status of the dataconnector.
+            Status of the Data Connector.
         events : list[str], optional
-            List of event types the dataconnectors should forward.
+            List of event types the Data Connector should forward.
         labels : list[str], optional
             List of labels to forward with each event.
         auth: Auth, optional
@@ -279,15 +282,27 @@ class DataConnector(dtoutputs.OutputBase):
         Returns
         -------
         dataconnector : DataConnector
-            Object representing the updated dataconnector.
+            Object representing the updated Data Connector.
 
         Examples
         --------
+        >>> # Update only the display_name of a Data Connector.
         >>> dcon = disruptive.DataConnector.update_dataconnector(
-        ...     dataconnector_id='z19m68nlq0bgk84smxng',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
-        ...     events=['temperature', 'touch'],
+        ... )
+
+        >>> # Update both the display_name, labels, and forwarded event types.
+        >>> dcon = disruptive.DataConnector.update_dataconnector(
+        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        ...     project_id='<PROJECT_ID>',
+        ...     display_name='new-name',
+        ...     labels=['room-number', 'customer-id'],
+        ...     events=[
+        ...         disruptive.events.TOUCH,
+        ...         disruptive.events.TEMPERATURE,
+        ...         ],
         ... )
 
         """
@@ -326,14 +341,14 @@ class DataConnector(dtoutputs.OutputBase):
                              **kwargs,
                              ) -> None:
         """
-        Deletes the specified dataconnector.
+        Deletes the specified Data Connector.
 
         Parameters
         ----------
         dataconnector_id : str
-            Unique ID of the dataconnector to delete.
+            Unique ID of the Data Connector to delete.
         project_id : str
-            Unique ID of the project that contains the dataconnector.
+            Unique ID of the project that contains the Data Connector.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -344,9 +359,10 @@ class DataConnector(dtoutputs.OutputBase):
 
         Examples
         --------
+        >>> # Delete the specified Data Connector.
         >>> disruptive.DataConnector.delete_dataconnector(
-        ...     dataconnector_id='z19m68nlq0bgk84smxng',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -368,14 +384,14 @@ class DataConnector(dtoutputs.OutputBase):
                     **kwargs,
                     ) -> Metric:
         """
-        Get the metrics of the last 3 hours for a dataconnector.
+        Get the metrics of the last 3 hours for a Data Connector.
 
         Parameters
         ----------
         dataconnector_id : str
-            Unique ID of the dataconnector to list metrics for.
+            Unique ID of the Data Connector to list metrics for.
         project_id : str
-            Unique ID of the project that contains the dataconnector.
+            Unique ID of the project that contains the Data Connector.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -391,9 +407,10 @@ class DataConnector(dtoutputs.OutputBase):
 
         Examples
         --------
+        >>> # Get the 3h metrics of the specified Data Connector.
         >>> metrics = disruptive.DataConnector.get_metrics(
-        ...     dataconnector_id='z19m68nlq0bgk84smxng',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -416,7 +433,7 @@ class DataConnector(dtoutputs.OutputBase):
                            **kwargs,
                            ) -> None:
         """
-        Synchronizes the current dataconnector state.
+        Synchronizes the current Data Connector state.
 
         This method let's you synchronize your cloud service with the current
         state of the devices in your project. This entails pushing the most
@@ -425,9 +442,9 @@ class DataConnector(dtoutputs.OutputBase):
         Parameters
         ----------
         dataconnector_id : str
-            Unique ID of the dataconnector to synchronize.
+            Unique ID of the Data Connector to synchronize.
         project_id : str
-            Unique ID of the project that contains the dataconnector.
+            Unique ID of the project that contains the Data Connector.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.
@@ -438,9 +455,10 @@ class DataConnector(dtoutputs.OutputBase):
 
         Examples
         --------
+        >>> # Synchronize the specified Data Connector.
         >>> disruptive.DataConnector.sync_dataconnector(
-        ...     dataconnector_id='z19m68nlq0bgk84smxng',
-        ...     project_id='y14u8p094l37cdv1o0ug',
+        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        ...     project_id='<PROJECT_ID>',
         ... )
 
         """
@@ -481,7 +499,7 @@ class DataConnector(dtoutputs.OutputBase):
 
     class HttpPushConfig():
         """
-        Type-specific configurations for the HTTP_PUSH dataconnector.
+        Type-specific configurations for the HTTP_PUSH Data Connector.
 
         Attributes
         ----------
