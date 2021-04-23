@@ -37,7 +37,7 @@ Class
 
       # Add a new developer member to the specified project.
       dt.Project.add_member(
-          project_id,
-          email,
+          project_id='<PROJECT_ID>',
+          email='<EMAIL_ADDRESS>',
           roles=[dt.Role.PROJECT_DEVELOPER],
       )
