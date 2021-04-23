@@ -132,11 +132,11 @@ class Emulator():
             Unique ID of the target device.
         project_id : str
             Unique ID of the target project.
-        data : :ref:`Event Data`
+        data : :ref:`Event Data <eventdata>`
             An object representing the event data to be published.
-            Can be any of the listed :ref:`Event Data` classes.
+            Can be any of the listed Event Data classes.
             labelsChanged is not supported when publishing emulated events.
-            The chosen :ref:`Event Data` must be supported by the device.
+            The chosen Event Data must be supported by the device.
         auth: Auth, optional
             Authorization object used to authenticate the REST API.
             If provided it will be prioritized over global authentication.

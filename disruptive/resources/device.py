@@ -431,7 +431,7 @@ class Device(dtoutputs.OutputBase):
 
 class Reported(dtoutputs.OutputBase):
     """
-    Represents the most recent :ref:`Event Data <Event Data>` of
+    Represents the most recent :ref:`Event Data <eventdata>` of
     each type for a single :ref:`Device <device>`.
     If an event type has never been emitted or is not available to
     the device type, the related attribute is `None`.

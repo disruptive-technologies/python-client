@@ -116,9 +116,9 @@ class EventHistory(dtoutputs.OutputBase):
         # Return list of Event objects of paginated GET response.
         return cls(Event.from_mixed_list(res))
 
-    def get_events(self, event_type):
+    def get_events(self, event_type: str):
         """
-        Returns a filtered list of events specified by type from history.
+        Returns a type-filtered list of events from history.
 
         Parameters
         ----------
@@ -127,7 +127,7 @@ class EventHistory(dtoutputs.OutputBase):
 
         Returns
         -------
-        events : list
+        events : list[Event]
             List of event objects of the specified type.
 
         """
