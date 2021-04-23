@@ -122,8 +122,8 @@ class Auth():
             if type(credentials[key]) != str:
                 raise TypeError(
                     'Authentication credentials must be of type '
-                    + '<class \'str\'>, but received {}.'.format(
-                        type(credentials[key])
+                    + 'str, but received {}.'.format(
+                        type(credentials[key]).__name__,
                     ))
 
     def get_token(self) -> str:

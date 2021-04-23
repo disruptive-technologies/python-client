@@ -120,15 +120,15 @@ class TestStream():
         request_mock.request_patcher.side_effect = side_effect_override
 
         # Catch ConnectionError caused by exhausted retries.
-        with pytest.raises(dterrors.ConnectionError):
+        with pytest.raises(dterrors.ReadTimeout):
             # Start a stream, which should rause an error causing retries.
             for event in disruptive.Stream.project(
                     project_id='project_id',
                     request_retries=8):
                 pass
 
-        # Verify request is attempted the set number of times.
-        request_mock.assert_request_count(8)
+        # Verify request is attempted the set number of times (+1).
+        request_mock.assert_request_count(9)
 
     def test_retry_logic_connectionerror(self, request_mock):
         def side_effect_override(**kwargs):
@@ -145,5 +145,5 @@ class TestStream():
                     request_retries=7):
                 pass
 
-        # Verify request is attempted the set number of times.
-        request_mock.assert_request_count(7)
+        # Verify request is attempted the set number of times (+1).
+        request_mock.assert_request_count(8)
