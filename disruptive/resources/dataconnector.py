@@ -207,7 +207,7 @@ class DataConnector(dtoutputs.OutputBase):
         >>> # Create a new Data Connector.
         >>> dcon = disruptive.DataConnector.create_dataconnector(
         ...     project_id='<PROJECT_ID>',
-        ...     config=disruptive.dataconnector_configs.HttpPush(
+        ...     config=disruptive.DataConnector.HttpPushConfig(
         ...         url='<HTTPS_ENDPOINT_URL>',
         ...         signature_secret='some-good-secret',
         ...     ),

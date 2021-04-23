@@ -28,7 +28,7 @@ Most tasks are performed using methods that are grouped under various resource n
    import disruptive as dt
 
    # Fetch a specific sensor from a project.
-   sensor = dt.Device.get_device(device_id)
+   sensor = dt.Device.get_device('<DEVICE_ID>')
    
    # Print the sensor information wil list all attributes and values.
    print(sensor)
