@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
+# Unreleased
+### Added
+- [#38](https://github.com/disruptive-technologies/disruptive-python/pull/38) Type constant `CLOUD_CONNECTOR` were missing on the Device resource.
+
 # v0.3.0
 _Released on 2020-04-22._
 ### Changed
