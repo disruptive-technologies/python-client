@@ -2,7 +2,8 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# v0.3.1
+_Released on 2020-04-24._
 ### Fixed
 - [#39](https://github.com/disruptive-technologies/disruptive-python/pull/39) Request retry logic ran 1 loop too few.
 ### Added
