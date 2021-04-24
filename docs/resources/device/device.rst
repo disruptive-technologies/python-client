@@ -3,7 +3,7 @@ Device
 The Device resource can be used to interact with `Sensors and Cloud Connectors <https://developer.disruptive-technologies.com/docs/devices>`_, together referred to as devices. Various tasks can be performed by using the API Methods included in the class.
 
 - :ref:`get_device() <get_device>`
-- :ref:`list_device() <list_devices>`
+- :ref:`list_devices() <list_devices>`
 - :ref:`transfer_devices() <transfer_devices>`
 - :ref:`set_label() <set_label>`
 - :ref:`remove_label() <remove_label>`
