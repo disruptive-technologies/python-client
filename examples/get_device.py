@@ -1,21 +1,18 @@
-# Standard library imports.
 import os
 
-# Import disruptive package.
 import disruptive as dt
 
+# Fetch credentials and device info from environment.
+key_id = os.getenv('DT_SERVICE_ACCOUNT_KEY_ID', '')
+secret = os.getenv('DT_SERVICE_ACCOUNT_SECRET', '')
+email = os.getenv('DT_SERVICE_ACCOUNT_EMAIL', '')
+device_id = os.getenv('DT_DEVICE_ID', '')
+
 # Authenticate the package using serviceaccount credentials.
-dt.default_auth = dt.Auth.serviceaccount(
-    key_id=os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', ''),
-    secret=os.environ.get('DT_SERVICE_ACCOUNT_SECRET', ''),
-    email=os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', ''),
-)
+dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 
 # Get the device of interest.
-device = dt.Device.get_device(
-    project_id=os.environ.get('DT_PROJECT_ID', ''),
-    device_id=os.environ.get('DT_DEVICE_ID', ''),
-)
+device = dt.Device.get_device(device_id)
 
 # Print the device information to console.
 print(device)
