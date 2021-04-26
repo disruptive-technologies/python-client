@@ -72,16 +72,10 @@ dt.log = True
 ```
 
 ## Examples
-A few examples has been provided. Before running, a few environment variables must be set. These are listed for each [example](https://developer.disruptive-technologies.com/api/libraries/python/examples/examples.html) in the documentation.
-
-They can be ran using the package install by:
+A few [examples](https://developer.disruptive-technologies.com/api/libraries/python/examples/examples.html) has been provided. Before running, the required environment variables listed at the start of each example must be set.
 
 ```sh
 python examples/example_name.py
-```
-or using the source code:
-```sh
-python -m examples.example_name
 ```
 
 ## Exceptions
