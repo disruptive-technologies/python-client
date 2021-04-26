@@ -1,20 +1,14 @@
-# This examples shows how one can use the built-in `threading` package to
-# stream events in a separate thread where a buffer list is appended as new
-# events arrive independently of the main loop.
-
-# Standard library imports.
 import os
 import time
 import threading
 
-# Import disruptive package.
 import disruptive as dt
 
-# Fetch credentials and IDs from environment variables.
-key_id = os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', '')
-secret = os.environ.get('DT_SERVICE_ACCOUNT_SECRET', '')
-email = os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', '')
-project_id = os.environ.get('DT_PROJECT_ID', '')
+# Fetch credentials and project info from environment.
+key_id = os.getenv('DT_SERVICE_ACCOUNT_KEY_ID', '')
+secret = os.getenv('DT_SERVICE_ACCOUNT_SECRET', '')
+email = os.getenv('DT_SERVICE_ACCOUNT_EMAIL', '')
+project_id = os.getenv('DT_PROJECT_ID', '')
 
 # Authenticate the package using serviceaccount credentials.
 dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)

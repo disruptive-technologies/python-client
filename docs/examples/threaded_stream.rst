@@ -1,32 +1,31 @@
 Threaded Stream
 ===============
-This examples shows how one can use the built-in `threading` package to stream events in a separate thread where a buffer list is appended as new events arrive independently of the main loop.
+In this example, the :code:`disruptive.Stream.project()` resource method and built-in `threading` package is used together to continuously stream events in a separate thread, independent of the main program. Every time a new event appears in the stream it is appended to a buffer list which is accessible from the main thread.
 
 Full Example
 ------------
+The following snippet implements the example. Remember to set the environment variables.
 
 .. code-block:: python 
 
-   # Standard library imports.
    import os
    import time
    import threading
    
-   # Import disruptive package.
    import disruptive as dt
    
-   # Fetch credentials and IDs from environment variables.
-   key_id = os.environ.get('DT_SERVICE_ACCOUNT_KEY_ID', '')
-   secret = os.environ.get('DT_SERVICE_ACCOUNT_SECRET', '')
-   email = os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', '')
-   project_id = os.environ.get('DT_PROJECT_ID', '')
+   # Fetch credentials and project info from environment.
+   key_id = os.getenv('DT_SERVICE_ACCOUNT_KEY_ID', '')
+   secret = os.getenv('DT_SERVICE_ACCOUNT_SECRET', '')
+   email = os.getenv('DT_SERVICE_ACCOUNT_EMAIL', '')
+   project_id = os.getenv('DT_PROJECT_ID', '')
    
    # Authenticate the package using serviceaccount credentials.
    dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
    
    
    # Function which will be the target for our thread.
-   def stream_worker(project_id):
+   def stream_worker(project_id: str):
        # Create stream generator
        for new_event in dt.Stream.project(project_id):
            # When a new event arrives, lock buffer before writing.
@@ -39,7 +38,7 @@ Full Example
    
    
    # Initialize the stream buffer list where we will store events.
-   event_buffer = []
+   event_buffer: list = []
    
    # Use locking to avoid corrupting data by writing simultaneously.
    buffer_lock = threading.Lock()
@@ -69,22 +68,10 @@ Full Example
        # Patiently wait for 5 seconds.
        time.sleep(5)
 
-Step-By-Step
-------------
+Explanation
+-----------
 
-Environment variables are used for both credentials and the project ID. Therefore, in addition to importing the disruptive package, we also import os. Additionally, `threading` is required to spawn new threads, whereas `time` provides the :code:`sleep` function.
-
-.. code-block:: python 
-
-   # Standard library imports.
-   import os
-   import time
-   import threading
-   
-   # Import disruptive package.
-   import disruptive as dt
-
-Using Service Account credentials, all endpoints in the package can be authenticated at once by updating the :code:`dt.default_auth` variable with an Auth object.
+Using `Service Account <https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts>`_ credentials, the entire package can be authenticated at once by setting the :code:`dt.default_auth` variable with an Auth :ref:`authentication method <authmethods>`.
 
 .. code-block:: python
 
