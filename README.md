@@ -72,11 +72,14 @@ dt.log = True
 ```
 
 ## Examples
-A few examples showcasing various uses for the package has been provided. They do not require additional dependencies and can, provided the package has been installed, be run by:
+A few examples has been provided. Before running, a few environment variables must be set. These are listed for each [example](https://developer.disruptive-technologies.com/api/libraries/python/examples/examples.html) in the documentation.
+
+They can be ran using the package install by:
+
 ```sh
-python example_name.py
+python examples/example_name.py
 ```
-or from root using the source code:
+or using the source code:
 ```sh
 python -m examples.example_name
 ```
