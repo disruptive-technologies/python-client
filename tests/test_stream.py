@@ -21,7 +21,7 @@ class TestStream():
             device_id='device_id',
             project_id='project_id',
             event_types=['temperature', 'touch'],
-            request_retries=9,
+            request_attempts=9,
         ):
             pass
 
@@ -46,7 +46,7 @@ class TestStream():
             label_filters=['l1', 'l2'],
             device_types=['temperature', 'touch'],
             event_types=['temperature', 'touch'],
-            request_retries=9,
+            request_attempts=9,
         ):
             pass
 
@@ -124,11 +124,11 @@ class TestStream():
             # Start a stream, which should rause an error causing retries.
             for event in disruptive.Stream.project(
                     project_id='project_id',
-                    request_retries=8):
+                    request_attempts=8):
                 pass
 
         # Verify request is attempted the set number of times (+1).
-        request_mock.assert_request_count(9)
+        request_mock.assert_request_count(8)
 
     def test_retry_logic_connectionerror(self, request_mock):
         def side_effect_override(**kwargs):
@@ -142,8 +142,8 @@ class TestStream():
             # Start a stream, which should rause an error causing retries.
             for event in disruptive.Stream.project(
                     project_id='project_id',
-                    request_retries=7):
+                    request_attempts=7):
                 pass
 
         # Verify request is attempted the set number of times (+1).
-        request_mock.assert_request_count(8)
+        request_mock.assert_request_count(7)
