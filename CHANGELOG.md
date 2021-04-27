@@ -9,6 +9,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
   - Methods `create_dataconnector()` and `update_dataconnector()` parameter `events` renamed to `event_types`.
   - Method `get_device()` parameter `project_id` now defaults to wildcard `"-"` instead of None.
 - [#45](https://github.com/disruptive-technologies/disruptive-python/pull/45) Config variable `request_retries` renamed to `request_attempts` to better reflect what is actually does.
+- [#46](https://github.com/disruptive-technologies/disruptive-python/pull/46) Logging has been expanded to use either `disruptive.log_level` or the `logging` module.
 
 # v0.3.1
 _Released on 2020-04-24._
