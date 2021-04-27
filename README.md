@@ -72,10 +72,14 @@ dt.log_level = 'info'
 ```
 If more fine-grained control is desired, the standard library `logging` module can also be used.
 ```python
-logging.basicConfig()
+logging.basicConfig(
+    filename='example.log',
+    format='[%(asctime)s.%(msecs)03d] %(levelname)-8s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+)
 logging.getLogger('disruptive').setLevel(logging.INFO)
 ``` 
-For both methods, the standard levels `debug`, `info`, `warning`, `error`, and `critical` are available. Read more about them in the [documentation](https://developer.disruptive-technologies.com/api/libraries/python/).
+For both methods, the standard levels `debug`, `info`, `warning`, `error`, and `critical` are available.
 
 ## Examples
 A few [examples](https://developer.disruptive-technologies.com/api/libraries/python/examples/examples.html) has been provided. Before running, the required environment variables listed at the start of each example must be set.
