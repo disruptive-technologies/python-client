@@ -29,8 +29,9 @@ from disruptive.resources.emulator import Emulator  # noqa
 # Additional helper modules.
 import disruptive.events as events  # noqa
 
-# If True, debug information is sent to stdout.
-log = False
+# If set, logs of chosen level and higher are printed to console.
+# Available levels are: debug, info, warning, error, critical.
+log_level = None
 
 # REST API base URLs of which all endpoints are an expansion.
 api_url = 'https://api.disruptive-technologies.com/v2'

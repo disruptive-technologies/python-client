@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-# Standard library imports.
 from typing import Optional
 
-# Project imports.
 import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.events.events as dtevents
@@ -549,4 +547,4 @@ class Reported(dtoutputs.OutputBase):
                     data,
                 )
             else:
-                dtlog.log('Skipping unknown event type {}.'.format(key))
+                dtlog.warning('Skipping unknown event type {}.'.format(key))
