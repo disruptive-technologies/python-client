@@ -75,8 +75,8 @@ class ServiceAccount(dtoutputs.OutputBase):
             If provided it will be prioritized over global authentication.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
+        request_attempts: int, optional
+            Number of times a request is attempted before giving up.
 
         Returns
         -------
@@ -122,8 +122,8 @@ class ServiceAccount(dtoutputs.OutputBase):
             If provided it will be prioritized over global authentication.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
+        request_attempts: int, optional
+            Number of times a request is attempted before giving up.
 
         Returns
         -------
@@ -174,8 +174,8 @@ class ServiceAccount(dtoutputs.OutputBase):
             If provided it will be prioritized over global authentication.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
+        request_attempts: int, optional
+            Number of times a request is attempted before giving up.
 
         Returns
         -------
@@ -235,8 +235,8 @@ class ServiceAccount(dtoutputs.OutputBase):
             If provided it will be prioritized over global authentication.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
+        request_attempts: int, optional
+            Number of times a request is attempted before giving up.
 
         Returns
         -------
@@ -302,8 +302,8 @@ class ServiceAccount(dtoutputs.OutputBase):
             If provided it will be prioritized over global authentication.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
+        request_attempts: int, optional
+            Number of times a request is attempted before giving up.
 
         Examples
         --------
@@ -349,8 +349,8 @@ class ServiceAccount(dtoutputs.OutputBase):
             If provided it will be prioritized over global authentication.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
+        request_attempts: int, optional
+            Number of times a request is attempted before giving up.
 
         Returns
         -------
@@ -400,8 +400,8 @@ class ServiceAccount(dtoutputs.OutputBase):
             If provided it will be prioritized over global authentication.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
+        request_attempts: int, optional
+            Number of times a request is attempted before giving up.
 
         Returns
         -------
@@ -451,8 +451,8 @@ class ServiceAccount(dtoutputs.OutputBase):
             If provided it will be prioritized over global authentication.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
+        request_attempts: int, optional
+            Number of times a request is attempted before giving up.
 
         Returns
         -------
@@ -504,8 +504,8 @@ class ServiceAccount(dtoutputs.OutputBase):
             If provided it will be prioritized over global authentication.
         request_timeout: int, optional
             Seconds before giving up a request without an answer.
-        request_retries: int, optional
-            Maximum number of times to retry a request before giving up.
+        request_attempts: int, optional
+            Number of times a request is attempted before giving up.
 
         Examples
         --------

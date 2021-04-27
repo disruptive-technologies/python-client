@@ -102,7 +102,7 @@ class TestRequests():
         api_res = dtapiresponses.temperature_sensor
 
         # As we want to test maxium depth, set n to package config variable.
-        n = disruptive.request_retries
+        n = disruptive.request_attempts
 
         # Create in iterable side_effect for our mock.
         side_effects = [__patched_request({}, 500, {}) for i in range(n)]
@@ -122,7 +122,7 @@ class TestRequests():
         # Call disruptive.Device.get_device() to trigger the request chain.
         device = disruptive.Device.get_device('project_id', 'device_id')
 
-        # Verify that recursive loop executed disruptive.request_retries times.
+        # Verify recursive loop executed disruptive.request_attempts times.
         request_mock.assert_request_count(n)
 
         # Lastly, verify device object were built correctly.
@@ -257,7 +257,7 @@ class TestRequests():
             timeout=99,
         )
 
-    def test_request_retries_override(self, request_mock):
+    def test_request_attempts_override(self, request_mock):
         # Set response status code to force error with retry attemps.
         request_mock.status_code = 500
 
@@ -266,8 +266,8 @@ class TestRequests():
             # Call Device.get_device() with overriden retry count.
             disruptive.Device.get_device(
                 device_id='device_id',
-                request_retries=99,
+                request_attempts=99,
             )
 
         # Verify it did in fact retry that many times.
-        request_mock.assert_request_count(100)
+        request_mock.assert_request_count(99)

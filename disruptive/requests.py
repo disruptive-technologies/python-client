@@ -28,7 +28,7 @@ class DTRequest():
         self.body = None
         self.data = None
         self.request_timeout = dt.request_timeout
-        self.request_retries = dt.request_retries
+        self.request_attempts = dt.request_attempts
         self.log = dt.log
 
         # Unpack kwargs and set attributes thereafter.
@@ -54,9 +54,9 @@ class DTRequest():
         if 'request_timeout' in kwargs:
             self.request_timeout = kwargs['request_timeout']
 
-        # Check if request_retries is overriden.
-        if 'request_retries' in kwargs:
-            self.request_retries = kwargs['request_retries']
+        # Check if request_attempts is overriden.
+        if 'request_attempts' in kwargs:
+            self.request_attempts = kwargs['request_attempts']
 
         # Check if base_url is overriden.
         if 'base_url' in kwargs:
@@ -83,11 +83,11 @@ class DTRequest():
                 'must be float greater than 0.'.format(self.request_timeout)
             )
 
-        # Check that request_retries > 0.
-        if self.request_retries <= 0:
+        # Check that request_attempts > 0.
+        if self.request_attempts <= 0:
             raise dterrors.ConfigurationError(
-                'Configuration parameter request_retries has value {}, but '
-                'must be integer greater than 0.'.format(self.request_retries)
+                'Configuration parameter request_attempts has value {}, but '
+                'must be integer greater than 0.'.format(self.request_attempts)
             )
 
     def _request_wrapper(self,
@@ -158,18 +158,18 @@ class DTRequest():
             )
 
         # Check if retry is required.
-        if should_retry and nth_attempt <= self.request_retries:
-
+        if should_retry and nth_attempt < self.request_attempts:
             dtlog.log('Error: {}'.format(error))
-            dtlog.log('Attempting reconnect {}/{} in {}s.'.format(
-                nth_attempt,
-                self.request_retries,
-                sleeptime,
-            ), override=self.log)
+            dtlog.log('Reconnecting in {}s.'.format(sleeptime))
 
             # Sleep if necessary.
             if sleeptime is not None:
                 time.sleep(sleeptime)
+
+            dtlog.log('Connection attempt {}/{}.'.format(
+                nth_attempt+1,
+                self.request_attempts,
+            ), override=self.log)
 
             # Attempt the request again recursively, iterating counter.
             res.data = self._send_request(nth_attempt+1)
@@ -238,10 +238,10 @@ class DTRequest():
         # Unpack kwargs.
         params = kwargs['params'] if 'params' in kwargs else {}
         headers = kwargs['headers'] if 'headers' in kwargs else {}
-        if 'request_retries' in kwargs:
-            request_retries = kwargs['request_retries']
+        if 'request_attempts' in kwargs:
+            request_attempts = kwargs['request_attempts']
         else:
-            request_retries = dt.request_retries
+            request_attempts = dt.request_attempts
 
         # Add ping parameter to dictionary.
         params['ping_interval'] = str(PING_INTERVAL) + 's'
@@ -300,18 +300,20 @@ class DTRequest():
                 error, should_retry, sleeptime = dterrors.parse_request_error(
                     e, {}, nth_attempt)
 
-                # Print the error and try again up to max_request_retries.
-                if nth_attempt <= request_retries and should_retry:
+                # Print the error and try again up to max_request_attempts.
+                if nth_attempt < request_attempts and should_retry:
                     dtlog.log('Error: {}'.format(error))
-                    dtlog.log('Attempting reconnect {}/{} in {}s.'.format(
-                        nth_attempt,
-                        request_retries,
-                        nth_attempt**2,
-                    ))
+                    dtlog.log('Reconnecting in {}s.'.format(sleeptime))
 
                     # Exponential backoff in sleep time.
                     time.sleep(sleeptime)
+
+                    # Iterate attempt counter.
                     nth_attempt += 1
+                    dtlog.log('Connection attempt {}/{}.'.format(
+                        nth_attempt,
+                        request_attempts,
+                    ))
 
                 else:
                     raise error
