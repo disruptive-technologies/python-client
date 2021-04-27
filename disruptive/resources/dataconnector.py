@@ -168,7 +168,7 @@ class DataConnector(dtoutputs.OutputBase):
                              config: disruptive.DataConnector.HttpPushConfig,
                              display_name: str = '',
                              status: str = 'ACTIVE',
-                             events: list[str] = [],
+                             event_types: list[str] = [],
                              labels: list[str] = [],
                              **kwargs,
                              ) -> DataConnector:
@@ -185,7 +185,7 @@ class DataConnector(dtoutputs.OutputBase):
             Sets a display name for the project.
         status : {"ACTIVE", "USER_DISABLED"} strm optional
             Status of the new Data Connector.
-        events : list[str], optional
+        event_types : list[str], optional
             List of event types the Data Connector should forward.
         labels : list[str], optional
             List of labels to forward with each event.
@@ -219,7 +219,7 @@ class DataConnector(dtoutputs.OutputBase):
         # Construct request body dictionary.
         body: dict = dict()
         body['status'] = status
-        body['events'] = events
+        body['events'] = event_types
         body['labels'] = labels
         if len(display_name) > 0:
             body['displayName'] = display_name
@@ -247,7 +247,7 @@ class DataConnector(dtoutputs.OutputBase):
         config: Optional[disruptive.DataConnector.HttpPushConfig] = None,
         display_name: Optional[str] = None,
         status: Optional[str] = None,
-        events: Optional[list[str]] = None,
+        event_types: Optional[list[str]] = None,
         labels: Optional[list[str]] = None,
         **kwargs,
     ) -> DataConnector:
@@ -267,7 +267,7 @@ class DataConnector(dtoutputs.OutputBase):
             Sets a display name for the Data Connector.
         status : {"ACTIVE", "USER_DISABLED"} str, optional
             Status of the Data Connector.
-        events : list[str], optional
+        event_types : list[str], optional
             List of event types the Data Connector should forward.
         labels : list[str], optional
             List of labels to forward with each event.
@@ -299,7 +299,7 @@ class DataConnector(dtoutputs.OutputBase):
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ...     labels=['room-number', 'customer-id'],
-        ...     events=[
+        ...     event_types=[
         ...         disruptive.events.TOUCH,
         ...         disruptive.events.TEMPERATURE,
         ...         ],
@@ -313,8 +313,8 @@ class DataConnector(dtoutputs.OutputBase):
             body['displayName'] = display_name
         if status is not None:
             body['status'] = status
-        if events is not None:
-            body['events'] = events
+        if event_types is not None:
+            body['events'] = event_types
         if labels is not None:
             body['labels'] = labels
 
