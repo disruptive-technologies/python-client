@@ -118,7 +118,7 @@ class DTRequest():
 
     def _send_request(self, nth_attempt=1):
         # Log the request.
-        log.info('Request [{}] to {}.'.format(
+        log.debug('Request [{}] to {}.'.format(
             self.method,
             self.base_url + self.url
         ))
@@ -134,7 +134,7 @@ class DTRequest():
         )
 
         # Log the response.
-        log.info('Response [{}].'.format(
+        log.debug('Response [{}].'.format(
             res.status_code
         ))
 
@@ -153,8 +153,8 @@ class DTRequest():
 
         # Check if retry is required.
         if should_retry and nth_attempt < self.request_attempts:
-            log.warning(error)
-            log.info('Reconnecting in {}s.'.format(sleeptime))
+            log.error(error)
+            log.warning('Reconnecting in {}s.'.format(sleeptime))
 
             # Sleep if necessary.
             if sleeptime is not None:
@@ -296,8 +296,8 @@ class DTRequest():
 
                 # Print the error and try again up to max_request_attempts.
                 if nth_attempt < request_attempts and should_retry:
-                    log.warning(error)
-                    log.info('Reconnecting in {}s.'.format(sleeptime))
+                    log.error(error)
+                    log.warning('Reconnecting in {}s.'.format(sleeptime))
 
                     # Exponential backoff in sleep time.
                     time.sleep(sleeptime)
