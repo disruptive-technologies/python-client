@@ -14,7 +14,7 @@ class Organization(OutputBase):
 
     Attributes
     ----------
-    id : str
+    organization_id : str
         Unique organization ID.
     display_name : str
         The provided display name.
@@ -36,7 +36,7 @@ class Organization(OutputBase):
         OutputBase.__init__(self, organization)
 
         # Unpack attributes from dictionary.
-        self.id = organization['name'].split('/')[-1]
+        self.organization_id = organization['name'].split('/')[-1]
         self.display_name = organization['displayName']
 
     @classmethod

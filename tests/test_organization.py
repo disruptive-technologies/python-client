@@ -28,7 +28,7 @@ class TestOrganization():
         o = disruptive.Organization.get_organization('organization_id')
 
         # Assert attributes unpacked correctly.
-        assert o.id == res['name'].split('/')[-1]
+        assert o.organization_id == res['name'].split('/')[-1]
         assert o.display_name == res['displayName']
 
     def test_get_organization(self, request_mock):
