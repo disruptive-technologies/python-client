@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-# Standard library imports.
 import time
 import json
+import logging
 from typing import Optional
 
-# Third-party imports.
 import requests
 
-# Project imports
 import disruptive as dt
-import disruptive.logging as dtlog
 import disruptive.errors as dterrors
+
+log = logging.getLogger('disruptive')
 
 
 class DTRequest():
@@ -29,7 +28,6 @@ class DTRequest():
         self.data = None
         self.request_timeout = dt.request_timeout
         self.request_attempts = dt.request_attempts
-        self.log = dt.log
 
         # Unpack kwargs and set attributes thereafter.
         self._unpack_kwargs(**kwargs)
@@ -61,10 +59,6 @@ class DTRequest():
         # Check if base_url is overriden.
         if 'base_url' in kwargs:
             self.base_url = kwargs['base_url']
-
-        # Check if log is overriden.
-        if 'log' in kwargs:
-            self.log = kwargs['log']
 
         # Add authorization header to request except when explicitly otherwise.
         if 'skip_auth' not in kwargs or kwargs['skip_auth'] is False:
@@ -124,10 +118,10 @@ class DTRequest():
 
     def _send_request(self, nth_attempt=1):
         # Log the request.
-        dtlog.log('Request [{}] to {}.'.format(
+        log.info('Request [{}] to {}.'.format(
             self.method,
             self.base_url + self.url
-        ), override=self.log)
+        ))
 
         res, req_error = self._request_wrapper(
             method=self.method,
@@ -140,9 +134,9 @@ class DTRequest():
         )
 
         # Log the response.
-        dtlog.log('Response [{}].'.format(
+        log.info('Response [{}].'.format(
             res.status_code
-        ), override=self.log)
+        ))
 
         # If _request_wrapper raised an exception, the request failed.
         if req_error is not None:
@@ -159,17 +153,17 @@ class DTRequest():
 
         # Check if retry is required.
         if should_retry and nth_attempt < self.request_attempts:
-            dtlog.log('Error: {}'.format(error))
-            dtlog.log('Reconnecting in {}s.'.format(sleeptime))
+            log.warning(error)
+            log.info('Reconnecting in {}s.'.format(sleeptime))
 
             # Sleep if necessary.
             if sleeptime is not None:
                 time.sleep(sleeptime)
 
-            dtlog.log('Connection attempt {}/{}.'.format(
+            log.info('Connection attempt {}/{}.'.format(
                 nth_attempt+1,
                 self.request_attempts,
-            ), override=self.log)
+            ))
 
             # Attempt the request again recursively, iterating counter.
             res.data = self._send_request(nth_attempt+1)
@@ -259,7 +253,7 @@ class DTRequest():
                 # Set up a stream connection.
                 # Connection will timeout and reconnect if no single event
                 # is received in an interval of ping_interval + ping_jitter.
-                dtlog.log('Starting stream...')
+                log.info('Starting stream...')
                 stream = requests.request(
                     method='GET',
                     url=url,
@@ -284,7 +278,7 @@ class DTRequest():
                     # Check for ping event.
                     event = payload['result']['event']
                     if event['eventType'] == 'ping':
-                        dtlog.log('Ping received.')
+                        log.debug('Ping received.')
                         continue
 
                     # Yield event to generator.
@@ -302,15 +296,15 @@ class DTRequest():
 
                 # Print the error and try again up to max_request_attempts.
                 if nth_attempt < request_attempts and should_retry:
-                    dtlog.log('Error: {}'.format(error))
-                    dtlog.log('Reconnecting in {}s.'.format(sleeptime))
+                    log.warning(error)
+                    log.info('Reconnecting in {}s.'.format(sleeptime))
 
                     # Exponential backoff in sleep time.
                     time.sleep(sleeptime)
 
                     # Iterate attempt counter.
                     nth_attempt += 1
-                    dtlog.log('Connection attempt {}/{}.'.format(
+                    log.info('Connection attempt {}/{}.'.format(
                         nth_attempt,
                         request_attempts,
                     ))

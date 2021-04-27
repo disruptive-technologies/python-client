@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-# Standard library imports.
+import logging
 from typing import Optional
 
-# Project imports.
 import disruptive
-import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
+
+log = logging.getLogger('disruptive')
 
 
 class DataConnector(dtoutputs.OutputBase):
@@ -491,7 +491,7 @@ class DataConnector(dtoutputs.OutputBase):
             )
         else:
             # If this else statement runs, no config is available for type.
-            dtlog.log('No config available for {} dataconnectors.'.format(
+            log.warning('No config available for {} dataconnectors.'.format(
                 dataconnector_type
             ))
             return None

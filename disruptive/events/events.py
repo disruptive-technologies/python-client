@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-# Standard library imports.
+import logging
 from typing import Optional
 from datetime import datetime
 
-# Project imports.
 import disruptive
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
-import disruptive.logging as dtlog
+
+log = logging.getLogger('disruptive')
 
 # Event-type constants.
 TOUCH = 'touch'
@@ -124,7 +124,7 @@ class _EventData(dtoutputs.OutputBase):
             )
             return out
 
-        dtlog.log('Skipping unknown event type {}.'.format(event_type))
+        log.warning('Skipping unknown event type {}.'.format(event_type))
         return None, None
 
     def _celsius_to_fahrenheit(self, celsius: float):
