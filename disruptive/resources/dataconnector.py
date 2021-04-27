@@ -8,7 +8,6 @@ import disruptive
 import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
-from disruptive.outputs import Metric
 
 
 class DataConnector(dtoutputs.OutputBase):
@@ -168,7 +167,7 @@ class DataConnector(dtoutputs.OutputBase):
                              config: disruptive.DataConnector.HttpPushConfig,
                              display_name: str = '',
                              status: str = 'ACTIVE',
-                             events: list[str] = [],
+                             event_types: list[str] = [],
                              labels: list[str] = [],
                              **kwargs,
                              ) -> DataConnector:
@@ -185,7 +184,7 @@ class DataConnector(dtoutputs.OutputBase):
             Sets a display name for the project.
         status : {"ACTIVE", "USER_DISABLED"} strm optional
             Status of the new Data Connector.
-        events : list[str], optional
+        event_types : list[str], optional
             List of event types the Data Connector should forward.
         labels : list[str], optional
             List of labels to forward with each event.
@@ -219,7 +218,7 @@ class DataConnector(dtoutputs.OutputBase):
         # Construct request body dictionary.
         body: dict = dict()
         body['status'] = status
-        body['events'] = events
+        body['events'] = event_types
         body['labels'] = labels
         if len(display_name) > 0:
             body['displayName'] = display_name
@@ -247,7 +246,7 @@ class DataConnector(dtoutputs.OutputBase):
         config: Optional[disruptive.DataConnector.HttpPushConfig] = None,
         display_name: Optional[str] = None,
         status: Optional[str] = None,
-        events: Optional[list[str]] = None,
+        event_types: Optional[list[str]] = None,
         labels: Optional[list[str]] = None,
         **kwargs,
     ) -> DataConnector:
@@ -267,7 +266,7 @@ class DataConnector(dtoutputs.OutputBase):
             Sets a display name for the Data Connector.
         status : {"ACTIVE", "USER_DISABLED"} str, optional
             Status of the Data Connector.
-        events : list[str], optional
+        event_types : list[str], optional
             List of event types the Data Connector should forward.
         labels : list[str], optional
             List of labels to forward with each event.
@@ -299,7 +298,7 @@ class DataConnector(dtoutputs.OutputBase):
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ...     labels=['room-number', 'customer-id'],
-        ...     events=[
+        ...     event_types=[
         ...         disruptive.events.TOUCH,
         ...         disruptive.events.TEMPERATURE,
         ...         ],
@@ -313,8 +312,8 @@ class DataConnector(dtoutputs.OutputBase):
             body['displayName'] = display_name
         if status is not None:
             body['status'] = status
-        if events is not None:
-            body['events'] = events
+        if event_types is not None:
+            body['events'] = event_types
         if labels is not None:
             body['labels'] = labels
 
@@ -547,3 +546,33 @@ class DataConnector(dtoutputs.OutputBase):
             if self.headers is not None:
                 config['headers'] = self.headers
             return 'httpConfig', config
+
+
+class Metric(dtoutputs.OutputBase):
+    """
+    Represents the metrics for a dataconnector over the last 3 hours.
+
+    Attributes
+    ----------
+    success_count : int
+        Number of 2xx responses.
+    error_count : int
+        Number of non-2xx responses.
+    latency : str
+        Average latency.
+
+    """
+
+    def __init__(self, metric: dict) -> None:
+        """
+        Constructs the Metric object by unpacking the raw response.
+
+        """
+
+        # Inherit attributes from ResponseBase parent.
+        dtoutputs.OutputBase.__init__(self, metric)
+
+        # Unpack attributes from dictionary.
+        self.success_count = metric['metrics']['successCount']
+        self.error_count = metric['metrics']['errorCount']
+        self.latency = metric['metrics']['latency99p']
