@@ -91,7 +91,7 @@ class Device(dtoutputs.OutputBase):
     @classmethod
     def get_device(cls,
                    device_id: str,
-                   project_id: Optional[str] = None,
+                   project_id: str = '-',
                    **kwargs,
                    ) -> Device:
         """
@@ -124,9 +124,6 @@ class Device(dtoutputs.OutputBase):
         >>> device = disruptive.Device.get_device('<DEVICE_ID>')
 
         """
-
-        if project_id is None:
-            project_id = '-'
 
         # Construct URL
         url = '/projects/{}/devices/{}'.format(project_id, device_id)
