@@ -2,6 +2,13 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
+# Unreleased
+### Changed
+- [#44](https://github.com/disruptive-technologies/disruptive-python/pull/44) A few parameters and attributes has been renamed for consistency.
+  - Organization attribute `id` renamed to `organization_id`.
+  - Methods `create_dataconnector()` and `update_dataconnector()` parameter `events` renamed to `event_types`.
+  - Method `get_device()` parameter `project_id` now defaults to wildcard `"-"` instead of None.
+
 # v0.3.1
 _Released on 2020-04-24._
 ### Fixed
