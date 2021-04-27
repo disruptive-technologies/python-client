@@ -1,12 +1,3 @@
-import logging
-
-# Set the logging format and disable all levels by default.
-logging.basicConfig(
-    level=99,
-    format='[%(asctime)s.%(msecs)03d] %(levelname)-8s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-)
-
 # Metadata
 __version__ = "0.3.1"
 
@@ -37,6 +28,10 @@ from disruptive.resources.emulator import Emulator  # noqa
 
 # Additional helper modules.
 import disruptive.events as events  # noqa
+
+# If set, logs of chosen level and higher are printed to console.
+# Available levels are: debug, info, warning, error, critical.
+log_level = None
 
 # REST API base URLs of which all endpoints are an expansion.
 api_url = 'https://api.disruptive-technologies.com/v2'

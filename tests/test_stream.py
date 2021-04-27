@@ -77,14 +77,14 @@ class TestStream():
         ]
 
         # Mock logging function, which should trigger once for each ping.
-        with patch.object(disruptive.requests.log, 'debug') as log_mock:
+        with patch('disruptive.logging.debug') as log_mock:
             for event in disruptive.Stream.device('device_id', 'project_id'):
                 pass
 
             # Assert logging called with expected message.
             log_mock.assert_called_with('Ping received.')
 
-            # log.info() should have been called once per ping.
+            # debug() should have been called once per ping.
             assert log_mock.call_count == 5
 
     def test_responses(self, request_mock):

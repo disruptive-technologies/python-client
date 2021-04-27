@@ -2,15 +2,13 @@ from __future__ import annotations
 
 import time
 import json
-import logging
 from typing import Optional
 
 import requests
 
 import disruptive as dt
+import disruptive.logging as dtlog
 import disruptive.errors as dterrors
-
-log = logging.getLogger('disruptive')
 
 
 class DTRequest():
@@ -118,7 +116,7 @@ class DTRequest():
 
     def _send_request(self, nth_attempt=1):
         # Log the request.
-        log.debug('Request [{}] to {}.'.format(
+        dtlog.debug('Request [{}] to {}.'.format(
             self.method,
             self.base_url + self.url
         ))
@@ -134,7 +132,7 @@ class DTRequest():
         )
 
         # Log the response.
-        log.debug('Response [{}].'.format(
+        dtlog.debug('Response [{}].'.format(
             res.status_code
         ))
 
@@ -153,14 +151,14 @@ class DTRequest():
 
         # Check if retry is required.
         if should_retry and nth_attempt < self.request_attempts:
-            log.error(error)
-            log.warning('Reconnecting in {}s.'.format(sleeptime))
+            dtlog.error(error)
+            dtlog.warning('Reconnecting in {}s.'.format(sleeptime))
 
             # Sleep if necessary.
             if sleeptime is not None:
                 time.sleep(sleeptime)
 
-            log.info('Connection attempt {}/{}.'.format(
+            dtlog.info('Connection attempt {}/{}.'.format(
                 nth_attempt+1,
                 self.request_attempts,
             ))
@@ -253,7 +251,7 @@ class DTRequest():
                 # Set up a stream connection.
                 # Connection will timeout and reconnect if no single event
                 # is received in an interval of ping_interval + ping_jitter.
-                log.info('Starting stream...')
+                dtlog.info('Starting stream...')
                 stream = requests.request(
                     method='GET',
                     url=url,
@@ -278,7 +276,7 @@ class DTRequest():
                     # Check for ping event.
                     event = payload['result']['event']
                     if event['eventType'] == 'ping':
-                        log.debug('Ping received.')
+                        dtlog.debug('Ping received.')
                         continue
 
                     # Yield event to generator.
@@ -296,15 +294,15 @@ class DTRequest():
 
                 # Print the error and try again up to max_request_attempts.
                 if nth_attempt < request_attempts and should_retry:
-                    log.error(error)
-                    log.warning('Reconnecting in {}s.'.format(sleeptime))
+                    dtlog.error(error)
+                    dtlog.warning('Reconnecting in {}s.'.format(sleeptime))
 
                     # Exponential backoff in sleep time.
                     time.sleep(sleeptime)
 
                     # Iterate attempt counter.
                     nth_attempt += 1
-                    log.info('Connection attempt {}/{}.'.format(
+                    dtlog.info('Connection attempt {}/{}.'.format(
                         nth_attempt,
                         request_attempts,
                     ))
