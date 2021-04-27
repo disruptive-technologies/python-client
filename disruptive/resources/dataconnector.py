@@ -8,7 +8,6 @@ import disruptive
 import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
-from disruptive.outputs import Metric
 
 
 class DataConnector(dtoutputs.OutputBase):
@@ -547,3 +546,33 @@ class DataConnector(dtoutputs.OutputBase):
             if self.headers is not None:
                 config['headers'] = self.headers
             return 'httpConfig', config
+
+
+class Metric(dtoutputs.OutputBase):
+    """
+    Represents the metrics for a dataconnector over the last 3 hours.
+
+    Attributes
+    ----------
+    success_count : int
+        Number of 2xx responses.
+    error_count : int
+        Number of non-2xx responses.
+    latency : str
+        Average latency.
+
+    """
+
+    def __init__(self, metric: dict) -> None:
+        """
+        Constructs the Metric object by unpacking the raw response.
+
+        """
+
+        # Inherit attributes from ResponseBase parent.
+        dtoutputs.OutputBase.__init__(self, metric)
+
+        # Unpack attributes from dictionary.
+        self.success_count = metric['metrics']['successCount']
+        self.error_count = metric['metrics']['errorCount']
+        self.latency = metric['metrics']['latency99p']

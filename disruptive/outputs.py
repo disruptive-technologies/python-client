@@ -95,36 +95,6 @@ class OutputBase():
         return out
 
 
-class Metric(OutputBase):
-    """
-    Represents the metrics for a dataconnector over the last 3 hours.
-
-    Attributes
-    ----------
-    success_count : int
-        Number of 2xx responses.
-    error_count : int
-        Number of non-2xx responses.
-    latency : str
-        Average latency.
-
-    """
-
-    def __init__(self, metric: dict) -> None:
-        """
-        Constructs the Metric object by unpacking the raw response.
-
-        """
-
-        # Inherit attributes from ResponseBase parent.
-        OutputBase.__init__(self, metric)
-
-        # Unpack attributes from dictionary.
-        self.success_count = metric['metrics']['successCount']
-        self.error_count = metric['metrics']['errorCount']
-        self.latency = metric['metrics']['latency99p']
-
-
 class Member(OutputBase):
     """
     Represents a member.
