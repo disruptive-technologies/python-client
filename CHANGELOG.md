@@ -2,7 +2,8 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# v0.4.0
+_Released on 2020-05-02._
 ### Changed
 - [#44](https://github.com/disruptive-technologies/disruptive-python/pull/44) A few parameters and attributes has been renamed for consistency.
   - Organization attribute `id` renamed to `organization_id`.
