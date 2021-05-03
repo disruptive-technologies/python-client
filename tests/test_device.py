@@ -1,4 +1,5 @@
-# Project imports.
+from unittest.mock import patch
+
 import disruptive
 import disruptive.events.events as dtevents
 import tests.api_responses as dtapiresponses
@@ -80,6 +81,44 @@ class TestDevice():
         request_mock.assert_requested(
             method='GET',
             url=url,
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # output should be list.
+        assert type(devices) == list
+
+        # Assert output is list of Device.
+        for d in devices:
+            assert isinstance(d, disruptive.Device)
+
+    def test_list_devices_optionals(self, request_mock):
+        # Update the response data with a list of device data.
+        request_mock.json = dtapiresponses.paginated_device_response
+
+        # Call Device.list_devices() method.
+        devices = disruptive.Device.list_devices(
+            project_id='project_id',
+            query='some_filter',
+            device_ids=['device1, device2'],
+            device_types=['temperature'],
+            label_filters={'key': 'value'},
+            order_by='reported.temperature.value',
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = disruptive.api_url+'/projects/project_id/devices'
+        request_mock.assert_requested(
+            method='GET',
+            url=url,
+            params={
+                'query': 'some_filter',
+                'device_ids': ['device1, device2'],
+                'device_types': ['temperature'],
+                'order_by': 'reported.temperature.value',
+                'label_filters': ['key=value'],
+            }
         )
 
         # Assert single request sent.
@@ -208,7 +247,7 @@ class TestDevice():
         # Assert output is None.
         assert d is None
 
-    def test_no_reported_data(self, request_mock):
+    def test_reported_no_data(self, request_mock):
         # Update the response data with device data.
         request_mock.json = dtapiresponses.null_reported_sensor
 
@@ -235,3 +274,14 @@ class TestDevice():
         assert isinstance(d.reported.network_status, dtevents.NetworkStatus)
         assert isinstance(d.reported.battery_status, dtevents.BatteryStatus)
         assert isinstance(d.reported.touch, dtevents.Touch)
+
+    def test_reported_unknown_data(self, request_mock):
+        # Update the response data with device data.
+        request_mock.json = dtapiresponses.unknown_reported_sensor
+
+        # Mock the warning logger.
+        with patch('disruptive.logging.warning') as warning_mock:
+            # Call the appropriate endpoint.
+            disruptive.Device.get_device('device_id', 'project_id')
+
+            assert warning_mock.call_count == 1

@@ -301,6 +301,22 @@ null_reported_sensor = {
     }
 }
 
+unknown_reported_sensor = {
+    "name": "projects/c0md3mmpc7bet3vico8g/devices/emuc1pe9nvlq0bgk44sg4o0",
+    "type": "temperature",
+    "labels": {
+        "name": "Emulated temperature: emuc16e9nvlq0bgk44sg4o0",
+        "virtual-sensor": ""
+    },
+    "reported": {
+        "networkStatus": None,  # The REST API will return "null" for
+        "batteryStatus": None,  # these values if they are yet to be set.
+        "temperature": None,    # This is converted to None in python, which
+        "touch": None,          # is why we set that here.
+        "does_not_exist": {'key1': 'value1', 'key2': 'value2'},
+    }
+}
+
 all_devices_list = [
     ccon,
     humidity_sensor,
