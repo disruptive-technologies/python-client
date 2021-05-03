@@ -17,7 +17,7 @@ class TestTransforms():
 
     def test_to_iso8601_invalid_type(self):
         inp = {'timestamp': '1970-01-01T00:00:00Z'}
-        with pytest.raises(TypeError):
+        with pytest.raises(dterrors.TypeError):
             dttrans.to_iso8601(inp)
 
     def test_to_iso8601_none(self):
@@ -57,7 +57,7 @@ class TestTransforms():
 
     def test_to_datetime_invalid_type(self):
         inp = {'timestamp': datetime(1970, 1, 1)}
-        with pytest.raises(TypeError):
+        with pytest.raises(dterrors.TypeError):
             dttrans.to_datetime(inp)
 
     def test_to_datetime_none(self):
