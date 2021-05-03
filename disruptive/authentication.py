@@ -119,12 +119,25 @@ class Auth():
         """
 
         for key in credentials:
-            if type(credentials[key]) != str:
+            # Verify credential is type string.
+            if isinstance(credentials[key], str):
+                # Raise ValueError if string is empty.
+                # This typically happens is credentials are fetched from
+                # the environment with a fallback to an empty string.
+                if len(credentials[key]) == 0:
+                    raise ValueError(
+                        'Authentication credential <{}> is'
+                        ' empty string.'.format(key)
+                    )
+
+            # If not, raise TypeError.
+            else:
                 raise TypeError(
-                    'Authentication credentials must be of type '
-                    + 'str, but received {}.'.format(
-                        type(credentials[key]).__name__,
-                    ))
+                    'Authentication credential <{}> got type <{}>. '
+                    'Expected <str>.'.format(
+                        key, type(credentials[key]).__name__
+                    )
+                )
 
     def get_token(self) -> str:
         """

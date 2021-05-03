@@ -15,7 +15,7 @@ class TestAuth():
         request_mock.json = res
 
         # Call the two classmethod constructors.
-        auth = dt.Auth.serviceaccount('', '', '')
+        auth = dt.Auth.serviceaccount('key_id', 'secret', 'email')
 
         # Assert token post request not sent at construction.
         request_mock.assert_request_count(0)
@@ -29,7 +29,7 @@ class TestAuth():
         request_mock.json = res
 
         # Create an authentication object.
-        auth = dt.Auth.serviceaccount('', '', '')
+        auth = dt.Auth.serviceaccount('key_id', 'secret', 'email')
 
         # Verify expired token.
         assert auth._has_expired()
@@ -47,8 +47,8 @@ class TestAuth():
     def test_raise_missing_credential(self):
         # Verify TypeError raised at missing input credential.
         with pytest.raises(TypeError):
-            dt.Auth.serviceaccount(None, '', '')
+            dt.Auth.serviceaccount(None, 'secret', 'email')
         with pytest.raises(TypeError):
-            dt.Auth.serviceaccount('', None, '')
+            dt.Auth.serviceaccount('key_id', None, 'email')
         with pytest.raises(TypeError):
-            dt.Auth.serviceaccount('', '', None)
+            dt.Auth.serviceaccount('key_id', 'secret', None)
