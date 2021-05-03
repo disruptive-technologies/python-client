@@ -1,9 +1,7 @@
-# Standard library imports.
 import re
 import base64
 from datetime import datetime
 
-# Project imports.
 import disruptive.errors as dterrors
 
 
@@ -23,12 +21,9 @@ def to_iso8601(ts):
             return ts
         else:
             # Invalid iso8601 format, raise error.
-            raise dterrors.FormatError(
-                'Timestamp format {} is invalid iso8601 format.\n'
-                'E.g. 2020-01-01T00:00:00Z'.format(
-                    ts
-                )
-            )
+            msg = 'Timestamp format <{}> is invalid iso8601 format.\n' \
+                'Example: 2020-01-01T00:00:00Z'.format(ts)
+            raise dterrors.FormatError(msg)
 
     # If not string, datetime is also fine as it can be converted.
     elif isinstance(ts, datetime):
@@ -47,12 +42,9 @@ def to_iso8601(ts):
 
     # If any other type, raise TypeError.
     else:
-        raise TypeError(
-            'Got timestamp of type {}, expected'
-            ' iso8601 str or datetime.'.format(
-                type(ts).__name__
-            )
-        )
+        msg = 'Got timestamp of type <{}>, expected ' \
+            'iso8601 <str> or <datetime>.'.format(type(ts).__name__)
+        raise dterrors.TypeError(msg)
 
 
 def to_datetime(ts):
@@ -69,10 +61,9 @@ def to_datetime(ts):
             return datetime.fromisoformat(ts.replace('Z', '+00:00'))
         else:
             # Invalid iso8601 format, raise error.
-            raise dterrors.FormatError(
-                'Timestamp format {} is invalid iso8601 format.\n'
-                'E.g. 2020-01-01T00:00:00Z'
-            )
+            msg = 'Timestamp format <{}> is invalid iso8601 format.\n' \
+                'Example: 2020-01-01T00:00:00Z'
+            raise dterrors.FormatError(msg)
 
     # If ts is None, return None.
     elif ts is None:
@@ -80,12 +71,11 @@ def to_datetime(ts):
 
     # If any other type, raise TypeError.
     else:
-        raise TypeError(
-            'Got timestamp of type {}, expected'
-            ' iso8601 str or datetime.'.format(
+        msg = 'Got timestamp of type <{}>, expected ' \
+            'iso8601 <str> or <datetime>.'.format(
                 type(ts).__name__
             )
-        )
+        raise dterrors.TypeError(msg)
 
 
 def validate_iso8601_format(dt_str):

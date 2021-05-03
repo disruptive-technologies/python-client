@@ -1,5 +1,6 @@
-# Third-party imports.
 import requests
+
+import disruptive.logging as dtlog
 
 
 class DTApiError(Exception):
@@ -12,6 +13,9 @@ class DTApiError(Exception):
 
         # Call the base class constructor.
         super().__init__(message)
+
+        # Log the error.
+        dtlog.error(message)
 
 
 class BadRequest(DTApiError):
@@ -125,6 +129,26 @@ class FormatError(DTApiError):
 class ConfigurationError(DTApiError):
     """
     One or more :ref:`configuration parameters <configuration>` are invalid.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class TypeError(DTApiError):
+    """
+    Unexpected type.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class ValueError(DTApiError):
+    """
+    Unexpected value.
 
     """
 

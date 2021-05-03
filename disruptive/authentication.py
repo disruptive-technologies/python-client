@@ -125,7 +125,7 @@ class Auth():
                 # This typically happens is credentials are fetched from
                 # the environment with a fallback to an empty string.
                 if len(credentials[key]) == 0:
-                    raise ValueError(
+                    raise dterrors.ValueError(
                         'Authentication credential <{}> is'
                         ' empty string.'.format(key)
                     )
