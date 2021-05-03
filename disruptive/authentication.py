@@ -138,6 +138,7 @@ class Auth():
                         key, type(credentials[key]).__name__
                     )
                 )
+
     def get_token(self) -> str:
         """
         Returns the access token.
