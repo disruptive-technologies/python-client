@@ -440,14 +440,14 @@ class Humidity(_EventData):
 
     def __repr__(self):
         string = '{}.{}('\
-            'temperature={}, '\
+            'celsius={}, '\
             'humidity={}, '\
             'timestamp={}'\
             ')'
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
-            self.temperature,
+            self.celsius,
             self.humidity,
             repr(dttrans.to_iso8601(self.timestamp)),
         )
