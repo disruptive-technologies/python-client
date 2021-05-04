@@ -109,7 +109,7 @@ class TestEvents():
     def test_connection_status(self):
         x = disruptive.events.ConnectionStatus(
             connection='ETHERNET',
-            available='ETHERNET',
+            available=['ETHERNET', 'CELLULAR'],
             timestamp=datetime.now(),
         )
 
