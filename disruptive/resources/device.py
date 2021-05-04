@@ -529,22 +529,19 @@ class Reported(dtoutputs.OutputBase):
             if self._raw[key] is None:
                 continue
 
-            # Also skip labelsChanged key as it does not exist in reported.
-            if key == 'labelsChanged':
-                continue
-
             # Repack the data field in expected format.
             repacked = {key: self._raw[key]}
 
-            # Initialize appropriate data instance.
-            data = dtevents._EventData.from_event_type(repacked, key)
-
-            # Set attribute according to event type.
+            # Check if key exists in map of known events.
             if key in dtevents._EVENTS_MAP._api_names:
+                # Initialize appropriate data instance.
+                data = dtevents._EventData.from_event_type(repacked, key)
+
+                # Set attribute according to event type.
                 setattr(
                     self,
                     dtevents._EVENTS_MAP._api_names[key].attr_name,
                     data,
                 )
             else:
-                dtlog.warning('Skipping unknown event type {}.'.format(key))
+                dtlog.warning('Skipping unknown reported type {}.'.format(key))

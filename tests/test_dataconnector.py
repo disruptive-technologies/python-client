@@ -214,6 +214,8 @@ class TestDataconnector():
             project_id='c0md3pm0p7bet3vico8g',
             display_name='my-new-dcon',
             labels=['name', 'custom-label-01', 'custom_label-02'],
+            status='ACTIVE',
+            event_types=['touch', 'temperature', 'objectPresent'],
             config=disruptive.DataConnector.HttpPushConfig(
                 url='https://584087e0a1fa.eu.ngrok.io/api/endpoint',
                 signature_secret='some-very-good-secret',
@@ -233,8 +235,10 @@ class TestDataconnector():
             method='PATCH',
             url=url,
             body={
-                'labels': ['name', 'custom-label-01', 'custom_label-02'],
                 'displayName': 'my-new-dcon',
+                'status': 'ACTIVE',
+                'events': ['touch', 'temperature', 'objectPresent'],
+                'labels': ['name', 'custom-label-01', 'custom_label-02'],
                 'httpConfig': {
                     'url': 'https://584087e0a1fa.eu.ngrok.io/api/endpoint',
                     'signatureSecret': 'some-very-good-secret',

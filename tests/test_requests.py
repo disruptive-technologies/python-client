@@ -1,7 +1,6 @@
-# Third-party imports.
 import pytest
+import requests
 
-# Project imports.
 import disruptive
 import tests.api_responses as dtapiresponses
 from disruptive.requests import DTRequest, DTResponse
@@ -271,3 +270,66 @@ class TestRequests():
 
         # Verify it did in fact retry that many times.
         request_mock.assert_request_count(99)
+
+    def test_request_attempts_invalid(self, request_mock):
+        # Catch expected error as retries are exhausted.
+        with pytest.raises(disruptive.errors.ConfigurationError):
+            # Call Device.get_device() with overriden retry count.
+            disruptive.Device.get_device(
+                device_id='device_id',
+                request_attempts=-1,
+            )
+
+    def test_request_timeout_invalid(self, request_mock):
+        # Catch expected error as retries are exhausted.
+        with pytest.raises(disruptive.errors.ConfigurationError):
+            # Call Device.get_device() with overriden retry count.
+            disruptive.Device.get_device(
+                device_id='device_id',
+                request_timeout=-1,
+            )
+
+    def test_request_caught_requests_connection_error(self, request_mock):
+        # Re-mock requests.request with a new side_effect.
+        request_mock.request_patcher = request_mock._mocker.patch(
+            'requests.request',
+            side_effect=requests.exceptions.ConnectionError,
+        )
+
+        # Catch the expected ConnectionError that should be raised.
+        with pytest.raises(disruptive.errors.ConnectionError):
+            # Call Device.get_device(), overriden all defaults with kwargs.
+            _ = disruptive.Device.get_device(
+                device_id='device_id',
+                request_timeout=99,
+            )
+
+    def test_request_caught_generic_requests_error(self, request_mock):
+        # Re-mock requests.request with a new side_effect.
+        request_mock.request_patcher = request_mock._mocker.patch(
+            'requests.request',
+            side_effect=requests.exceptions.RequestException,
+        )
+
+        # Catch the expected ConnectionError that should be raised.
+        with pytest.raises(disruptive.errors.UnknownError):
+            # Call Device.get_device(), overriden all defaults with kwargs.
+            _ = disruptive.Device.get_device(
+                device_id='device_id',
+                request_timeout=99,
+            )
+
+    def test_request_caught_value_error(self, request_mock):
+        # Re-mock requests.request with a new side_effect.
+        request_mock.request_patcher = request_mock._mocker.patch(
+            'requests.request',
+            side_effect=requests.exceptions.RequestException,
+        )
+
+        # Catch the expected ConnectionError that should be raised.
+        with pytest.raises(disruptive.errors.UnknownError):
+            # Call Device.get_device(), overriden all defaults with kwargs.
+            _ = disruptive.Device.get_device(
+                device_id='device_id',
+                request_timeout=99,
+            )

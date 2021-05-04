@@ -139,5 +139,70 @@ class TestEventHistory():
         assert len(celsius) == 2
 
         # Types should also match expected.
+        assert isinstance(timestamp, list)
+        assert isinstance(celsius, list)
         assert isinstance(timestamp[0], datetime)
         assert isinstance(celsius[0], float)
+
+    def test_get_data_axes_single(self, request_mock):
+        # Update the response data with event history data.
+        res = dtapiresponses.event_history_each_type
+        request_mock.json = res
+
+        # Call EventHistory.list_events() method.
+        h = disruptive.EventHistory.list_events(
+            device_id='device_id',
+            project_id='project_id',
+        )
+
+        # Fetch timestamps and value for temperature events.
+        celsius = h.get_data_axes(x_name='celsius')
+
+        # There is one temperature and one humidity event in res.
+        # This should result in 2 celsius entries.
+        assert len(celsius) == 2
+
+        # Types should also match expected.
+        assert isinstance(celsius, list)
+        assert isinstance(celsius[0], float)
+
+    def test_get_data_axes_uknown_event_type(self, request_mock):
+        # Update the response data with event history data.
+        res = dtapiresponses.event_history_each_type
+        request_mock.json = res
+
+        # Call EventHistory.list_events() method.
+        h = disruptive.EventHistory.list_events(
+            device_id='device_id',
+            project_id='project_id',
+        )
+
+        # Fetch timestamps and value for temperature events.
+        timestamp = h.get_data_axes(x_name='timestamp', event_type='unknown')
+
+        # Nothing should have been found.
+        assert isinstance(timestamp, list)
+        assert len(timestamp) == 0
+
+    def test_get_data_axes_uknown_axes(self, request_mock):
+        # Update the response data with event history data.
+        res = dtapiresponses.event_history_each_type
+        request_mock.json = res
+
+        # Call EventHistory.list_events() method.
+        h = disruptive.EventHistory.list_events(
+            device_id='device_id',
+            project_id='project_id',
+        )
+
+        # Fetch timestamps and value for temperature events.
+        timestamp, celsius = h.get_data_axes(
+            x_name='unknown1',
+            y_name='unknown2',
+        )
+
+        # Nothing should have been found.
+        assert isinstance(timestamp, list)
+        assert isinstance(celsius, list)
+        assert len(timestamp) == 0
+        assert len(celsius) == 0

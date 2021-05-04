@@ -440,14 +440,14 @@ class Humidity(_EventData):
 
     def __repr__(self):
         string = '{}.{}('\
-            'temperature={}, '\
+            'celsius={}, '\
             'humidity={}, '\
             'timestamp={}'\
             ')'
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
-            self.temperature,
+            self.celsius,
             self.humidity,
             repr(dttrans.to_iso8601(self.timestamp)),
         )
@@ -1184,7 +1184,7 @@ class ConnectionStatus(_EventData):
     ----------
     connection : str
         Whether the Cloud Connector is on "ETHERNET", "CELLULAR", or "OFFLINE".
-    available : str
+    available : list[str]
         Lists available connections. Can contain
         "ETHERNET", "CELLULAR", or both.
     timestamp : datetime
@@ -1194,7 +1194,7 @@ class ConnectionStatus(_EventData):
 
     def __init__(self,
                  connection: str,
-                 available: str,
+                 available: list[str],
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
@@ -1205,7 +1205,7 @@ class ConnectionStatus(_EventData):
         connection : str
             Whether the Cloud Connector is on
             "ETHERNET", "CELLULAR", or "OFFLINE".
-        available : str
+        available : list[str]
             Lists available connections.
             Can contain "ETHERNET", "CELLULAR", or both.
         timestamp : datetime, str, optional

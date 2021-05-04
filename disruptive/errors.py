@@ -136,6 +136,16 @@ class ConfigurationError(DTApiError):
         super().__init__(message)
 
 
+class EmptyStringError(DTApiError):
+    """
+    Unexpected empty string.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class TypeError(DTApiError):
     """
     Unexpected type.
