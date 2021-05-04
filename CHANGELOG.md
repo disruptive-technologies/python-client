@@ -5,6 +5,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
 # Unreleased
 ### Fixed
 - [#49](https://github.com/disruptive-technologies/disruptive-python/pull/49) Fixed forgotten Humidity attribute rename from `temperature` to `celsius`.
+- [#50](https://github.com/disruptive-technologies/disruptive-python/pull/50) ConnectionStatus event parameter `available` should be `list[str]`, not `str`.
 
 # v0.4.0
 _Released on 2020-05-02._
