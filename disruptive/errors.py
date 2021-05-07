@@ -146,26 +146,6 @@ class EmptyStringError(DTApiError):
         super().__init__(message)
 
 
-class TypeError(DTApiError):
-    """
-    Unexpected type.
-
-    """
-
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class ValueError(DTApiError):
-    """
-    Unexpected value.
-
-    """
-
-    def __init__(self, message):
-        super().__init__(message)
-
-
 class UnknownError(DTApiError):
     """
     An unexpected error has been raised.
