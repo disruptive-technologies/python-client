@@ -132,7 +132,8 @@ class Auth():
 
             # If not, raise TypeError.
             else:
-                raise TypeError(
+                raise dterrors._raise_provided(
+                    TypeError,
                     'Authentication credential <{}> got type <{}>. '
                     'Expected <str>.'.format(
                         key, type(credentials[key]).__name__

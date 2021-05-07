@@ -44,7 +44,7 @@ def to_iso8601(ts):
     else:
         msg = 'Got timestamp of type <{}>, expected ' \
             'iso8601 <str> or <datetime>.'.format(type(ts).__name__)
-        raise TypeError(msg)
+        raise dterrors._raise_provided(TypeError, msg)
 
 
 def to_datetime(ts):
@@ -75,7 +75,7 @@ def to_datetime(ts):
             'iso8601 <str> or <datetime>.'.format(
                 type(ts).__name__
             )
-        raise TypeError(msg)
+        raise dterrors._raise_provided(TypeError, msg)
 
 
 def validate_iso8601_format(dt_str):
