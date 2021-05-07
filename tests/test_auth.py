@@ -55,7 +55,7 @@ class TestAuth():
         assert not auth._has_expired()
 
     def test_raise_none_credential(self):
-        # Verify TypeError raised at None input credential.
+        # Verify InvalidTypeError raised at None input credential.
         with pytest.raises(TypeError):
             disruptive.Auth.serviceaccount(None, 'secret', 'email')
         with pytest.raises(TypeError):

@@ -3,6 +3,14 @@ import requests
 import disruptive.logging as dtlog
 
 
+def _raise_provided(error, message: str):
+    # Log the error.
+    dtlog.error(message)
+
+    # Raise provided error.
+    raise error(message)
+
+
 class DTApiError(Exception):
     """
     Represents errors raised from the REST API.
