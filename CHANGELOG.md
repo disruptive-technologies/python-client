@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
+# Unreleased
+### Changed
+- [#52](https://github.com/disruptive-technologies/disruptive-python/pull/52) Replaced `disruptive.errors.TypeError` and `disruptive.errors.ValueError` with built-ins.
+
 # v0.4.1
 _Released on 2020-05-04._
 ### Fixed
