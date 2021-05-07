@@ -56,11 +56,11 @@ class TestAuth():
 
     def test_raise_none_credential(self):
         # Verify TypeError raised at None input credential.
-        with pytest.raises(dterrors.TypeError):
+        with pytest.raises(TypeError):
             disruptive.Auth.serviceaccount(None, 'secret', 'email')
-        with pytest.raises(dterrors.TypeError):
+        with pytest.raises(TypeError):
             disruptive.Auth.serviceaccount('key_id', None, 'email')
-        with pytest.raises(dterrors.TypeError):
+        with pytest.raises(TypeError):
             disruptive.Auth.serviceaccount('key_id', 'secret', None)
 
     def test_raise_empty_string_credential(self):
