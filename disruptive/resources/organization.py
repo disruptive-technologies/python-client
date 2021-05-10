@@ -51,13 +51,9 @@ class Organization(OutputBase):
         ----------
         organization_id : str
             Unique organization ID.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -89,13 +85,9 @@ class Organization(OutputBase):
 
         Parameters
         ----------
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -128,13 +120,9 @@ class Organization(OutputBase):
         ----------
         organization_id : str
             Unique ID of the organization to get members from.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -177,13 +165,9 @@ class Organization(OutputBase):
         roles : {["organization.admin"]} list[str]
             The role(s) to provide the new member in the organization.
             Currently only supports organization.admin.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -232,13 +216,9 @@ class Organization(OutputBase):
             For User members, this is the unique User ID.
         organization_id : str
             Unique ID of the organization to get a member from.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -283,13 +263,9 @@ class Organization(OutputBase):
             For User members, this is the unique User ID.
         organization_id : str
             Unique ID of the organization to remove a member from.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------
@@ -332,13 +308,9 @@ class Organization(OutputBase):
             For User members, this is the unique User ID.
         organization_id : str
             Unique ID of the organization of the member to get the URL from.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Raises
         ------
@@ -378,13 +350,9 @@ class Organization(OutputBase):
         ----------
         organization_id : str
             Unique ID of the organization to list permissions in.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------

@@ -19,8 +19,9 @@ Support is available for Python 3.7+.
    quickstart
 
 .. toctree::
+   :titlesonly:
    :hidden:
-   :maxdepth: 1
+   :maxdepth: 2
 
    examples/examples
 

@@ -163,7 +163,7 @@ class Touch(_EventData):
         ----------
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -246,7 +246,7 @@ class Temperature(_EventData):
             Temperature value in Celsius.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -334,7 +334,7 @@ class ObjectPresent(_EventData):
             Indicates whether an object is "PRESENT" or "NOT_PRESENT".
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -425,7 +425,7 @@ class Humidity(_EventData):
             Relative humidity in percent.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -520,7 +520,7 @@ class ObjectPresentCount(_EventData):
             or disappearance of an object over its lifetime.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -607,7 +607,7 @@ class TouchCount(_EventData):
             touched over its lifetime.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -692,7 +692,7 @@ class WaterPresent(_EventData):
             Indicates whether water is "PRESENT" or "NOT_PRESENT".
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -889,7 +889,7 @@ class NetworkStatus(_EventData):
             List of the Cloud Connector that forwarded the event.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -1008,7 +1008,7 @@ class BatteryStatus(_EventData):
             A coarse percentage estimate (0% to 100%) of the remaining battery.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -1104,7 +1104,7 @@ class LabelsChanged(_EventData):
             List of keys of removed labels.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -1210,7 +1210,7 @@ class ConnectionStatus(_EventData):
             Can contain "ETHERNET", "CELLULAR", or both.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -1308,7 +1308,7 @@ class EthernetStatus(_EventData):
             IP address of the Cloud Connector on the local network.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
@@ -1400,7 +1400,7 @@ class CellularStatus(_EventData):
             Cloud Connector cellular reception percentage.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
-            (i.e. YYYY-MM-DDThh:mm:ssZ).
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
 
         """
 
