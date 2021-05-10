@@ -19,19 +19,19 @@ The following snippet shows the various variables that can be configured and the
    dt.log = False
 
    # Number of seconds to wait for a response before giving up.
-   request_timeout = 3
+   dt.request_timeout = 3
 
    # Number of times a request is attempted if an error is returned.
-   request_attempts = 3
+   dt.request_attempts = 3
 
    # Base API URL from which all endpoints are expanded.
-   api_url = 'https://api.d21s.com/v2'
+   dt.api_url = 'https://api.d21s.com/v2'
 
    # Same as the previous, but for the emulator API.
-   emulator_url = 'https://emulator.d21s.com/v2'
+   dt.emulator_url = 'https://emulator.d21s.com/v2'
 
    # Full URL to which token exchange request is sent.
-   auth_url = 'https://identity.d21s.com/oauth2/token'
+   dt.auth_url = 'https://identity.d21s.com/oauth2/token'
 
 Per-Request
 -----------
