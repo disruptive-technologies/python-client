@@ -1,6 +1,6 @@
 Threaded Stream
 ===============
-In this example, the :code:`disruptive.Stream.project()` resource method and built-in `threading` package is used together to continuously stream events in a separate thread, independent of the main program. Every time a new event appears in the stream it is appended to a buffer list which is accessible from the main thread.
+In this example, the :code:`disruptive.Stream.event_stream()` resource method and built-in `threading` package is used together to continuously stream events in a separate thread, independent of the main program. Every time a new event appears in the stream it is appended to a buffer list which is accessible from the main thread.
 
 Full Example
 ------------
@@ -27,7 +27,7 @@ The following snippet implements the example. Remember to set the environment va
    # Function which will be the target for our thread.
    def stream_worker(project_id: str):
        # Create stream generator
-       for new_event in dt.Stream.project(project_id):
+       for new_event in dt.Stream.event_stream(project_id):
            # When a new event arrives, lock buffer before writing.
            print('[Thread] New Event')
            with buffer_lock:
@@ -85,7 +85,7 @@ When using the `threading` package, the target code to be ran in the newly spawn
    # Function which will be the target for our thread.
    def stream_worker(project_id):
        # Create stream generator
-       for new_event in dt.Stream.project(project_id):
+       for new_event in dt.Stream.event_stream(project_id):
            # When a new event arrives, lock buffer before writing.
            print('[Thread] New Event')
            with buffer_lock:
