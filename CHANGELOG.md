@@ -6,6 +6,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
 ### Changed
 - [#52](https://github.com/disruptive-technologies/disruptive-python/pull/52) Replaced `disruptive.errors.TypeError` and `disruptive.errors.ValueError` with built-ins.
 - [#54](https://github.com/disruptive-technologies/disruptive-python/pull/54) Combined `disruptive.Stream.device()` and `.project()` into `.event_stream()`.
+- [#56](https://github.com/disruptive-technologies/disruptive-python/pull/56) Method `disruptive.Project.update_member()` roles parameter no longer optional.
 
 # v0.4.1
 _Released on 2020-05-04._
