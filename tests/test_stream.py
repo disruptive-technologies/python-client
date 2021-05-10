@@ -15,32 +15,9 @@ from disruptive.events import Event
 
 class TestStream():
 
-    def test_device_arguments(self, request_mock):
+    def test_event_stream_arguments(self, request_mock):
         # Call stream with customer kwargs.
-        for event in disruptive.Stream.device(
-            device_id='device_id',
-            project_id='project_id',
-            event_types=['temperature', 'touch'],
-            request_attempts=9,
-        ):
-            pass
-
-        url = disruptive.api_url
-        url += '/projects/project_id/devices/device_id:stream'
-        request_mock.assert_requested(
-            method='GET',
-            url=url,
-            params={
-                'event_types': ['temperature', 'touch'],
-                'ping_interval': '10s',
-            },
-            stream=True,
-            timeout=12,
-        )
-
-    def test_project_arguments(self, request_mock):
-        # Call stream with customer kwargs.
-        for event in disruptive.Stream.project(
+        for event in disruptive.Stream.event_stream(
             project_id='project_id',
             device_ids=['id1', 'id2', 'id3'],
             label_filters=['l1', 'l2'],
@@ -78,7 +55,7 @@ class TestStream():
 
         # Mock logging function, which should trigger once for each ping.
         with patch('disruptive.logging.debug') as log_mock:
-            for event in disruptive.Stream.device('device_id', 'project_id'):
+            for event in disruptive.Stream.event_stream('project_id'):
                 pass
 
             # Assert logging called with expected message.
@@ -108,7 +85,7 @@ class TestStream():
         ]
 
         # Start the stream.
-        for i, event in enumerate(disruptive.Stream.project('project_id')):
+        for i, event in enumerate(disruptive.Stream.event_stream('project_id')):
             # Compare stream event to expected events.
             assert event._raw == expected[i]._raw
 
@@ -122,7 +99,7 @@ class TestStream():
         # Catch ConnectionError caused by exhausted retries.
         with pytest.raises(dterrors.ReadTimeout):
             # Start a stream, which should rause an error causing retries.
-            for event in disruptive.Stream.project(
+            for event in disruptive.Stream.event_stream(
                     project_id='project_id',
                     request_attempts=8):
                 pass
@@ -140,7 +117,7 @@ class TestStream():
         # Catch ConnectionError caused by exhausted retries.
         with pytest.raises(dterrors.ConnectionError):
             # Start a stream, which should rause an error causing retries.
-            for event in disruptive.Stream.project(
+            for event in disruptive.Stream.event_stream(
                     project_id='project_id',
                     request_attempts=7):
                 pass

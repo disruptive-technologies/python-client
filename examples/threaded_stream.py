@@ -17,7 +17,7 @@ dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
 # Function which will be the target for our thread.
 def stream_worker(project_id: str):
     # Create stream generator
-    for new_event in dt.Stream.project(project_id):
+    for new_event in dt.Stream.event_stream(project_id):
         # When a new event arrives, lock buffer before writing.
         print('[Thread] New Event')
         with buffer_lock:

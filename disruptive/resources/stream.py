@@ -16,66 +16,15 @@ class Stream():
     """
 
     @staticmethod
-    def device(device_id: str,
-               project_id: str,
-               event_types: Optional[list[str]] = None,
-               **kwargs,
-               ) -> Generator:
+    def event_stream(project_id: str,
+                     device_ids: Optional[list[str]] = None,
+                     label_filters: Optional[list[str]] = None,
+                     device_types: Optional[list[str]] = None,
+                     event_types: Optional[list[str]] = None,
+                     **kwargs,
+                     ) -> Generator:
         """
-        Streams events for a single device.
-
-        Implements a basic retry-routine. If connection is lost, the stream
-        will attempt to reconnect with an exponential backoff. Potential
-        lost events while reconnecting are, however, not acocunted for.
-
-        Parameters
-        ----------
-        device_id : str
-            Unique ID of the target device.
-        project_id : str
-            Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-
-        Returns
-        -------
-        stream : Generator
-            A python Generator type that yields each new event in the stream.
-
-        Examples
-        --------
-        >>> # Stream real-time events from a single device.
-        >>> for event in dt.Stream.device('<DEVICE_ID>', '<PROJECT_ID>'):
-        ...     print(event)
-
-        """
-
-        # Construct URL.
-        url = '/projects/{}/devices/{}:stream'.format(
-            project_id,
-            device_id
-        )
-
-        # Construct parameters dictionary.
-        params: dict = dict()
-        if event_types is not None:
-            params['event_types'] = event_types
-
-        # Relay generator output.
-        for event in dtrequests.DTRequest.stream(url, params=params, **kwargs):
-            yield Event(event)
-
-    @staticmethod
-    def project(project_id: str,
-                device_ids: Optional[list[str]] = None,
-                label_filters: Optional[list[str]] = None,
-                device_types: Optional[list[str]] = None,
-                event_types: Optional[list[str]] = None,
-                **kwargs,
-                ) -> Generator:
-        """
-        Streams events for a multiple devices in a project.
+        Streams events for one, several, or all devices in a project.
 
         Implements a basic retry-routine. If connection is lost, the stream
         will attempt to reconnect with an exponential backoff. Potential
@@ -105,14 +54,27 @@ class Stream():
         Examples
         --------
         >>> # Stream real-time events from all devices in a project.
-        >>> for event in dt.Stream.project('<PROJECT_ID>'):
+        >>> for event in dt.Stream.event_stream('<PROJECT_ID>'):
         ...     print(event)
 
-        >>> # Stream from all temperature- and touch sensors with a 'v1' label.
-        >>> for e in dt.Stream.project(project_id='<PROJECT_ID>',
-        ...                            device_types=['temperature', 'touch'],
-        ...                            label_filters=['v1'],
-        ...                            ):
+        >>> # Stream real-time events from one device in a project.
+        >>> for event in dt.Stream.event_stream(project_id='<PROJECT_ID>',
+        ...                                     device_ids=['<DEVICE_ID>'],
+        ...                                     ):
+        ...     print(event)
+
+        >>> # Stream real-time touch events from a select list of
+        >>> # humidity- and touch sensors, but only those with a 'v1' label.
+        >>> for e in dt.Stream.event_stream(project_id='<PROJECT_ID>',
+        ...                                 device_ids=[
+        ...                                     '<DEVICE_ID_1>',
+        ...                                     '<DEVICE_ID_2>',
+        ...                                     '<DEVICE_ID_3>',
+        ...                                 ]
+        ...                                 event_types=['touch'],
+        ...                                 device_types=['humidity', 'touch'],
+        ...                                 label_filters=['v1'],
+        ...                                 ):
         ...     print(e.data)
 
         """

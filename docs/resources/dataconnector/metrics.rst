@@ -1,3 +1,3 @@
 Metrics
 ^^^^^^^
-.. autoclass:: disruptive.outputs.Metric
+.. autoclass:: disruptive.resources.dataconnector.Metric
