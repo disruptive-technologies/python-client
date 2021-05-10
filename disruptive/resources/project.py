@@ -69,13 +69,9 @@ class Project(OutputBase):
         ----------
         project_id : str
             Unique project ID.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -115,13 +111,9 @@ class Project(OutputBase):
             Unique organization ID.
         query : str, optional
             Keyword based search for project- and organization display names.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -171,13 +163,9 @@ class Project(OutputBase):
             Unique organization ID.
         display_name : str
             Sets a display name for the project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -223,13 +211,9 @@ class Project(OutputBase):
             Unique ID of the project to update.
         display_name : str, optional
             If provided, updates the project display name.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------
@@ -270,13 +254,9 @@ class Project(OutputBase):
         ----------
         project_id : str
             Unique ID of the project to delete.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Raises
         ------
@@ -312,13 +292,9 @@ class Project(OutputBase):
         ----------
         project_id : str
             Unique ID of the project to get members from.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -362,13 +338,9 @@ class Project(OutputBase):
             Email of the user or Service Account to be added.
         roles : list[str]
             The role(s) to provide the new member in the project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -417,13 +389,9 @@ class Project(OutputBase):
             For User members, this is the unique User ID.
         project_id : str
             Unique ID of the project to get a member from.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -471,13 +439,9 @@ class Project(OutputBase):
             Unique ID of the project to update a member in.
         roles : list[str], optional
             List of new roles for the specified member.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -529,13 +493,9 @@ class Project(OutputBase):
             For User members, this is the unique User ID.
         project_id : str
             Unique ID of the project to remove a member from.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------
@@ -578,13 +538,9 @@ class Project(OutputBase):
             For User members, this is the unique User ID.
         project_id : str
             Unique ID of the project of the member to get the URL from.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -629,13 +585,9 @@ class Project(OutputBase):
         ----------
         project_id : str
             Unique ID of the project to list permissions in.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------

@@ -42,9 +42,9 @@ class Stream():
             Only includes events from devices with specified type(s).
         event_types : list[str], optional
             Only includes events of the specified type(s).
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------

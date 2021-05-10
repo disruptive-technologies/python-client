@@ -70,13 +70,9 @@ class ServiceAccount(dtoutputs.OutputBase):
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -117,13 +113,9 @@ class ServiceAccount(dtoutputs.OutputBase):
         ----------
         project_id : str
             Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -169,13 +161,9 @@ class ServiceAccount(dtoutputs.OutputBase):
         basic_auth : bool, optional
             Enables Basic Auth for the Service Account if True.
             Defaults to False.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -230,13 +218,9 @@ class ServiceAccount(dtoutputs.OutputBase):
             Updates the Service Account display name.
         basic_auth : bool, optional
             If True, enables Basic Auth while False disables it.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -297,13 +281,9 @@ class ServiceAccount(dtoutputs.OutputBase):
             Unique ID of the Service Account to delete.
         project_id : str
             Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------
@@ -344,13 +324,9 @@ class ServiceAccount(dtoutputs.OutputBase):
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -395,13 +371,9 @@ class ServiceAccount(dtoutputs.OutputBase):
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -446,13 +418,9 @@ class ServiceAccount(dtoutputs.OutputBase):
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -499,13 +467,9 @@ class ServiceAccount(dtoutputs.OutputBase):
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------

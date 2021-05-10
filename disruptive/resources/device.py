@@ -103,13 +103,9 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the target project.
             If not provided, a wildcard project will be used, resulting
             in a search for the device through all available projects.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -161,13 +157,9 @@ class Device(dtoutputs.OutputBase):
             The field name you want to order the response by.
             Referred to using dot notation (i.e. "reported.temperature.value").
             Default order is ascending, but can be flipped by prefixing "-".
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -230,13 +222,9 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the source project.
         target_project_id : str
             Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------
@@ -292,13 +280,9 @@ class Device(dtoutputs.OutputBase):
             Label key to be added.
         value : str
             Label value to be added.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------
@@ -340,13 +324,9 @@ class Device(dtoutputs.OutputBase):
             Unique ID of the target project.
         key : str
             Key of the label to be removed.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------
@@ -381,7 +361,7 @@ class Device(dtoutputs.OutputBase):
         Add, update, or remove multiple labels (key and value)
         on multiple devices
 
-        Must provide either `add_labels` or `remove_labels`. If neither are
+        Must provide either `set_labels` or `remove_labels`. If neither are
         provided, a :ref:`BadRequest <badrequest>` error will be raised.
 
         Parameters
@@ -390,23 +370,19 @@ class Device(dtoutputs.OutputBase):
             List of unique IDs for the target devices.
         project_id : str
             Unique ID of target project.
-        add_labels : dict[str, str], optional
+        set_labels : dict[str, str], optional
             Key and value of labels to be added. If a label key
             already exists, the value is updated.
         remove_labels : list[str], optional
             Label keys to be removed.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Raises
         ------
         BadRequest
-            If neither `add_labels` nor `remove_labels` is provided.
+            If neither `set_labels` nor `remove_labels` is provided.
 
         Examples
         --------
@@ -417,7 +393,7 @@ class Device(dtoutputs.OutputBase):
         ...         '<DEVICE_ID_2>',
         ...     ],
         ...     project_id='<PROJECT_ID>',
-        ...     add_labels={
+        ...     set_labels={
         ...         'new-label-1': 'value-1',
         ...         'new-label-2': 'value-2',
         ...         'new-label-3': 'value-3',
@@ -428,7 +404,7 @@ class Device(dtoutputs.OutputBase):
         >>> disruptive.Device.batch_update_labels(
         ...     device_ids=['<DEVICE_ID_1>']
         ...     project_id='<PROJECT_ID>',
-        ...     add_labels={'new-label': 'new-value'},
+        ...     set_labels={'new-label': 'new-value'},
         ...     remove_labels=['old-label'],
         ... )
 

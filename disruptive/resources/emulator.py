@@ -37,13 +37,9 @@ class Emulator():
         labels : dict[str, str], optional
             Set labels for the new device.
             Format: {'key': 'value'}.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -99,13 +95,9 @@ class Emulator():
             Specifies which device type to delete.
         project_id : str
             Unique ID of the target project.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------
@@ -155,13 +147,9 @@ class Emulator():
             Can be any of the listed Event Data classes.
             labelsChanged is not supported when publishing emulated events.
             The chosen Event Data must be supported by the device.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------

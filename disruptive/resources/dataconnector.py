@@ -84,13 +84,9 @@ class DataConnector(dtoutputs.OutputBase):
             Unique Data Connector ID.
         project_id : str
             Unique project ID.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -129,13 +125,9 @@ class DataConnector(dtoutputs.OutputBase):
         ----------
         project_id : str
             Unique project ID.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -180,19 +172,15 @@ class DataConnector(dtoutputs.OutputBase):
             An object representing the type-specific configuration.
         display_name : str, optional
             Sets a display name for the project.
-        status : {"ACTIVE", "USER_DISABLED"} strm optional
+        status : {"ACTIVE", "USER_DISABLED"} str, optional
             Status of the new Data Connector.
         event_types : list[str], optional
             List of event types the Data Connector should forward.
         labels : list[str], optional
             List of labels to forward with each event.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -268,13 +256,9 @@ class DataConnector(dtoutputs.OutputBase):
             List of event types the Data Connector should forward.
         labels : list[str], optional
             List of labels to forward with each event.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -346,13 +330,9 @@ class DataConnector(dtoutputs.OutputBase):
             Unique ID of the Data Connector to delete.
         project_id : str
             Unique ID of the project that contains the Data Connector.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------
@@ -389,13 +369,9 @@ class DataConnector(dtoutputs.OutputBase):
             Unique ID of the Data Connector to list metrics for.
         project_id : str
             Unique ID of the project that contains the Data Connector.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Returns
         -------
@@ -442,13 +418,9 @@ class DataConnector(dtoutputs.OutputBase):
             Unique ID of the Data Connector to synchronize.
         project_id : str
             Unique ID of the project that contains the Data Connector.
-        auth: Auth, optional
-            Authorization object used to authenticate the REST API.
-            If provided it will be prioritized over global authentication.
-        request_timeout: int, optional
-            Seconds before giving up a request without an answer.
-        request_attempts: int, optional
-            Number of times a request is attempted before giving up.
+        **kwargs
+            Arbitrary keyword arguments.
+            See the :ref:`Configuration <configuration>` page.
 
         Examples
         --------

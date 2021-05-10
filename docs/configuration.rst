@@ -33,6 +33,8 @@ The following snippet shows the various variables that can be configured and the
    # Full URL to which token exchange request is sent.
    dt.auth_url = 'https://identity.d21s.com/oauth2/token'
 
+.. _per_request_configuration:
+
 Per-Request
 -----------
 Each API method in the package can also be configured individually with the aforementioned variables. This will not update the package-wide behavior, only affecting the one call.
