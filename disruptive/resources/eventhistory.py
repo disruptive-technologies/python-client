@@ -6,56 +6,25 @@ from datetime import datetime
 
 # Project imports.
 import disruptive.requests as dtrequests
-import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
 from disruptive.events.events import Event
 
 
-class EventHistory(dtoutputs.OutputBase):
+class EventHistory():
     """
-    Contains staticmethods for fetching event history.
+    Contains staticmethods for streaming events.
     Used for namespacing only and thus does not have a constructor
 
-    Attributes
-    ----------
-    events_list : list[Event]
-        List of all events fetched in history.
-
     """
 
-    def __init__(self, events_list: list[Event]) -> None:
-        """
-        Constructs the EventHistory object from a list of events.
-
-        Parameters
-        ----------
-        events_list : list[Event]
-            A list of event objects, each representing a single event.
-
-        """
-
-        # Inherit from OutputBase parent.
-        dtoutputs.OutputBase.__init__(self, {})
-
-        # Set parameter attributes.
-        self.events_list = events_list
-
-    def __repr__(self):
-        return '{}.{}({})'.format(
-            self.__class__.__module__,
-            self.__class__.__name__,
-            self.events_list,
-        )
-
-    @classmethod
-    def list_events(cls,
-                    device_id: str,
+    @staticmethod
+    def list_events(device_id: str,
                     project_id: str,
                     event_types: Optional[list[str]] = None,
                     start_time: Optional[str | datetime] = None,
                     end_time: Optional[str | datetime] = None,
                     **kwargs,
-                    ) -> EventHistory:
+                    ) -> list[Event]:
         """
         Get the event history for a single device.
 
@@ -79,25 +48,23 @@ class EventHistory(dtoutputs.OutputBase):
 
         Returns
         -------
-        history : EventHistory
-            Object containing each event in history in addition to a few
-            convenience functions.
+        events : list[Event]
+            A list of all events fetched by the call.
 
         Examples
         --------
         >>> # Fetch all historic events the last 24 hours.
-        >>> history = disruptive.EventHistory.list_events(
+        >>> events = disruptive.EventHistory.list_events(
         ...     device_id='<DEVICE_ID>',
         ...     project_id='<PROJECT_ID',
         ... )
-        >>> print(history.events_list)
 
         >>> # Create a datetime object for 7 days ago.
         >>> from datetime import datetime, timedelta
         >>> seven_days_ago = datetime.now() - timedelta(7)
         >>>
         >>> # Fetch objectPresent event history the last 7 days.
-        ... history = dt.EventHistory.list_events(
+        ... events = dt.EventHistory.list_events(
         ...     device_id='<DEVICE_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     event_types=['objectPresent'],
@@ -131,77 +98,4 @@ class EventHistory(dtoutputs.OutputBase):
         )
 
         # Return list of Event objects of paginated GET response.
-        return cls(Event.from_mixed_list(res))
-
-    def get_events(self, event_type: str):
-        """
-        Returns a type-filtered list of events from history.
-
-        Parameters
-        ----------
-        event_type : str
-            The event type to be returned.
-
-        Returns
-        -------
-        events : list[Event]
-            List of event objects of the specified type.
-
-        """
-
-        out = []
-        for e in self.events_list:
-            if e.event_type == event_type:
-                out.append(e)
-        return out
-
-    def get_data_axes(self,
-                      x_name: str,
-                      y_name: Optional[str] = None,
-                      event_type: Optional[str] = None,
-                      ):
-        """
-        Returns filtered lists of the data axes as specified from
-        event type in history.
-
-        Parameters
-        ----------
-        x_name : str
-            Name of the first axis to isolate.
-        y_name : str, optional
-            Name of the second axis to isolate.
-        event_type : str, optional
-            Filter by event type. For instance, "state" exists for both
-            waterPresent and objectPresent event types.
-
-        Returns
-        -------
-        x_axis : list
-            List of values on the first axis.
-        y_axis : list
-            List of values on the second axis.
-
-        """
-
-        x_axis = []
-        y_axis = []
-        for e in self.events_list:
-            # Skip event if event_type mismatch.
-            if event_type is not None and event_type != e.event_type:
-                continue
-
-            # Skip event if x- or y-name does not exist.
-            if not hasattr(e.data, x_name):
-                continue
-            if y_name is not None and not hasattr(e.data, y_name):
-                continue
-
-            # Tests passed, append timestamp and y-axis.
-            x_axis.append(getattr(e.data, x_name))
-            if y_name is not None:
-                y_axis.append(getattr(e.data, y_name))
-
-        if y_name is not None:
-            return x_axis, y_axis
-        else:
-            return x_axis
+        return Event.from_mixed_list(res)

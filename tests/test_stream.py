@@ -1,12 +1,9 @@
-# Standard library imports.
 import json
 from unittest.mock import patch
 
-# Third-party imports.
 import pytest
 import requests
 
-# Project imports.
 import disruptive
 import disruptive.errors as dterrors
 import tests.api_responses as dtapiresponses
@@ -85,9 +82,9 @@ class TestStream():
         ]
 
         # Start the stream.
-        for i, event in enumerate(disruptive.Stream.event_stream('project_id')):
+        for i, e in enumerate(disruptive.Stream.event_stream('project_id')):
             # Compare stream event to expected events.
-            assert event._raw == expected[i]._raw
+            assert e._raw == expected[i]._raw
 
     def test_retry_logic_readtimeout(self, request_mock):
         def side_effect_override(**kwargs):
