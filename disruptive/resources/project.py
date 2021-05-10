@@ -423,7 +423,7 @@ class Project(OutputBase):
     @staticmethod
     def update_member(member_id: str,
                       project_id: str,
-                      roles: Optional[list[str]] = None,
+                      roles: list[str],
                       **kwargs,
                       ) -> Member:
         """
@@ -437,7 +437,7 @@ class Project(OutputBase):
             For User members, this is the unique User ID.
         project_id : str
             Unique ID of the project to update a member in.
-        roles : list[str], optional
+        roles : list[str]
             List of new roles for the specified member.
         **kwargs
             Arbitrary keyword arguments.
