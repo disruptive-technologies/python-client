@@ -1,3 +1,5 @@
+.. _plot_sensor_data_example:
+
 Plot Sensor Data
 ================
 In this example, 7 days of historic temperature events are fetched and plotted for a sensor.

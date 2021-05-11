@@ -6,7 +6,7 @@ While this package does not require any configuration from the user, certain var
 
 Package-Wide
 ------------
-The following snippet shows the various variables that can be configured and their default values. Setting a new value directly on the package itself, as shown below, will alter the behavior for all methods in the package at once.
+The following snippet shows the various variables that can be configured and their default values. Setting a new value directly on the package itself as shown below will alter the behavior for all methods in the package.
 
 .. _config params:
 
@@ -15,8 +15,8 @@ The following snippet shows the various variables that can be configured and the
    # Import the disruptive package.
    import disruptive as dt
 
-   # If True, information about outgoing requests is printed.
-   dt.log = False
+   # Set to either 'debug', 'info', 'warning', 'error', or 'critical' to enable logging.
+   dt.log = None
 
    # Number of seconds to wait for a response before giving up.
    dt.request_timeout = 3
@@ -29,9 +29,6 @@ The following snippet shows the various variables that can be configured and the
 
    # Same as the previous, but for the emulator API.
    dt.emulator_url = 'https://emulator.d21s.com/v2'
-
-   # Full URL to which token exchange request is sent.
-   dt.auth_url = 'https://identity.d21s.com/oauth2/token'
 
 .. _per_request_configuration:
 
