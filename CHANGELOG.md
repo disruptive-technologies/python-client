@@ -12,6 +12,10 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
   - All `serviceaccount` occurances have been renamed to `service_account`.
   - All `dataconnector` occurances have been renamed to `data_connector`.
 - [#60](https://github.com/disruptive-technologies/disruptive-python/pull/60) `Auth` methods now returns instances of classes special to the chosen method, like `ServiceAccountAuth`.
+- [#61](https://github.com/disruptive-technologies/disruptive-python/pull/61) Renamed a few variables and parameters.
+  - Renamed `ServiceAccount` attribute `basic_auth` to `basic_auth_enabled`.
+  - Renamed `api_url` to `base_url`.
+  - Renamed `emulator_url` to `emulator_base_url`.
 
 # v0.4.1
 _Released on 2020-05-04._
