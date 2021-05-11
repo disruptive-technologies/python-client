@@ -12,7 +12,7 @@ device_id = os.getenv('DT_DEVICE_ID', '')
 project_id = os.getenv('DT_PROJECT_ID', '')
 
 # Authenticate the package using Service Account credentials.
-dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
+dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 
 # Fetch temperature events for the last 7 days.
 history = dt.EventHistory.list_events(

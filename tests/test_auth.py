@@ -14,18 +14,18 @@ class TestAuth():
         request_mock.json = res
 
         # Fetch a role.
-        x = disruptive.Auth.serviceaccount('key_id', 'secret', 'email')
+        x = disruptive.Auth.service_account('key_id', 'secret', 'email')
 
         # Evaluate __repr__ function and compare copy.
         eval(repr(x))
 
-    def test_serviceaccount_auth(self, request_mock):
+    def test_service_account_auth(self, request_mock):
         # Update the response json with a mock token response.
         res = dtapiresponses.auth_token_fresh
         request_mock.json = res
 
         # Call the two classmethod constructors.
-        auth = disruptive.Auth.serviceaccount('key_id', 'secret', 'email')
+        auth = disruptive.Auth.service_account('key_id', 'secret', 'email')
 
         # Assert token post request not sent at construction.
         request_mock.assert_request_count(0)
@@ -39,7 +39,7 @@ class TestAuth():
         request_mock.json = res
 
         # Create an authentication object.
-        auth = disruptive.Auth.serviceaccount('key_id', 'secret', 'email')
+        auth = disruptive.Auth.service_account('key_id', 'secret', 'email')
 
         # Verify expired token.
         assert auth._has_expired()
@@ -57,17 +57,17 @@ class TestAuth():
     def test_raise_none_credential(self):
         # Verify InvalidTypeError raised at None input credential.
         with pytest.raises(TypeError):
-            disruptive.Auth.serviceaccount(None, 'secret', 'email')
+            disruptive.Auth.service_account(None, 'secret', 'email')
         with pytest.raises(TypeError):
-            disruptive.Auth.serviceaccount('key_id', None, 'email')
+            disruptive.Auth.service_account('key_id', None, 'email')
         with pytest.raises(TypeError):
-            disruptive.Auth.serviceaccount('key_id', 'secret', None)
+            disruptive.Auth.service_account('key_id', 'secret', None)
 
     def test_raise_empty_string_credential(self):
         # Verify EmptyStringError raised at missing input credential.
         with pytest.raises(dterrors.EmptyStringError):
-            disruptive.Auth.serviceaccount('', 'secret', 'email')
+            disruptive.Auth.service_account('', 'secret', 'email')
         with pytest.raises(dterrors.EmptyStringError):
-            disruptive.Auth.serviceaccount('key_id', '', 'email')
+            disruptive.Auth.service_account('key_id', '', 'email')
         with pytest.raises(dterrors.EmptyStringError):
-            disruptive.Auth.serviceaccount('key_id', 'secret', '')
+            disruptive.Auth.service_account('key_id', 'secret', '')

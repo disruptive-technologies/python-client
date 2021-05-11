@@ -92,12 +92,12 @@ class TestOrganization():
 
     def test_add_member(self, request_mock):
         # Update the response data with member data.
-        request_mock.json = dtapiresponses.serviceaccount_member
+        request_mock.json = dtapiresponses.service_account_member
 
         # Call the appropriate endpoint
         member = disruptive.Organization.add_member(
             organization_id='org_id',
-            email='serviceaccount_email@domain.com',
+            email='service_account_email@domain.com',
             roles=['organization.admin'],
         )
 
@@ -107,7 +107,7 @@ class TestOrganization():
             url=disruptive.api_url+'/organizations/org_id/members',
             body={
                 'roles': ['roles/organization.admin'],
-                'email': 'serviceaccount_email@domain.com',
+                'email': 'service_account_email@domain.com',
             }
         )
 
@@ -119,7 +119,7 @@ class TestOrganization():
 
     def test_get_member(self, request_mock):
         # Update the response data with member data.
-        request_mock.json = dtapiresponses.serviceaccount_member
+        request_mock.json = dtapiresponses.service_account_member
 
         # Call the appropriate endpoint
         member = disruptive.Organization.get_member(

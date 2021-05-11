@@ -6,10 +6,10 @@ Resources
    :caption: Contents:
    
    device/device
-   dataconnector/dataconnector
+   data_connector/data_connector
    project/project
    organization/organization
-   serviceaccount/serviceaccount
+   service_account/service_account
    role/role
    eventhistory/eventhistory
    stream/stream

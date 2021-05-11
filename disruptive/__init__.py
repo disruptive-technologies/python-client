@@ -10,19 +10,19 @@ from disruptive.authentication import Auth  # noqa
 # each individual method with the same auth object.
 #
 # Available authentication methods:
-# auth = disruptive.Auth.serviceaccount(key_id, secret, email)
+# auth = disruptive.Auth.service_account(key_id, secret, email)
 #
 # Initialize package with unauthenticated object.
 default_auth = Auth({})
 
 # Resources.
 from disruptive.resources.device import Device  # noqa
-from disruptive.resources.dataconnector import DataConnector  # noqa
+from disruptive.resources.data_connector import DataConnector  # noqa
 from disruptive.resources.organization import Organization  # noqa
 from disruptive.resources.project import Project  # noqa
 from disruptive.resources.stream import Stream  # noqa
 from disruptive.resources.eventhistory import EventHistory  # noqa
-from disruptive.resources.serviceaccount import ServiceAccount  # noqa
+from disruptive.resources.service_account import ServiceAccount  # noqa
 from disruptive.resources.role import Role  # noqa
 from disruptive.resources.emulator import Emulator  # noqa
 

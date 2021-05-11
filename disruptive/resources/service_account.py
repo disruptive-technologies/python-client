@@ -18,7 +18,7 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    serviceaccount_id : str
+    service_account_id : str
         Unique Service Account ID.
     email : str
         Unique Service Account email.
@@ -33,40 +33,40 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     """
 
-    def __init__(self, serviceaccount: dict) -> None:
+    def __init__(self, service_account: dict) -> None:
         """
         Constructs the ServiceAccount object by unpacking the raw response.
 
         Parameters
         ----------
-        serviceaccount : dict
+        service_account : dict
             Unmodified Service Account response dictionary.
 
         """
 
         # Inherit from Response parent.
-        dtoutputs.OutputBase.__init__(self, serviceaccount)
+        dtoutputs.OutputBase.__init__(self, service_account)
 
         # Unpack attributes from dictionary.
-        self.serviceaccount_id = serviceaccount['name'].split('/')[-1]
-        self.email = serviceaccount['email']
-        self.display_name = serviceaccount['displayName']
-        self.basic_auth = serviceaccount['enableBasicAuth']
-        self.create_time = dttrans.to_datetime(serviceaccount['createTime'])
-        self.update_time = dttrans.to_datetime(serviceaccount['updateTime'])
+        self.service_account_id = service_account['name'].split('/')[-1]
+        self.email = service_account['email']
+        self.display_name = service_account['displayName']
+        self.basic_auth = service_account['enableBasicAuth']
+        self.create_time = dttrans.to_datetime(service_account['createTime'])
+        self.update_time = dttrans.to_datetime(service_account['updateTime'])
 
     @classmethod
-    def get_serviceaccount(cls,
-                           serviceaccount_id: str,
-                           project_id: str,
-                           **kwargs,
-                           ) -> ServiceAccount:
+    def get_service_account(cls,
+                            service_account_id: str,
+                            project_id: str,
+                            **kwargs,
+                            ) -> ServiceAccount:
         """
         Gets the current state of a single Service Account.
 
         Parameters
         ----------
-        serviceaccount_id : str
+        service_account_id : str
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
@@ -76,14 +76,14 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Returns
         -------
-        serviceaccount : ServiceAccount
+        service_account : ServiceAccount
             Object representing the target Service Account.
 
         Examples
         --------
         >>> # Fetch information about a specific Service Account.
-        >>> sa = disruptive.ServiceAccount.get_serviceaccount(
-        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        >>> sa = disruptive.ServiceAccount.get_service_account(
+        ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -92,7 +92,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         # Construct URL.
         url = '/projects/{}/serviceaccounts/{}'.format(
             project_id,
-            serviceaccount_id,
+            service_account_id,
         )
 
         # Return ServiceAccount object of GET request response.
@@ -102,10 +102,10 @@ class ServiceAccount(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def list_serviceaccounts(cls,
-                             project_id: str,
-                             **kwargs,
-                             ) -> list[ServiceAccount]:
+    def list_service_accounts(cls,
+                              project_id: str,
+                              **kwargs,
+                              ) -> list[ServiceAccount]:
         """
         Gets a list of the current state of all Service Accounts in a project.
 
@@ -119,13 +119,13 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Returns
         -------
-        serviceaccounts : list[ServiceAccount]
+        service_accounts : list[ServiceAccount]
             List of objects each representing a Service Account.
 
         Examples
         --------
         >>> # Fetch a list of all Service Accounts in a project.
-        >>> sas = disruptive.ServiceAccount.list_serviceaccounts(
+        >>> sas = disruptive.ServiceAccount.list_service_accounts(
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -143,12 +143,12 @@ class ServiceAccount(dtoutputs.OutputBase):
         return [cls(sa) for sa in service_accounts]
 
     @classmethod
-    def create_serviceaccount(cls,
-                              project_id: str,
-                              display_name: str = '',
-                              basic_auth: bool = False,
-                              **kwargs,
-                              ) -> ServiceAccount:
+    def create_service_account(cls,
+                               project_id: str,
+                               display_name: str = '',
+                               basic_auth: bool = False,
+                               **kwargs,
+                               ) -> ServiceAccount:
         """
         Create a new Service Account in the specified project.
 
@@ -167,15 +167,15 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Returns
         -------
-        serviceaccount : ServiceAccount
+        service_account : ServiceAccount
             Object representing the newly created Service Account.
 
         Examples
         --------
         >>> # Create a new Service Account with basic auth enabled.
-        >>> sa = disruptive.ServiceAccount.create_serviceaccount(
+        >>> sa = disruptive.ServiceAccount.create_service_account(
         ...     project_id='<PROJECT_ID>',
-        ...     display_name='new-serviceaccount',
+        ...     display_name='new-service-account',
         ...     basic_auth=True,
         ... )
 
@@ -198,19 +198,19 @@ class ServiceAccount(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def update_serviceaccount(cls,
-                              serviceaccount_id: str,
-                              project_id: str,
-                              display_name: Optional[str] = None,
-                              basic_auth: Optional[bool] = None,
-                              **kwargs,
-                              ) -> ServiceAccount:
+    def update_service_account(cls,
+                               service_account_id: str,
+                               project_id: str,
+                               display_name: Optional[str] = None,
+                               basic_auth: Optional[bool] = None,
+                               **kwargs,
+                               ) -> ServiceAccount:
         """
         Updates the attributes of a specified Service Account.
 
         Parameters
         ----------
-        serviceaccount_id : str
+        service_account_id : str
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
@@ -224,21 +224,21 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Returns
         -------
-        serviceaccount : ServiceAccount
+        service_account : ServiceAccount
             Object representing the updated Service Account.
 
         Examples
         --------
         >>> # Update only the `display_name` of a Service Account.
-        >>> sa = disruptive.ServiceAccount.update_serviceaccount(
-        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        >>> sa = disruptive.ServiceAccount.update_service_account(
+        ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ... )
 
         >>> # Update both `display_name` and `basic_auth` of a Service Account.
-        >>> sa = disruptive.ServiceAccount.update_serviceaccount(
-        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        >>> sa = disruptive.ServiceAccount.update_service_account(
+        ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ...     basic_auth=False,
@@ -249,7 +249,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         # Construct URL.
         url = '/projects/{}/serviceaccounts/{}'.format(
             project_id,
-            serviceaccount_id,
+            service_account_id,
         )
 
         # Construct body.
@@ -267,17 +267,17 @@ class ServiceAccount(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def delete_serviceaccount(cls,
-                              serviceaccount_id: str,
-                              project_id: str,
-                              **kwargs,
-                              ) -> None:
+    def delete_service_account(cls,
+                               service_account_id: str,
+                               project_id: str,
+                               **kwargs,
+                               ) -> None:
         """
         Deletes the specified Service Account.
 
         Parameters
         ----------
-        serviceaccount_id : str
+        service_account_id : str
             Unique ID of the Service Account to delete.
         project_id : str
             Unique ID of the target project.
@@ -288,8 +288,8 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Delete a single Service Account.
-        >>> disruptive.ServiceAccount.delete_serviceaccount(
-        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        >>> disruptive.ServiceAccount.delete_service_account(
+        ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -298,7 +298,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         # Construct URL.
         url = '/projects/{}/serviceaccounts/{}'.format(
             project_id,
-            serviceaccount_id,
+            service_account_id,
         )
 
         # Send DELETE request, but return nothing.
@@ -309,7 +309,7 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     @staticmethod
     def get_key(key_id: str,
-                serviceaccount_id: str,
+                service_account_id: str,
                 project_id: str,
                 **kwargs,
                 ) -> Key:
@@ -320,7 +320,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         ----------
         key_id : str
             Unique ID of the target key.
-        serviceaccount_id : str
+        service_account_id : str
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
@@ -338,7 +338,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         >>> # Get information about a specific key.
         >>> key = disruptive.ServiceAccount.get_key(
         ...     key_id='<KEY_ID>',
-        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -347,7 +347,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         # Construct URL.
         url = '/projects/{}/serviceaccounts/{}/keys/{}'.format(
             project_id,
-            serviceaccount_id,
+            service_account_id,
             key_id,
         )
 
@@ -358,7 +358,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         ))
 
     @staticmethod
-    def list_keys(serviceaccount_id: str,
+    def list_keys(service_account_id: str,
                   project_id: str,
                   **kwargs,
                   ) -> list[Key]:
@@ -367,7 +367,7 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        serviceaccount_id : str
+        service_account_id : str
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
@@ -384,7 +384,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         --------
         >>> # List all keys for a specific Service Account.
         >>> keys = disruptive.ServiceAccount.list_keys(
-        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -393,7 +393,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         # Construct URL.
         url = '/projects/{}/serviceaccounts/{}/keys'.format(
             project_id,
-            serviceaccount_id,
+            service_account_id,
         )
 
         # Return list of Key objects of paginated GET response.
@@ -405,7 +405,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         return [Key(key) for key in keys]
 
     @staticmethod
-    def create_key(serviceaccount_id: str,
+    def create_key(service_account_id: str,
                    project_id: str,
                    **kwargs,
                    ) -> Key:
@@ -414,7 +414,7 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        serviceaccount_id : str
+        service_account_id : str
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
@@ -431,7 +431,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         --------
         >>> # Create a new key for a specific Service Account.
         >>> key = disruptive.ServiceAccount.create_key(
-        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -440,7 +440,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         # Construct URL.
         url = '/projects/{}/serviceaccounts/{}/keys'.format(
             project_id,
-            serviceaccount_id,
+            service_account_id,
         )
 
         # Return Key object of POST request response.
@@ -452,7 +452,7 @@ class ServiceAccount(dtoutputs.OutputBase):
 
     @staticmethod
     def delete_key(key_id: str,
-                   serviceaccount_id: str,
+                   service_account_id: str,
                    project_id: str,
                    **kwargs,
                    ) -> None:
@@ -463,7 +463,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         ----------
         key_id : str
             Unique ID of the key to delete.
-        serviceaccount_id : str
+        service_account_id : str
             Unique ID of the target Service Account.
         project_id : str
             Unique ID of the target project.
@@ -476,7 +476,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         >>> # Delete a specific key on a Service Account.
         >>> disruptive.ServiceAccount.delete_key(
         ...     key_id='<KEY_ID',
-        ...     serviceaccount_id='<SERVICEACCOUNT_ID>',
+        ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -485,7 +485,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         # Construct URL.
         url = '/projects/{}/serviceaccounts/{}/keys/{}'.format(
             project_id,
-            serviceaccount_id,
+            service_account_id,
             key_id,
         )
 

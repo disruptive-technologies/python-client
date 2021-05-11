@@ -59,13 +59,13 @@ class Auth():
         )
 
     @classmethod
-    def serviceaccount(cls,
-                       key_id: str,
-                       secret: str,
-                       email: str,
-                       ) -> Auth:
+    def service_account(cls,
+                        key_id: str,
+                        secret: str,
+                        email: str,
+                        ) -> Auth:
         """
-        Constructs the Auth object for authenticating using a serviceaccount.
+        Constructs the Auth object for authenticating using a Service Account.
 
         This method uses an OAuth2 flow to authenticate. Using the provided
         credentials, a JWT is created and exchanged for an access token which
@@ -74,11 +74,11 @@ class Auth():
         Parameters
         ----------
         key_id : str
-            Unique serviceaccount key ID.
+            Unique Service Account key ID.
         secret : str
-            Serviceaccount secret.
+            Service Account secret.
         email : str
-            Unique serviceaccount email address.
+            Unique Service Account email address.
 
         Returns
         -------
@@ -97,8 +97,8 @@ class Auth():
         )
 
         # Patch the newly created object with method-specific methods.
-        setattr(obj, '_has_expired', obj._serviceaccount_has_expired)
-        setattr(obj, 'refresh', obj._serviceaccount_refresh)
+        setattr(obj, '_has_expired', obj._service_account_has_expired)
+        setattr(obj, 'refresh', obj._service_account_refresh)
 
         # Return the patch object.
         return obj
@@ -170,7 +170,7 @@ class Auth():
             'No authentication method has been set.\n'
             'Package-wide authentication can be set by:'
             + '\n>>> import disruptive as dt'
-            + '\n>>> dt.default_auth = dt.Auth.serviceaccount'
+            + '\n>>> dt.default_auth = dt.Auth.service_account'
             + '(key_id, secret, email)'
         )
 
@@ -182,7 +182,7 @@ class Auth():
         """
         pass
 
-    def _serviceaccount_has_expired(self) -> bool:
+    def _service_account_has_expired(self) -> bool:
         """
         Evaluates whether the access token has expired.
 
@@ -198,7 +198,7 @@ class Auth():
         else:
             return False
 
-    def _serviceaccount_refresh(self) -> None:
+    def _service_account_refresh(self) -> None:
         """
         Refreshes the access token.
 
@@ -207,11 +207,11 @@ class Auth():
 
         """
 
-        response = self._serviceaccount_get_access_token()
+        response = self._service_account_get_access_token()
         self.expiration = time.time() + response['expires_in']
         self.token = 'Bearer {}'.format(response['access_token'])
 
-    def _serviceaccount_get_access_token(self) -> dict:
+    def _service_account_get_access_token(self) -> dict:
         """
         Constructs and exchanges the JWT for an access token.
 
