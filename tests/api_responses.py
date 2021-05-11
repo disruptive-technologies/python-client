@@ -859,3 +859,22 @@ transfer_device_errors = {
         },
     ],
 }
+
+batch_label_response = {
+    "batchErrors": [
+        {
+            "device": "/projects/<source_project_id>/devices/<device_id_1>",
+            "status": {
+                "code": "INVALID_ARGUMENT",
+                "message": "Max labels reached for device."
+            }
+        },
+        {
+            "device": "/projects/<source_project_id>/devices/<device_id_2>",
+            "status": {
+                "code": "INTERNAL_ERROR",
+                "message": "Operation timed out. Retry again in a few seconds."
+            }
+        }
+    ]
+}

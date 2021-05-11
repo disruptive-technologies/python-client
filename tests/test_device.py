@@ -133,6 +133,9 @@ class TestDevice():
             assert isinstance(d, disruptive.Device)
 
     def test_batch_update_labels(self, request_mock):
+        # Update the response data with labelupdate response data.
+        request_mock.json = dtapiresponses.batch_label_response
+
         # Call Device.batch_update_labels() method.
         d = disruptive.Device.batch_update_labels(
             device_ids=['device_id1', 'device_id2', 'device_id3'],
@@ -164,9 +167,12 @@ class TestDevice():
         request_mock.assert_request_count(1)
 
         # Assert output is None.
-        assert d is None
+        assert isinstance(d, list)
 
     def test_set_label(self, request_mock):
+        # Update the response data with labelupdate response data.
+        request_mock.json = dtapiresponses.batch_label_response
+
         # Call Device.set_label() method.
         d = disruptive.Device.set_label(
             device_id='device_id',
@@ -192,9 +198,12 @@ class TestDevice():
         request_mock.assert_request_count(1)
 
         # Assert output is None.
-        assert d is None
+        assert isinstance(d, list)
 
     def test_remove_label(self, request_mock):
+        # Update the response data with labelupdate response data.
+        request_mock.json = dtapiresponses.batch_label_response
+
         # Call Device.remove_label() method.
         d = disruptive.Device.remove_label(
             device_id='device_id',
@@ -219,7 +228,7 @@ class TestDevice():
         request_mock.assert_request_count(1)
 
         # Assert output is None.
-        assert d is None
+        assert isinstance(d, list)
 
     def test_transfer_devices(self, request_mock):
         # Update the response data with transfer response data.
@@ -289,8 +298,8 @@ class TestDevice():
         assert isinstance(d, list)
         assert len(d) == 2
         for e in d:
-            # List should contain BatchError.
-            assert isinstance(e, dterrors.BatchError)
+            # List should contain TransferDeviceError.
+            assert isinstance(e, dterrors.TransferDeviceError)
 
             # Id should be one of the bad ones.
             assert e.device_id in bad_ids
