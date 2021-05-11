@@ -39,9 +39,10 @@ class Stream():
         label_filters : list[str], optional
             Only includes events from devices with specified label(s).
         device_types : list[str], optional
-            Only includes events from devices with specified type(s).
+            Only includes events from devices with specified
+            :ref:`type(s) <device_type_constants>`.
         event_types : list[str], optional
-            Only includes events of the specified type(s).
+            Only includes events of the specified :ref:`type(s) <event_types>`.
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.

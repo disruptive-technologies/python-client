@@ -31,7 +31,8 @@ class Emulator():
         project_id : str
             Unique ID of the target project.
         device_type : str
-            Specifies which device type to create.
+            Specifies which device
+            :ref:`type <device_type_constants>` to create.
         display_name : str, optional
             Provides a display name to the device.
         labels : dict[str, str], optional
@@ -145,7 +146,8 @@ class Emulator():
         data : :ref:`Event Data <eventdata>`
             An object representing the event data to be published.
             Can be any of the listed Event Data classes.
-            labelsChanged is not supported when publishing emulated events.
+            :code:`labelsChanged` is not supported
+            when publishing emulated events.
             The chosen Event Data must be supported by the device.
         **kwargs
             Arbitrary keyword arguments.

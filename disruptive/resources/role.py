@@ -64,7 +64,7 @@ class Role(OutputBase):
         Parameters
         ----------
         role : str
-            Name of the role.
+            :ref:`Name <role_types>` of the role.
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
@@ -72,7 +72,7 @@ class Role(OutputBase):
         Returns
         -------
         role : Role
-            Object representing the specified role.
+            Object representing the specified :ref:`role <role_types>`.
 
         Examples
         --------
@@ -103,7 +103,7 @@ class Role(OutputBase):
         Returns
         -------
         roles : list[Role]
-            List of objects each representing a role.
+            List of objects each representing a :ref:`role <role_types>`.
 
         Examples
         --------

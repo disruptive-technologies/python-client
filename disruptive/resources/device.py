@@ -25,7 +25,7 @@ class Device(dtoutputs.OutputBase):
         Given device name if set through a label with key `name`.
         Otherwise None.
     device_type : str
-        Device type.
+        :ref:`Device type <device_type_constants>`.
     labels : dict
         Label keys and values.
     is_emulator : bool
@@ -148,7 +148,7 @@ class Device(dtoutputs.OutputBase):
         device_ids : list[str], optional
             Specify devices by their unique IDs.
         device_types : list[str], optional
-            Specify devices by type.
+            Filter by :ref:`device types <device_type_constants>`.
         label_filters : dict[str, str], optional
             Specify devices by label keys and values (i.e. {"key": "value"}).
             If only a key is provided (i.e. {"key": ""}), all

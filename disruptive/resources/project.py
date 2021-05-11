@@ -337,7 +337,8 @@ class Project(OutputBase):
         email : str
             Email of the user or Service Account to be added.
         roles : list[str]
-            The role(s) to provide the new member in the project.
+            The :ref:`role(s) <role_types>` to provide the
+            new member in the project.
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
@@ -350,7 +351,7 @@ class Project(OutputBase):
         Examples
         --------
         >>> # Add a new project.developer member to a project.
-        >>> member = disruptive.Project.add_members(
+        >>> member = disruptive.Project.add_member(
         ...     project_id='<PROJECT_ID>',
         ...     email='<MEMBER_EMAIL_ADDRESS>',
         ...     roles=[disruptive.Role.PROJECT_DEVELOPER],
@@ -438,7 +439,7 @@ class Project(OutputBase):
         project_id : str
             Unique ID of the project to update a member in.
         roles : list[str]
-            List of new roles for the specified member.
+            List of new :ref:`roles <role_types>` for the specified member.
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
@@ -579,7 +580,7 @@ class Project(OutputBase):
                          **kwargs,
                          ) -> list[str]:
         """
-        List permissions available in the specified project.
+        List permissions available to the caller in the specified project.
 
         Parameters
         ----------
@@ -592,14 +593,12 @@ class Project(OutputBase):
         Returns
         -------
         permissions : list[str]
-            List of available permissions.
+            List of permissions available to the caller.
 
         Examples
         --------
         >>> # List the available permissions in a project.
-        >>> permissions = disruptive.Project.list_permissions(
-        ...     project_id='<PROJECT_ID>',
-        ... )
+        >>> permissions = disruptive.Project.list_permissions('<PROJECT_ID>')
 
         """
 
