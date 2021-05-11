@@ -36,6 +36,6 @@ There is currently one method of authenticating the API.
 
 .. autofunction:: disruptive.Auth.service_account
 
-Class
------
-.. autoclass:: disruptive.Auth
+Classes
+-------
+.. autoclass:: disruptive.authentication.ServiceAccountAuth

@@ -13,7 +13,7 @@ from disruptive.authentication import Auth  # noqa
 # auth = disruptive.Auth.service_account(key_id, secret, email)
 #
 # Initialize package with unauthenticated object.
-default_auth = Auth({})
+default_auth = Auth.unauthenticated()
 
 # Resources.
 from disruptive.resources.device import Device  # noqa
@@ -36,7 +36,6 @@ log_level = None
 # REST API base URLs of which all endpoints are an expansion.
 api_url = 'https://api.disruptive-technologies.com/v2'
 emulator_url = 'https://emulator.disruptive-technologies.com/v2'
-auth_url = 'https://identity.disruptive-technologies.com/oauth2/token'
 
 # If a request response contains an error for which a series of retries is
 # worth considering, these variable determine how long to wait without an

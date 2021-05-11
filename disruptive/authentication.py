@@ -8,64 +8,233 @@ import urllib.parse
 import jwt
 
 # Project imports
-import disruptive
 import disruptive.requests as dtrequests
 import disruptive.errors as dterrors
 
 
-class Auth():
+class _AuthRoutineBase(object):
+
+    def __init__(self):
+        # Set default attributes.
+        self._expiration = 0
+        self._token = ''
+
+    def _has_expired(self) -> bool:
+        """
+        Evaluates whether the access token has expired.
+
+        Returns
+        -------
+        has_expired : bool
+            True if the access token has expired, otherwise False.
+
+        """
+
+        if time.time() > self._expiration:
+            return True
+        else:
+            return False
+
+    def get_token(self) -> str:
+        """
+        Returns the access token.
+        If the token has expired, renew it.
+
+        Returns
+        -------
+        token : str
+            Access token added to the request header.
+
+        """
+
+        # Check expiration time.
+        if self._has_expired():
+            # Renew access token.
+            self.refresh()
+
+        return self._token
+
+    def refresh(self):
+        """
+        This function does nothing and is overwritten in all
+        child classes. It only exists for consistency purposes
+        as it is called in get_token().
+
+        """
+
+        pass
+
+
+class Unauthenticated(_AuthRoutineBase):
+
+    def __init__(self):
+        # Inherit parent class methods and attributes.
+        super().__init__()
+
+    def refresh(self) -> None:
+        """
+        If called, this function does not but raise an error as no
+        authentication routine has been called to update the configuration
+        variable, nor has an authentication object been provided.
+
+        """
+        raise dterrors.Unauthorized(
+            'No authentication method has been set.\n\n'
+            'Package-wide authentication can be set by:'
+            + '\n>>> import disruptive as dt'
+            + '\n>>> dt.default_auth = dt.Auth.service_account'
+            + '(key_id, secret, email)'
+        )
+
+
+class ServiceAccountAuth(_AuthRoutineBase):
     """
-    Used to initialize and maintain authentication to the REST API.
+    This method uses an OAuth2 flow to authenticate. Using the provided
+    credentials, a JWT is created and exchanged for an access token which
+    is renewed every hour as required.
 
     Attributes
     ----------
-    token : str
-        Access token provided in request header.
-    method : str
-        Authentication method used.
-    expiration : int
-        Unixtime of when the authentication expires.
-    credentials : dict[str, str]
-        Credentials provided for authenticating with the chosen method.
+    token_endpoint : str
+        URL to which the jwt is exchanged for an access token.
 
     """
 
-    def __init__(self, credentials: dict[str, str]) -> None:
-        """
-        Constructs the Auth object by validating and updating credentials.
+    def __init__(self, key_id: str, secret: str, email: str):
+        # Inherit parent class methods and attributes.
+        super().__init__()
 
-        Parameters
-        ----------
-        credentials : dict[str, str]
-            Credentials provided for authenticating with the chosen method.
+        # Set parameter attributes.
+        self._key_id = key_id
+        self._secret = secret
+        self._email = email
 
-        """
+        # Set default URLs.
+        self.token_endpoint = 'https://identity.'\
+            'disruptive-technologies.com/oauth2/token'
 
-        # Verify provided credentials are strings.
-        self._verify_str_credentials(credentials)
+    @property
+    def key_id(self):
+        return self._key_id
 
-        # Initialize attributes with nonset values.
-        self.token = ''
-        self.expiration = 0
+    @property
+    def secret(self):
+        return self._secret
 
-        # Set arguments as attributes
-        self.credentials = credentials
+    @property
+    def email(self):
+        return self._email
 
     def __repr__(self):
-        return '{}.{}({})'.format(
+        return '{}.{}({}, {}, {})'.format(
             self.__class__.__module__,
             self.__class__.__name__,
-            self.credentials,
+            repr(self.key_id),
+            repr(self.secret),
+            repr(self.email),
         )
+
+    def refresh(self) -> None:
+        """
+        Refreshes the access token.
+
+        This first exchanges the JWT for an access token, then updates
+        the expiration and token attributes with the response.
+
+        """
+
+        response = self._get_access_token()
+        self._expiration = time.time() + response['expires_in']
+        self._token = 'Bearer {}'.format(response['access_token'])
+
+    def _get_access_token(self) -> dict:
+        """
+        Constructs and exchanges the JWT for an access token.
+
+        Returns
+        -------
+        response : dict
+            Dictionary containing expiration and the token itself.
+
+        """
+
+        # Construct the JWT header.
+        jwt_headers = {
+            'alg': 'HS256',
+            'kid': self.key_id,
+        }
+
+        # Construct the JWT payload.
+        jwt_payload = {
+            'iat': int(time.time()),         # current unixtime
+            'exp': int(time.time()) + 3600,  # expiration unixtime
+            'aud': self.token_endpoint,
+            'iss': self.email,
+        }
+
+        # Sign and encode JWT with the secret.
+        encoded_jwt = jwt.encode(
+            payload=jwt_payload,
+            key=self.secret,
+            algorithm='HS256',
+            headers=jwt_headers,
+        )
+
+        # Prepare HTTP POST request data.
+        # Note: The requests package applies Form URL-Encoding by default.
+        request_data = urllib.parse.urlencode({
+            'assertion': encoded_jwt,
+            'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+        })
+
+        # Exchange the JWT for an access token.
+        try:
+            access_token_response = dtrequests.DTRequest.post(
+                url='',
+                base_url=self.token_endpoint,
+                data=request_data,
+                headers={'Content-Type': 'application/x-www-form-urlencoded'},
+                skip_auth=True,
+            )
+        except dterrors.BadRequest:
+            # Re-raise exception with more specific information.
+            raise dterrors.BadRequest(
+                'Could not authenticate with the provided credentials.\n'
+                'Read more: https://developer.d21s.com/docs/authentication'
+                '/oauth2#common-errors'
+            )
+
+        # Return the access token in the request.
+        return access_token_response
+
+
+class Auth():
+    """
+    Authenticates the API using a factory design pattern.
+    The Auth class itself is only for namespacing purposes.
+
+    Depending on the classmethod called, an instance of some
+    authentication routine, like ServiceAccountAuth, is returned.
+
+    If no classmethod has been called, and the API is configured with
+    an instance of the Auth class itself, exceptions will be raised
+    with indicators on how to properly authenticate.
+
+    """
+
+    @staticmethod
+    def unauthenticated():
+        return Unauthenticated()
 
     @classmethod
     def service_account(cls,
                         key_id: str,
                         secret: str,
                         email: str,
-                        ) -> Auth:
+                        ) -> ServiceAccountAuth:
         """
-        Constructs the Auth object for authenticating using a Service Account.
+        Constructs the ServiceAccountAuth object for
+        authenticating using a Service Account's credentials.
 
         This method uses an OAuth2 flow to authenticate. Using the provided
         credentials, a JWT is created and exchanged for an access token which
@@ -82,28 +251,22 @@ class Auth():
 
         Returns
         -------
-        auth : Auth
+        auth : ServiceAccountAuth
             Object to initialize and maintain authentication to the REST API.
 
         """
 
-        # Construct Auth object with method and credentials.
-        obj = cls(
-            credentials={
-                'key_id': key_id,
-                'secret': secret,
-                'email': email,
-            },
-        )
+        # Check that credentials are populated strings.
+        cls._verify_str_credentials({
+            'key_id': key_id,
+            'secret': secret,
+            'email': email,
+        })
 
-        # Patch the newly created object with method-specific methods.
-        setattr(obj, '_has_expired', obj._service_account_has_expired)
-        setattr(obj, 'refresh', obj._service_account_refresh)
+        return ServiceAccountAuth(key_id, secret, email)
 
-        # Return the patch object.
-        return obj
-
-    def _verify_str_credentials(self, credentials: dict) -> None:
+    @staticmethod
+    def _verify_str_credentials(credentials: dict) -> None:
         """
         Verifies that the provided credentials are strings.
 
@@ -139,137 +302,3 @@ class Auth():
                         key, type(credentials[key]).__name__
                     )
                 )
-
-    def get_token(self) -> str:
-        """
-        Returns the access token.
-        If the token has expired, renew it.
-
-        Returns
-        -------
-        token : str
-            Access token added to the request header.
-
-        """
-
-        # Check expiration time.
-        if self._has_expired():
-            # Renew access token.
-            self.refresh()
-
-        return self.token
-
-    def _has_expired(self) -> bool:
-        """
-        Raises an Unauthorized error with some added information.
-        If this function is called, the project has not yet been
-        authenticated, and the user should be reminded to do so.
-
-        """
-        raise dterrors.Unauthorized(
-            'No authentication method has been set.\n'
-            'Package-wide authentication can be set by:'
-            + '\n>>> import disruptive as dt'
-            + '\n>>> dt.default_auth = dt.Auth.service_account'
-            + '(key_id, secret, email)'
-        )
-
-    def refresh(self) -> None:
-        """
-        This function does nothing until an authenticate method has
-        been initialized. Until then, it acts as a name placeholder
-        which is replaced by a type-specific method.
-        """
-        pass
-
-    def _service_account_has_expired(self) -> bool:
-        """
-        Evaluates whether the access token has expired.
-
-        Returns
-        -------
-        has_expired : bool
-            True if the access token has expired, otherwise False.
-
-        """
-
-        if time.time() > self.expiration:
-            return True
-        else:
-            return False
-
-    def _service_account_refresh(self) -> None:
-        """
-        Refreshes the access token.
-
-        This first exchanges the JWT for an access token, then updates
-        the expiration and token attributes with the response.
-
-        """
-
-        response = self._service_account_get_access_token()
-        self.expiration = time.time() + response['expires_in']
-        self.token = 'Bearer {}'.format(response['access_token'])
-
-    def _service_account_get_access_token(self) -> dict:
-        """
-        Constructs and exchanges the JWT for an access token.
-
-        Returns
-        -------
-        response : dict
-            Dictionary containing expiration and the token itself.
-
-        """
-
-        # Set access token URL.
-        token_url = disruptive.auth_url
-
-        # Construct the JWT header.
-        jwt_headers = {
-            'alg': 'HS256',
-            'kid': self.credentials['key_id'],
-        }
-
-        # Construct the JWT payload.
-        jwt_payload = {
-            'iat': int(time.time()),         # current unixtime
-            'exp': int(time.time()) + 3600,  # expiration unixtime
-            'aud': token_url,
-            'iss': self.credentials['email'],
-        }
-
-        # Sign and encode JWT with the secret.
-        encoded_jwt = jwt.encode(
-            payload=jwt_payload,
-            key=self.credentials['secret'],
-            algorithm='HS256',
-            headers=jwt_headers,
-        )
-
-        # Prepare HTTP POST request data.
-        # Note: The requests package applies Form URL-Encoding by default.
-        request_data = urllib.parse.urlencode({
-            'assertion': encoded_jwt,
-            'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer'
-        })
-
-        # Exchange the JWT for an access token.
-        try:
-            access_token_response = dtrequests.DTRequest.post(
-                url='',
-                base_url=token_url,
-                data=request_data,
-                headers={'Content-Type': 'application/x-www-form-urlencoded'},
-                skip_auth=True,
-            )
-        except dterrors.BadRequest:
-            # Re-raise exception with more specific information.
-            raise dterrors.BadRequest(
-                'Could not authenticate with the provided credentials.\n'
-                'Read more: https://developer.d21s.com/docs/authentication'
-                '/oauth2#common-errors'
-            )
-
-        # Return the access token in the request.
-        return access_token_response

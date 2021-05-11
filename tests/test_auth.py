@@ -3,7 +3,7 @@ import pytest
 import disruptive
 import disruptive.errors as dterrors
 import tests.api_responses as dtapiresponses
-from disruptive.authentication import Auth
+from disruptive.authentication import ServiceAccountAuth
 
 
 class TestAuth():
@@ -31,7 +31,7 @@ class TestAuth():
         request_mock.assert_request_count(0)
 
         # Assert instance of Auth class.
-        assert isinstance(auth, Auth)
+        assert isinstance(auth, ServiceAccountAuth)
 
     def test_token_refresh(self, request_mock):
         # Update the response json with an expired token response.
