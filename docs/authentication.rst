@@ -16,7 +16,7 @@ By setting :code:`disruptive.default_auth`, the entire package is authenticated 
    email = os.environ.get('DT_SERVICE_ACCOUNT_EMAIL', '')
    
    # Using the fetched credentials, authenticate the package.
-   dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
+   dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 
 Each method can also be authenticated directly, which then ignores :code:`disruptive.default_auth`.
 
@@ -25,7 +25,7 @@ Each method can also be authenticated directly, which then ignores :code:`disrup
    # Provide the API Method with an authentication object directly.
    device = dt.Device.get_device(
        device_id='<DEVICE_ID>',
-       auth=dt.Auth.serviceaccount(key_id, secret, email)
+       auth=dt.Auth.service_account(key_id, secret, email)
    )
 
 .. _authmethods:
@@ -34,7 +34,7 @@ Authentication Methods
 ----------------------
 There is currently one method of authenticating the API.
 
-.. autofunction:: disruptive.Auth.serviceaccount
+.. autofunction:: disruptive.Auth.service_account
 
 Class
 -----

@@ -34,8 +34,8 @@ Using [Service Account](https://developer.disruptive-technologies.com/docs/servi
 ```python
 import disruptive as dt
 
-# Using serviceaccount credentials, authenticate the package.
-dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
+# Using Service Account credentials, authenticate the package.
+dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 ```
 
 ## Usage

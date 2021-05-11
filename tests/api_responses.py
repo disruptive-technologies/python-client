@@ -471,7 +471,7 @@ organization_permissions = {
     ]
 }
 
-serviceaccount1 = {
+service_account1 = {
     "name": "projects/c14u9q095l47ccv1o3pg/"
             + "serviceaccounts/c14uar7915fg90c8lfp0",
     "email": "c15uar7915fg13c8lfp0@c15u9p094l47cdv1o3qg."
@@ -482,7 +482,7 @@ serviceaccount1 = {
     "updateTime": "2021-03-11T09:39:56.103249Z"
 }
 
-serviceaccount2 = {
+service_account2 = {
     "name": "projects/c14u88094l47cdv1o3pg/"
             + "serviceaccounts/c17m9hm914gg00c8levg",
     "email": "c17m8hn915gg00c8levg@c24u9p094l47cdv1o2pg."
@@ -493,11 +493,11 @@ serviceaccount2 = {
     "updateTime": "2021-03-15T13:44:39.039375Z"
 }
 
-serviceaccounts = {
+service_accounts = {
     'nextPageToken': '',
     'serviceAccounts': [
-        serviceaccount1,
-        serviceaccount2,
+        service_account1,
+        service_account2,
     ]
 }
 
@@ -538,7 +538,7 @@ user_member = {
     "createTime": "1970-01-01T00:00:00.000000Z"
 }
 
-serviceaccount_member = {
+service_account_member = {
     "name": "organizations/c10humqoss90032gu54g/members/c17n9hn915gg00c8ievg",
     "displayName": "localdev",
     "roles": [
@@ -555,7 +555,7 @@ members = {
     'nextPageToken': '',
     'members': [
         user_member,
-        serviceaccount_member,
+        service_account_member,
     ]
 }
 

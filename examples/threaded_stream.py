@@ -10,8 +10,8 @@ secret = os.getenv('DT_SERVICE_ACCOUNT_SECRET', '')
 email = os.getenv('DT_SERVICE_ACCOUNT_EMAIL', '')
 project_id = os.getenv('DT_PROJECT_ID', '')
 
-# Authenticate the package using serviceaccount credentials.
-dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
+# Authenticate the package using Service Account credentials.
+dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 
 
 # Function which will be the target for our thread.

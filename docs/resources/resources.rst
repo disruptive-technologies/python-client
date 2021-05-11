@@ -9,7 +9,7 @@ Resources
    dataconnector/dataconnector
    project/project
    organization/organization
-   serviceaccount/serviceaccount
+   service_account/service_account
    role/role
    eventhistory/eventhistory
    stream/stream

@@ -158,7 +158,7 @@ class TestProject():
         # Call the appropriate endpoint
         member = disruptive.Project.add_member(
             project_id='project_id',
-            email='serviceaccount_email@domain.com',
+            email='service_account_email@domain.com',
             roles=['project.developer'],
         )
 
@@ -168,7 +168,7 @@ class TestProject():
             url=disruptive.api_url+'/projects/project_id/members',
             body={
                 'roles': ['roles/project.developer'],
-                'email': 'serviceaccount_email@domain.com',
+                'email': 'service_account_email@domain.com',
             }
         )
 

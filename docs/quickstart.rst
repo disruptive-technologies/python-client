@@ -15,7 +15,7 @@ Using `Service Account <https://developer.disruptive-technologies.com/docs/servi
    import disruptive as dt
    
    # Using Service Account credentials, authenticate the entire package.
-   dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
+   dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 
 See the :ref:`Authentication` section for more details.
 

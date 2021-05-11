@@ -20,8 +20,8 @@ The following snippet implements the example. Remember to set the environment va
    email = os.getenv('DT_SERVICE_ACCOUNT_EMAIL', '')
    project_id = os.getenv('DT_PROJECT_ID', '')
    
-   # Authenticate the package using serviceaccount credentials.
-   dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
+   # Authenticate the package using Service Account credentials.
+   dt.default_auth = dt.Auth.service_account(key_id, secret, email)
    
    
    # Function which will be the target for our thread.
@@ -75,8 +75,8 @@ Using `Service Account <https://developer.disruptive-technologies.com/docs/servi
 
 .. code-block:: python
 
-   # Authenticate the package using serviceaccount credentials.
-   dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
+   # Authenticate the package using Service Account credentials.
+   dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 
 When using the `threading` package, the target code to be ran in the newly spawned thread must be wrapped in a function, here called :code:`stream_worker`. It's job is to start the stream generator, then append new events to buffer as they arrive.
 
