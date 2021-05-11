@@ -1,3 +1,5 @@
+.. _get_device_example:
+
 Get Device
 ==========
 In this example, a single device is fetched and printed to console.

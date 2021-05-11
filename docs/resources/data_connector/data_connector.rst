@@ -35,41 +35,52 @@ Class
 -----
 .. autoclass:: disruptive.DataConnector
 
-   .. rubric:: Data Connector Type Constants
-   .. compound::
-      The DataConnector resources class contains one string constant for each configuration type available, including a list of all types.
+.. _data_connector_types:
 
-   .. autoattribute:: disruptive.DataConnector.HTTP_PUSH
-   .. autoattribute:: disruptive.DataConnector.DATA_CONNECTOR_TYPES
+Type Constants
+--------------
+
+The DataConnector class contains a string constant for each available Data Connector type.
+
+.. autoattribute:: disruptive.DataConnector.HTTP_PUSH
+.. autoattribute:: disruptive.DataConnector.DATA_CONNECTOR_TYPES
+
+.. _data_connector_configs:
 
 Configurations
 --------------
-The :ref:`DataConnector <data_connector>` `config` attribute holds an instance of a type-specific configuration class.
+The :code:`config` attribute of the :ref:`DataConnector <data_connector>` class holds one of the following type-specific configuration class objects. 
 
-- :ref:`HttpPushConfig <httppush_config>`
+- :ref:`HttpPushConfig <http_push_config>`
 
 When fetching a Data Connector, this attribute is set automatically, but when :ref:`creating <create_data_connector>` or :ref:`updating <update_data_connector>` one, it must be provided.
 
 .. code-block:: python
 
-   # Create an HTTP_PUSH Data Connector.
-   disruptive.DataConnector.create_data_connector(
-       project_id='y14u8p094l37cdv1o0ug',
-       display_name='new-data-connector',
-       config=dt.DataConnector.HttpPushConfig(
-           url='https://some-endpoint-url.com',
-           signature_secret='good-secret',
-       ),
-   )
+   import disruptive as dt
 
-.. _httppush_config:
-.. autoclass:: disruptive.DataConnector.HttpPushConfig
-   
-   .. automethod:: disruptive.DataConnector.HttpPushConfig.__init__
+   # Create an HTTP_PUSH Data Connector.
+   dt.DataConnector.create_data_connector(
+      project_id='<PROJECT_ID>',
+      config=dt.DataConnector.<CONFIG>('parameters...'),
+   )
 
 .. toctree::
    :hidden:
    :maxdepth: 1
    :caption: Extras:
 
+   http_push_config
    metrics
+
+.. _data_connector_status:
+
+Status
+------
+A Data Connector can have on of the following statuses.
+
+- :code:`ACTIVE`
+- :code:`USER_DISABLED`
+- :code:`SYSTEM_DISABLED.`
+
+You can read more about what this entails in our `developer documentation <https://developer.disruptive-technologies.com/docs/data-connectors/advanced-configurations#enable-and-disable>`_.

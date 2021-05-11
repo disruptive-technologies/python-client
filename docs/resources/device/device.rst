@@ -40,30 +40,32 @@ Class
 -----
 .. autoclass:: disruptive.Device
 
-   .. rubric:: Device Type Constants
-   .. compound::
-      The Device resources class contains one string constant for each device type available, including a list of all types.
+.. _device_type_constants:
 
-   .. autoattribute:: disruptive.Device.TEMPERATURE
-   .. autoattribute:: disruptive.Device.PROXIMITY
-   .. autoattribute:: disruptive.Device.TOUCH
-   .. autoattribute:: disruptive.Device.HUMIDITY
-   .. autoattribute:: disruptive.Device.PROXIMITY_COUNTER
-   .. autoattribute:: disruptive.Device.TOUCH_COUNTER
-   .. autoattribute:: disruptive.Device.WATER_DETECTOR
-   .. autoattribute:: disruptive.Device.CLOUD_CONNECTOR
-   .. autoattribute:: disruptive.Device.DEVICE_TYPES
+Type Constants
+--------------
+The Device class contains a string constant for each available device type.
 
-   .. compound::
-      This can be useful when filtering or comparing devices.
+.. autoattribute:: disruptive.Device.TEMPERATURE
+.. autoattribute:: disruptive.Device.PROXIMITY
+.. autoattribute:: disruptive.Device.TOUCH
+.. autoattribute:: disruptive.Device.HUMIDITY
+.. autoattribute:: disruptive.Device.PROXIMITY_COUNTER
+.. autoattribute:: disruptive.Device.TOUCH_COUNTER
+.. autoattribute:: disruptive.Device.WATER_DETECTOR
+.. autoattribute:: disruptive.Device.CLOUD_CONNECTOR
+.. autoattribute:: disruptive.Device.DEVICE_TYPES
 
-   .. code-block:: python
+This can be a useful alternative to writing the strings directly.
 
-      # List all temperature- and touch sensors in a project.
-      devices = dt.Device.list_devices(
-          project_id,
-          device_types=[
-              dt.Device.TEMPERATURE,
-              dt.Device.TOUCH,
-          ],
-      )
+.. code-block:: python
+
+   # List all temperature- and touch sensors in a project.
+   devices = dt.Device.list_devices(
+       project_id='<PROJECT_ID>',
+       device_types=[
+           dt.Device.TEMPERATURE,
+           dt.Device.TOUCH,
+           dt.Device.WATER_DETECTOR,
+       ],
+   )

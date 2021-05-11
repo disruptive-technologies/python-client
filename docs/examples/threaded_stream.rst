@@ -1,3 +1,5 @@
+.. _threaded_stream_example:
+
 Threaded Stream
 ===============
 In this example, the :code:`disruptive.Stream.event_stream()` resource method and built-in `threading` package is used together to continuously stream events in a separate thread, independent of the main program. Every time a new event appears in the stream it is appended to a buffer list which is accessible from the main thread.

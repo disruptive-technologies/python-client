@@ -24,13 +24,15 @@ class DataConnector(dtoutputs.OutputBase):
     display_name : str
         The provided display name.
     data_connector_type : str
-        Data Connector type. Currently, only HTTP_PUSH is available.
+        Data Connector :ref:`type <data_connector_types>`.
     status : str
-        Whether the Data Connector is
+        Whether the Data Connector :ref:`status <data_connector_status>` is
         "ACTIVE", "USER_DISABLED", or "SYSTEM_DISABLED".
     config : HttpPushConfig, None
-        An object representing the type-specific configuration.
-        If an unknown Data Connector type is receiver, this is None.
+        An object representing its type-specific
+        :ref:`configuration <data_connector_configs>`.
+        If an unknown Data Connector :ref:`type <data_connector_types>`
+        is receiver, this is None.
     event_Types : list[str]
         List of event types that should be forwarded.
         If empty, all event types are forwarded.
@@ -169,11 +171,12 @@ class DataConnector(dtoutputs.OutputBase):
         project_id : str
             Unique project ID.
         config : HttpPushConfig
-            An object representing the type-specific configuration.
+            An object representing the type-specific
+            :ref:`configuration <data_connector_configs>`.
         display_name : str, optional
             Sets a display name for the project.
         status : {"ACTIVE", "USER_DISABLED"} str, optional
-            Status of the new Data Connector.
+            :ref:`Status <data_connector_status>` of the new Data Connector.
         event_types : list[str], optional
             List of event types the Data Connector should forward.
         labels : list[str], optional
@@ -247,13 +250,16 @@ class DataConnector(dtoutputs.OutputBase):
         project_id : str
             Unique ID of the project that contains the Data Connector.
         config : HttpPushConfig, optional
-            An object representing the type-specific configuration.
+            An object representing the type-specific
+            :ref:`configuration <data_connector_configs>` for
+            the Data Connector.
         display_name : str, optional
             Sets a display name for the Data Connector.
         status : {"ACTIVE", "USER_DISABLED"} str, optional
-            Status of the Data Connector.
+            :ref:`Status <data_connector_status>` of the Data Connector.
         event_types : list[str], optional
-            List of event types the Data Connector should forward.
+            List of :ref:`event types <event_types>` the
+            Data Connector should forward.
         labels : list[str], optional
             List of labels to forward with each event.
         **kwargs

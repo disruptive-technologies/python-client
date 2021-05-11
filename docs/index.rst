@@ -28,10 +28,21 @@ Support is available for Python 3.7+.
 .. toctree::
    :titlesonly:
    :hidden:
+   :maxdepth: 2
+
+   authentication/authentication
+
+.. toctree::
+   :titlesonly:
+   :hidden:
    :maxdepth: 4
 
-   authentication
    resources/resources
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+
    events
    exceptions
    configuration

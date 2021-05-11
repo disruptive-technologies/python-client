@@ -35,7 +35,8 @@ class EventHistory():
         project_id : str
             Unique ID of the target project.
         event_types : list[str], optional
-            If provided, only the specified event types are fetched.
+            If provided, only the specified
+            :ref:`event types <event_types>` are fetched.
         start_time : str, datetime, optional
             Specifies from when event history is fetched.
             Defaults to 24 hours ago.

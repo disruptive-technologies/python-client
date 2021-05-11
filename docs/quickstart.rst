@@ -7,21 +7,20 @@ Our Python 3 API aims to be simple in use without compromising on functionality.
 
 Authentication
 ==============
-Using `Service Account <https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts>`_ credentials, setting :code:`disruptive.default_auth` authenticates the package:
+Using :ref:`Service Account credentials<service_account_auth>`, setting :code:`disruptive.default_auth` authenticates the package:
 
 .. code-block:: python
 
-   import os
    import disruptive as dt
    
    # Using Service Account credentials, authenticate the entire package.
-   dt.default_auth = dt.Auth.service_account(key_id, secret, email)
+   dt.default_auth = dt.Auth.service_account('<KEY_ID>', '<SECRET>', '<EMAIL>')
 
-See the :ref:`Authentication` section for more details.
+You can read about the various ways of authenticating in the :ref:`Authentication` section.
 
 Usage
 =====
-Most tasks are performed using methods that are grouped under various resource names on the form :code:`disruptive.<Resource>.<method>()`. Here we show a few quick examples.
+Methods are grouped under various :ref:`Resources <resource_methods>` on the form :code:`disruptive.<Resource>.<method>()`.
 
 .. code-block:: python
 

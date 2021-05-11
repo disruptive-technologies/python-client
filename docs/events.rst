@@ -6,7 +6,7 @@ When interacting the :ref:`EventHistory <eventhistory>` or :ref:`Stream <stream>
 
 .. autoclass:: disruptive.events.Event
 
-.. _eventdata:
+.. _event_types:
 
 Type Constants
 --------------
@@ -40,9 +40,11 @@ This can be useful when using resource methods where one can filter on event typ
       ],
    )
 
+.. _eventdata:
+
 Event Data
 ----------
-The following classes each represent one type-specific event data that can be encountered. Instances are found in the `data` attribute of an :ref:`Event <event>` or the `reported` attribute of a :ref:`Device <device>`.
+The following classes each represent one type-specific event data that can be encountered. Instances are found in the :code:`data` attribute of an :ref:`Event <event>` or the :code:`reported` attribute of a :ref:`Device <device>`.
 
 - :ref:`Touch <touch_event>`
 - :ref:`Temperature <temperature_event>`

@@ -1,3 +1,5 @@
+.. _resource_methods:
+
 Resources
 =========
 
