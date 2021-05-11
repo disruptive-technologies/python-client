@@ -5,6 +5,22 @@ import disruptive.logging as dtlog
 
 
 class BatchError(dtoutputs.OutputBase):
+    """
+    Represents problems with batch-style operations where one or several
+    of the actions failed, but the method itself is successful.
+
+    Attributes
+    ----------
+    device_id : str
+        Unique ID of the source device.
+    project_id : str
+        Unique ID of the source project.
+    status_code : str
+        A status code for the returned error.
+    message : str
+        Described the cause of the error.
+
+    """
 
     def __init__(self, error):
         # Inherit from OutputBase parent.

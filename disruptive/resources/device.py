@@ -6,7 +6,7 @@ import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.events.events as dtevents
 import disruptive.outputs as dtoutputs
-import disruptive.errors as dterrors
+from disruptive.errors import BatchError
 
 
 class Device(dtoutputs.OutputBase):
@@ -227,10 +227,16 @@ class Device(dtoutputs.OutputBase):
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
 
+        Returns
+        -------
+        errors : list[BatchError]
+            A list that contains one error object for each device that
+            could not be successfully transferred.
+
         Examples
         --------
         >>> # Move a device from on project to another.
-        >>> disruptive.Device.transfer_devices(
+        >>> err = disruptive.Device.transfer_devices(
         ...     device_ids=[
         ...         '<DEVICE_ID_1>',
         ...         '<DEVICE_ID_2',
@@ -260,7 +266,7 @@ class Device(dtoutputs.OutputBase):
         )
 
         # Return any transferErrors found in response.
-        return [dterrors.BatchError(err) for err in response['transferErrors']]
+        return [BatchError(err) for err in response['transferErrors']]
 
     @staticmethod
     def set_label(device_id: str,
