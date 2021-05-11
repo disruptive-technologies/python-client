@@ -20,4 +20,5 @@ Errors
 ------
 Unlike exceptions, errors and not raised, but a class object returned to the user with information for them to deal with as they see fit. Errors are only returned by batch-style functions like :ref:`transfer_devices() <transfer_devices>` and :ref:`batch_update_labels() <batch_update_labels>`.
 
-.. autoclass:: disruptive.errors.BatchError
+.. autoclass:: disruptive.errors.TransferDeviceError
+.. autoclass:: disruptive.errors.LabelUpdateError

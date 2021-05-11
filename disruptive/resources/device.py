@@ -6,7 +6,7 @@ import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.events.events as dtevents
 import disruptive.outputs as dtoutputs
-from disruptive.errors import BatchError
+from disruptive.errors import TransferDeviceError
 
 
 class Device(dtoutputs.OutputBase):
@@ -266,7 +266,7 @@ class Device(dtoutputs.OutputBase):
         )
 
         # Return any transferErrors found in response.
-        return [BatchError(err) for err in response['transferErrors']]
+        return [TransferDeviceError(err) for err in response['transferErrors']]
 
     @staticmethod
     def set_label(device_id: str,
