@@ -15,7 +15,7 @@ project_id = os.getenv('DT_PROJECT_ID', '')
 dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 
 # Fetch temperature events for the last 7 days.
-history = dt.EventHistory.list_events(
+event_history = dt.EventHistory.list_events(
     device_id=device_id,
     project_id=project_id,
     event_types=[dt.events.TEMPERATURE],
@@ -23,10 +23,11 @@ history = dt.EventHistory.list_events(
 )
 
 # Isolate timeaxis and temperature data which can be plotted directly.
-timeaxis, temperature = history.get_data_axes('timestamp', 'celsius')
+timestamps = [event.data.timestamp for event in event_history]
+temperature = [event.data.celsius for event in event_history]
 
 # Generate a plot using the fetched timeaxis and temperature values.
-plt.plot(timeaxis, temperature)
+plt.plot(timestamps, temperature, '.-')
 plt.xlabel('Timestamp')
 plt.ylabel('Temperature [C]')
 plt.show()
