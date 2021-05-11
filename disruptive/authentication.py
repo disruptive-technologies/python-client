@@ -89,9 +89,7 @@ class Unauthenticated(_AuthRoutineBase):
 
 class ServiceAccountAuth(_AuthRoutineBase):
     """
-    This method uses an OAuth2 flow to authenticate. Using the provided
-    credentials, a JWT is created and exchanged for an access token which
-    is renewed every hour as required.
+    Ensures that the access token is available and up-to-date.
 
     Attributes
     ----------
@@ -233,12 +231,9 @@ class Auth():
                         email: str,
                         ) -> ServiceAccountAuth:
         """
-        Constructs the ServiceAccountAuth object for
-        authenticating using a Service Account's credentials.
-
-        This method uses an OAuth2 flow to authenticate. Using the provided
-        credentials, a JWT is created and exchanged for an access token which
-        is renewed every hour as required.
+        This method uses an OAuth2 authentication flow. With the provided
+        credentials, a `JWT <https://jwt.io/>`_ is created and exchanged for
+        an access token.
 
         Parameters
         ----------
