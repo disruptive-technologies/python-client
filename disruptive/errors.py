@@ -1,6 +1,20 @@
 import requests
 
+import disruptive.outputs as dtoutputs
 import disruptive.logging as dtlog
+
+
+class BatchError(dtoutputs.OutputBase):
+
+    def __init__(self, error):
+        # Inherit from OutputBase parent.
+        super().__init__(error)
+
+        # Unpack error dictionary.
+        self.device_id = error['device'].split('/')[-1]
+        self.project_id = error['device'].split('/')[1]
+        self.status_code = error['status']['code']
+        self.message = error['status']['message']
 
 
 def _raise_provided(error, message: str):

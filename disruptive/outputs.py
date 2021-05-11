@@ -2,7 +2,7 @@
 import disruptive.transforms as dttrans
 
 
-class OutputBase():
+class OutputBase(object):
     """
     Represents common features for all returnable objects.
 

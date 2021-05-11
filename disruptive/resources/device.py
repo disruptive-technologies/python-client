@@ -6,6 +6,7 @@ import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.events.events as dtevents
 import disruptive.outputs as dtoutputs
+import disruptive.errors as dterrors
 
 
 class Device(dtoutputs.OutputBase):
@@ -249,14 +250,17 @@ class Device(dtoutputs.OutputBase):
             "devices": devices
         }
 
-        # Sent POST request, but return nothing.
-        dtrequests.DTRequest.post(
+        # Sent POST request.
+        response = dtrequests.DTRequest.post(
             url='/projects/{}/devices:transfer'.format(
                 target_project_id
             ),
             body=body,
             **kwargs,
         )
+
+        # Return any transferErrors found in response.
+        return [dterrors.BatchError(err) for err in response['transferErrors']]
 
     @staticmethod
     def set_label(device_id: str,

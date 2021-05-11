@@ -3,6 +3,7 @@ from unittest.mock import patch
 import disruptive
 import disruptive.events.events as dtevents
 import tests.api_responses as dtapiresponses
+import disruptive.errors as dterrors
 
 
 class TestDevice():
@@ -221,6 +222,9 @@ class TestDevice():
         assert d is None
 
     def test_transfer_devices(self, request_mock):
+        # Update the response data with transfer response data.
+        request_mock.json = dtapiresponses.transfer_device_no_errors
+
         # Call Device.remove_label() method.
         d = disruptive.Device.transfer_devices(
             device_ids=['device_id1', 'device_id2'],
@@ -244,8 +248,53 @@ class TestDevice():
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
-        # Assert output is None.
-        assert d is None
+        # Assert output.
+        assert isinstance(d, list)
+        assert len(d) == 0
+
+    def test_transfer_devices_errors(self, request_mock):
+        # Update the response data with transfer response data.
+        request_mock.json = dtapiresponses.transfer_device_errors
+
+        # Define device ids to transfer.
+        good_ids = ['device_id1', 'device_id2']
+        bad_ids = ['abc', '123']
+
+        # Call Device.remove_label() method.
+        d = disruptive.Device.transfer_devices(
+            device_ids=good_ids+bad_ids,
+            source_project_id='source_project',
+            target_project_id='target_project',
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = disruptive.base_url+'/projects/target_project/devices:transfer'
+        request_mock.assert_requested(
+            method='POST',
+            url=url,
+            body={
+                'devices': [
+                    'projects/source_project/devices/device_id1',
+                    'projects/source_project/devices/device_id2',
+                    'projects/source_project/devices/abc',
+                    'projects/source_project/devices/123',
+                ],
+            }
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output.
+        assert isinstance(d, list)
+        assert len(d) == 2
+        for e in d:
+            # List should contain BatchError.
+            assert isinstance(e, dterrors.BatchError)
+
+            # Id should be one of the bad ones.
+            assert e.device_id in bad_ids
+            assert e.device_id not in good_ids
 
     def test_reported_no_data(self, request_mock):
         # Update the response data with device data.
