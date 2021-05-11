@@ -22,10 +22,10 @@ The following snippet implements the example. Remember to set the environment va
    project_id = os.getenv('DT_PROJECT_ID', '')
    
    # Authenticate the package using Service Account credentials.
-   dt.default_auth = dt.Auth.serviceaccount(key_id, secret, email)
+   dt.default_auth = dt.Auth.service_account(key_id, secret, email)
    
    # Fetch temperature events for the last 7 days.
-   history = dt.EventHistory.list_events(
+   event_history = dt.EventHistory.list_events(
        device_id=device_id,
        project_id=project_id,
        event_types=[dt.events.TEMPERATURE],
@@ -33,10 +33,11 @@ The following snippet implements the example. Remember to set the environment va
    )
    
    # Isolate timeaxis and temperature data which can be plotted directly.
-   timeaxis, temperature = history.get_data_axes('timestamp', 'celsius')
+   timestamps = [event.data.timestamp for event in event_history]
+   temperature = [event.data.celsius for event in event_history]
    
    # Generate a plot using the fetched timeaxis and temperature values.
-   plt.plot(timeaxis, temperature)
+   plt.plot(timestamps, temperature, '.-')
    plt.xlabel('Timestamp')
    plt.ylabel('Temperature [C]')
    plt.show()
@@ -62,17 +63,18 @@ Once authenticated, the temperature event history can be fetched using the :code
        start_time=datetime.today()-timedelta(days=7),
    )
 
-The returned `history` variable is an instance of the `EventHistory` class. While it contains a list of all fetched events in the :code:`events_list` attribute, we here use the :code:`get_data_axes()` method instead. This returns the event values instead, which is much easier to plot.
+The returned `event_history` variable is list containing the fetched :ref:`Events <event>`. Various data can be extracted quickly using simple list comprehension.
 
 .. code-block:: python
 
-   timeaxis, temperature = history.get_data_axes('timestamp', 'celsius')
+   timestamps = [event.data.timestamp for event in event_history]
+   temperature = [event.data.celsius for event in event_history]
 
 Finally, provided the `matplotlib` package is installed, the data can be plotted.
 
 .. code-block:: python
 
-   plt.plot(timeaxis, temperature)
+   plt.plot(timestamps, temperature, '.-')
    plt.xlabel('Timestamp')
    plt.ylabel('Temperature [C]')
    plt.show()
