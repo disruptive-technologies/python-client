@@ -40,7 +40,7 @@ dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 
 ## Usage
 
-API methods are grouped under various resource names on the form `disruptive.<Resource>.<method>()`.
+Methods are grouped under various resources on the form `disruptive.<Resource>.<method>()`.
 
 ```python
 # Fetch a specific temperature sensor from a project.
