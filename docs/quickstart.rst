@@ -11,17 +11,16 @@ Using :ref:`Service Account credentials<service_account_auth>`, setting :code:`d
 
 .. code-block:: python
 
-   import os
    import disruptive as dt
    
    # Using Service Account credentials, authenticate the entire package.
-   dt.default_auth = dt.Auth.service_account(key_id, secret, email)
+   dt.default_auth = dt.Auth.service_account('<KEY_ID>', '<SECRET>', '<EMAIL>')
 
-See the :ref:`Authentication` section for the various ways of authenticating the package.
+You can read about the various ways of authenticating in the :ref:`Authentication` section.
 
 Usage
 =====
-Most tasks are performed using methods that are grouped under various resource names on the form :code:`disruptive.<Resource>.<method>()`. Here we show a few quick examples.
+Methods are grouped under various :ref:`Resources <resource_methods>` on the form :code:`disruptive.<Resource>.<method>()`.
 
 .. code-block:: python
 

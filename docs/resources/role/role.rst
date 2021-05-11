@@ -8,7 +8,7 @@ The Role resource can be used to fetch `roles <https://developer.disruptive-tech
 Each role fetched by an API Method is represented by an instance of the :ref:`Role <role>` class that is returned to the user.
 
 API Methods
-^^^^^^^^^^^
+-----------
 .. _get_role:
 .. autofunction:: disruptive.Role.get_role
 .. _list_roles:
@@ -17,27 +17,28 @@ API Methods
 .. _role:
 
 Class
-^^^^^
+-----
 .. autoclass:: disruptive.Role
 
-   .. rubric:: Available Roles Constants
-   .. compound::
-      The Role resources class contains one string constant for each available role, including a list of all types.
+.. _role_types:
 
-   .. autoattribute:: disruptive.Role.PROJECT_USER
-   .. autoattribute:: disruptive.Role.PROJECT_DEVELOPER
-   .. autoattribute:: disruptive.Role.PROJECT_ADMIN
-   .. autoattribute:: disruptive.Role.ORGANIZATION_ADMIN
-   .. autoattribute:: disruptive.Role.ROLES
+Type Constants
+--------------
+The Role class contains a string constant for each available role.
 
-   .. compound::
-      This can be useful when filtering or comparing roles.
+.. autoattribute:: disruptive.Role.PROJECT_USER
+.. autoattribute:: disruptive.Role.PROJECT_DEVELOPER
+.. autoattribute:: disruptive.Role.PROJECT_ADMIN
+.. autoattribute:: disruptive.Role.ORGANIZATION_ADMIN
+.. autoattribute:: disruptive.Role.ROLES
 
-   .. code-block:: python
+This can be a useful alternative to writing the strings directly.
 
-      # Add a new developer member to the specified project.
-      dt.Project.add_member(
-          project_id='<PROJECT_ID>',
-          email='<EMAIL_ADDRESS>',
-          roles=[dt.Role.PROJECT_DEVELOPER],
-      )
+.. code-block:: python
+
+   # Add a new developer member to the specified project.
+   dt.Project.add_member(
+       project_id='<PROJECT_ID>',
+       email='<EMAIL_ADDRESS>',
+       roles=[dt.Role.PROJECT_DEVELOPER],
+   )
