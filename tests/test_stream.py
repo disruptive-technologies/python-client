@@ -24,7 +24,7 @@ class TestStream():
         ):
             pass
 
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/project_id/devices:stream'
         request_mock.assert_requested(
             method='GET',

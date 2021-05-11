@@ -130,19 +130,19 @@ class TestRequests():
     def test_method_propagation(self, request_mock):
         # Assert GET method propagates correctly.
         DTRequest.get('/url')
-        request_mock.assert_requested('GET', disruptive.api_url+'/url')
+        request_mock.assert_requested('GET', disruptive.base_url+'/url')
 
         # Assert POST method propagates correctly.
         DTRequest.post('/url')
-        request_mock.assert_requested('POST', disruptive.api_url+'/url')
+        request_mock.assert_requested('POST', disruptive.base_url+'/url')
 
         # Assert PATCH method propagates correctly.
         DTRequest.patch('/url')
-        request_mock.assert_requested('PATCH', disruptive.api_url+'/url')
+        request_mock.assert_requested('PATCH', disruptive.base_url+'/url')
 
         # Assert DELETE method propagates correctly.
         DTRequest.delete('/url')
-        request_mock.assert_requested('DELETE', disruptive.api_url+'/url')
+        request_mock.assert_requested('DELETE', disruptive.base_url+'/url')
 
     def test_pagination_early_exit(self, request_mock):
         # Create a response we will update the page-token off.
@@ -183,7 +183,7 @@ class TestRequests():
         request_mock.assert_request_count(3)
 
         # The last request should have been made with page-token == '3'.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/project_id/devices/device_id/events'
         request_mock.assert_requested(
             method='GET',
@@ -230,7 +230,7 @@ class TestRequests():
         request_mock.assert_request_count(5)
 
         # The last request should have been made with page-token == '1'.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/project_id/devices/device_id/events'
         request_mock.assert_requested(
             method='GET',
@@ -249,7 +249,7 @@ class TestRequests():
         )
 
         # Verify request were configured with new timeout.
-        url = disruptive.api_url + '/projects/-/devices/device_id'
+        url = disruptive.base_url + '/projects/-/devices/device_id'
         request_mock.assert_requested(
             method='GET',
             url=url,

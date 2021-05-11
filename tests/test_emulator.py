@@ -21,7 +21,7 @@ class TestEmulator():
         # Verify expected outgoing parameters in request.
         request_mock.assert_requested(
             method='POST',
-            url=dt.emulator_url+'/projects/project_id/devices',
+            url=dt.emulator_base_url+'/projects/project_id/devices',
             body={
                 'type': 'temperature',
                 'labels': {
@@ -47,7 +47,7 @@ class TestEmulator():
         # Verify expected outgoing parameters in request.
         request_mock.assert_requested(
             method='DELETE',
-            url=dt.emulator_url+'/projects/project_id/devices/device_id',
+            url=dt.emulator_base_url+'/projects/project_id/devices/device_id',
         )
 
         # Assert single request sent.
@@ -68,7 +68,7 @@ class TestEmulator():
         )
 
         # Verify expected outgoing parameters in request.
-        url = dt.emulator_url
+        url = dt.emulator_base_url
         url += '/projects/project_id/devices/device_id:publish'
         request_mock.assert_requested(
             method='POST',

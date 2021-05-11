@@ -45,7 +45,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id',
+            url=disruptive.base_url+'/projects/project_id',
         )
 
         # Assert single request sent.
@@ -64,7 +64,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects',
+            url=disruptive.base_url+'/projects',
         )
 
         # Assert single request sent.
@@ -84,7 +84,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=disruptive.api_url+'/projects',
+            url=disruptive.base_url+'/projects',
             body={'organization': 'organizations/org', 'displayName': 'name'},
         )
 
@@ -104,7 +104,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='PATCH',
-            url=disruptive.api_url+'/projects/project_id',
+            url=disruptive.base_url+'/projects/project_id',
             body={'displayName': 'new-name'},
         )
 
@@ -121,7 +121,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=disruptive.api_url+'/projects/project_id',
+            url=disruptive.base_url+'/projects/project_id',
         )
 
         # Assert single request sent.
@@ -140,7 +140,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id/members',
+            url=disruptive.base_url+'/projects/project_id/members',
         )
 
         # Assert single request sent.
@@ -165,7 +165,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=disruptive.api_url+'/projects/project_id/members',
+            url=disruptive.base_url+'/projects/project_id/members',
             body={
                 'roles': ['roles/project.developer'],
                 'email': 'service_account_email@domain.com',
@@ -191,7 +191,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id/members/member_id',
+            url=disruptive.base_url+'/projects/project_id/members/member_id',
         )
 
         # Assert single request sent.
@@ -214,7 +214,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='PATCH',
-            url=disruptive.api_url+'/projects/project_id/members/member_id',
+            url=disruptive.base_url+'/projects/project_id/members/member_id',
             body={'roles': ['roles/project.developer']}
         )
 
@@ -237,7 +237,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=disruptive.api_url+'/projects/project_id/members/member_id',
+            url=disruptive.base_url+'/projects/project_id/members/member_id',
         )
 
         # Assert single request sent.
@@ -260,7 +260,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id/members/'
+            url=disruptive.base_url+'/projects/project_id/members/'
             + 'member_id:getInviteUrl',
         )
 
@@ -285,7 +285,7 @@ class TestProject():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id/permissions'
+            url=disruptive.base_url+'/projects/project_id/permissions'
         )
 
         # Assert single request sent.

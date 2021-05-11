@@ -73,7 +73,7 @@ class TestDataconnector():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/project_id/dataconnectors/data_connector_id'
         request_mock.assert_requested(
             method='GET',
@@ -96,7 +96,7 @@ class TestDataconnector():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url+'/projects/project_id/dataconnectors'
+        url = disruptive.base_url+'/projects/project_id/dataconnectors'
         request_mock.assert_requested(
             method='GET',
             url=url,
@@ -132,7 +132,7 @@ class TestDataconnector():
 
         # Verify expected outgoing parameters in request.
         # Especially the body is important here.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/c0md3pm0p7bet3vico8g/dataconnectors'
         request_mock.assert_requested(
             method='POST',
@@ -184,7 +184,7 @@ class TestDataconnector():
 
         # Verify expected outgoing parameters in request.
         # Especially the body is important here.
-        url = disruptive.api_url+'/projects/project_id/dataconnectors'
+        url = disruptive.base_url+'/projects/project_id/dataconnectors'
         request_mock.assert_requested(
             method='POST',
             url=url,
@@ -228,7 +228,7 @@ class TestDataconnector():
 
         # Verify expected outgoing parameters in request.
         # Especially the body is important here.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/c0md3pm0p7bet3vico8g'
         url += '/dataconnectors/c16pegipidie7lltrefg'
         request_mock.assert_requested(
@@ -278,7 +278,7 @@ class TestDataconnector():
             )
 
         # Verify that all optional parameters are not included in the body.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/project_id/dataconnectors/data_connector_id'
         request_mock.assert_requested(
             method='PATCH',
@@ -294,7 +294,7 @@ class TestDataconnector():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/project_id/dataconnectors/data_connector_id'
         request_mock.assert_requested(
             method='DELETE',
@@ -318,7 +318,7 @@ class TestDataconnector():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/project_id/dataconnectors/data_connector_id:metrics'
         request_mock.assert_requested(
             method='GET',
@@ -339,7 +339,7 @@ class TestDataconnector():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/project_id/dataconnectors/data_connector_id:sync'
         request_mock.assert_requested(
             method='POST',

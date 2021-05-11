@@ -43,7 +43,7 @@ class TestRole():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/roles/project.developer',
+            url=disruptive.base_url+'/roles/project.developer',
         )
 
         # Assert single request sent.
@@ -62,7 +62,7 @@ class TestRole():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/roles',
+            url=disruptive.base_url+'/roles',
         )
 
         # Assert single request sent.
