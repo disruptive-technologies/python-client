@@ -8,6 +8,9 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
 - [#54](https://github.com/disruptive-technologies/disruptive-python/pull/54) Combined `disruptive.Stream.device()` and `.project()` into `.event_stream()`.
 - [#56](https://github.com/disruptive-technologies/disruptive-python/pull/56) Method `disruptive.Project.update_member()` roles parameter no longer optional.
 - [#57](https://github.com/disruptive-technologies/disruptive-python/pull/57) Method `disruptive.EventHistory.list_events()` now returns a list of events, not an `EventHistory` object.
+- [#58](https://github.com/disruptive-technologies/disruptive-python/pull/58) A few key names have been changed.
+  - All `serviceaccount` occurances have been renamed to `service_account`.
+  - All `dataconnector` occurances have been renamed to `data_connector`.
 
 # v0.4.1
 _Released on 2020-05-04._
