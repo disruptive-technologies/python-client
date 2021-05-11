@@ -6,7 +6,7 @@ Resources
    :caption: Contents:
    
    device/device
-   dataconnector/dataconnector
+   data_connector/data_connector
    project/project
    organization/organization
    service_account/service_account

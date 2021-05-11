@@ -9,13 +9,13 @@ import tests.api_responses as dtapiresponses
 class TestDataconnector():
 
     def test_repr(self, request_mock):
-        # Update the response data with dataconnector data.
-        res = dtapiresponses.configured_dataconnector
+        # Update the response data with Data Connector data.
+        res = dtapiresponses.configured_data_connector
         request_mock.json = res
 
-        # Fetch a dataconnector.
-        x = disruptive.DataConnector.get_dataconnector(
-            dataconnector_id='dataconnector_id',
+        # Fetch a Data Connector..
+        x = disruptive.DataConnector.get_data_connector(
+            data_connector_id='data_connector_id',
             project_id='project_id',
         )
 
@@ -24,57 +24,57 @@ class TestDataconnector():
         assert x._raw == y._raw
 
     def test_attributes(self, request_mock):
-        # Update the response json with a mock dataconnector response.
-        r = dtapiresponses.configured_dataconnector
+        # Update the response json with a mock Data Connector response.
+        r = dtapiresponses.configured_data_connector
         request_mock.json = r
 
         # Call the appropriate endpoint.
-        d = disruptive.DataConnector.get_dataconnector(
-            dataconnector_id='dataconnector_id',
+        d = disruptive.DataConnector.get_data_connector(
+            data_connector_id='data_connector_id',
             project_id='project_id',
         )
 
         # Assert attributes unpacked correctly.
-        assert d.dataconnector_id == r['name'].split('/')[-1]
+        assert d.data_connector_id == r['name'].split('/')[-1]
         assert d.project_id == r['name'].split('/')[1]
         assert d.status == r['status']
         assert d.display_name == r['displayName']
         assert d.event_types == r['events']
         assert d.labels == r['labels']
-        assert d.dataconnector_type == r['type']
+        assert d.data_connector_type == r['type']
         assert isinstance(d.config, disruptive.DataConnector.HttpPushConfig)
         assert d.config.url == r['httpConfig']['url']
         assert d.config.signature_secret == r['httpConfig']['signatureSecret']
         assert d.config.headers == r['httpConfig']['headers']
 
     def test_unknown_config_type(self, request_mock):
-        # Update the response json with a mock dataconnector of unknown type.
-        r = dtapiresponses.unknown_dataconnector
+        # Update the response json with a mock Data Connector of unknown type.
+        r = dtapiresponses.unknown_data_connector
         request_mock.json = r
 
-        # Call an endpoint to construct a dataconnector object.
-        d = disruptive.DataConnector.get_dataconnector(
-            dataconnector_id='dataconnector_id',
+        # Call an endpoint to construct a Data Connector object.
+        d = disruptive.DataConnector.get_data_connector(
+            data_connector_id='data_connector_id',
             project_id='project_id',
         )
 
         # Assert config attribute is None.
-        assert d.dataconnector_type == 'unknown'
+        assert d.data_connector_type == 'unknown'
         assert d.config is None
 
-    def test_get_dataconnector(self, request_mock):
-        # Update the response json with a mock dataconnector response.
-        request_mock.json = dtapiresponses.configured_dataconnector
+    def test_get_data_connector(self, request_mock):
+        # Update the response json with a mock Data Connector response.
+        request_mock.json = dtapiresponses.configured_data_connector
 
         # Call the appropriate endpoint.
-        d = disruptive.DataConnector.get_dataconnector(
-            dataconnector_id='dataconnector_id',
+        d = disruptive.DataConnector.get_data_connector(
+            data_connector_id='data_connector_id',
             project_id='project_id',
         )
 
         # Verify expected outgoing parameters in request.
         url = disruptive.api_url
-        url += '/projects/project_id/dataconnectors/dataconnector_id'
+        url += '/projects/project_id/dataconnectors/data_connector_id'
         request_mock.assert_requested(
             method='GET',
             url=url,
@@ -86,12 +86,12 @@ class TestDataconnector():
         # Assert output instance.
         assert isinstance(d, disruptive.DataConnector)
 
-    def test_list_dataconnectors(self, request_mock):
-        # Update the response json with a mock dataconnector response.
-        request_mock.json = dtapiresponses.paginated_dataconnectors_response
+    def test_list_data_connectors(self, request_mock):
+        # Update the response json with a mock Data Connector response.
+        request_mock.json = dtapiresponses.paginated_data_connectors_response
 
         # Call the appropriate endpoint.
-        dataconnectors = disruptive.DataConnector.list_dataconnectors(
+        data_connectors = disruptive.DataConnector.list_data_connectors(
             project_id='project_id',
         )
 
@@ -106,17 +106,17 @@ class TestDataconnector():
         request_mock.assert_request_count(1)
 
         # Assert output as list of instances.
-        assert isinstance(dataconnectors, list)
-        for d in dataconnectors:
+        assert isinstance(data_connectors, list)
+        for d in data_connectors:
             assert isinstance(d, disruptive.DataConnector)
 
-    def test_create_dataconnector(self, request_mock):
+    def test_create_data_connector(self, request_mock):
         # Update the response json with a mock dataconnector response.
-        res = dtapiresponses.configured_dataconnector
+        res = dtapiresponses.configured_data_connector
         request_mock.json = res
 
-        # Call DataConnector.configured_dataconnector().
-        d = disruptive.DataConnector.create_dataconnector(
+        # Call DataConnector.configured_data_connector().
+        d = disruptive.DataConnector.create_data_connector(
             project_id='c0md3pm0p7bet3vico8g',
             display_name='my-new-dcon',
             labels=['name', 'custom-label-01', 'custom_label-02'],
@@ -159,9 +159,9 @@ class TestDataconnector():
         # Assert output is instance of DataConnector.
         assert isinstance(d, disruptive.DataConnector)
 
-    def test_create_dataconnector_http_push_config(self, request_mock):
+    def test_create_data_connector_http_push_config(self, request_mock):
         """
-        Test that the creation of a dataconnector using HttpPush config
+        Test that the creation of a Data Connector using HttpPush config
         will set the expected type and request body.
 
         """
@@ -172,8 +172,8 @@ class TestDataconnector():
             # Do nothing and return None.
             init_mock.return_value = None
 
-            # Call DataConnector.create_dataconnector for type HTTP_PUSH.
-            disruptive.DataConnector.create_dataconnector(
+            # Call DataConnector.create_data_connector for type HTTP_PUSH.
+            disruptive.DataConnector.create_data_connector(
                 project_id='project_id',
                 config=disruptive.DataConnector.HttpPushConfig(
                     url='some-url',
@@ -203,14 +203,14 @@ class TestDataconnector():
             }
         )
 
-    def test_update_dataconnector(self, request_mock):
-        # Update the response json with a mock dataconnector response.
-        res = dtapiresponses.configured_dataconnector
+    def test_update_data_connector(self, request_mock):
+        # Update the response json with a mock Data Connector response.
+        res = dtapiresponses.configured_data_connector
         request_mock.json = res
 
-        # Call DataConnector.configured_dataconnector().
-        d = disruptive.DataConnector.update_dataconnector(
-            dataconnector_id='c16pegipidie7lltrefg',
+        # Call DataConnector.configured_data_connector().
+        d = disruptive.DataConnector.update_data_connector(
+            data_connector_id='c16pegipidie7lltrefg',
             project_id='c0md3pm0p7bet3vico8g',
             display_name='my-new-dcon',
             labels=['name', 'custom-label-01', 'custom_label-02'],
@@ -256,7 +256,7 @@ class TestDataconnector():
         # Assert output is instance of DataConnector.
         assert isinstance(d, disruptive.DataConnector)
 
-    def test_update_dataconnector_change_nothing(self, request_mock):
+    def test_update_data_connector_change_nothing(self, request_mock):
         """
         Verify that if not provided, optional parameters should not
         be included in the request body. This is important as we do
@@ -270,32 +270,32 @@ class TestDataconnector():
             # Do nothing and return None.
             init_mock.return_value = None
 
-            # Call DataConnector.configured_dataconnector() with only
+            # Call DataConnector.configured_data_connector() with only
             # required parameters, basically asking the API to change nothing.
-            disruptive.DataConnector.update_dataconnector(
-                dataconnector_id='dataconnector_id',
+            disruptive.DataConnector.update_data_connector(
+                data_connector_id='data_connector_id',
                 project_id='project_id',
             )
 
         # Verify that all optional parameters are not included in the body.
         url = disruptive.api_url
-        url += '/projects/project_id/dataconnectors/dataconnector_id'
+        url += '/projects/project_id/dataconnectors/data_connector_id'
         request_mock.assert_requested(
             method='PATCH',
             url=url,
             body={},
         )
 
-    def test_delete_dataconnector(self, request_mock):
-        # Call the DataConnector.delete_dataconnector() method.
-        d = disruptive.DataConnector.delete_dataconnector(
-            dataconnector_id='dataconnector_id',
+    def test_delete_data_connector(self, request_mock):
+        # Call the DataConnector.delete_data_connector() method.
+        d = disruptive.DataConnector.delete_data_connector(
+            data_connector_id='data_connector_id',
             project_id='project_id',
         )
 
         # Verify expected outgoing parameters in request.
         url = disruptive.api_url
-        url += '/projects/project_id/dataconnectors/dataconnector_id'
+        url += '/projects/project_id/dataconnectors/data_connector_id'
         request_mock.assert_requested(
             method='DELETE',
             url=url,
@@ -313,13 +313,13 @@ class TestDataconnector():
 
         # Call DataConnector.get_metrics.
         m = disruptive.DataConnector.get_metrics(
-            dataconnector_id='dataconnector_id',
+            data_connector_id='data_connector_id',
             project_id='project_id',
         )
 
         # Verify expected outgoing parameters in request.
         url = disruptive.api_url
-        url += '/projects/project_id/dataconnectors/dataconnector_id:metrics'
+        url += '/projects/project_id/dataconnectors/data_connector_id:metrics'
         request_mock.assert_requested(
             method='GET',
             url=url,
@@ -329,18 +329,18 @@ class TestDataconnector():
         request_mock.assert_request_count(1)
 
         # Assert output is instance of Metric.
-        assert isinstance(m, disruptive.resources.dataconnector.Metric)
+        assert isinstance(m, disruptive.resources.data_connector.Metric)
 
-    def test_sync_dataconnector(self, request_mock):
-        # Call DataConnector.sync_dataconnector.
-        m = disruptive.DataConnector.sync_dataconnector(
-            dataconnector_id='dataconnector_id',
+    def test_sync_data_connector(self, request_mock):
+        # Call DataConnector.sync_data_connector.
+        m = disruptive.DataConnector.sync_data_connector(
+            data_connector_id='data_connector_id',
             project_id='project_id',
         )
 
         # Verify expected outgoing parameters in request.
         url = disruptive.api_url
-        url += '/projects/project_id/dataconnectors/dataconnector_id:sync'
+        url += '/projects/project_id/dataconnectors/data_connector_id:sync'
         request_mock.assert_requested(
             method='POST',
             url=url,
@@ -354,22 +354,22 @@ class TestDataconnector():
 
     def test_http_push_config_inbound(self, request_mock):
         """
-        Test that fetching a dataconnector with type `HTTP_PUSH` will
+        Test that fetching a Data Connector with type `HTTP_PUSH` will
         result in a config attribute of instance HttpPush.
 
         """
-        # Update the response json with a mock dataconnector response.
-        r = dtapiresponses.configured_dataconnector
+        # Update the response json with a mock Data Connector response.
+        r = dtapiresponses.configured_data_connector
         request_mock.json = r
 
         # Call the appropriate endpoint.
-        d = disruptive.DataConnector.get_dataconnector(
-            dataconnector_id='c16eegpdidie7lltpefg',
+        d = disruptive.DataConnector.get_data_connector(
+            data_connector_id='c16eegpdidie7lltpefg',
             project_id='c0md3mm0c7pet3vico8g',
         )
 
         # Assert type and config instance.
-        assert d.dataconnector_type == 'HTTP_PUSH'
+        assert d.data_connector_type == 'HTTP_PUSH'
         assert isinstance(d.config, disruptive.DataConnector.HttpPushConfig)
 
         # Assert HttpPush attributes are set properly.
@@ -379,7 +379,7 @@ class TestDataconnector():
 
     def test_http_push_config_outbound(self):
         """
-        Test that creating a dataconnector with an HttpPush object will
+        Test that creating a Data Connector with an HttpPush object will
         result in the correct type- and request body construction.
 
         """
@@ -395,7 +395,7 @@ class TestDataconnector():
         )
 
         # Verify type attribute is correct.
-        assert config.dataconnector_type == 'HTTP_PUSH'
+        assert config.data_connector_type == 'HTTP_PUSH'
 
         # Test that _to_dict() method returns expected format.
         expected = {

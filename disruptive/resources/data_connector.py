@@ -17,13 +17,13 @@ class DataConnector(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    dataconnector_id : str
+    data_connector_id : str
         Unique Data Connector ID.
     project_id : str
         Unique ID of the project where the Data Connector resides.
     display_name : str
         The provided display name.
-    dataconnector_type : str
+    data_connector_type : str
         Data Connector type. Currently, only HTTP_PUSH is available.
     status : str
         Whether the Data Connector is
@@ -40,47 +40,47 @@ class DataConnector(dtoutputs.OutputBase):
 
     """
 
-    # Constants for the various dataconnector configuration types.
+    # Constants for the various Data Connector configuration types.
     HTTP_PUSH = 'HTTP_PUSH'
-    DATACONNECTOR_TYPES = [HTTP_PUSH]
+    DATA_CONNECTOR_TYPES = [HTTP_PUSH]
 
-    def __init__(self, dataconnector: dict) -> None:
+    def __init__(self, data_connector: dict) -> None:
         """
         Constructs the Data Connector object by unpacking
         the raw Data Connector response.
 
         Parameters
         ----------
-        dataconnector : dict
+        data_connector : dict
             Unmodified Data Connector response dictionary.
 
         """
 
         # Inherit from OutputBase parent.
-        dtoutputs.OutputBase.__init__(self, dataconnector)
+        dtoutputs.OutputBase.__init__(self, data_connector)
 
         # Unpack attributes from dictionary.
-        self.dataconnector_id = dataconnector['name'].split('/')[-1]
-        self.project_id = dataconnector['name'].split('/')[1]
-        self.status = dataconnector['status']
-        self.display_name = dataconnector['displayName']
-        self.event_types = dataconnector['events']
-        self.labels = dataconnector['labels']
-        self.dataconnector_type = dataconnector['type']
-        self.config = self._from_dict(dataconnector)
+        self.data_connector_id = data_connector['name'].split('/')[-1]
+        self.project_id = data_connector['name'].split('/')[1]
+        self.status = data_connector['status']
+        self.display_name = data_connector['displayName']
+        self.event_types = data_connector['events']
+        self.labels = data_connector['labels']
+        self.data_connector_type = data_connector['type']
+        self.config = self._from_dict(data_connector)
 
     @classmethod
-    def get_dataconnector(cls,
-                          dataconnector_id: str,
-                          project_id: str,
-                          **kwargs,
-                          ) -> DataConnector:
+    def get_data_connector(cls,
+                           data_connector_id: str,
+                           project_id: str,
+                           **kwargs,
+                           ) -> DataConnector:
         """
         Gets the current state of a single Data Connector.
 
         Parameters
         ----------
-        dataconnector_id : str
+        data_connector_id : str
             Unique Data Connector ID.
         project_id : str
             Unique project ID.
@@ -90,14 +90,14 @@ class DataConnector(dtoutputs.OutputBase):
 
         Returns
         -------
-        dataconnector : DataConnector
+        data_connector : DataConnector
             Object representing the target Data Connector.
 
         Examples
         --------
         >>> # Fetch information about a specific Data Connector.
-        >>> dcon = disruptive.DataConnector.get_dataconnector(
-        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        >>> dcon = disruptive.DataConnector.get_data_connector(
+        ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -105,7 +105,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Construct URL
         url = '/projects/{}/dataconnectors/{}'
-        url = url.format(project_id, dataconnector_id)
+        url = url.format(project_id, data_connector_id)
 
         # Return DataConnector object of GET request response.
         return cls(dtrequests.DTRequest.get(
@@ -114,10 +114,10 @@ class DataConnector(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def list_dataconnectors(cls,
-                            project_id: str,
-                            **kwargs,
-                            ) -> list[DataConnector]:
+    def list_data_connectors(cls,
+                             project_id: str,
+                             **kwargs,
+                             ) -> list[DataConnector]:
         """
         Gets a list of the current state of all Data Connectors in a project.
 
@@ -131,36 +131,36 @@ class DataConnector(dtoutputs.OutputBase):
 
         Returns
         -------
-        dataconnectors : list[DataConnector]
+        data_connectors : list[DataConnector]
             List of objects each representing a Data Connector.
 
         Examples
         --------
         >>> # List information about all Data Connectors in a project.
-        >>> dcons = disruptive.DataConnector.list_dataconnectors(
+        >>> dcons = disruptive.DataConnector.list_data_connectors(
         ...     project_id='<PROJECT_ID>',
         ... )
 
         """
 
         # Return list of DataConnector objects of paginated GET response.
-        dataconnectors = dtrequests.DTRequest.paginated_get(
+        data_connectors = dtrequests.DTRequest.paginated_get(
             url='/projects/{}/dataconnectors'.format(project_id),
             pagination_key='dataConnectors',
             **kwargs,
         )
-        return [cls(dcon) for dcon in dataconnectors]
+        return [cls(dcon) for dcon in data_connectors]
 
     @classmethod
-    def create_dataconnector(cls,
-                             project_id: str,
-                             config: disruptive.DataConnector.HttpPushConfig,
-                             display_name: str = '',
-                             status: str = 'ACTIVE',
-                             event_types: list[str] = [],
-                             labels: list[str] = [],
-                             **kwargs,
-                             ) -> DataConnector:
+    def create_data_connector(cls,
+                              project_id: str,
+                              config: disruptive.DataConnector.HttpPushConfig,
+                              display_name: str = '',
+                              status: str = 'ACTIVE',
+                              event_types: list[str] = [],
+                              labels: list[str] = [],
+                              **kwargs,
+                              ) -> DataConnector:
         """
         Creates a new Data Connector in the specified project.
 
@@ -184,13 +184,13 @@ class DataConnector(dtoutputs.OutputBase):
 
         Returns
         -------
-        dataconnector : DataConnector
+        data_connector : DataConnector
             Object representing the newly created Data Connector.
 
         Examples
         --------
         >>> # Create a new Data Connector.
-        >>> dcon = disruptive.DataConnector.create_dataconnector(
+        >>> dcon = disruptive.DataConnector.create_data_connector(
         ...     project_id='<PROJECT_ID>',
         ...     config=disruptive.DataConnector.HttpPushConfig(
         ...         url='<HTTPS_ENDPOINT_URL>',
@@ -210,7 +210,7 @@ class DataConnector(dtoutputs.OutputBase):
             body['displayName'] = display_name
 
         # Add the appropriate field depending on config.
-        body['type'] = config.dataconnector_type
+        body['type'] = config.data_connector_type
         key, value = config._to_dict()
         body[key] = value
 
@@ -225,9 +225,9 @@ class DataConnector(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def update_dataconnector(
+    def update_data_connector(
         cls,
-        dataconnector_id: str,
+        data_connector_id: str,
         project_id: str,
         config: Optional[disruptive.DataConnector.HttpPushConfig] = None,
         display_name: Optional[str] = None,
@@ -242,7 +242,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        dataconnector_id : str
+        data_connector_id : str
             Unique ID of the Data Connector to update.
         project_id : str
             Unique ID of the project that contains the Data Connector.
@@ -262,21 +262,21 @@ class DataConnector(dtoutputs.OutputBase):
 
         Returns
         -------
-        dataconnector : DataConnector
+        data_connector : DataConnector
             Object representing the updated Data Connector.
 
         Examples
         --------
         >>> # Update only the display_name of a Data Connector.
-        >>> dcon = disruptive.DataConnector.update_dataconnector(
-        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        >>> dcon = disruptive.DataConnector.update_data_connector(
+        ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ... )
 
         >>> # Update both the display_name, labels, and forwarded event types.
-        >>> dcon = disruptive.DataConnector.update_dataconnector(
-        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        >>> dcon = disruptive.DataConnector.update_data_connector(
+        ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ...     labels=['room-number', 'customer-id'],
@@ -306,7 +306,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Construct URL.
         url = '/projects/{}/dataconnectors/{}'
-        url = url.format(project_id, dataconnector_id)
+        url = url.format(project_id, data_connector_id)
 
         # Return DataConnector object of PATCH request response.
         return cls(dtrequests.DTRequest.patch(
@@ -316,17 +316,17 @@ class DataConnector(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def delete_dataconnector(cls,
-                             dataconnector_id: str,
-                             project_id: str,
-                             **kwargs,
-                             ) -> None:
+    def delete_data_connector(cls,
+                              data_connector_id: str,
+                              project_id: str,
+                              **kwargs,
+                              ) -> None:
         """
         Deletes the specified Data Connector.
 
         Parameters
         ----------
-        dataconnector_id : str
+        data_connector_id : str
             Unique ID of the Data Connector to delete.
         project_id : str
             Unique ID of the project that contains the Data Connector.
@@ -337,8 +337,8 @@ class DataConnector(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Delete the specified Data Connector.
-        >>> disruptive.DataConnector.delete_dataconnector(
-        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        >>> disruptive.DataConnector.delete_data_connector(
+        ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -346,7 +346,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Construct URL.
         url = '/projects/{}/dataconnectors/{}'
-        url = url.format(project_id, dataconnector_id)
+        url = url.format(project_id, data_connector_id)
 
         # Send DELETE request, but return nothing.
         dtrequests.DTRequest.delete(
@@ -356,7 +356,7 @@ class DataConnector(dtoutputs.OutputBase):
 
     @classmethod
     def get_metrics(cls,
-                    dataconnector_id: str,
+                    data_connector_id: str,
                     project_id: str,
                     **kwargs,
                     ) -> Metric:
@@ -365,7 +365,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        dataconnector_id : str
+        data_connector_id : str
             Unique ID of the Data Connector to list metrics for.
         project_id : str
             Unique ID of the project that contains the Data Connector.
@@ -382,7 +382,7 @@ class DataConnector(dtoutputs.OutputBase):
         --------
         >>> # Get the 3h metrics of the specified Data Connector.
         >>> metrics = disruptive.DataConnector.get_metrics(
-        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -390,7 +390,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Construct URL.
         url = '/projects/{}/dataconnectors/{}'
-        url = url.format(project_id, dataconnector_id)
+        url = url.format(project_id, data_connector_id)
         url += ':metrics'
 
         # Return Metric object of GET request response.
@@ -400,11 +400,11 @@ class DataConnector(dtoutputs.OutputBase):
         ))
 
     @classmethod
-    def sync_dataconnector(cls,
-                           dataconnector_id: str,
-                           project_id: str,
-                           **kwargs,
-                           ) -> None:
+    def sync_data_connector(cls,
+                            data_connector_id: str,
+                            project_id: str,
+                            **kwargs,
+                            ) -> None:
         """
         Synchronizes the current Data Connector state.
 
@@ -414,7 +414,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        dataconnector_id : str
+        data_connector_id : str
             Unique ID of the Data Connector to synchronize.
         project_id : str
             Unique ID of the project that contains the Data Connector.
@@ -425,8 +425,8 @@ class DataConnector(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Synchronize the specified Data Connector.
-        >>> disruptive.DataConnector.sync_dataconnector(
-        ...     dataconnector_id='<DATACONNECTOR_ID>',
+        >>> disruptive.DataConnector.sync_data_connector(
+        ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -434,7 +434,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Construct URL.
         url = '/projects/{}/dataconnectors/{}'
-        url = url.format(project_id, dataconnector_id)
+        url = url.format(project_id, data_connector_id)
         url += ':sync'
 
         # Send POST request, but return nothing.
@@ -444,14 +444,14 @@ class DataConnector(dtoutputs.OutputBase):
         )
 
     @classmethod
-    def _from_dict(cls, dataconnector: dict):
-        # Isolate the dataconnector type.
-        dataconnector_type = dataconnector['type']
+    def _from_dict(cls, data_connector: dict):
+        # Isolate the Data Connector type.
+        data_connector_type = data_connector['type']
 
         # Select the appropriate config depending on type.
-        if dataconnector_type == 'HTTP_PUSH':
+        if data_connector_type == 'HTTP_PUSH':
             # Isolate config field.
-            config = dataconnector['httpConfig']
+            config = data_connector['httpConfig']
 
             # Create and return an HttpPush object.
             return cls.HttpPushConfig(
@@ -461,8 +461,8 @@ class DataConnector(dtoutputs.OutputBase):
             )
         else:
             # If this else statement runs, no config is available for type.
-            dtlog.warning('No config available for {} dataconnectors.'.format(
-                dataconnector_type
+            dtlog.warning('No config available for {} Data Connectors.'.format(
+                data_connector_type
             ))
             return None
 
@@ -481,7 +481,7 @@ class DataConnector(dtoutputs.OutputBase):
 
         """
 
-        dataconnector_type = 'HTTP_PUSH'
+        data_connector_type = 'HTTP_PUSH'
 
         def __init__(self,
                      url: Optional[str] = None,
@@ -520,7 +520,7 @@ class DataConnector(dtoutputs.OutputBase):
 
 class Metric(dtoutputs.OutputBase):
     """
-    Represents the metrics for a dataconnector over the last 3 hours.
+    Represents the metrics for a Data Connector over the last 3 hours.
 
     Attributes
     ----------

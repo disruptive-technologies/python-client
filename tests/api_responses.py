@@ -334,7 +334,7 @@ paginated_device_response = {
     'devices': all_devices_list,
 }
 
-simple_dataconnector = {
+simple_data_connector = {
     "name": "projects/c0md3mm0c7pet3vico8g/"
             + "dataconnectors/c16eegpdidie7lltpefg",
     "displayName": "my-new-dcon",
@@ -351,7 +351,7 @@ simple_dataconnector = {
     }
 }
 
-unknown_dataconnector = {
+unknown_data_connector = {
     "name": "projects/c0md3mm0c7pet3vico8g/"
             + "dataconnectors/c16eegpdidie7lltpefg",
     "displayName": "my-new-dcon",
@@ -368,7 +368,7 @@ unknown_dataconnector = {
     }
 }
 
-configured_dataconnector = {
+configured_data_connector = {
     "name": "projects/c0md3pm0p7bet3vico8g/"
             + "dataconnectors/c16pegipidie7lltrefg",
     "displayName": "my-new-dcon",
@@ -394,11 +394,11 @@ configured_dataconnector = {
     }
 }
 
-paginated_dataconnectors_response = {
+paginated_data_connectors_response = {
     'nextPageToken': '',
     'dataConnectors': [
-        simple_dataconnector,
-        configured_dataconnector,
+        simple_data_connector,
+        configured_data_connector,
     ]
 }
 
