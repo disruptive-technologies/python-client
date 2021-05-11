@@ -34,8 +34,8 @@ import disruptive.events as events  # noqa
 log_level = None
 
 # REST API base URLs of which all endpoints are an expansion.
-api_url = 'https://api.disruptive-technologies.com/v2'
-emulator_url = 'https://emulator.disruptive-technologies.com/v2'
+base_url = 'https://api.disruptive-technologies.com/v2'
+emulator_base_url = 'https://emulator.disruptive-technologies.com/v2'
 
 # If a request response contains an error for which a series of retries is
 # worth considering, these variable determine how long to wait without an

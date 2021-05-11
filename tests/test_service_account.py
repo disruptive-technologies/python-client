@@ -37,7 +37,7 @@ class TestServiceAccount():
         assert s.service_account_id == res['name'].split('/')[-1]
         assert s.email == res['email']
         assert s.display_name == res['displayName']
-        assert s.basic_auth == res['enableBasicAuth']
+        assert s.basic_auth_enabled == res['enableBasicAuth']
         assert s.create_time == dttrans.to_datetime(res['createTime'])
         assert s.update_time == dttrans.to_datetime(res['updateTime'])
 
@@ -54,7 +54,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id/'
+            url=disruptive.base_url+'/projects/project_id/'
             + 'serviceaccounts/service_account_id',
         )
 
@@ -76,7 +76,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id/serviceaccounts',
+            url=disruptive.base_url+'/projects/project_id/serviceaccounts',
         )
 
         # Verify single request sent.
@@ -100,7 +100,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=disruptive.api_url+'/projects/project_id/serviceaccounts',
+            url=disruptive.base_url+'/projects/project_id/serviceaccounts',
             body={'displayName': 'new-sa', 'enableBasicAuth': True},
         )
 
@@ -119,7 +119,7 @@ class TestServiceAccount():
             service_account_id='service_account_id',
             project_id='project_id',
             display_name='service-account-1',
-            basic_auth=False,
+            basic_auth_enabled=False,
         )
 
         # Verify single request sent.
@@ -128,7 +128,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='PATCH',
-            url=disruptive.api_url+'/projects/project_id/'
+            url=disruptive.base_url+'/projects/project_id/'
             + 'serviceaccounts/service_account_id',
             body={'displayName': 'service-account-1', 'enableBasicAuth': False}
         )
@@ -152,7 +152,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=disruptive.api_url+'/projects/project_id/'
+            url=disruptive.base_url+'/projects/project_id/'
             + 'serviceaccounts/service_account_id',
         )
 
@@ -201,7 +201,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id/'
+            url=disruptive.base_url+'/projects/project_id/'
             + 'serviceaccounts/service_account_id/keys/key_id',
         )
 
@@ -224,7 +224,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id/'
+            url=disruptive.base_url+'/projects/project_id/'
             + 'serviceaccounts/service_account_id/keys',
         )
 
@@ -248,7 +248,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=disruptive.api_url+'/projects/project_id/'
+            url=disruptive.base_url+'/projects/project_id/'
             + 'serviceaccounts/service_account_id/keys',
         )
 
@@ -272,7 +272,7 @@ class TestServiceAccount():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=disruptive.api_url+'/projects/project_id/'
+            url=disruptive.base_url+'/projects/project_id/'
             + 'serviceaccounts/service_account_id/keys/key_id',
         )
 

@@ -19,7 +19,7 @@ class DTRequest():
         self.url = url
 
         # Set default attributes, though many are updated in _unpack_kwargs().
-        self.base_url = dt.api_url
+        self.base_url = dt.base_url
         self.params = {}
         self.headers = {}
         self.body = None
@@ -222,7 +222,7 @@ class DTRequest():
         PING_JITTER = 2
 
         # Expand url with base_url.
-        url = dt.api_url + url
+        url = dt.base_url + url
 
         # Set error variable that if not None, raise it.
         error = None

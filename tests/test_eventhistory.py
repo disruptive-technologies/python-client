@@ -20,7 +20,7 @@ class TestEventHistory():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url
+        url = disruptive.base_url
         url += '/projects/project_id/devices/device_id/events'
         request_mock.assert_requested(
             method='GET',

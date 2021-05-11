@@ -41,7 +41,7 @@ class TestDevice():
         # Verify expected outgoing parameters in request.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/project_id/devices/device_id',
+            url=disruptive.base_url+'/projects/project_id/devices/device_id',
         )
 
         # Assert single request sent.
@@ -60,7 +60,7 @@ class TestDevice():
         # Verify expected outgoing parameters in request.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/projects/-/devices/device_id',
+            url=disruptive.base_url+'/projects/-/devices/device_id',
         )
 
         # Assert single request sent.
@@ -77,7 +77,7 @@ class TestDevice():
         devices = disruptive.Device.list_devices('project_id')
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url+'/projects/project_id/devices'
+        url = disruptive.base_url+'/projects/project_id/devices'
         request_mock.assert_requested(
             method='GET',
             url=url,
@@ -108,7 +108,7 @@ class TestDevice():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url+'/projects/project_id/devices'
+        url = disruptive.base_url+'/projects/project_id/devices'
         request_mock.assert_requested(
             method='GET',
             url=url,
@@ -144,7 +144,7 @@ class TestDevice():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url+'/projects/project_id/devices:batchUpdate'
+        url = disruptive.base_url+'/projects/project_id/devices:batchUpdate'
         request_mock.assert_requested(
             method='POST',
             url=url,
@@ -175,7 +175,7 @@ class TestDevice():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url+'/projects/project_id/devices:batchUpdate'
+        url = disruptive.base_url+'/projects/project_id/devices:batchUpdate'
         request_mock.assert_requested(
             method='POST',
             url=url,
@@ -202,7 +202,7 @@ class TestDevice():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url+'/projects/project_id/devices:batchUpdate'
+        url = disruptive.base_url+'/projects/project_id/devices:batchUpdate'
         request_mock.assert_requested(
             method='POST',
             url=url,
@@ -229,7 +229,7 @@ class TestDevice():
         )
 
         # Verify expected outgoing parameters in request.
-        url = disruptive.api_url+'/projects/target_project/devices:transfer'
+        url = disruptive.base_url+'/projects/target_project/devices:transfer'
         request_mock.assert_requested(
             method='POST',
             url=url,

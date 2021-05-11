@@ -77,7 +77,7 @@ class Emulator():
         # Return Device object of GET request response.
         return Device(dtrequests.DTRequest.post(
             url=url,
-            base_url=disruptive.emulator_url,
+            base_url=disruptive.emulator_base_url,
             body=body,
             **kwargs,
         ))
@@ -113,7 +113,7 @@ class Emulator():
         # Send DELETE request, but return nothing.
         dtrequests.DTRequest.delete(
             url=url,
-            base_url=disruptive.emulator_url,
+            base_url=disruptive.emulator_base_url,
             **kwargs,
         )
 
@@ -173,7 +173,7 @@ class Emulator():
         # Send POST request, but return nothing.
         dtrequests.DTRequest.post(
             url=url,
-            base_url=disruptive.emulator_url,
+            base_url=disruptive.emulator_base_url,
             body={data.event_type: data._raw},
             **kwargs,
         )

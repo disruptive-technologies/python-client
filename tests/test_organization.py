@@ -41,7 +41,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/organizations/organization_id',
+            url=disruptive.base_url+'/organizations/organization_id',
         )
 
         # Assert single request sent.
@@ -60,7 +60,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/organizations',
+            url=disruptive.base_url+'/organizations',
         )
 
         # Assert single request sent.
@@ -80,7 +80,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/organizations/org_id/members',
+            url=disruptive.base_url+'/organizations/org_id/members',
         )
 
         # Assert single request sent.
@@ -104,7 +104,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='POST',
-            url=disruptive.api_url+'/organizations/org_id/members',
+            url=disruptive.base_url+'/organizations/org_id/members',
             body={
                 'roles': ['roles/organization.admin'],
                 'email': 'service_account_email@domain.com',
@@ -130,7 +130,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/organizations/org_id/members/member_id',
+            url=disruptive.base_url+'/organizations/org_id/members/member_id',
         )
 
         # Assert single request sent.
@@ -152,7 +152,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='DELETE',
-            url=disruptive.api_url+'/organizations/org_id/members/member_id',
+            url=disruptive.base_url+'/organizations/org_id/members/member_id',
         )
 
         # Assert single request sent.
@@ -175,7 +175,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/organizations/org_id/members/'
+            url=disruptive.base_url+'/organizations/org_id/members/'
             + 'member_id:getInviteUrl',
         )
 
@@ -200,7 +200,7 @@ class TestOrganization():
         # Verify request parameters.
         request_mock.assert_requested(
             method='GET',
-            url=disruptive.api_url+'/organizations/org_id/permissions'
+            url=disruptive.base_url+'/organizations/org_id/permissions'
         )
 
         # Assert single request sent.

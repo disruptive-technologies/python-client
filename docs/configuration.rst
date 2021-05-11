@@ -25,10 +25,10 @@ The following snippet shows the various variables that can be configured and the
    dt.request_attempts = 3
 
    # Base API URL from which all endpoints are expanded.
-   dt.api_url = 'https://api.d21s.com/v2'
+   dt.base_url = 'https://api.d21s.com/v2'
 
    # Same as the previous, but for the emulator API.
-   dt.emulator_url = 'https://emulator.d21s.com/v2'
+   dt.emulator_base_url = 'https://emulator.d21s.com/v2'
 
 .. _per_request_configuration:
 
@@ -43,7 +43,7 @@ Each API method in the package can also be configured individually with the afor
        project_id,
        # The following configurations are specific for this call.
        log=False,
-       api_url='https://api.d21s.com/v2',
+       base_url='https://api.d21s.com/v2',
        request_attempts=3,
        request_timeout=3,
    )
