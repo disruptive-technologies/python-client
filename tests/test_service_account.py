@@ -37,7 +37,7 @@ class TestServiceAccount():
         assert s.service_account_id == res['name'].split('/')[-1]
         assert s.email == res['email']
         assert s.display_name == res['displayName']
-        assert s.basic_auth == res['enableBasicAuth']
+        assert s.basic_auth_enabled == res['enableBasicAuth']
         assert s.create_time == dttrans.to_datetime(res['createTime'])
         assert s.update_time == dttrans.to_datetime(res['updateTime'])
 
@@ -119,7 +119,7 @@ class TestServiceAccount():
             service_account_id='service_account_id',
             project_id='project_id',
             display_name='service-account-1',
-            basic_auth=False,
+            basic_auth_enabled=False,
         )
 
         # Verify single request sent.

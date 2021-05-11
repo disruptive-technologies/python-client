@@ -24,7 +24,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Unique Service Account email.
     display_name : str
         The provided display name.
-    basic_auth : bool
+    basic_auth_enabled : bool
         True if Basic Auth is enabled, otherwise False.
     create_time : datetime
         Timestamp of when the Service Account was created.
@@ -51,7 +51,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         self.service_account_id = service_account['name'].split('/')[-1]
         self.email = service_account['email']
         self.display_name = service_account['displayName']
-        self.basic_auth = service_account['enableBasicAuth']
+        self.basic_auth_enabled = service_account['enableBasicAuth']
         self.create_time = dttrans.to_datetime(service_account['createTime'])
         self.update_time = dttrans.to_datetime(service_account['updateTime'])
 
@@ -146,7 +146,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def create_service_account(cls,
                                project_id: str,
                                display_name: str = '',
-                               basic_auth: bool = False,
+                               basic_auth_enabled: bool = False,
                                **kwargs,
                                ) -> ServiceAccount:
         """
@@ -158,7 +158,7 @@ class ServiceAccount(dtoutputs.OutputBase):
             Unique ID of the target project.
         display_name : str, optional
             Sets a display name for the Service Account.
-        basic_auth : bool, optional
+        basic_auth_enabled : bool, optional
             Enables Basic Auth for the Service Account if True.
             Defaults to False.
         **kwargs
@@ -176,7 +176,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         >>> sa = disruptive.ServiceAccount.create_service_account(
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-service-account',
-        ...     basic_auth=True,
+        ...     basic_auth_enabled=True,
         ... )
 
         """
@@ -186,7 +186,7 @@ class ServiceAccount(dtoutputs.OutputBase):
 
         # Construct body.
         body: dict = dict()
-        body['enableBasicAuth'] = basic_auth
+        body['enableBasicAuth'] = basic_auth_enabled
         if len(display_name) > 0:
             body['displayName'] = display_name
 
@@ -202,7 +202,7 @@ class ServiceAccount(dtoutputs.OutputBase):
                                service_account_id: str,
                                project_id: str,
                                display_name: Optional[str] = None,
-                               basic_auth: Optional[bool] = None,
+                               basic_auth_enabled: Optional[bool] = None,
                                **kwargs,
                                ) -> ServiceAccount:
         """
@@ -216,7 +216,7 @@ class ServiceAccount(dtoutputs.OutputBase):
             Unique ID of the target project.
         display_name : str, optional
             Updates the Service Account display name.
-        basic_auth : bool, optional
+        basic_auth_enabled : bool, optional
             If True, enables Basic Auth while False disables it.
         **kwargs
             Arbitrary keyword arguments.
@@ -236,12 +236,12 @@ class ServiceAccount(dtoutputs.OutputBase):
         ...     display_name='new-name',
         ... )
 
-        >>> # Update both `display_name` and `basic_auth` of a Service Account.
+        >>> # Update both `display_name` and `basic_auth_enabled`.
         >>> sa = disruptive.ServiceAccount.update_service_account(
         ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
-        ...     basic_auth=False,
+        ...     basic_auth_enabled=False,
         ... )
 
         """
@@ -256,8 +256,8 @@ class ServiceAccount(dtoutputs.OutputBase):
         body: dict = dict()
         if display_name is not None:
             body['displayName'] = display_name
-        if basic_auth is not None:
-            body['enableBasicAuth'] = basic_auth
+        if basic_auth_enabled is not None:
+            body['enableBasicAuth'] = basic_auth_enabled
 
         # Return ServiceAccount object of GET request response.
         return cls(dtrequests.DTRequest.patch(
