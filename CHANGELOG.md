@@ -11,6 +11,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
 - [#58](https://github.com/disruptive-technologies/disruptive-python/pull/58) A few key names have been changed.
   - All `serviceaccount` occurances have been renamed to `service_account`.
   - All `dataconnector` occurances have been renamed to `data_connector`.
+- [#60](https://github.com/disruptive-technologies/disruptive-python/pull/60) `Auth` methods now returns instances of classes special to the chosen method, like `ServiceAccountAuth`.
 
 # v0.4.1
 _Released on 2020-05-04._
