@@ -17,7 +17,10 @@ class TestStream():
         for event in disruptive.Stream.event_stream(
             project_id='project_id',
             device_ids=['id1', 'id2', 'id3'],
-            label_filters=['l1', 'l2'],
+            label_filters={
+                'l1': 'v1',
+                'l2': None,
+            },
             device_types=['temperature', 'touch'],
             event_types=['temperature', 'touch'],
             request_attempts=9,
@@ -32,7 +35,7 @@ class TestStream():
             params={
                 'device_ids': ['id1', 'id2', 'id3'],
                 'device_types': ['temperature', 'touch'],
-                'label_filters': ['l1', 'l2'],
+                'label_filters': ['l1=v1', 'l2'],
                 'event_types': ['temperature', 'touch'],
                 'ping_interval': '10s',
             },

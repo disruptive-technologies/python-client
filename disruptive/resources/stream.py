@@ -18,7 +18,7 @@ class Stream():
     @staticmethod
     def event_stream(project_id: str,
                      device_ids: Optional[list[str]] = None,
-                     label_filters: Optional[list[str]] = None,
+                     label_filters: Optional[dict] = None,
                      device_types: Optional[list[str]] = None,
                      event_types: Optional[list[str]] = None,
                      **kwargs,
@@ -36,8 +36,10 @@ class Stream():
             Unique ID of the target project.
         device_ids : list[str], optional
             Only includes events from the specified device(s).
-        label_filters : list[str], optional
-            Only includes events from devices with specified label(s).
+        label_filters : dict[str, Optional[str]], optional
+            Filter devices by their labels. Takes
+            the form :code:`{"key": "value"}`, or :code:`{"key": None}` to
+            allow any label value.
         device_types : list[str], optional
             Only includes events from devices with specified
             :ref:`type(s) <device_type_constants>`.
@@ -65,7 +67,8 @@ class Stream():
         ...     print(event)
 
         >>> # Stream real-time touch events from a select list of
-        >>> # humidity- and touch sensors, but only those with a 'v1' label.
+        >>> # humidity- and touch sensors, but only those with
+        >>> # a 'v1' label in room number 99.
         >>> for e in dt.Stream.event_stream(project_id='<PROJECT_ID>',
         ...                                 device_ids=[
         ...                                     '<DEVICE_ID_1>',
@@ -74,7 +77,10 @@ class Stream():
         ...                                 ]
         ...                                 event_types=['touch'],
         ...                                 device_types=['humidity', 'touch'],
-        ...                                 label_filters=['v1'],
+        ...                                 label_filters={
+        ...                                     'v1': None,
+        ...                                     'room-number': '99',
+        ...                                 },
         ...                                 ):
         ...     print(e.data)
 
@@ -87,7 +93,13 @@ class Stream():
         if device_types is not None:
             params['device_types'] = device_types
         if label_filters is not None:
-            params['label_filters'] = label_filters
+            params['label_filters'] = []
+            for key in label_filters:
+                if isinstance(label_filters[key], str):
+                    string = key + '=' + label_filters[key]
+                    params['label_filters'].append(string)
+                else:
+                    params['label_filters'].append(key)
         if event_types is not None:
             params['event_types'] = event_types
 
