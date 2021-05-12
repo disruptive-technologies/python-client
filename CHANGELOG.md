@@ -19,6 +19,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
 
 ### Added
 - [#62](https://github.com/disruptive-technologies/disruptive-python/pull/62) Batch-style resource methods now return a list of errors objects.
+- [#63](https://github.com/disruptive-technologies/disruptive-python/pull/63) Exceptions are now grouped into four main groups for easier handling.
 
 # v0.4.1
 _Released on 2020-05-04._
