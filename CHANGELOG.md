@@ -16,6 +16,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
   - Renamed `ServiceAccount` attribute `basic_auth` to `basic_auth_enabled`.
   - Renamed `api_url` to `base_url`.
   - Renamed `emulator_url` to `emulator_base_url`.
+- [#64](https://github.com/disruptive-technologies/disruptive-python/pull/64) Method `disruptive.Stream.event_stream()` parameter `label_filters` now takes dict instead of list.
 
 ### Added
 - [#62](https://github.com/disruptive-technologies/disruptive-python/pull/62) Batch-style resource methods now return a list of errors objects.
