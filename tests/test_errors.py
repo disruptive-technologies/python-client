@@ -1,7 +1,5 @@
-# Third-party imports.
 import pytest
 
-# Project imports.
 import disruptive as dt
 import disruptive.errors as errors
 
@@ -103,3 +101,31 @@ class TestResponseStatusCodes():
 
         # Assert expected retry attempts.
         request_mock.assert_request_count(dt.request_attempts)
+
+    def test_server_error_group(self, request_mock):
+        for code in [500, 503, 504]:
+            request_mock.status_code = code
+            with pytest.raises(errors.ServerError):
+                dt.Device.get_device('')
+
+    def test_usage_error_group(self, request_mock):
+        for code in [400, 401, 403, 404, 409, 429]:
+            request_mock.status_code = code
+            with pytest.raises(errors.UsageError):
+                dt.Device.get_device('')
+
+        with pytest.raises(errors.UsageError):
+            dt.EventHistory.list_events(
+                device_id='device_id',
+                project_id='project_id',
+                start_time='XXXX-01-01T00:00:00Z',
+            )
+
+        old_value = dt.request_attempts
+        dt.request_attempts = -1
+        with pytest.raises(errors.UsageError):
+            dt.Device.get_device('', '')
+        dt.request_attempts = old_value
+
+        with pytest.raises(errors.UsageError):
+            dt.Auth.service_account('', '', '')
