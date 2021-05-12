@@ -18,7 +18,7 @@ class Stream():
     @staticmethod
     def event_stream(project_id: str,
                      device_ids: Optional[list[str]] = None,
-                     label_filters: Optional[dict[str, Optional[str]]] = None,
+                     label_filters: Optional[dict] = None,
                      device_types: Optional[list[str]] = None,
                      event_types: Optional[list[str]] = None,
                      **kwargs,
