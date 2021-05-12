@@ -17,6 +17,9 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
   - Renamed `api_url` to `base_url`.
   - Renamed `emulator_url` to `emulator_base_url`.
 
+### Added
+- [#62](https://github.com/disruptive-technologies/disruptive-python/pull/62) Batch-style resource methods now return a list of errors objects.
+
 # v0.4.1
 _Released on 2020-05-04._
 ### Fixed
