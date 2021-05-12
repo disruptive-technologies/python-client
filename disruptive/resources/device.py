@@ -390,7 +390,7 @@ class Device(dtoutputs.OutputBase):
         on multiple devices
 
         Must provide either `set_labels` or `remove_labels`. If neither are
-        provided, a :ref:`BadRequest <badrequest>` error will be raised.
+        provided, a :ref:`BadRequest <bad_request_error>` error will be raised.
 
         Parameters
         ----------

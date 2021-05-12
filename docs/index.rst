@@ -44,7 +44,17 @@ Support is available for Python 3.7+.
    :maxdepth: 1
 
    events
-   exceptions
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+
+   errors
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+
    configuration
 
 Get Started!

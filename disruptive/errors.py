@@ -4,22 +4,25 @@ import disruptive.outputs as dtoutputs
 import disruptive.logging as dtlog
 
 
-class LabelUpdateError(dtoutputs.OutputBase):
+# ------------------------- Parent -------------------------
+class DTApiError(Exception):
     """
-    Represents errors that occur when a label can, for some reason, not
-    be updated for a device.
+    Represents errors raised from the REST API.
 
-    Attributes
-    ----------
-    device_id : str
-        Unique ID of the source device.
-    project_id : str
-        Unique ID of the source project.
-    status_code : str
-        A status code for the returned error. Is either
-        "INVALID_ARGUMENT", "NOT_FOUND", or "INTERNAL_ERROR".
-    message : str
-        Described the cause of the error.
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+        # Log the error.
+        dtlog.error(message)
+
+
+# ------------------------- BatchErrors -------------------------
+class BatchError(dtoutputs.OutputBase):
+    """
+    Parent class for errors in batch-style methods where one or several
+    actions may fail in an otherwise successful request.
 
     """
 
@@ -27,14 +30,11 @@ class LabelUpdateError(dtoutputs.OutputBase):
         # Inherit from OutputBase parent.
         super().__init__(error)
 
-        # Unpack error dictionary.
-        self.device_id = error['device'].split('/')[-1]
-        self.project_id = error['device'].split('/')[1]
-        self.status_code = error['status']['code']
-        self.message = error['status']['message']
+        # Log the error.
+        dtlog.error(error)
 
 
-class TransferDeviceError(dtoutputs.OutputBase):
+class TransferDeviceError(BatchError):
     """
     Represents errors that occur when a device can, for some reason, not
     be transferred from one project to another.
@@ -64,44 +64,40 @@ class TransferDeviceError(dtoutputs.OutputBase):
         self.message = error['status']['message']
 
 
-def _raise_provided(error, message: str):
-    # Log the error.
-    dtlog.error(message)
-
-    # Raise provided error.
-    raise error(message)
-
-
-class DTApiError(Exception):
+class LabelUpdateError(BatchError):
     """
-    Represents errors raised from the REST API.
+    Represents errors that occur when a label can, for some reason, not
+    be updated for a device.
 
-    """
-
-    def __init__(self, message):
-
-        # Call the base class constructor.
-        super().__init__(message)
-
-        # Log the error.
-        dtlog.error(message)
-
-
-class BadRequest(DTApiError):
-    """
-    The response contained a status code of 400.
-    https://developer.d21s.com/docs/error-codes#400
+    Attributes
+    ----------
+    device_id : str
+        Unique ID of the source device.
+    project_id : str
+        Unique ID of the source project.
+    status_code : str
+        A status code for the returned error. Is either
+        "INVALID_ARGUMENT", "NOT_FOUND", or "INTERNAL_ERROR".
+    message : str
+        Described the cause of the error.
 
     """
 
-    def __init__(self, message):
-        super().__init__(message)
+    def __init__(self, error):
+        # Inherit from OutputBase parent.
+        super().__init__(error)
+
+        # Unpack error dictionary.
+        self.device_id = error['device'].split('/')[-1]
+        self.project_id = error['device'].split('/')[1]
+        self.status_code = error['status']['code']
+        self.message = error['status']['message']
 
 
-class Unauthorized(DTApiError):
+# ------------------------- ServerError -------------------------
+class ServerError(DTApiError):
     """
-    The response contained a status code of 401.
-    https://developer.d21s.com/docs/error-codes#401
+    Covers response errors in the 500 status code range.
 
     """
 
@@ -109,51 +105,7 @@ class Unauthorized(DTApiError):
         super().__init__(message)
 
 
-class Forbidden(DTApiError):
-    """
-    The response contained a status code of 403.
-    https://developer.d21s.com/docs/error-codes#403
-
-    """
-
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class NotFound(DTApiError):
-    """
-    The response contained a status code of 404.
-    https://developer.d21s.com/docs/error-codes#404
-
-    """
-
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class Conflict(DTApiError):
-    """
-    The response contained a status code of 409.
-    https://developer.d21s.com/docs/error-codes#409
-
-    """
-
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class TooManyRequests(DTApiError):
-    """
-    The response contained a status code of 429.
-    https://developer.d21s.com/docs/error-codes#429
-
-    """
-
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class InternalServerError(DTApiError):
+class InternalServerError(ServerError):
     """
     The response contained a status code of 500.
     https://developer.d21s.com/docs/error-codes#500
@@ -164,20 +116,11 @@ class InternalServerError(DTApiError):
         super().__init__(message)
 
 
-class ReadTimeout(DTApiError):
+# ------------------------- UsageError -------------------------
+class UsageError(DTApiError):
     """
-    The server did not respond in the alloted amount
-    of time set by :ref:`request_timeout <config params>`.
-
-    """
-
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class ConnectionError(DTApiError):
-    """
-    Could not establish connection to the server.
+    Covers response errors in the 400 status code range in
+    addition to problems caused by invalid parameter inputs.
 
     """
 
@@ -185,7 +128,73 @@ class ConnectionError(DTApiError):
         super().__init__(message)
 
 
-class FormatError(DTApiError):
+class BadRequest(UsageError):
+    """
+    The response contained a status code of 400.
+    https://developer.d21s.com/docs/error-codes#400
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class Unauthorized(UsageError):
+    """
+    The response contained a status code of 401.
+    https://developer.d21s.com/docs/error-codes#401
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class Forbidden(UsageError):
+    """
+    The response contained a status code of 403.
+    https://developer.d21s.com/docs/error-codes#403
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class NotFound(UsageError):
+    """
+    The response contained a status code of 404.
+    https://developer.d21s.com/docs/error-codes#404
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class Conflict(UsageError):
+    """
+    The response contained a status code of 409.
+    https://developer.d21s.com/docs/error-codes#409
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class TooManyRequests(UsageError):
+    """
+    The response contained a status code of 429.
+    https://developer.d21s.com/docs/error-codes#429
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class FormatError(UsageError):
     """
     Some string formatting, usually a timestamp, is wrong.
 
@@ -195,7 +204,7 @@ class FormatError(DTApiError):
         super().__init__(message)
 
 
-class ConfigurationError(DTApiError):
+class ConfigurationError(UsageError):
     """
     One or more :ref:`configuration parameters <configuration>` are invalid.
 
@@ -205,7 +214,7 @@ class ConfigurationError(DTApiError):
         super().__init__(message)
 
 
-class EmptyStringError(DTApiError):
+class EmptyStringError(UsageError):
     """
     Unexpected empty string.
 
@@ -215,12 +224,11 @@ class EmptyStringError(DTApiError):
         super().__init__(message)
 
 
-class UnknownError(DTApiError):
+# ------------------------- ConnectionError -------------------------
+class ConnectionError(DTApiError):
     """
-    An unexpected error has been raised.
-
-    This is likely due to a bug in the package.
-    Please report this to developer-support@disruptive-technologies.com.
+    Covers errors caused by unsuccessful connections from the client.
+    These are mostly captured requests exceptions.
 
     """
 
@@ -228,6 +236,29 @@ class UnknownError(DTApiError):
         super().__init__(message)
 
 
+class ReadTimeout(ConnectionError):
+    """
+    Could not connection to server in the alloted amount
+    of time set by :ref:`request_timeout <config params>`.
+
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+# ------------------------- UnknownError -------------------------
+class UnknownError(DTApiError):
+    """
+    An unexpected exception has been raised.
+
+    This is likely due to a bug in the package.
+    Please report this to developer-support@disruptive-technologies.com.
+
+    """
+
+
+# ------------------------- error handling -------------------------
 def parse_request_error(caught_error, data, nth_attempt):
     # Read Timeouts should be attempted again.
     if isinstance(caught_error, requests.exceptions.ReadTimeout):
@@ -282,3 +313,11 @@ def parse_api_status_code(status_code, data, headers, nth_attempt):
         return InternalServerError(data), True, nth_attempt**2 + 9
     else:
         return UnknownError(data), False, None
+
+
+def _raise_provided(error, message: str):
+    # Log the error.
+    dtlog.error(message)
+
+    # Raise provided error.
+    raise error(message)
