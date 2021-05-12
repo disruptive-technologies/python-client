@@ -6,6 +6,7 @@ import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
 import disruptive.events.events as dtevents
 import disruptive.outputs as dtoutputs
+from disruptive.errors import TransferDeviceError, LabelUpdateError
 
 
 class Device(dtoutputs.OutputBase):
@@ -207,7 +208,7 @@ class Device(dtoutputs.OutputBase):
                          source_project_id: str,
                          target_project_id: str,
                          **kwargs,
-                         ) -> None:
+                         ) -> list[TransferDeviceError]:
         """
         Transfers all specified devices to the target project.
 
@@ -226,10 +227,16 @@ class Device(dtoutputs.OutputBase):
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
 
+        Returns
+        -------
+        errors : list[TransferDeviceError]
+            A list that contains one error object for each device that
+            could not be successfully transferred.
+
         Examples
         --------
         >>> # Move a device from on project to another.
-        >>> disruptive.Device.transfer_devices(
+        >>> err = disruptive.Device.transfer_devices(
         ...     device_ids=[
         ...         '<DEVICE_ID_1>',
         ...         '<DEVICE_ID_2',
@@ -249,8 +256,8 @@ class Device(dtoutputs.OutputBase):
             "devices": devices
         }
 
-        # Sent POST request, but return nothing.
-        dtrequests.DTRequest.post(
+        # Sent POST request.
+        response = dtrequests.DTRequest.post(
             url='/projects/{}/devices:transfer'.format(
                 target_project_id
             ),
@@ -258,13 +265,16 @@ class Device(dtoutputs.OutputBase):
             **kwargs,
         )
 
+        # Return any transferErrors found in response.
+        return [TransferDeviceError(err) for err in response['transferErrors']]
+
     @staticmethod
     def set_label(device_id: str,
                   project_id: str,
                   key: str,
                   value: str,
                   **kwargs,
-                  ) -> None:
+                  ) -> list[LabelUpdateError]:
         """
         Set a label (key and value) for a single device.
 
@@ -283,6 +293,12 @@ class Device(dtoutputs.OutputBase):
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
+
+        Returns
+        -------
+        errors : list[LabelUpdateError]
+            A list that contains one error object for each label that
+            could not be successfully updated.
 
         Examples
         --------
@@ -304,15 +320,18 @@ class Device(dtoutputs.OutputBase):
         body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
         body['addLabels'] = {key: value}
 
-        # Sent POST request, but return nothing.
-        dtrequests.DTRequest.post(url, body=body, **kwargs)
+        # Sent POST request.
+        response = dtrequests.DTRequest.post(url, body=body, **kwargs)
+
+        # Return any batchErrors found in response.
+        return [LabelUpdateError(err) for err in response['batchErrors']]
 
     @staticmethod
     def remove_label(device_id: str,
                      project_id: str,
                      key: str,
                      **kwargs,
-                     ) -> None:
+                     ) -> list[LabelUpdateError]:
         """
         Remove a label (key and value) from a single device.
 
@@ -327,6 +346,12 @@ class Device(dtoutputs.OutputBase):
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
+
+        Returns
+        -------
+        errors : list[LabelUpdateError]
+            A list that contains one error object for each label that
+            could not be successfully updated.
 
         Examples
         --------
@@ -347,8 +372,11 @@ class Device(dtoutputs.OutputBase):
         body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
         body['removeLabels'] = [key]
 
-        # Sent POST request, but return nothing.
-        dtrequests.DTRequest.post(url, body=body, **kwargs)
+        # Sent POST request.
+        response = dtrequests.DTRequest.post(url, body=body, **kwargs)
+
+        # Return any batchErrors found in response.
+        return [LabelUpdateError(err) for err in response['batchErrors']]
 
     @staticmethod
     def batch_update_labels(device_ids: list[str],
@@ -356,7 +384,7 @@ class Device(dtoutputs.OutputBase):
                             set_labels: Optional[dict[str, str]] = None,
                             remove_labels: Optional[list[str]] = None,
                             **kwargs,
-                            ) -> None:
+                            ) -> list[LabelUpdateError]:
         """
         Add, update, or remove multiple labels (key and value)
         on multiple devices
@@ -378,6 +406,12 @@ class Device(dtoutputs.OutputBase):
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
+
+        Returns
+        -------
+        errors : list[LabelUpdateError]
+            A list that contains one error object for each label that
+            could not be successfully updated.
 
         Raises
         ------
@@ -425,8 +459,11 @@ class Device(dtoutputs.OutputBase):
         # Construct URL.
         url = '/projects/{}/devices:batchUpdate'.format(project_id)
 
-        # Sent POST request, but return nothing.
-        dtrequests.DTRequest.post(url, body=body, **kwargs)
+        # Sent POST request.
+        response = dtrequests.DTRequest.post(url, body=body, **kwargs)
+
+        # Return any batchErrors found in response.
+        return [LabelUpdateError(err) for err in response['batchErrors']]
 
 
 class Reported(dtoutputs.OutputBase):

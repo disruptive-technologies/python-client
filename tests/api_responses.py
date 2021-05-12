@@ -828,3 +828,53 @@ stream_networkstatus_event = b'{"result":{"event":{"eventId":"c1vtubtd83it'\
     b'"emulated-ccon","signalStrength":99,"rssi":0}],'\
     b'"transmissionMode":"LOW_POWER_STANDARD_MODE"}},"timestamp":'\
     b'"2021-04-21T08:15:43.520167Z"}}}'
+
+transfer_device_no_errors = {
+    'transferredDevices': [
+        'projects/source_project/devices/device_id1',
+        'projects/source_project/devices/device_id2',
+    ],
+    'transferErrors': [],
+}
+
+transfer_device_errors = {
+    'transferredDevices': [
+        'projects/source_project/devices/device_id1',
+        'projects/source_project/devices/device_id2',
+    ],
+    'transferErrors': [
+        {
+            'device': 'projects/source_project/devices/123',
+            'status': {
+                'code': 'NOT_FOUND',
+                'message': 'resource not found',
+            }
+        },
+        {
+            'device': 'projects/source_project/devices/abc',
+            'status': {
+                'code': 'NOT_FOUND',
+                'message': 'resource not found',
+            }
+        },
+    ],
+}
+
+batch_label_response = {
+    "batchErrors": [
+        {
+            "device": "/projects/<source_project_id>/devices/<device_id_1>",
+            "status": {
+                "code": "INVALID_ARGUMENT",
+                "message": "Max labels reached for device."
+            }
+        },
+        {
+            "device": "/projects/<source_project_id>/devices/<device_id_2>",
+            "status": {
+                "code": "INTERNAL_ERROR",
+                "message": "Operation timed out. Retry again in a few seconds."
+            }
+        }
+    ]
+}

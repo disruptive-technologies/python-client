@@ -1,6 +1,67 @@
 import requests
 
+import disruptive.outputs as dtoutputs
 import disruptive.logging as dtlog
+
+
+class LabelUpdateError(dtoutputs.OutputBase):
+    """
+    Represents errors that occur when a label can, for some reason, not
+    be updated for a device.
+
+    Attributes
+    ----------
+    device_id : str
+        Unique ID of the source device.
+    project_id : str
+        Unique ID of the source project.
+    status_code : str
+        A status code for the returned error. Is either
+        "INVALID_ARGUMENT", "NOT_FOUND", or "INTERNAL_ERROR".
+    message : str
+        Described the cause of the error.
+
+    """
+
+    def __init__(self, error):
+        # Inherit from OutputBase parent.
+        super().__init__(error)
+
+        # Unpack error dictionary.
+        self.device_id = error['device'].split('/')[-1]
+        self.project_id = error['device'].split('/')[1]
+        self.status_code = error['status']['code']
+        self.message = error['status']['message']
+
+
+class TransferDeviceError(dtoutputs.OutputBase):
+    """
+    Represents errors that occur when a device can, for some reason, not
+    be transferred from one project to another.
+
+    Attributes
+    ----------
+    device_id : str
+        Unique ID of the source device.
+    project_id : str
+        Unique ID of the source project.
+    status_code : str
+        A status code for the returned error. Is either
+        "INVALID_ARGUMENT", "NOT_FOUND", or "INTERNAL_ERROR".
+    message : str
+        Described the cause of the error.
+
+    """
+
+    def __init__(self, error):
+        # Inherit from OutputBase parent.
+        super().__init__(error)
+
+        # Unpack error dictionary.
+        self.device_id = error['device'].split('/')[-1]
+        self.project_id = error['device'].split('/')[1]
+        self.status_code = error['status']['code']
+        self.message = error['status']['message']
 
 
 def _raise_provided(error, message: str):
