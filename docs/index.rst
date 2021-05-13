@@ -30,7 +30,7 @@ Support is available for Python 3.7+.
    :hidden:
    :maxdepth: 2
 
-   authentication/authentication
+   authentication
 
 .. toctree::
    :titlesonly:

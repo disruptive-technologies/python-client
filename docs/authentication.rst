@@ -43,4 +43,4 @@ Note that this will ignore the package-wide conifguration variable :code:`disrup
    :maxdepth: 1
    :hidden:
    
-   service_account_credentials
+   authentication/service_account_credentials

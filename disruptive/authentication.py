@@ -79,11 +79,9 @@ class Unauthenticated(_AuthRoutineBase):
 
         """
         raise dterrors.Unauthorized(
-            'No authentication method has been set.\n\n'
-            'Package-wide authentication can be set by:'
-            + '\n>>> import disruptive as dt'
-            + '\n>>> dt.default_auth = dt.Auth.service_account'
-            + '(key_id, secret, email)'
+            'No authentication method set.'
+            ' See developer.d21s.com/api/libraries/python/'
+            'authentication.html'
         )
 
 
