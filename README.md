@@ -43,6 +43,8 @@ dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 Methods are grouped under various resources on the form `disruptive.<Resource>.<method>()`.
 
 ```python
+import disruptive as dt
+
 # Fetch a specific sensor from a project.
 sensor = dt.Device.get_device(device_id)
 
