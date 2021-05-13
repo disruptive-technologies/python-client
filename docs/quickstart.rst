@@ -27,13 +27,13 @@ Methods are grouped under various :ref:`Resources <resource_methods>` on the for
    import disruptive as dt
 
    # Fetch a specific sensor from a project.
-   sensor = dt.Device.get_device('<DEVICE_ID>')
+   sensor = dt.Device.get_device(device_id)
    
    # Print the sensor information wil list all attributes and values.
    print(sensor)
    
    # Set a new label on the sensor.
-   dt.Device.set_label(sensor.device_id, sensor.project_id, key='nb#', value='99')
+   dt.Device.set_label(sensor.device_id, sensor.project_id, key='nb', value='99')
    
    # Get touch- and temperature event history for the sensor.
    history = dt.EventHistory.list_events(
@@ -42,8 +42,8 @@ Methods are grouped under various :ref:`Resources <resource_methods>` on the for
        event_types=['touch', 'temperature']
    )
    
-   # Set up a real-time event stream for the sensor.
-   for event in dt.Stream.device(sensor.device_id, sensor.project_id):
+   # Set up a real-time event stream of all device in project.
+   for event in dt.Stream.event_stream(sensor.project_id):
        # Print the data in new events as they arrive.
        print(event.data)
 

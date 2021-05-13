@@ -43,26 +43,26 @@ dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 Methods are grouped under various resources on the form `disruptive.<Resource>.<method>()`.
 
 ```python
-# Fetch a specific temperature sensor from a project.
-sensor = dt.Device.get_device('<DEVICE_ID>')
+# Fetch a specific sensor from a project.
+sensor = dt.Device.get_device(device_id)
 
-# Print the sensor information, listing all available attributes.
+# Print the sensor information wil list all attributes and values.
 print(sensor)
 
 # Set a new label on the sensor.
-dt.Device.set_label(sensor.device_id, sensor.project_id, key='nb#', value='99')
+dt.Device.set_label(sensor.device_id, sensor.project_id, key='nb', value='99')
 
-# Get touch- and temperature event history the last 24 hours for the sensor.
+# Get touch- and temperature event history for the sensor.
 history = dt.EventHistory.list_events(
     sensor.device_id,
     sensor.project_id,
     event_types=['touch', 'temperature']
 )
 
-# Set up a real-time event stream for the sensor.
-for new_event in dt.Stream.device(sensor.device_id, sensor.project_id):
+# Set up a real-time event stream of all device in project.
+for event in dt.Stream.event_stream(sensor.project_id):
     # Print the data in new events as they arrive.
-    print(new_event.data)
+    print(event.data)
 ```
 
 ## Logging
