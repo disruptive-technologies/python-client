@@ -1,3 +1,9 @@
+.. warning::
+
+   The Python API is still under development. Breaking changes can be expected before major version 1.0.0, and is not yet recommended for use in production-level integrations.
+
+   Feedback is appreciated. If you encounter bugs or have other thoughts about the usage experience, send an email to :code:`developer-support@disruptive-technologies.com`.
+
 Welcome!
 ========
 This is the Disruptive Technologies Python 3 API. It is an extension of our `REST API <https://developer.disruptive-technologies.com/api>`_ with added quality-of-life features, making interacting with our services even easier.
