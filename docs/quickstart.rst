@@ -20,7 +20,7 @@ You can read about the various ways of authenticating in the :ref:`Authenticatio
 
 Usage
 =====
-Methods are grouped under various :ref:`Resources <resource_methods>` on the form :code:`disruptive.<Resource>.<method>()`.
+Assuming you have authenticated correctly, most functionality is accessed through methods grouped under various :ref:`Resources <resource_methods>` on the form :code:`disruptive.<Resource>.<method>()`.
 
 .. code-block:: python
 

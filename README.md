@@ -40,7 +40,7 @@ dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 
 ## Usage
 
-Methods are grouped under various resources on the form `disruptive.<Resource>.<method>()`.
+Assuming you have authenticated correctly, most functionality is accessed through methods grouped under various Resources on the form `disruptive.<Resource>.<method>()`.
 
 ```python
 import disruptive as dt
