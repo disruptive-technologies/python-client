@@ -14,6 +14,7 @@ The following snippet authentications all functionality in the package at once.
 
 .. code-block:: python
 
+   import os
    import disruptive as dt
 
    # It is good practice to fetch credentials from an environment or file.
