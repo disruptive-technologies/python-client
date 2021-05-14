@@ -111,7 +111,6 @@ class _EventData(dtoutputs.OutputBase):
         """
 
         # Initialize the correct object.
-        # if event_type in [t.value['api_name'] for t in EventTypes]:
         if event_type in _EVENTS_MAP._api_names:
             out = (
                 getattr(
