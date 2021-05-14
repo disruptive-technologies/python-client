@@ -31,5 +31,6 @@ List of Examples
    :hidden:
    
    get_device
+   fetch_event_history
    plot_sensor_data
    threaded_stream

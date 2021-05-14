@@ -1,12 +1,21 @@
 .. _quickstart:
 
-**********
 Quickstart
-**********
+==========
 Our Python 3 API aims to be simple in use without compromising on functionality. Therefore, once authenticated, most tasks can be performed with only a single line of code.
 
+Installation
+------------
+The package can be installed through pip:
+
+.. code-block:: bash
+
+   pip install --upgrade disruptive
+
+Support is available for Python 3.7+.
+
 Authentication
-==============
+--------------
 Using :ref:`Service Account credentials<service_account_auth>`, setting :code:`disruptive.default_auth` authenticates the package:
 
 .. code-block:: python
@@ -19,7 +28,7 @@ Using :ref:`Service Account credentials<service_account_auth>`, setting :code:`d
 You can read about the various ways of authenticating in the :ref:`Authentication` section.
 
 Usage
-=====
+-----
 Assuming you have authenticated correctly, most functionality is accessed through methods grouped under various :ref:`Resources <resource_methods>` on the form :code:`disruptive.<Resource>.<method>()`.
 
 .. code-block:: python
