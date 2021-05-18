@@ -5,7 +5,7 @@ The Organization resource can be used to interact with `organizations <https://d
 - :ref:`get_organization() <get_organization>`
 - :ref:`list_organizations() <list_organizations>`
 - :ref:`list_members() <list_members>`
-- :ref:`add_member() <add_member>`
+- :ref:`add_member() <org_add_member>`
 - :ref:`get_member() <get_member>`
 - :ref:`remove_member() <remove_member>`
 - :ref:`get_member_invite_url() <get_member_invite_url>`
@@ -21,7 +21,7 @@ API Methods
 .. autofunction:: disruptive.Organization.list_organizations
 .. _list_members:
 .. autofunction:: disruptive.Organization.list_members
-.. _add_member:
+.. _org_add_member:
 .. autofunction:: disruptive.Organization.add_member
 .. _get_member:
 .. autofunction:: disruptive.Organization.get_member

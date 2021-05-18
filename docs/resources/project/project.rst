@@ -8,7 +8,7 @@ The Project resource can be used to interact with `projects <https://developer.d
 - :ref:`update_project() <update_project>`
 - :ref:`delete_project() <delete_project>`
 - :ref:`list_members() <list_members>`
-- :ref:`add_member() <add_member>`
+- :ref:`add_member() <project_add_member>`
 - :ref:`update_member() <update_member>`
 - :ref:`remove_member() <remove_member>`
 - :ref:`get_member_invite_url() <get_member_invite_url>`
@@ -30,7 +30,7 @@ API Methods
 .. autofunction:: disruptive.Project.delete_project
 .. _list_members:
 .. autofunction:: disruptive.Project.list_members
-.. _add_member:
+.. _project_add_member:
 .. autofunction:: disruptive.Project.add_member
 .. _update_member:
 .. autofunction:: disruptive.Project.update_member
