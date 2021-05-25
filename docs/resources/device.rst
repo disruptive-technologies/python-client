@@ -32,7 +32,7 @@ API Methods
    :maxdepth: 1
    :caption: Extras:
 
-   reported
+   device/reported
 
 .. _device:
 

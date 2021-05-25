@@ -70,8 +70,8 @@ When fetching a Data Connector, this attribute is set automatically, but when :r
    :maxdepth: 1
    :caption: Extras:
 
-   http_push_config
-   metrics
+   data_connector/http_push_config
+   data_connector/metrics
 
 .. _data_connector_status:
 

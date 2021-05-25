@@ -30,7 +30,7 @@ List of Examples
    :maxdepth: 1
    :hidden:
    
-   get_device
-   fetch_event_history
-   plot_sensor_data
-   threaded_stream
+   examples/get_device
+   examples/fetch_event_history
+   examples/plot_sensor_data
+   examples/threaded_stream
