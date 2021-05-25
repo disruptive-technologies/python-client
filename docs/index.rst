@@ -19,7 +19,7 @@ This is the Disruptive Technologies Python 3 API. It is an extension of our `RES
    :hidden:
    :maxdepth: 2
 
-   examples/examples
+   examples
 
 .. toctree::
    :titlesonly:
@@ -33,7 +33,7 @@ This is the Disruptive Technologies Python 3 API. It is an extension of our `RES
    :hidden:
    :maxdepth: 4
 
-   resources/resources
+   resources
 
 .. toctree::
    :hidden:

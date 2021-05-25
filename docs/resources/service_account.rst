@@ -46,4 +46,4 @@ Class
    :maxdepth: 4
    :caption: Extras:
 
-   key
+   service_account/key
