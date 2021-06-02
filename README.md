@@ -1,6 +1,6 @@
 # Disruptive Technologies Python Client
 
-![build](https://github.com/disruptive-technologies/disruptive-python/actions/workflows/build.yml/badge.svg)
+![build](https://github.com/disruptive-technologies/python-client/actions/workflows/build.yml/badge.svg)
 [![codecov](https://codecov.io/gh/disruptive-technologies/python-client/branch/main/graph/badge.svg)](https://codecov.io/gh/disruptive-technologies/python-client)
 
 ## Documentation
