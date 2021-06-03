@@ -257,6 +257,9 @@ class UnknownError(DTApiError):
 
     """
 
+    def __init__(self, message):
+        super().__init__(message)
+
 
 # ------------------------- error handling -------------------------
 def parse_request_error(caught_error, data, nth_attempt):
