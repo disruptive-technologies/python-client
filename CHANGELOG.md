@@ -7,7 +7,7 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
 - [e1ae80b](https://github.com/disruptive-technologies/python-client/commit/e1ae80b31c657450ff75521a1bbeace5c30e665b) Added missing constructor for UnknownError.
 
 # v0.5.0
-_Released on 2020-05-13._
+_Released on 2021-05-13._
 ### Changed
 - [#52](https://github.com/disruptive-technologies/disruptive-python/pull/52) Replaced `disruptive.errors.TypeError` and `disruptive.errors.ValueError` with built-ins.
 - [#54](https://github.com/disruptive-technologies/disruptive-python/pull/54) Combined `disruptive.Stream.device()` and `.project()` into `.event_stream()`.
@@ -28,13 +28,13 @@ _Released on 2020-05-13._
 - [#63](https://github.com/disruptive-technologies/disruptive-python/pull/63) Exceptions are now grouped into four main groups for easier handling.
 
 # v0.4.1
-_Released on 2020-05-04._
+_Released on 2021-05-04._
 ### Fixed
 - [#49](https://github.com/disruptive-technologies/disruptive-python/pull/49) Fixed forgotten Humidity attribute rename from `temperature` to `celsius`.
 - [#50](https://github.com/disruptive-technologies/disruptive-python/pull/50) ConnectionStatus event parameter `available` should be `list[str]`, not `str`.
 
 # v0.4.0
-_Released on 2020-05-02._
+_Released on 2021-05-02._
 ### Changed
 - [#44](https://github.com/disruptive-technologies/disruptive-python/pull/44) A few parameters and attributes has been renamed for consistency.
   - Organization attribute `id` renamed to `organization_id`.
@@ -44,7 +44,7 @@ _Released on 2020-05-02._
 - [#46](https://github.com/disruptive-technologies/disruptive-python/pull/46) Logging has been expanded to use either `disruptive.log_level` or the `logging` module.
 
 # v0.3.1
-_Released on 2020-04-24._
+_Released on 2021-04-24._
 ### Fixed
 - [#39](https://github.com/disruptive-technologies/disruptive-python/pull/39) Request retry logic ran 1 loop too few.
 ### Added
@@ -52,7 +52,7 @@ _Released on 2020-04-24._
 - [#41](https://github.com/disruptive-technologies/disruptive-python/pull/41) Added events module type constants on the form `disruptive.events.EVENT_TYPE`.
 
 # v0.3.0
-_Released on 2020-04-22._
+_Released on 2021-04-22._
 ### Changed
 - [#27](https://github.com/disruptive-technologies/disruptive-python/pull/27) Various attributes has been changed.
   - Device attribute `type` renamed to `device_type`.
@@ -66,7 +66,7 @@ _Released on 2020-04-22._
 - [#31](https://github.com/disruptive-technologies/disruptive-python/pull/31) Stream retry logic ran one too many times.
 
 # V0.2.3
-_Released on 2020-04-20._
+_Released on 2021-04-20._
 ### Fixed
 - [#25](https://github.com/disruptive-technologies/disruptive-python/pull/25) Double timezone info `(+00:00Z)` would break allowed format.
 ### Added
@@ -74,10 +74,10 @@ _Released on 2020-04-20._
 - [#26](https://github.com/disruptive-technologies/disruptive-python/pull/26) Added type constants to Device, DataConnector, and Role resource classes.
 
 # v0.2.2
-_Released on 2020-04-18._ 
+_Released on 2021-04-18._ 
 ### Added
 - [#23](https://github.com/disruptive-technologies/disruptive-python/pull/23) Added missing metadata about the project for better PyPI presentation.
 
 # v0.2.1
-_Released on 2020-04-17._  
+_Released on 2021-04-17._  
 Initial pre-release, open-sourcing, and PyPI publication of the project.
