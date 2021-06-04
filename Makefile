@@ -17,9 +17,6 @@ $(VENV)/bin/activate: setup.py
 build: venv
 	${VENV}/bin/python setup.py sdist bdist_wheel
 
-docs: venv
-	source ${VENV}/bin/activate && cd docs && ${MAKE} clean html
-
 test: venv
 	source ${VENV}/bin/activate && pytest tests/
 
