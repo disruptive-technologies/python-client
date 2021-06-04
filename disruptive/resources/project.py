@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-# Standard library imports.
-from typing import Optional
+from typing import Optional, Any
 
-# Project imports.
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase, Member
 
@@ -60,7 +58,7 @@ class Project(OutputBase):
     @classmethod
     def get_project(cls,
                     project_id: str,
-                    **kwargs,
+                    **kwargs: Any,
                     ) -> Project:
         """
         Gets the current state of a single project.
@@ -100,7 +98,7 @@ class Project(OutputBase):
     def list_projects(cls,
                       organization_id: Optional[str] = None,
                       query: Optional[str] = None,
-                      **kwargs,
+                      **kwargs: Any,
                       ) -> list[Project]:
         """
         Gets a list of the current state of all available projects.
@@ -152,7 +150,7 @@ class Project(OutputBase):
     def create_project(cls,
                        organization_id: str,
                        display_name: str,
-                       **kwargs,
+                       **kwargs: Any,
                        ) -> Project:
         """
         Create a new project in the specified organization.
@@ -200,7 +198,7 @@ class Project(OutputBase):
     @staticmethod
     def update_project(project_id: str,
                        display_name: Optional[str] = None,
-                       **kwargs,
+                       **kwargs: Any,
                        ) -> None:
         """
         Updates the display name a specified project.
@@ -242,7 +240,7 @@ class Project(OutputBase):
 
     @staticmethod
     def delete_project(project_id: str,
-                       **kwargs,
+                       **kwargs: Any,
                        ) -> None:
         """
         Deletes the specified project.
@@ -283,7 +281,7 @@ class Project(OutputBase):
 
     @staticmethod
     def list_members(project_id: str,
-                     **kwargs,
+                     **kwargs: Any,
                      ) -> list[Member]:
         """
         Gets a list of the current state of all members in a project.
@@ -319,13 +317,14 @@ class Project(OutputBase):
             pagination_key='members',
             **kwargs,
         )
-        return [Member(m) for m in members]
+        members_list: list[Member] = [Member(m) for m in members]
+        return members_list
 
     @staticmethod
     def add_member(project_id: str,
                    email: str,
                    roles: list[str],
-                   **kwargs,
+                   **kwargs: Any,
                    ) -> Member:
         """
         Add a new member to the specified project.
@@ -377,7 +376,7 @@ class Project(OutputBase):
     @staticmethod
     def get_member(member_id: str,
                    project_id: str,
-                   **kwargs,
+                   **kwargs: Any,
                    ) -> Member:
         """
         Get the state of a member in the specified project.
@@ -425,7 +424,7 @@ class Project(OutputBase):
     def update_member(member_id: str,
                       project_id: str,
                       roles: list[str],
-                      **kwargs,
+                      **kwargs: Any,
                       ) -> Member:
         """
         Update the role(s) of the specified member.
@@ -481,7 +480,7 @@ class Project(OutputBase):
     @staticmethod
     def remove_member(member_id: str,
                       project_id: str,
-                      **kwargs,
+                      **kwargs: Any,
                       ) -> None:
         """
         Revoke a member's membership in the specified project.
@@ -523,7 +522,7 @@ class Project(OutputBase):
     @staticmethod
     def get_member_invite_url(member_id: str,
                               project_id: str,
-                              **kwargs,
+                              **kwargs: Any,
                               ) -> str:
         """
         Get the invite URL for a member with pending invite.
@@ -570,14 +569,15 @@ class Project(OutputBase):
         ) + ':getInviteUrl'
 
         # Return url string in GET response.
-        return dtrequests.DTRequest.get(
+        invite_url: str = dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         )['inviteUrl']
+        return invite_url
 
     @staticmethod
     def list_permissions(project_id: str,
-                         **kwargs,
+                         **kwargs: Any,
                          ) -> list[str]:
         """
         List permissions available to the caller in the specified project.
@@ -606,8 +606,9 @@ class Project(OutputBase):
         url = '/projects/{}/permissions'.format(project_id)
 
         # Return list of permissions in GET response.
-        return dtrequests.DTRequest.paginated_get(
+        permissions: list[str] = dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='permissions',
             **kwargs,
         )
+        return permissions

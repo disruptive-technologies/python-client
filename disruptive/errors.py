@@ -11,7 +11,7 @@ class DTApiError(Exception):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
         # Log the error.
@@ -26,7 +26,7 @@ class BatchError(dtoutputs.OutputBase):
 
     """
 
-    def __init__(self, error):
+    def __init__(self, error) -> None:
         # Inherit from OutputBase parent.
         super().__init__(error)
 
@@ -53,15 +53,15 @@ class TransferDeviceError(BatchError):
 
     """
 
-    def __init__(self, error):
+    def __init__(self, error: dict) -> None:
         # Inherit from OutputBase parent.
         super().__init__(error)
 
         # Unpack error dictionary.
-        self.device_id = error['device'].split('/')[-1]
-        self.project_id = error['device'].split('/')[1]
-        self.status_code = error['status']['code']
-        self.message = error['status']['message']
+        self.device_id: str = error['device'].split('/')[-1]
+        self.project_id: str = error['device'].split('/')[1]
+        self.status_code: str = error['status']['code']
+        self.message: str = error['status']['message']
 
 
 class LabelUpdateError(BatchError):
@@ -83,15 +83,15 @@ class LabelUpdateError(BatchError):
 
     """
 
-    def __init__(self, error):
+    def __init__(self, error: dict) -> None:
         # Inherit from OutputBase parent.
         super().__init__(error)
 
         # Unpack error dictionary.
-        self.device_id = error['device'].split('/')[-1]
-        self.project_id = error['device'].split('/')[1]
-        self.status_code = error['status']['code']
-        self.message = error['status']['message']
+        self.device_id: str = error['device'].split('/')[-1]
+        self.project_id: str = error['device'].split('/')[1]
+        self.status_code: str = error['status']['code']
+        self.message: str = error['status']['message']
 
 
 # ------------------------- ServerError -------------------------
@@ -101,7 +101,7 @@ class ServerError(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -112,7 +112,7 @@ class InternalServerError(ServerError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -124,7 +124,7 @@ class UsageError(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -135,7 +135,7 @@ class BadRequest(UsageError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -146,7 +146,7 @@ class Unauthorized(UsageError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -157,7 +157,7 @@ class Forbidden(UsageError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -168,7 +168,7 @@ class NotFound(UsageError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -179,7 +179,7 @@ class Conflict(UsageError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -190,7 +190,7 @@ class TooManyRequests(UsageError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -200,7 +200,7 @@ class FormatError(UsageError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -210,7 +210,7 @@ class ConfigurationError(UsageError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -220,7 +220,7 @@ class EmptyStringError(UsageError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -232,7 +232,7 @@ class ConnectionError(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -243,7 +243,7 @@ class ReadTimeout(ConnectionError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
@@ -257,12 +257,38 @@ class UnknownError(DTApiError):
 
     """
 
-    def __init__(self, message):
+    def __init__(self, message) -> None:
         super().__init__(message)
 
 
 # ------------------------- error handling -------------------------
-def parse_request_error(caught_error, data, nth_attempt):
+def parse_request_error(caught_error: Exception,
+                        data: dict,
+                        nth_attempt: int,
+                        ) -> tuple:
+    """
+    Depending on the request error caught, choose a course of action.
+
+    Parameters
+    ----------
+    caught_error : Exception
+        Request error that has been caught.
+    data : dict
+        Data contained in the error-ridden request.
+    nth_attempt : int
+        Current request attempt.
+
+    Returns
+    -------
+    error : Exception
+        Exception to be raised.
+    should_retry : bool
+        If the request should be retried or not.
+    nth_attempt : int
+        Iterated attempt count.
+
+    """
+
     # Read Timeouts should be attempted again.
     if isinstance(caught_error, requests.exceptions.ReadTimeout):
         return (
@@ -318,7 +344,12 @@ def parse_api_status_code(status_code, data, headers, nth_attempt):
         return UnknownError(data), False, None
 
 
-def _raise_provided(error, message: str):
+def _raise_builtin(error, message: str):
+    """
+    Used to accompany raised builtin errors with a log message.
+
+    """
+
     # Log the error.
     dtlog.error(message)
 

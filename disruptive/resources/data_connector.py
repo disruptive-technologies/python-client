@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Any
 
 import disruptive
 import disruptive.logging as dtlog
@@ -75,7 +75,7 @@ class DataConnector(dtoutputs.OutputBase):
     def get_data_connector(cls,
                            data_connector_id: str,
                            project_id: str,
-                           **kwargs,
+                           **kwargs: Any,
                            ) -> DataConnector:
         """
         Gets the current state of a single Data Connector.
@@ -118,7 +118,7 @@ class DataConnector(dtoutputs.OutputBase):
     @classmethod
     def list_data_connectors(cls,
                              project_id: str,
-                             **kwargs,
+                             **kwargs: Any,
                              ) -> list[DataConnector]:
         """
         Gets a list of the current state of all Data Connectors in a project.
@@ -161,7 +161,7 @@ class DataConnector(dtoutputs.OutputBase):
                               status: str = 'ACTIVE',
                               event_types: list[str] = [],
                               labels: list[str] = [],
-                              **kwargs,
+                              **kwargs: Any,
                               ) -> DataConnector:
         """
         Creates a new Data Connector in the specified project.
@@ -237,7 +237,7 @@ class DataConnector(dtoutputs.OutputBase):
         status: Optional[str] = None,
         event_types: Optional[list[str]] = None,
         labels: Optional[list[str]] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> DataConnector:
         """
         Updates the attributes of a Data Connector.
@@ -325,7 +325,7 @@ class DataConnector(dtoutputs.OutputBase):
     def delete_data_connector(cls,
                               data_connector_id: str,
                               project_id: str,
-                              **kwargs,
+                              **kwargs: Any,
                               ) -> None:
         """
         Deletes the specified Data Connector.
@@ -364,7 +364,7 @@ class DataConnector(dtoutputs.OutputBase):
     def get_metrics(cls,
                     data_connector_id: str,
                     project_id: str,
-                    **kwargs,
+                    **kwargs: Any,
                     ) -> Metric:
         """
         Get the metrics of the last 3 hours for a Data Connector.
@@ -409,7 +409,7 @@ class DataConnector(dtoutputs.OutputBase):
     def sync_data_connector(cls,
                             data_connector_id: str,
                             project_id: str,
-                            **kwargs,
+                            **kwargs: Any,
                             ) -> None:
         """
         Synchronizes the current Data Connector state.
@@ -450,7 +450,7 @@ class DataConnector(dtoutputs.OutputBase):
         )
 
     @classmethod
-    def _from_dict(cls, data_connector: dict):
+    def _from_dict(cls, data_connector: dict) -> Optional[HttpPushConfig]:
         # Isolate the Data Connector type.
         data_connector_type = data_connector['type']
 
@@ -513,7 +513,7 @@ class DataConnector(dtoutputs.OutputBase):
             self.signature_secret = signature_secret
             self.headers = headers
 
-        def _to_dict(self):
+        def _to_dict(self) -> tuple[str, dict]:
             config: dict = dict()
             if self.url is not None:
                 config['url'] = self.url

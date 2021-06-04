@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-# Project imports.
+from typing import Any
+
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase
 
@@ -56,7 +57,7 @@ class Role(OutputBase):
     @classmethod
     def get_role(cls,
                  role: str,
-                 **kwargs,
+                 **kwargs: Any,
                  ) -> Role:
         """
         Gets a role specified by its name.
@@ -88,9 +89,7 @@ class Role(OutputBase):
         ))
 
     @classmethod
-    def list_roles(cls,
-                   **kwargs,
-                   ) -> list[Role]:
+    def list_roles(cls, **kwargs: Any) -> list[Role]:
         """
         List all available roles.
 

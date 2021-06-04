@@ -1,23 +1,20 @@
 from __future__ import annotations
 
-# Standard library imports.
 import time
 import urllib.parse
+from typing import Any
 
-# Third-party imports.
 import jwt
 
-# Project imports
-import disruptive.requests as dtrequests
-import disruptive.errors as dterrors
+from disruptive import requests as dtrequests, errors as dterrors
 
 
 class _AuthRoutineBase(object):
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Set default attributes.
-        self._expiration = 0
-        self._token = ''
+        self._expiration: int = 0
+        self._token: str = ''
 
     def _has_expired(self) -> bool:
         """
@@ -54,7 +51,7 @@ class _AuthRoutineBase(object):
 
         return self._token
 
-    def refresh(self):
+    def refresh(self) -> None:
         """
         This function does nothing and is overwritten in all
         child classes. It only exists for consistency purposes
@@ -67,7 +64,7 @@ class _AuthRoutineBase(object):
 
 class Unauthenticated(_AuthRoutineBase):
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Inherit parent class methods and attributes.
         super().__init__()
 
@@ -76,6 +73,12 @@ class Unauthenticated(_AuthRoutineBase):
         If called, this function does not but raise an error as no
         authentication routine has been called to update the configuration
         variable, nor has an authentication object been provided.
+
+        Raises
+        ------
+        Unauthorized
+            If neither default_auth has been set nor the
+            auth kwarg has been provided.
 
         """
         raise dterrors.Unauthorized(
@@ -101,27 +104,27 @@ class ServiceAccountAuth(_AuthRoutineBase):
         super().__init__()
 
         # Set parameter attributes.
-        self._key_id = key_id
-        self._secret = secret
-        self._email = email
+        self._key_id: str = key_id
+        self._secret: str = secret
+        self._email: str = email
 
         # Set default URLs.
         self.token_endpoint = 'https://identity.'\
             'disruptive-technologies.com/oauth2/token'
 
     @property
-    def key_id(self):
+    def key_id(self) -> str:
         return self._key_id
 
     @property
-    def secret(self):
+    def secret(self) -> str:
         return self._secret
 
     @property
-    def email(self):
+    def email(self) -> str:
         return self._email
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return '{}.{}({}, {}, {})'.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -139,7 +142,7 @@ class ServiceAccountAuth(_AuthRoutineBase):
 
         """
 
-        response = self._get_access_token()
+        response: dict = self._get_access_token()
         self._expiration = time.time() + response['expires_in']
         self._token = 'Bearer {}'.format(response['access_token'])
 
@@ -152,16 +155,21 @@ class ServiceAccountAuth(_AuthRoutineBase):
         response : dict
             Dictionary containing expiration and the token itself.
 
+        Raises
+        ------
+        BadRequest
+            If the provided credentials could not be used for authentication.
+
         """
 
         # Construct the JWT header.
-        jwt_headers = {
+        jwt_headers: dict[str, str] = {
             'alg': 'HS256',
             'kid': self.key_id,
         }
 
         # Construct the JWT payload.
-        jwt_payload = {
+        jwt_payload: dict[str, Any] = {
             'iat': int(time.time()),         # current unixtime
             'exp': int(time.time()) + 3600,  # expiration unixtime
             'aud': self.token_endpoint,
@@ -169,7 +177,7 @@ class ServiceAccountAuth(_AuthRoutineBase):
         }
 
         # Sign and encode JWT with the secret.
-        encoded_jwt = jwt.encode(
+        encoded_jwt: str = jwt.encode(
             payload=jwt_payload,
             key=self.secret,
             algorithm='HS256',
@@ -178,14 +186,14 @@ class ServiceAccountAuth(_AuthRoutineBase):
 
         # Prepare HTTP POST request data.
         # Note: The requests package applies Form URL-Encoding by default.
-        request_data = urllib.parse.urlencode({
+        request_data: str = urllib.parse.urlencode({
             'assertion': encoded_jwt,
             'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer'
         })
 
         # Exchange the JWT for an access token.
         try:
-            access_token_response = dtrequests.DTRequest.post(
+            access_token_response: dict = dtrequests.DTRequest.post(
                 url='',
                 base_url=self.token_endpoint,
                 data=request_data,
@@ -219,7 +227,7 @@ class Auth():
     """
 
     @staticmethod
-    def unauthenticated():
+    def unauthenticated() -> Unauthenticated:
         return Unauthenticated()
 
     @classmethod
@@ -288,7 +296,7 @@ class Auth():
 
             # If not, raise TypeError.
             else:
-                raise dterrors._raise_provided(
+                raise dterrors._raise_builtin(
                     TypeError,
                     'Authentication credential <{}> got type <{}>. '
                     'Expected <str>.'.format(

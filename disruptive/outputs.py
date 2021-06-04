@@ -116,7 +116,7 @@ class Member(OutputBase):
 
     """
 
-    def __init__(self, member):
+    def __init__(self, member: dict) -> None:
         """
         Constructs the Member object by unpacking the raw response.
 

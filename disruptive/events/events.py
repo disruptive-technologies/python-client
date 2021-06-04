@@ -33,7 +33,7 @@ class _EventData(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    timestamp : datetime
+    timestamp : datetime, str, optional
         Timestamp of when the event was received by a Cloud Connector.
 
     """
@@ -43,6 +43,8 @@ class _EventData(dtoutputs.OutputBase):
         Constructs the _EventData object by inheriting parent.
 
         """
+
+        self.timestamp: Optional[datetime | str] = None
 
         # If timestamp is provided, verify type and set attribute.
         if 'updateTime' in data:

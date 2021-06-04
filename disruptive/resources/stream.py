@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-# Standard library imports
-from typing import Generator, Optional
+from typing import Generator, Optional, Any
 
-# Project Imports.
 import disruptive.requests as dtrequests
 from disruptive.events.events import Event
 
@@ -21,7 +19,7 @@ class Stream():
                      label_filters: Optional[dict] = None,
                      device_types: Optional[list[str]] = None,
                      event_types: Optional[list[str]] = None,
-                     **kwargs,
+                     **kwargs: Any,
                      ) -> Generator:
         """
         Streams events for one, several, or all devices in a project.

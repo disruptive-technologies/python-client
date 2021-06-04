@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-# Project imports.
+from typing import Any
+
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase, Member
 
@@ -42,7 +43,7 @@ class Organization(OutputBase):
     @classmethod
     def get_organization(cls,
                          organization_id: str,
-                         **kwargs,
+                         **kwargs: Any,
                          ) -> Organization:
         """
         Gets the current state of a single organization.
@@ -77,9 +78,7 @@ class Organization(OutputBase):
         ))
 
     @classmethod
-    def list_organizations(cls,
-                           **kwargs,
-                           ) -> list[Organization]:
+    def list_organizations(cls, **kwargs: Any) -> list[Organization]:
         """
         Gets a list of the current state of all available organizations.
 
@@ -111,7 +110,7 @@ class Organization(OutputBase):
 
     @staticmethod
     def list_members(organization_id: str,
-                     **kwargs,
+                     **kwargs: Any,
                      ) -> list[Member]:
         """
         Gets a list of the current state of all members in an organization.
@@ -151,7 +150,7 @@ class Organization(OutputBase):
     def add_member(organization_id: str,
                    email: str,
                    roles: list[str],
-                   **kwargs,
+                   **kwargs: Any,
                    ) -> Member:
         """
         Add a new member to the specified organization.
@@ -203,7 +202,7 @@ class Organization(OutputBase):
     @staticmethod
     def get_member(member_id: str,
                    organization_id: str,
-                   **kwargs,
+                   **kwargs: Any,
                    ) -> Member:
         """
         Get a member from the specified organization.
@@ -250,7 +249,7 @@ class Organization(OutputBase):
     @staticmethod
     def remove_member(member_id: str,
                       organization_id: str,
-                      **kwargs,
+                      **kwargs: Any,
                       ) -> None:
         """
         Revoke a member's membership in the specified organization.
@@ -292,8 +291,8 @@ class Organization(OutputBase):
     @staticmethod
     def get_member_invite_url(member_id: str,
                               organization_id: str,
-                              **kwargs,
-                              ) -> None:
+                              **kwargs: Any,
+                              ) -> str:
         """
         Get the invite URL for a member with pending invite.
 
@@ -334,14 +333,15 @@ class Organization(OutputBase):
         ) + ':getInviteUrl'
 
         # Return url string in GET response.
-        return dtrequests.DTRequest.get(
+        invite_url: str = dtrequests.DTRequest.get(
             url=url,
             **kwargs,
         )['inviteUrl']
+        return invite_url
 
     @staticmethod
     def list_permissions(organization_id: str,
-                         **kwargs,
+                         **kwargs: Any,
                          ) -> list[str]:
         """
         List permissions available in the specified organization.
@@ -372,8 +372,9 @@ class Organization(OutputBase):
         url = '/organizations/{}/permissions'.format(organization_id)
 
         # Return list of permissions in GET response.
-        return dtrequests.DTRequest.paginated_get(
+        permissions: list[str] = dtrequests.DTRequest.paginated_get(
             url=url,
             pagination_key='permissions',
             **kwargs,
         )
+        return permissions

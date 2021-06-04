@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 import json
-from typing import Optional
+from typing import Optional, Any
 
 import requests
 
@@ -174,32 +174,36 @@ class DTRequest():
         return res.data
 
     @classmethod
-    def get(cls, url, **kwargs):
+    def get(cls, url: str, **kwargs: Any) -> dict:
         req = cls('GET', url, **kwargs)
-        return req._send_request()
+        response: dict = req._send_request()
+        return response
 
     @classmethod
-    def post(cls, url, **kwargs):
+    def post(cls, url: str, **kwargs: Any) -> dict:
         req = cls('POST', url, **kwargs)
-        return req._send_request()
+        response: dict = req._send_request()
+        return response
 
     @classmethod
-    def patch(cls, url, **kwargs):
+    def patch(cls, url: str, **kwargs: Any) -> dict:
         req = cls('PATCH', url, **kwargs)
-        return req._send_request()
+        response: dict = req._send_request()
+        return response
 
     @classmethod
-    def delete(cls, url, **kwargs):
+    def delete(cls, url: str, **kwargs: Any) -> dict:
         req = cls('DELETE', url, **kwargs)
-        return req._send_request()
+        response: dict = req._send_request()
+        return response
 
     @classmethod
     def paginated_get(cls,
                       url: str,
                       pagination_key: str,
                       params: dict[str, str] = {},
-                      **kwargs
-                      ):
+                      **kwargs: Any,
+                      ) -> list:
         # Initialize output list.
         results = []
 
