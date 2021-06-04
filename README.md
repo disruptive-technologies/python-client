@@ -109,11 +109,6 @@ Lint the package code using MyPy and flake8:
 make lint
 ```
 
-Build the sphinx documentation:
-```
-make docs
-```
-
 Build the package distribution:
 ```
 make build
