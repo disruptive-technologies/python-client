@@ -181,7 +181,7 @@ class Touch(_EventData):
         """
 
         # Set parameter attributes.
-        self.timestamp = timestamp
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'touch')
@@ -264,9 +264,9 @@ class Temperature(_EventData):
         """
 
         # Set parameter attributes.
-        self.celsius = celsius
-        self.fahrenheit = self._celsius_to_fahrenheit(celsius)
-        self.timestamp = timestamp
+        self.celsius: float = celsius
+        self.fahrenheit: float = self._celsius_to_fahrenheit(celsius)
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'temperature')
@@ -352,8 +352,8 @@ class ObjectPresent(_EventData):
         """
 
         # Set parameter attributes.
-        self.state = state
-        self.timestamp = timestamp
+        self.state: str = state
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'objectPresent')
@@ -415,7 +415,7 @@ class Humidity(_EventData):
     ----------
     temperature : float
         Temperature value in Celsius.
-    humidity : int
+    humidity : float
         Relative humidity in percent.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
@@ -443,10 +443,10 @@ class Humidity(_EventData):
         """
 
         # Set parameter attributes.
-        self.celsius = celsius
-        self.fahrenheit = self._celsius_to_fahrenheit(celsius)
-        self.humidity = humidity
-        self.timestamp = timestamp
+        self.celsius: float = celsius
+        self.fahrenheit: float = self._celsius_to_fahrenheit(celsius)
+        self.humidity: float = humidity
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'humidity')
@@ -538,8 +538,8 @@ class ObjectPresentCount(_EventData):
         """
 
         # Set parameter attributes.
-        self.total = total
-        self.timestamp = timestamp
+        self.total: int = total
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'objectPresentCount')
@@ -625,8 +625,8 @@ class TouchCount(_EventData):
         """
 
         # Set parameter attributes.
-        self.total = total
-        self.timestamp = timestamp
+        self.total: int = total
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'touchCount')
@@ -710,8 +710,8 @@ class WaterPresent(_EventData):
         """
 
         # Set parameter attributes.
-        self.state = state
-        self.timestamp = timestamp
+        self.state: str = state
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'waterPresent')
@@ -806,9 +806,9 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, {})
 
         # Unpack attributes.
-        self.cloudconnector_id = cloudconnector_id
-        self.signal_strength = signal_strength
-        self.rssi = rssi
+        self.cloudconnector_id: str = cloudconnector_id
+        self.signal_strength: int = signal_strength
+        self.rssi: int = rssi
 
     def __repr__(self) -> str:
         string = '{}.{}('\
@@ -907,11 +907,12 @@ class NetworkStatus(_EventData):
         """
 
         # Set attributes.
-        self.signal_strength = signal_strength
-        self.rssi = rssi
-        self.transmission_mode = transmission_mode
-        self.cloud_connectors = cloud_connectors
-        self.timestamp = timestamp
+        self.signal_strength: int = signal_strength
+        self.rssi: int = rssi
+        self.transmission_mode: str = transmission_mode
+        self.cloud_connectors: list[NetworkStatusCloudConnector] = \
+            cloud_connectors
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'networkStatus')
@@ -1026,8 +1027,8 @@ class BatteryStatus(_EventData):
         """
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        self.percentage = percentage
-        self.timestamp = timestamp
+        self.percentage: int = percentage
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'batteryStatus')
@@ -1122,10 +1123,10 @@ class LabelsChanged(_EventData):
         """
 
         # Set parameter attributes.
-        self.added = added
-        self.modified = modified
-        self.removed = removed
-        self.timestamp = timestamp
+        self.added: dict = added
+        self.modified: dict = modified
+        self.removed: list[str] = removed
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'labelsChanged')
@@ -1228,9 +1229,9 @@ class ConnectionStatus(_EventData):
         """
 
         # Set parameter attributes.
-        self.connection = connection
-        self.available = available
-        self.timestamp = timestamp
+        self.connection: str = connection
+        self.available: list[str] = available
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'connectionStatus')
@@ -1326,9 +1327,9 @@ class EthernetStatus(_EventData):
         """
 
         # Set parameter attributes.
-        self.mac_address = mac_address
-        self.ip_address = ip_address
-        self.timestamp = timestamp
+        self.mac_address: str = mac_address
+        self.ip_address: str = ip_address
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'ethernetStatus')
@@ -1418,8 +1419,8 @@ class CellularStatus(_EventData):
         """
 
         # Set parameter attributes.
-        self.signal_strength = signal_strength
-        self.timestamp = timestamp
+        self.signal_strength: int = signal_strength
+        self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'cellularStatus')
@@ -1497,10 +1498,10 @@ class Event(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, event)
 
         # Unpack attributes from dictionary.
-        self.event_id = event['eventId']
-        self.event_type = event['eventType']
-        self.device_id = event['targetName'].split('/')[-1]
-        self.project_id = event['targetName'].split('/')[1]
+        self.event_id: str = event['eventId']
+        self.event_type: str = event['eventType']
+        self.device_id: str = event['targetName'].split('/')[-1]
+        self.project_id: str = event['targetName'].split('/')[1]
 
         # Since labelsChanged is the only event that does not
         # contain an updateTime field in data, we provide the

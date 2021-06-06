@@ -47,13 +47,14 @@ class Project(OutputBase):
         OutputBase.__init__(self, project)
 
         # Unpack attributes from dictionary.
-        self.id = project['name'].split('/')[-1]
-        self.display_name = project['displayName']
-        self.organization_id = project['organization'].split('/')[-1]
-        self.organization_display_name = project['organizationDisplayName']
-        self.sensor_count = project['sensorCount']
-        self.cloud_connector_count = project['cloudConnectorCount']
-        self.is_inventory = project['inventory']
+        self.id: str = project['name'].split('/')[-1]
+        self.display_name: str = project['displayName']
+        self.organization_id: str = project['organization'].split('/')[-1]
+        self.organization_display_name: str = \
+            project['organizationDisplayName']
+        self.sensor_count: int = project['sensorCount']
+        self.cloud_connector_count: int = project['cloudConnectorCount']
+        self.is_inventory: bool = project['inventory']
 
     @classmethod
     def get_project(cls,

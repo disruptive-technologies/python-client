@@ -62,13 +62,13 @@ class DataConnector(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, data_connector)
 
         # Unpack attributes from dictionary.
-        self.data_connector_id = data_connector['name'].split('/')[-1]
-        self.project_id = data_connector['name'].split('/')[1]
-        self.status = data_connector['status']
-        self.display_name = data_connector['displayName']
-        self.event_types = data_connector['events']
-        self.labels = data_connector['labels']
-        self.data_connector_type = data_connector['type']
+        self.data_connector_id: str = data_connector['name'].split('/')[-1]
+        self.project_id: str = data_connector['name'].split('/')[1]
+        self.status: str = data_connector['status']
+        self.display_name: str = data_connector['displayName']
+        self.event_types: list[str] = data_connector['events']
+        self.labels: list[str] = data_connector['labels']
+        self.data_connector_type: str = data_connector['type']
         self.config = self._from_dict(data_connector)
 
     @classmethod

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Optional, Any
 
 import disruptive.requests as dtrequests
@@ -46,12 +47,14 @@ class ServiceAccount(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, service_account)
 
         # Unpack attributes from dictionary.
-        self.service_account_id = service_account['name'].split('/')[-1]
-        self.email = service_account['email']
-        self.display_name = service_account['displayName']
-        self.basic_auth_enabled = service_account['enableBasicAuth']
-        self.create_time = dttrans.to_datetime(service_account['createTime'])
-        self.update_time = dttrans.to_datetime(service_account['updateTime'])
+        self.service_account_id: str = service_account['name'].split('/')[-1]
+        self.email: str = service_account['email']
+        self.display_name: str = service_account['displayName']
+        self.basic_auth_enabled: bool = service_account['enableBasicAuth']
+        self.create_time: Optional[datetime] = \
+            dttrans.to_datetime(service_account['createTime'])
+        self.update_time: Optional[datetime] = \
+            dttrans.to_datetime(service_account['updateTime'])
 
     @classmethod
     def get_service_account(cls,
@@ -528,11 +531,12 @@ class Key(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, key)
 
         # Initialize secret, which is only not-None when created.
-        self.secret = None
+        self.secret: Optional[str] = None
 
         # Unpack attributes from dictionary.
-        self.key_id = key['id']
-        self.create_time = dttrans.to_datetime(key['createTime'])
+        self.key_id: str = key['id']
+        self.create_time: Optional[datetime] = \
+            dttrans.to_datetime(key['createTime'])
         if 'secret' in key:
             self.secret = key['secret']
 

@@ -37,8 +37,8 @@ class Organization(OutputBase):
         OutputBase.__init__(self, organization)
 
         # Unpack attributes from dictionary.
-        self.organization_id = organization['name'].split('/')[-1]
-        self.display_name = organization['displayName']
+        self.organization_id: str = organization['name'].split('/')[-1]
+        self.display_name: str = organization['displayName']
 
     @classmethod
     def get_organization(cls,

@@ -66,10 +66,10 @@ class Device(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, device)
 
         # Unpack attributes from dictionary.
-        self.device_id = device['name'].split('/')[-1]
-        self.project_id = device['name'].split('/')[1]
-        self.device_type = device['type']
-        self.labels = device['labels']
+        self.device_id: str = device['name'].split('/')[-1]
+        self.project_id: str = device['name'].split('/')[1]
+        self.device_type: str = device['type']
+        self.labels: dict = device['labels']
 
         # Set display_name if `name` label key exists.
         self.display_name = None
