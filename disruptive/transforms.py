@@ -81,7 +81,7 @@ def to_datetime(ts: Optional[str | datetime]) -> Optional[datetime]:
         raise dterrors._raise_builtin(TypeError, msg)
 
 
-def validate_iso8601_format(dt_str):
+def validate_iso8601_format(dt_str: str) -> bool:
     # Set up regex for matching iso8601 string.
     # This should probably be changed in the future as it is
     # a little forced. However, the reason for using this approach is

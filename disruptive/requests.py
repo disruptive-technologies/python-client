@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 import json
-from typing import Optional, Any
+from typing import Optional, Any, Generator
 
 import requests
 
@@ -13,15 +13,15 @@ import disruptive.errors as dterrors
 
 class DTRequest():
 
-    def __init__(self, method, url, **kwargs):
+    def __init__(self, method: str, url: str, **kwargs: Any):
         # Set attributes from parameters.
         self.method = method
         self.url = url
 
         # Set default attributes, though many are updated in _unpack_kwargs().
         self.base_url = dt.base_url
-        self.params = {}
-        self.headers = {}
+        self.params: dict = dict()
+        self.headers: dict = dict()
         self.body = None
         self.data = None
         self.request_timeout = dt.request_timeout
@@ -36,7 +36,7 @@ class DTRequest():
         # Construct full url from base and target endpoint.
         self.full_url = self.base_url + self.url
 
-    def _unpack_kwargs(self, **kwargs):
+    def _unpack_kwargs(self, **kwargs: Any) -> None:
         if 'params' in kwargs:
             self.params = kwargs['params']
         if 'headers' in kwargs:
@@ -67,7 +67,7 @@ class DTRequest():
             else:
                 self.headers['Authorization'] = dt.default_auth.get_token()
 
-    def _sanitize_arguments(self):
+    def _sanitize_arguments(self) -> None:
         # Check that request_timeout > 0.
         if self.request_timeout <= 0:
             raise dterrors.ConfigurationError(
@@ -90,7 +90,8 @@ class DTRequest():
                          body: Optional[dict],
                          data: Optional[str],
                          timeout: int,
-                         ):
+                         ) -> tuple[DTResponse, Any]:
+
         # Attempt to send the request.
         try:
             # Use the requests package to send the request.
@@ -114,7 +115,22 @@ class DTRequest():
             # Requests' .json() fails when no json is returned (code 405).
             return DTResponse({}, res.status_code, res.headers), e
 
-    def _send_request(self, nth_attempt=1):
+    def _send_request(self, nth_attempt: int = 1) -> dict:
+        """
+        Combines all the information and sends a request.
+
+        Parameters
+        ----------
+        nth_attempt : int
+            Request attempt count.
+
+        Returns
+        -------
+        data : dict
+            Data contained in the response.
+
+        """
+
         # Log the request.
         dtlog.debug('Request [{}] to {}.'.format(
             self.method,
@@ -171,7 +187,8 @@ class DTRequest():
             if error is not None:
                 raise error
 
-        return res.data
+        data: dict = res.data
+        return data
 
     @classmethod
     def get(cls, url: str, **kwargs: Any) -> dict:
@@ -220,7 +237,17 @@ class DTRequest():
         return results
 
     @staticmethod
-    def stream(url: str, **kwargs):
+    def stream(url: str, **kwargs: Any) -> Generator:
+        """
+        Initialzed and returns a stream generator.
+
+        Parameters
+        ----------
+        url : str
+            API endpoint URL.
+
+        """
+
         # Set ping constants.
         PING_INTERVAL = 10
         PING_JITTER = 2
@@ -317,7 +344,12 @@ class DTRequest():
 
 class DTResponse():
 
-    def __init__(self, data, status_code, headers):
+    def __init__(self,
+                 data: dict,
+                 status_code: Optional[int],
+                 headers: Any,
+                 ):
+
         self.data = data
         self.status_code = status_code
         self.headers = headers

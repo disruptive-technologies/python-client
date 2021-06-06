@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Union
 from datetime import datetime
 
 import disruptive
@@ -42,6 +42,13 @@ class _EventData(dtoutputs.OutputBase):
         """
         Constructs the _EventData object by inheriting parent.
 
+        Parameters
+        ----------
+        data : dict
+            Event data dictionary.
+        event_type : str
+            Name of the event type.
+
         """
 
         self.timestamp: Optional[datetime | str] = None
@@ -72,7 +79,10 @@ class _EventData(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, data)
 
     @classmethod
-    def from_event_type(cls, data: dict, event_type: str):
+    def from_event_type(cls,
+                        data: dict,
+                        event_type: str,
+                        ) -> Optional[_EventType]:
         """
         Constructs the appropriate child class from the provided event type.
 
@@ -94,13 +104,15 @@ class _EventData(dtoutputs.OutputBase):
 
         # Return the initialized class instance.
         if key:
-            return child._from_raw(data[event_type])
+            child_instance = child._from_raw(data[event_type])
         else:
             # Special case for labelsChanged event.
-            return child._from_raw(data)
+            child_instance = child._from_raw(data)
+        return child_instance
 
     @staticmethod
-    def __child_map(event_type: str):
+    def __child_map(event_type: str,
+                    ) -> tuple[Optional[_EventType], Optional[bool]]:
         """
         Based on provided event type, returns the
         child class and supporting information.
@@ -126,7 +138,7 @@ class _EventData(dtoutputs.OutputBase):
         dtlog.warning('Skipping unknown event type {}.'.format(event_type))
         return None, None
 
-    def _celsius_to_fahrenheit(self, celsius: float):
+    def _celsius_to_fahrenheit(self, celsius: float) -> float:
         """
         Converts Celsius temperature value to Fahrenheit.
 
@@ -174,7 +186,7 @@ class Touch(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'touch')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'timestamp={}'\
             ')'
@@ -185,7 +197,7 @@ class Touch(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> Touch:
         """
         Constructs a Touch object from API response data.
 
@@ -211,7 +223,7 @@ class Touch(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
@@ -259,7 +271,7 @@ class Temperature(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'temperature')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'celsius={}, '\
             'timestamp={}'\
@@ -272,7 +284,7 @@ class Temperature(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> Temperature:
         """
         Constructs a Temperature object from API response data.
 
@@ -299,7 +311,7 @@ class Temperature(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.celsius is not None:
             data['value'] = self.celsius
@@ -346,7 +358,7 @@ class ObjectPresent(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'objectPresent')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'state={}, '\
             'timestamp={}'\
@@ -359,7 +371,7 @@ class ObjectPresent(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> ObjectPresent:
         """
         Constructs an ObjectPresent object from API response data.
 
@@ -386,7 +398,7 @@ class ObjectPresent(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.state is not None:
             data['state'] = self.state
@@ -439,7 +451,7 @@ class Humidity(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'humidity')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'celsius={}, '\
             'humidity={}, '\
@@ -454,7 +466,7 @@ class Humidity(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> Humidity:
         """
         Constructs a Humidity object from API response data.
 
@@ -482,7 +494,7 @@ class Humidity(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.celsius is not None:
             data['temperature'] = self.celsius
@@ -532,7 +544,7 @@ class ObjectPresentCount(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'objectPresentCount')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'total={}, '\
             'timestamp={}'\
@@ -545,7 +557,7 @@ class ObjectPresentCount(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> ObjectPresentCount:
         """
         Constructs a ObjectPresentCount object from API response data.
 
@@ -572,7 +584,7 @@ class ObjectPresentCount(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         data['total'] = self.total
         if self.timestamp is not None:
@@ -619,7 +631,7 @@ class TouchCount(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'touchCount')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'total={}, '\
             'timestamp={}'\
@@ -632,7 +644,7 @@ class TouchCount(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> TouchCount:
         """
         Constructs a TouchCount object from API response data.
 
@@ -659,7 +671,7 @@ class TouchCount(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         data['total'] = self.total
         if self.timestamp is not None:
@@ -704,7 +716,7 @@ class WaterPresent(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'waterPresent')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'state={}, '\
             'timestamp={}'\
@@ -717,7 +729,7 @@ class WaterPresent(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> WaterPresent:
         """
         Constructs a WaterPresent object from API response data.
 
@@ -744,7 +756,7 @@ class WaterPresent(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         data['state'] = self.state
         if self.timestamp is not None:
@@ -798,7 +810,7 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
         self.signal_strength = signal_strength
         self.rssi = rssi
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'cloudconnector_id={}, '\
             'signal_strength={}, '\
@@ -813,7 +825,7 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> NetworkStatusCloudConnector:
         """
         Constructs a NetworkStatusCloudConnector object from API response data.
 
@@ -904,7 +916,7 @@ class NetworkStatus(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'networkStatus')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'signal_strength={}, '\
             'rssi={}, '\
@@ -923,7 +935,7 @@ class NetworkStatus(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> NetworkStatus:
         """
         Constructs a NetworkStatus object from API response data.
 
@@ -960,7 +972,7 @@ class NetworkStatus(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.signal_strength is not None:
             data['signalStrength'] = self.signal_strength
@@ -1020,7 +1032,7 @@ class BatteryStatus(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'batteryStatus')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'percentage={}, '\
             'timestamp={}'\
@@ -1033,7 +1045,7 @@ class BatteryStatus(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> BatteryStatus:
         """
         Constructs a BatteryStatus object from API response data.
 
@@ -1060,7 +1072,7 @@ class BatteryStatus(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.percentage is not None:
             data['percentage'] = self.percentage
@@ -1118,7 +1130,7 @@ class LabelsChanged(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'labelsChanged')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'added={}, '\
             'modified={}, '\
@@ -1135,7 +1147,7 @@ class LabelsChanged(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> LabelsChanged:
         """
         Constructs a LabelsChanged object from API response data.
 
@@ -1164,7 +1176,7 @@ class LabelsChanged(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.added is not None:
             data['added'] = self.added
@@ -1223,7 +1235,7 @@ class ConnectionStatus(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'connectionStatus')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'connection={}, '\
             'available={}, '\
@@ -1238,7 +1250,7 @@ class ConnectionStatus(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> ConnectionStatus:
         """
         Constructs a ConnectionStatus object from API response data.
 
@@ -1266,7 +1278,7 @@ class ConnectionStatus(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.connection is not None:
             data['connection'] = self.connection
@@ -1321,7 +1333,7 @@ class EthernetStatus(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'ethernetStatus')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'mac_address={}, '\
             'ip_address={}, '\
@@ -1336,7 +1348,7 @@ class EthernetStatus(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> EthernetStatus:
         """
         Constructs a EthernetStatus object from API response data.
 
@@ -1364,7 +1376,7 @@ class EthernetStatus(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.mac_address is not None:
             data['macAddress'] = self.mac_address
@@ -1412,7 +1424,7 @@ class CellularStatus(_EventData):
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'cellularStatus')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = '{}.{}('\
             'signal_strength={}, '\
             'timestamp={}'\
@@ -1425,7 +1437,7 @@ class CellularStatus(_EventData):
         )
 
     @classmethod
-    def _from_raw(cls, data: dict):
+    def _from_raw(cls, data: dict) -> CellularStatus:
         """
         Constructs a CellularStatus object from API response data.
 
@@ -1452,7 +1464,7 @@ class CellularStatus(_EventData):
 
         return obj
 
-    def __repack(self):
+    def __repack(self) -> dict:
         data: dict = dict()
         if self.signal_strength is not None:
             data['signalStrength'] = self.signal_strength
@@ -1503,7 +1515,7 @@ class Event(dtoutputs.OutputBase):
         )
 
     @classmethod
-    def from_mixed_list(cls, events: list[dict]):
+    def from_mixed_list(cls, events: list[dict]) -> list[Event]:
         """
         Construct Event objects for each event in list.
 
@@ -1534,7 +1546,12 @@ class __EventsMap():
 
     class __TypeNames():
 
-        def __init__(self, api_name, attr_name, class_name, is_keyed):
+        def __init__(self,
+                     api_name: str,
+                     attr_name: str,
+                     class_name: str,
+                     is_keyed: bool
+                     ) -> None:
             self.api_name = api_name
             self.attr_name = attr_name
             self.class_name = class_name
@@ -1623,3 +1640,10 @@ class __EventsMap():
 
 
 _EVENTS_MAP = __EventsMap()
+
+_EventType = Union[
+    Touch, Temperature, ObjectPresent, Humidity, ObjectPresentCount,
+    TouchCount, WaterPresent, NetworkStatus, NetworkStatusCloudConnector,
+    BatteryStatus, LabelsChanged, ConnectionStatus, EthernetStatus,
+    CellularStatus,
+]

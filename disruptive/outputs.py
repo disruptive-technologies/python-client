@@ -1,4 +1,3 @@
-# Project imports.
 import disruptive.transforms as dttrans
 
 
@@ -22,18 +21,18 @@ class OutputBase(object):
         # Set attribute from input argument.
         self._raw = raw
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return '{}.{}({})'.format(
             self.__class__.__module__,
             self.__class__.__name__,
             self._raw,
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         out = self.__str__recursive([], self, level=0)
         return '\n'.join(out)
 
-    def __str__recursive(self, out, obj, level):
+    def __str__recursive(self, out: list, obj: object, level: int) -> list:
         # Set the indent level for formatting.
         n_spaces = 4
         l0 = level*' '*n_spaces
@@ -78,7 +77,13 @@ class OutputBase(object):
 
         return out
 
-    def __str__list(self, out, lst, level, n_spaces, l1):
+    def __str__list(self,
+                    out: list,
+                    lst: list,
+                    level: int,
+                    n_spaces: int,
+                    l1: str,
+                    ) -> list:
         for val in lst:
             # Class objects should be dumped recursively.
             if hasattr(val, '__dict__'):

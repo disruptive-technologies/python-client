@@ -1,3 +1,5 @@
+from typing import Any, Optional
+
 import requests
 
 import disruptive.outputs as dtoutputs
@@ -11,7 +13,7 @@ class DTApiError(Exception):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
         # Log the error.
@@ -26,7 +28,7 @@ class BatchError(dtoutputs.OutputBase):
 
     """
 
-    def __init__(self, error) -> None:
+    def __init__(self, error: Any) -> None:
         # Inherit from OutputBase parent.
         super().__init__(error)
 
@@ -101,7 +103,7 @@ class ServerError(DTApiError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -112,7 +114,7 @@ class InternalServerError(ServerError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -124,7 +126,7 @@ class UsageError(DTApiError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -135,7 +137,7 @@ class BadRequest(UsageError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -146,7 +148,7 @@ class Unauthorized(UsageError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -157,7 +159,7 @@ class Forbidden(UsageError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -168,7 +170,7 @@ class NotFound(UsageError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -179,7 +181,7 @@ class Conflict(UsageError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -190,7 +192,7 @@ class TooManyRequests(UsageError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -200,7 +202,7 @@ class FormatError(UsageError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -210,7 +212,7 @@ class ConfigurationError(UsageError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -220,7 +222,7 @@ class EmptyStringError(UsageError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -232,7 +234,7 @@ class ConnectionError(DTApiError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -243,7 +245,7 @@ class ReadTimeout(ConnectionError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -257,7 +259,7 @@ class UnknownError(DTApiError):
 
     """
 
-    def __init__(self, message) -> None:
+    def __init__(self, message: str | dict) -> None:
         super().__init__(message)
 
 
@@ -309,7 +311,37 @@ def parse_request_error(caught_error: Exception,
         return UnknownError(data), False, None
 
 
-def parse_api_status_code(status_code, data, headers, nth_attempt):
+def parse_api_status_code(status_code: Optional[int],
+                          data: dict,
+                          headers: Any,
+                          nth_attempt: int,
+                          ) -> Any:
+    """
+    Depending on the status code, returns an exception, retry boolean
+    and, incemented retry attempt.
+
+    Parameters
+    ----------
+    status_code : int
+        Status code returned by the API.
+    data : dict
+        Data in the response.
+    headers : dict
+        Headers in the response.
+    nth_attempt : int
+        Retry attempt count.
+
+    Returns
+    -------
+    error : Exception
+        The exception to be raised.
+    should_retry : bool
+        If the request should be retried.
+    nth_attempt : int
+        Incremented retry attempt count.
+
+    """
+
     # Check for API errors.
     if status_code == 200:
         return None, False, None
@@ -344,9 +376,16 @@ def parse_api_status_code(status_code, data, headers, nth_attempt):
         return UnknownError(data), False, None
 
 
-def _raise_builtin(error, message: str):
+def _raise_builtin(error: Any, message: str) -> Any:
     """
     Used to accompany raised builtin errors with a log message.
+
+    Parameters
+    ----------
+    error : Exception
+        Exception to be raised after logging.
+    message : str
+        Message to log.
 
     """
 
