@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Any
 
 import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
@@ -66,10 +66,10 @@ class Device(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, device)
 
         # Unpack attributes from dictionary.
-        self.device_id = device['name'].split('/')[-1]
-        self.project_id = device['name'].split('/')[1]
-        self.device_type = device['type']
-        self.labels = device['labels']
+        self.device_id: str = device['name'].split('/')[-1]
+        self.project_id: str = device['name'].split('/')[1]
+        self.device_type: str = device['type']
+        self.labels: dict = device['labels']
 
         # Set display_name if `name` label key exists.
         self.display_name = None
@@ -91,7 +91,7 @@ class Device(dtoutputs.OutputBase):
     def get_device(cls,
                    device_id: str,
                    project_id: str = '-',
-                   **kwargs,
+                   **kwargs: Any,
                    ) -> Device:
         """
         Gets the current state of a single device.
@@ -134,7 +134,7 @@ class Device(dtoutputs.OutputBase):
                      device_types: Optional[list[str]] = None,
                      label_filters: Optional[dict[str, str]] = None,
                      order_by: Optional[str] = None,
-                     **kwargs,
+                     **kwargs: Any,
                      ) -> list[Device]:
         """
         Gets a list of the current state of all devices in a
@@ -207,7 +207,7 @@ class Device(dtoutputs.OutputBase):
     def transfer_devices(device_ids: list[str],
                          source_project_id: str,
                          target_project_id: str,
-                         **kwargs,
+                         **kwargs: Any,
                          ) -> list[TransferDeviceError]:
         """
         Transfers all specified devices to the target project.
@@ -273,7 +273,7 @@ class Device(dtoutputs.OutputBase):
                   project_id: str,
                   key: str,
                   value: str,
-                  **kwargs,
+                  **kwargs: Any,
                   ) -> list[LabelUpdateError]:
         """
         Set a label (key and value) for a single device.
@@ -330,7 +330,7 @@ class Device(dtoutputs.OutputBase):
     def remove_label(device_id: str,
                      project_id: str,
                      key: str,
-                     **kwargs,
+                     **kwargs: Any,
                      ) -> list[LabelUpdateError]:
         """
         Remove a label (key and value) from a single device.
@@ -383,7 +383,7 @@ class Device(dtoutputs.OutputBase):
                             project_id: str,
                             set_labels: Optional[dict[str, str]] = None,
                             remove_labels: Optional[list[str]] = None,
-                            **kwargs,
+                            **kwargs: Any,
                             ) -> list[LabelUpdateError]:
         """
         Add, update, or remove multiple labels (key and value)

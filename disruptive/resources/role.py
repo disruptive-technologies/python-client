@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-# Project imports.
+from typing import Any
+
 import disruptive.requests as dtrequests
 from disruptive.outputs import OutputBase
 
@@ -48,15 +49,15 @@ class Role(OutputBase):
         OutputBase.__init__(self, role)
 
         # Unpack attributes from dictionary.
-        self.role = role['name'].split('/')[-1]
-        self.display_name = role['displayName']
-        self.description = role['description']
-        self.permissions = role['permissions']
+        self.role: str = role['name'].split('/')[-1]
+        self.display_name: str = role['displayName']
+        self.description: str = role['description']
+        self.permissions: list[str] = role['permissions']
 
     @classmethod
     def get_role(cls,
                  role: str,
-                 **kwargs,
+                 **kwargs: Any,
                  ) -> Role:
         """
         Gets a role specified by its name.
@@ -88,9 +89,7 @@ class Role(OutputBase):
         ))
 
     @classmethod
-    def list_roles(cls,
-                   **kwargs,
-                   ) -> list[Role]:
+    def list_roles(cls, **kwargs: Any) -> list[Role]:
         """
         List all available roles.
 

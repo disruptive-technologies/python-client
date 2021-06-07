@@ -1,18 +1,21 @@
+from __future__ import annotations
+
 import re
 import base64
 from datetime import datetime
+from typing import Optional
 
 import disruptive.errors as dterrors
 
 
-def base64_encode(string: str):
+def base64_encode(string: str) -> str:
     string_bytes = string.encode('ascii')
     base64_bytes = base64.b64encode(string_bytes)
     base64_string = base64_bytes.decode('ascii')
     return base64_string
 
 
-def to_iso8601(ts):
+def to_iso8601(ts: Optional[str | datetime]) -> Optional[str]:
     # Verify that we even got a string.
     if isinstance(ts, str):
         # As it is a string, verify iso8601 format.
@@ -44,10 +47,10 @@ def to_iso8601(ts):
     else:
         msg = 'Got timestamp of type <{}>, expected ' \
             'iso8601 <str> or <datetime>.'.format(type(ts).__name__)
-        raise dterrors._raise_provided(TypeError, msg)
+        raise dterrors._raise_builtin(TypeError, msg)
 
 
-def to_datetime(ts):
+def to_datetime(ts: Optional[str | datetime]) -> Optional[datetime]:
     # Check if input is already datetime format.
     if isinstance(ts, datetime):
         # Nothing to do, just return it.
@@ -75,10 +78,10 @@ def to_datetime(ts):
             'iso8601 <str> or <datetime>.'.format(
                 type(ts).__name__
             )
-        raise dterrors._raise_provided(TypeError, msg)
+        raise dterrors._raise_builtin(TypeError, msg)
 
 
-def validate_iso8601_format(dt_str):
+def validate_iso8601_format(dt_str: str) -> bool:
     # Set up regex for matching iso8601 string.
     # This should probably be changed in the future as it is
     # a little forced. However, the reason for using this approach is

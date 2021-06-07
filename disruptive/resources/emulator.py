@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-# Standard library imports.
-from typing import Optional
+from typing import Optional, Any
 
-# Project imports.
 import disruptive
 import disruptive.requests as dtrequests
 from disruptive.resources.device import Device
@@ -21,7 +19,7 @@ class Emulator():
                       device_type: str,
                       display_name: Optional[str] = None,
                       labels: Optional[dict[str, str]] = {},
-                      **kwargs,
+                      **kwargs: Any,
                       ) -> Device:
         """
         Create a new emulated device with specified type and project.
@@ -85,7 +83,7 @@ class Emulator():
     @staticmethod
     def delete_device(device_id: str,
                       project_id: str,
-                      **kwargs,
+                      **kwargs: Any,
                       ) -> None:
         """
         Deletes the specified emulated device.
@@ -132,7 +130,7 @@ class Emulator():
                       disruptive.events.ConnectionStatus |
                       disruptive.events.EthernetStatus |
                       disruptive.events.CellularStatus,
-                      **kwargs,
+                      **kwargs: Any,
                       ) -> None:
         """
         From the specified device, publish an event of the given type.

@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-# Standard library imports.
-from typing import Optional
+from typing import Optional, Any
 from datetime import datetime
 
-# Project imports.
 import disruptive.requests as dtrequests
 import disruptive.transforms as dttrans
 from disruptive.events.events import Event
@@ -23,7 +21,7 @@ class EventHistory():
                     event_types: Optional[list[str]] = None,
                     start_time: Optional[str | datetime] = None,
                     end_time: Optional[str | datetime] = None,
-                    **kwargs,
+                    **kwargs: Any,
                     ) -> list[Event]:
         """
         Get the event history for a single device.
@@ -99,4 +97,5 @@ class EventHistory():
         )
 
         # Return list of Event objects of paginated GET response.
-        return Event.from_mixed_list(res)
+        events: list[Event] = Event.from_mixed_list(res)
+        return events

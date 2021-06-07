@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-# Standard library imports.
-from typing import Optional
+from datetime import datetime
+from typing import Optional, Any
 
-# Project imports.
 import disruptive.requests as dtrequests
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
@@ -48,18 +47,20 @@ class ServiceAccount(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, service_account)
 
         # Unpack attributes from dictionary.
-        self.service_account_id = service_account['name'].split('/')[-1]
-        self.email = service_account['email']
-        self.display_name = service_account['displayName']
-        self.basic_auth_enabled = service_account['enableBasicAuth']
-        self.create_time = dttrans.to_datetime(service_account['createTime'])
-        self.update_time = dttrans.to_datetime(service_account['updateTime'])
+        self.service_account_id: str = service_account['name'].split('/')[-1]
+        self.email: str = service_account['email']
+        self.display_name: str = service_account['displayName']
+        self.basic_auth_enabled: bool = service_account['enableBasicAuth']
+        self.create_time: Optional[datetime] = \
+            dttrans.to_datetime(service_account['createTime'])
+        self.update_time: Optional[datetime] = \
+            dttrans.to_datetime(service_account['updateTime'])
 
     @classmethod
     def get_service_account(cls,
                             service_account_id: str,
                             project_id: str,
-                            **kwargs,
+                            **kwargs: Any,
                             ) -> ServiceAccount:
         """
         Gets the current state of a single Service Account.
@@ -104,7 +105,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     @classmethod
     def list_service_accounts(cls,
                               project_id: str,
-                              **kwargs,
+                              **kwargs: Any,
                               ) -> list[ServiceAccount]:
         """
         Gets a list of the current state of all Service Accounts in a project.
@@ -147,7 +148,7 @@ class ServiceAccount(dtoutputs.OutputBase):
                                project_id: str,
                                display_name: str = '',
                                basic_auth_enabled: bool = False,
-                               **kwargs,
+                               **kwargs: Any,
                                ) -> ServiceAccount:
         """
         Create a new Service Account in the specified project.
@@ -203,7 +204,7 @@ class ServiceAccount(dtoutputs.OutputBase):
                                project_id: str,
                                display_name: Optional[str] = None,
                                basic_auth_enabled: Optional[bool] = None,
-                               **kwargs,
+                               **kwargs: Any,
                                ) -> ServiceAccount:
         """
         Updates the attributes of a specified Service Account.
@@ -270,7 +271,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def delete_service_account(cls,
                                service_account_id: str,
                                project_id: str,
-                               **kwargs,
+                               **kwargs: Any,
                                ) -> None:
         """
         Deletes the specified Service Account.
@@ -311,7 +312,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def get_key(key_id: str,
                 service_account_id: str,
                 project_id: str,
-                **kwargs,
+                **kwargs: Any,
                 ) -> Key:
         """
         Get the key of a Service Account.
@@ -360,7 +361,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     @staticmethod
     def list_keys(service_account_id: str,
                   project_id: str,
-                  **kwargs,
+                  **kwargs: Any,
                   ) -> list[Key]:
         """
         Get a list of all keys for a Service Account.
@@ -407,7 +408,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     @staticmethod
     def create_key(service_account_id: str,
                    project_id: str,
-                   **kwargs,
+                   **kwargs: Any,
                    ) -> Key:
         """
         Create a new key for the specified Service Account.
@@ -454,7 +455,7 @@ class ServiceAccount(dtoutputs.OutputBase):
     def delete_key(key_id: str,
                    service_account_id: str,
                    project_id: str,
-                   **kwargs,
+                   **kwargs: Any,
                    ) -> None:
         """
         Deletes a key in the specified Service Account.
@@ -530,11 +531,12 @@ class Key(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, key)
 
         # Initialize secret, which is only not-None when created.
-        self.secret = None
+        self.secret: Optional[str] = None
 
         # Unpack attributes from dictionary.
-        self.key_id = key['id']
-        self.create_time = dttrans.to_datetime(key['createTime'])
+        self.key_id: str = key['id']
+        self.create_time: Optional[datetime] = \
+            dttrans.to_datetime(key['createTime'])
         if 'secret' in key:
             self.secret = key['secret']
 
