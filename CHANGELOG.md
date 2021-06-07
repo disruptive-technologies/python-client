@@ -2,7 +2,8 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# v0.5.1
+_Released on 2021-06-07._
 ### Fixed
 - [e1ae80b](https://github.com/disruptive-technologies/python-client/commit/e1ae80b31c657450ff75521a1bbeace5c30e665b) Added missing constructor for UnknownError.
 
