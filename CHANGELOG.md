@@ -6,6 +6,9 @@ After major version v1.0.0, the project adheres to [semantic versioning](https:/
 ### Fixed
 - [e1ae80b](https://github.com/disruptive-technologies/python-client/commit/e1ae80b31c657450ff75521a1bbeace5c30e665b) Added missing constructor for UnknownError.
 
+### Added
+- [#68](https://github.com/disruptive-technologies/python-client/pull/68) Added stricter rules for MyPy, resulting in stronger typing.
+
 # v0.5.0
 _Released on 2021-05-13._
 ### Changed
