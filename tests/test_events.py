@@ -34,7 +34,7 @@ class TestEvents():
     def test_humidity(self):
         x = disruptive.events.Humidity(
             celsius=23,
-            humidity=99.9,
+            relative_humidity=99.9,
             timestamp=datetime.now(),
         )
 

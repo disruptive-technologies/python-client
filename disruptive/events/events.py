@@ -415,7 +415,7 @@ class Humidity(_EventData):
     ----------
     temperature : float
         Temperature value in Celsius.
-    humidity : float
+    relative_humidity : float
         Relative humidity in percent.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
@@ -424,7 +424,7 @@ class Humidity(_EventData):
 
     def __init__(self,
                  celsius: float,
-                 humidity: float,
+                 relative_humidity: float,
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
@@ -434,7 +434,7 @@ class Humidity(_EventData):
         ----------
         temperature : float
             Temperature value in Celsius.
-        humidity : float
+        relative_humidity : float
             Relative humidity in percent.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
@@ -445,7 +445,7 @@ class Humidity(_EventData):
         # Set parameter attributes.
         self.celsius: float = celsius
         self.fahrenheit: float = self._celsius_to_fahrenheit(celsius)
-        self.humidity: float = humidity
+        self.relative_humidity: float = relative_humidity
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
@@ -454,14 +454,14 @@ class Humidity(_EventData):
     def __repr__(self) -> str:
         string = '{}.{}('\
             'celsius={}, '\
-            'humidity={}, '\
+            'relative_humidity={}, '\
             'timestamp={}'\
             ')'
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
             self.celsius,
-            self.humidity,
+            self.relative_humidity,
             repr(dttrans.to_iso8601(self.timestamp)),
         )
 
@@ -485,7 +485,7 @@ class Humidity(_EventData):
         # Construct the object with unpacked parameters.
         obj = cls(
             celsius=data['temperature'],
-            humidity=data['relativeHumidity'],
+            relative_humidity=data['relativeHumidity'],
             timestamp=data['updateTime'],
         )
 
@@ -498,8 +498,8 @@ class Humidity(_EventData):
         data: dict = dict()
         if self.celsius is not None:
             data['temperature'] = self.celsius
-        if self.humidity is not None:
-            data['relativeHumidity'] = self.humidity
+        if self.relative_humidity is not None:
+            data['relativeHumidity'] = self.relative_humidity
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
         return data
