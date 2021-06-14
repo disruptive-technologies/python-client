@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
+# Unreleased
+### Changed
+- [#69](https://github.com/disruptive-technologies/python-client/pull/69) Renamed Humidity event attribute "humidity" to "relative_humidity".
+
 # v0.5.1
 _Released on 2021-06-07._
 ### Fixed
