@@ -64,10 +64,10 @@ class TestAuth():
             disruptive.Auth.service_account('key_id', 'secret', None)
 
     def test_raise_empty_string_credential(self):
-        # Verify EmptyStringError raised at missing input credential.
-        with pytest.raises(dterrors.EmptyStringError):
+        # Verify ConfigurationError raised at missing input credential.
+        with pytest.raises(dterrors.ConfigurationError):
             disruptive.Auth.service_account('', 'secret', 'email')
-        with pytest.raises(dterrors.EmptyStringError):
+        with pytest.raises(dterrors.ConfigurationError):
             disruptive.Auth.service_account('key_id', '', 'email')
-        with pytest.raises(dterrors.EmptyStringError):
+        with pytest.raises(dterrors.ConfigurationError):
             disruptive.Auth.service_account('key_id', 'secret', '')

@@ -218,16 +218,6 @@ class ConfigurationError(UsageError):
         super().__init__(message)
 
 
-class EmptyStringError(UsageError):
-    """
-    Unexpected empty string.
-
-    """
-
-    def __init__(self, message: str | dict) -> None:
-        super().__init__(message)
-
-
 # ------------------------- ConnectionError -------------------------
 class ConnectionError(DTApiError):
     """

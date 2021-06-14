@@ -285,11 +285,11 @@ class Auth():
         for key in credentials:
             # Verify credential is type string.
             if isinstance(credentials[key], str):
-                # Raise EmptyStringError if string is empty.
+                # Raise ConfigurationError if string is empty.
                 # This typically happens is credentials are fetched from
                 # the environment with a fallback to an empty string.
                 if len(credentials[key]) == 0:
-                    raise dterrors.EmptyStringError(
+                    raise dterrors.ConfigurationError(
                         'Authentication credential <{}> is'
                         ' empty string.'.format(key)
                     )
