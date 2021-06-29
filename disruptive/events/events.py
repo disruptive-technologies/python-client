@@ -222,6 +222,8 @@ class Temperature(_EventData):
         Temperature value in Celsius.
     fahrenheit : float
         Temperature value in Fahrenheit.
+    samples : list[TemperatureSample]
+        Temperature values sampled over a single heartbeat.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
@@ -240,6 +242,8 @@ class Temperature(_EventData):
         ----------
         celsius : float
             Temperature value in Celsius.
+        samples : list[TemperatureSample]
+            Temperature values sampled over a single heartbeat.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
             (i.e. yyyy-MM-ddTHH:mm:ssZ).
@@ -248,19 +252,9 @@ class Temperature(_EventData):
 
         # Set parameter attributes.
         self.celsius: float = celsius
+        self.samples: Optional[list] = samples
         self.fahrenheit: float = dttrans._celsius_to_fahrenheit(celsius)
         self.timestamp: Optional[datetime | str] = timestamp
-
-        # If provided, construct list of TemperatureSample objects.
-        if samples is None:
-            self.samples = None
-        else:
-            self.samples = []
-            for sample in samples:
-                self.samples.append(TemperatureSample(
-                    celsius=sample['value'],
-                    timestamp=sample['sampleTime']
-                ))
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'temperature')
@@ -296,10 +290,18 @@ class Temperature(_EventData):
 
         """
 
+        # Convert samples dictionaries to TemperatureSample objects.
+        sample_objs = []
+        for sample in data['samples']:
+            sample_objs.append(TemperatureSample(
+                celsius=sample['value'],
+                timestamp=sample['sampleTime'],
+            ))
+
         # Construct the object with unpacked parameters.
         obj = cls(
             celsius=data['value'],
-            samples=data['samples'],
+            samples=sample_objs,
             timestamp=data['updateTime'],
         )
 
@@ -313,30 +315,52 @@ class Temperature(_EventData):
         if self.celsius is not None:
             data['value'] = self.celsius
         if self.samples is not None:
-            data['samples'] = self.samples
+            data['samples'] = [s._raw for s in self.samples]
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
         return data
 
 
-class TemperatureSample():
+class TemperatureSample(dtoutputs.OutputBase):
+    """
+    Represents a single temperature event sample from a heartbeat period.
+
+    Attributes
+    ----------
+    celsius : float
+        Temperature value in Celsius.
+    fahrenheit : float
+        Temperature value in Fahrenheit.
+    timestamp : datetime
+        Interpolated inter-heartbeat timestamp.
+
+    """
 
     def __init__(self,
-                 celsius,
-                 timestamp: Optional[datetime | str] = None,
+                 celsius: float,
+                 timestamp: datetime | str,
                  ) -> None:
+        """
+        Constructs the TemperatureSample object. The `fahrenheit` attribute is
+        calculated from the provided `celsius` parameter.
+
+        Parameters
+        ----------
+        celsius : float
+            Temperature value in Celsius.
+        timestamp : datetime, str, optional
+            Timestamp in either datetime or string iso8601 format
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
+
+        """
 
         # Set parameter attributes.
         self.celsius: float = celsius
         self.fahrenheit: float = dttrans._celsius_to_fahrenheit(celsius)
-        self.timestamp: Optional[datetime | str] = timestamp
+        self.timestamp = dttrans.to_datetime(timestamp)
 
-        # Build a generic _EventData object.
-        # We do this solely to construct an appropriate timestamp.
-        event_data = _EventData(self.__repack(), 'temperature')
-
-        # Update timestamp with datetime version.
-        self.timestamp = event_data.timestamp
+        # Inherit parent class.
+        dtoutputs.OutputBase.__init__(self, self.__repack())
 
     def __repr__(self) -> str:
         string = '{}.{}('\
@@ -358,8 +382,8 @@ class TemperatureSample():
             timestamp=data['sampleTime'],
         )
 
-        # Re-inherit from parent, but now providing response data.
-        _EventData.__init__(obj, data, obj.event_type)
+        # Inherit parent class.
+        dtoutputs.OutputBase.__init__(obj, data)
 
         return obj
 
@@ -368,7 +392,7 @@ class TemperatureSample():
         if self.celsius is not None:
             data['value'] = self.celsius
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data['sampleTime'] = dttrans.to_iso8601(self.timestamp)
         return data
 
 
