@@ -1,6 +1,7 @@
 from disruptive.events.events import Event  # noqa
 from disruptive.events.events import Touch  # noqa
 from disruptive.events.events import Temperature  # noqa
+from disruptive.events.events import TemperatureSample  # noqa
 from disruptive.events.events import ObjectPresent  # noqa
 from disruptive.events.events import Humidity  # noqa
 from disruptive.events.events import ObjectPresentCount  # noqa
