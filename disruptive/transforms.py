@@ -36,6 +36,8 @@ def to_iso8601(ts: Optional[str | datetime]) -> Optional[str]:
         # Add timezone information if lacking.
         if '+' not in dt:
             dt += 'Z'
+        elif '+00:00' in dt:
+            dt = dt.replace('+00:00', 'Z')
 
         return dt
 
@@ -64,7 +66,7 @@ def to_datetime(ts: Optional[str | datetime]) -> Optional[datetime]:
             return datetime.fromisoformat(ts.replace('Z', '+00:00'))
         else:
             # Invalid iso8601 format, raise error.
-            msg = 'Timestamp format <{}> is invalid iso8601 format.\n' \
+            msg = f'Timestamp format [{ts}] is invalid iso8601 format.\n' \
                 'Example: 2020-01-01T00:00:00Z'
             raise dterrors.FormatError(msg)
 
