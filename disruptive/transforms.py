@@ -97,3 +97,22 @@ def validate_iso8601_format(dt_str: str) -> bool:
         return True
     else:
         return False
+
+
+def _celsius_to_fahrenheit(celsius: float) -> float:
+    """
+    Converts Celsius temperature value to Fahrenheit.
+
+    Parameters
+    ----------
+    celsius : float
+        Temperature value in Celsius.
+
+    Returns
+    -------
+    fahrenheit : float
+        Temperature value in Fahrenheit if Celsius is not None.
+
+    """
+
+    return (celsius * (9/5)) + 32
