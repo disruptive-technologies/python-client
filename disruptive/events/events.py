@@ -138,24 +138,6 @@ class _EventData(dtoutputs.OutputBase):
         dtlog.warning('Skipping unknown event type {}.'.format(event_type))
         return None, None
 
-    def _celsius_to_fahrenheit(self, celsius: float) -> float:
-        """
-        Converts Celsius temperature value to Fahrenheit.
-
-        Parameters
-        ----------
-        celsius : float
-            Temperature value in Celsius.
-
-        Returns
-        -------
-        fahrenheit : float
-            Temperature value in Fahrenheit if Celsius is not None.
-
-        """
-
-        return (celsius * (9/5)) + 32
-
 
 class Touch(_EventData):
     """
@@ -247,6 +229,7 @@ class Temperature(_EventData):
 
     def __init__(self,
                  celsius: float,
+                 samples: Optional[list] = None,
                  timestamp: Optional[datetime | str] = None,
                  ) -> None:
         """
@@ -265,8 +248,19 @@ class Temperature(_EventData):
 
         # Set parameter attributes.
         self.celsius: float = celsius
-        self.fahrenheit: float = self._celsius_to_fahrenheit(celsius)
+        self.fahrenheit: float = dttrans._celsius_to_fahrenheit(celsius)
         self.timestamp: Optional[datetime | str] = timestamp
+
+        # If provided, construct list of TemperatureSample objects.
+        if samples is None:
+            self.samples = None
+        else:
+            self.samples = []
+            for sample in samples:
+                self.samples.append(TemperatureSample(
+                    celsius=sample['value'],
+                    timestamp=sample['sampleTime']
+                ))
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'temperature')
@@ -274,12 +268,14 @@ class Temperature(_EventData):
     def __repr__(self) -> str:
         string = '{}.{}('\
             'celsius={}, '\
+            'samples={}, '\
             'timestamp={}'\
             ')'
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
             self.celsius,
+            self.samples,
             repr(dttrans.to_iso8601(self.timestamp)),
         )
 
@@ -303,7 +299,63 @@ class Temperature(_EventData):
         # Construct the object with unpacked parameters.
         obj = cls(
             celsius=data['value'],
+            samples=data['samples'],
             timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self) -> dict:
+        data: dict = dict()
+        if self.celsius is not None:
+            data['value'] = self.celsius
+        if self.samples is not None:
+            data['samples'] = self.samples
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
+
+
+class TemperatureSample():
+
+    def __init__(self,
+                 celsius,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
+
+        # Set parameter attributes.
+        self.celsius: float = celsius
+        self.fahrenheit: float = dttrans._celsius_to_fahrenheit(celsius)
+        self.timestamp: Optional[datetime | str] = timestamp
+
+        # Build a generic _EventData object.
+        # We do this solely to construct an appropriate timestamp.
+        event_data = _EventData(self.__repack(), 'temperature')
+
+        # Update timestamp with datetime version.
+        self.timestamp = event_data.timestamp
+
+    def __repr__(self) -> str:
+        string = '{}.{}('\
+            'celsius={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.celsius,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
+    @classmethod
+    def _from_raw(cls, data: dict) -> TemperatureSample:
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            celsius=data['value'],
+            timestamp=data['sampleTime'],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -444,7 +496,7 @@ class Humidity(_EventData):
 
         # Set parameter attributes.
         self.celsius: float = celsius
-        self.fahrenheit: float = self._celsius_to_fahrenheit(celsius)
+        self.fahrenheit: float = dttrans._celsius_to_fahrenheit(celsius)
         self.relative_humidity: float = relative_humidity
         self.timestamp: Optional[datetime | str] = timestamp
 
