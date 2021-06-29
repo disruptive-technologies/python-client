@@ -61,6 +61,35 @@ class TestEmulator():
         d = dt.Emulator.publish_event(
             device_id='device_id',
             project_id='project_id',
+            data=dt.events.Touch(
+                timestamp='1970-01-01T00:00:00Z',
+            ),
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = dt.emulator_base_url
+        url += '/projects/project_id/devices/device_id:publish'
+        request_mock.assert_requested(
+            method='POST',
+            url=url,
+            body={
+                'touch': {
+                    'updateTime': '1970-01-01T00:00:00Z',
+                }
+            }
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert d is None
+
+    def test_temperature_without_samples(self, request_mock):
+        # Call Emulator.publish_event() method.
+        d = dt.Emulator.publish_event(
+            device_id='device_id',
+            project_id='project_id',
             data=dt.events.Temperature(
                 celsius=55,
                 timestamp='1970-01-01T00:00:00Z',
@@ -76,6 +105,56 @@ class TestEmulator():
             body={
                 'temperature': {
                     'value': 55,
+                    'updateTime': '1970-01-01T00:00:00Z',
+                }
+            }
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert output is None.
+        assert d is None
+
+    def test_temperature_with_timestamped_samples(self, request_mock):
+        # Call Emulator.publish_event() method.
+        d = dt.Emulator.publish_event(
+            device_id='device_id',
+            project_id='project_id',
+            data=dt.events.Temperature(
+                celsius=55,
+                samples=[
+                    dt.events.TemperatureSample(
+                        celsius=55,
+                        timestamp='1970-01-01T00:00:00Z',
+                    ),
+                    dt.events.TemperatureSample(
+                        celsius=56,
+                        timestamp='1970-01-01T00:00:01Z',
+                    ),
+                    dt.events.TemperatureSample(
+                        celsius=57,
+                        timestamp='1970-01-01T00:00:02Z',
+                    ),
+                ],
+                timestamp='1970-01-01T00:00:00Z',
+            ),
+        )
+
+        # Verify expected outgoing parameters in request.
+        url = dt.emulator_base_url
+        url += '/projects/project_id/devices/device_id:publish'
+        request_mock.assert_requested(
+            method='POST',
+            url=url,
+            body={
+                'temperature': {
+                    'value': 55,
+                    'samples': [
+                        {'value': 55, 'sampleTime': '1970-01-01T00:00:00Z'},
+                        {'value': 56, 'sampleTime': '1970-01-01T00:00:01Z'},
+                        {'value': 57, 'sampleTime': '1970-01-01T00:00:02Z'},
+                    ],
                     'updateTime': '1970-01-01T00:00:00Z',
                 }
             }
