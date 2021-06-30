@@ -2,10 +2,13 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# v0.6.0
 ### Changed
 - [#69](https://github.com/disruptive-technologies/python-client/pull/69) Renamed Humidity event attribute "humidity" to "relative_humidity".
 - [#70](https://github.com/disruptive-technologies/python-client/pull/70) Replaced EmptyStringError with more general ConfigurationError.
+
+### Added
+- [#72](https://github.com/disruptive-technologies/python-client/pull/72) Added support for 2nd generation temperature sensors.
 
 # v0.5.1
 _Released on 2021-06-07._
