@@ -141,6 +141,12 @@ temperature_sensor = {
         },
         "temperature": {
             "value": -27,
+            "samples": [
+                {
+                    "value": -27,
+                    "sampleTime": "2021-03-13T16:05:47.722334Z"
+                }
+            ],
             "updateTime": "2021-03-13T16:05:47.722334Z"
         },
         "touch": {
@@ -647,6 +653,12 @@ event_history_each_type = {
             "data": {
                 "temperature": {
                     "value": 24.9,
+                    "samples": [
+                        {
+                            "value": 24.9,
+                            "sampleTime": "2019-05-16T08:15:18.318751Z"
+                        }
+                    ],
                     "updateTime": "2019-05-16T08:15:18.318751Z"
                 }
             },
@@ -818,7 +830,8 @@ stream_temperature_event = b'{"result":{"event":{"eventId":'\
     b'"d1vtobtd83ut9sd2bj9g","targetName":"projects/914u9p094l47cdv1o3pg'\
     b'/devices/emui17m69nlq0bgk44smcng","eventType":"temperature","data"'\
     b':{"temperature":{"value":5,"updateTime":"2021-04-21T08:'\
-    b'15:43.512330Z"}},"timestamp":"2021-04-21T08:15:43.512330Z"}}}'
+    b'15:43.512330Z","samples":[{"value":5,"sampleTime":"2021-04-21T08:'\
+    b'15:43.512330Z"}]}},"timestamp":"2021-04-21T08:15:43.512330Z"}}}'
 
 stream_networkstatus_event = b'{"result":{"event":{"eventId":"c1vtubtd83it'\
     b'9ud2bja0","targetName":"projects/c14u9p094l47cdb1oipg/devices/'\

@@ -42,7 +42,8 @@ class TestTransforms():
 
     def test_to_iso8601_datetime_with_tz_utc(self):
         inp = datetime(1970, 1, 1, tzinfo=timezone(timedelta(hours=0)))
-        outp = '1970-01-01T00:00:00+00:00'
+        # A timezone of 00:00 should return 'Z' instead.
+        outp = '1970-01-01T00:00:00Z'
         assert dttrans.to_iso8601(inp) == outp
 
     def test_to_iso8601_datetime_with_tz_offset(self):
