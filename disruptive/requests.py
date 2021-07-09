@@ -314,7 +314,7 @@ class DTRequest():
                     elif 'error' in payload:
                         error, _, _ = dterrors.parse_api_status_code(
                             payload['error']['code'],
-                            payload, None, None
+                            payload, None, 0
                         )
                         raise error
 
