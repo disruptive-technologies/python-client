@@ -298,28 +298,37 @@ class DTRequest():
                 for line in stream.iter_lines():
                     # Decode the response payload and break on error.
                     payload = json.loads(line.decode('ascii'))
-                    if 'result' not in payload:
-                        break
+                    if 'result' in payload:
+                        # Reset retry counter.
+                        nth_attempt = 1
 
-                    # Reset retry counter.
-                    nth_attempt = 1
+                        # Check for ping event.
+                        event = payload['result']['event']
+                        if event['eventType'] == 'ping':
+                            dtlog.debug('Ping received.')
+                            continue
 
-                    # Check for ping event.
-                    event = payload['result']['event']
-                    if event['eventType'] == 'ping':
-                        dtlog.debug('Ping received.')
-                        continue
+                        # Yield event to generator.
+                        yield event
 
-                    # Yield event to generator.
-                    yield event
+                    elif 'error' in payload:
+                        error, _, _ = dterrors.parse_api_status_code(
+                            payload['error']['code'],
+                            payload, None, None
+                        )
+                        raise error
+
+                    else:
+                        raise dterrors.UnknownError(payload)
 
                 # If the stream finished, but without an error, break the loop.
+                dtlog.info('Stream ended without an error.')
                 break
 
             except KeyboardInterrupt:
                 break
 
-            except Exception as e:
+            except requests.exceptions.RequestException as e:
                 error, should_retry, sleeptime = dterrors.parse_request_error(
                     e, {}, nth_attempt)
 
