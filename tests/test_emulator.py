@@ -7,7 +7,7 @@ class TestEmulator():
 
     def test_create_device(self, request_mock):
         # Update the response data with device data.
-        res = dtapiresponses.created_temperatur_emulator
+        res = dtapiresponses.created_temperature_emulator
         request_mock.json = res
 
         # Call Emulator.create_device() method.
