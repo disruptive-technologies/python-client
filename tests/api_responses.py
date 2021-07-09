@@ -11,6 +11,7 @@ auth_token_expired = {
 ccon = {
     "name": "projects/c0md8mm0c7bet3vic78g/devices/emuc909fk1qdqebrvv2jqv0",
     "type": "ccon",
+    "productNumber": "100011",
     "labels": {
         "name": "ccon",
         "virtual-sensor": ""
@@ -45,6 +46,7 @@ ccon = {
 humidity_sensor = {
     "name": "projects/c0md38m0c7bet4vico8g/devices/emuc109fhppdqebrvv2jqug",
     "type": "humidity",
+    "productNumber": "101895",
     "labels": {
         "name": "humidity",
         "new-label": "99",
@@ -82,6 +84,7 @@ humidity_sensor = {
 proximity_sensor = {
     "name": "projects/c0md3mm0c7pet3vico8g/devices/emuc0pc36pqdqebrvv29r8g",
     "type": "proximity",
+    "productNumber": "102064",
     "labels": {
         "name": "proximity",
         "virtual-sensor": ""
@@ -117,6 +120,7 @@ proximity_sensor = {
 temperature_sensor = {
     "name": "projects/c0md3mm0c7pet3vico8g/devices/c0pppd1qdqebrvv1iqp0",
     "type": "temperature",
+    "productNumber": "102067",
     "labels": {
         "name": "temperature",
         "test": "2",
@@ -158,6 +162,7 @@ temperature_sensor = {
 touch_sensor = {
     "name": "projects/c0md3mm0c7pet3vico8g/devices/emucpuc989qdqebrvv29so0",
     "type": "touch",
+    "productNumber": "100110",
     "labels": {
         "name": "touch",
         "new-label": "99",
@@ -190,6 +195,7 @@ touch_sensor = {
 water_present_sensor = {
     "name": "projects/c0md3mmpc7bet3vico8g/devices/emucpppobpqdqebrvv1iqog",
     "type": "waterDetector",
+    "productNumber": "101714",
     "labels": {
         "name": "water",
         "virtual-sensor": ""
@@ -225,6 +231,7 @@ water_present_sensor = {
 proximity_counter_sensor = {
     "name": "projects/c0md3mmpc7bet3vico8g/devices/emucp6e7qvlq0bgk44sg46g",
     "type": "proximityCounter",
+    "productNumber": "101730",
     "labels": {
         "name": "proximity counter",
         "virtual-sensor": ""
@@ -260,6 +267,7 @@ proximity_counter_sensor = {
 touch_count_sensor = {
     "name": "projects/c0md3mmpc7bet3vico8g/devices/emucp6e8dnlq0bgk44sg4c0",
     "type": "touchCounter",
+    "productNumber": "101675",
     "labels": {
         "name": "touch counter",
         "virtual-sensor": ""
@@ -295,6 +303,7 @@ touch_count_sensor = {
 null_reported_sensor = {
     "name": "projects/c0md3mmpc7bet3vico8g/devices/emuc1pe9nvlq0bgk44sg4o0",
     "type": "temperature",
+    "productNumber": "",
     "labels": {
         "name": "Emulated temperature: emuc16e9nvlq0bgk44sg4o0",
         "virtual-sensor": ""
@@ -310,6 +319,7 @@ null_reported_sensor = {
 unknown_reported_sensor = {
     "name": "projects/c0md3mmpc7bet3vico8g/devices/emuc1pe9nvlq0bgk44sg4o0",
     "type": "temperature",
+    "productNumber": "",
     "labels": {
         "name": "Emulated temperature: emuc16e9nvlq0bgk44sg4o0",
         "virtual-sensor": ""
@@ -622,9 +632,10 @@ metrics = {
     }
 }
 
-created_temperatur_emulator = {
+created_temperature_emulator = {
     'name': 'projects/c14u9p094l47cdv1o3pg/devices/emuc1so7tgttn8sjobqvvug',
     'type': 'temperature',
+    'productNumber': '102058',
     'labels': {
         'key': 'value',
         'name': 'new-device',

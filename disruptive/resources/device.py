@@ -27,6 +27,8 @@ class Device(dtoutputs.OutputBase):
         Otherwise None.
     device_type : str
         :ref:`Device type <device_type_constants>`.
+    product_number : str
+        The product number of the device.
     labels : dict
         Label keys and values.
     is_emulator : bool
@@ -69,6 +71,7 @@ class Device(dtoutputs.OutputBase):
         self.device_id: str = device['name'].split('/')[-1]
         self.project_id: str = device['name'].split('/')[1]
         self.device_type: str = device['type']
+        self.product_number: str = device['productNumber']
         self.labels: dict = device['labels']
 
         # Set display_name if `name` label key exists.
