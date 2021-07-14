@@ -343,3 +343,25 @@ class TestDevice():
             disruptive.Device.get_device('device_id', 'project_id')
 
             assert warning_mock.call_count == 1
+
+    def test_missing_product_number(self, request_mock):
+        # Update the response data with device data.
+        request_mock.json = dtapiresponses.null_reported_sensor
+
+        # Call Device.get_device() method.
+        d = disruptive.Device.get_device('device_id', 'project_id')
+
+        # Verify expected outgoing parameters in request.
+        request_mock.assert_requested(
+            method='GET',
+            url=disruptive.base_url+'/projects/project_id/devices/device_id',
+        )
+
+        # Assert single request sent.
+        request_mock.assert_request_count(1)
+
+        # Assert instance of Device object.
+        assert isinstance(d, disruptive.Device)
+
+        # Assert empty string as product number.
+        assert d.product_number == ''

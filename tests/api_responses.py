@@ -303,7 +303,6 @@ touch_count_sensor = {
 null_reported_sensor = {
     "name": "projects/c0md3mmpc7bet3vico8g/devices/emuc1pe9nvlq0bgk44sg4o0",
     "type": "temperature",
-    "productNumber": "",
     "labels": {
         "name": "Emulated temperature: emuc16e9nvlq0bgk44sg4o0",
         "virtual-sensor": ""

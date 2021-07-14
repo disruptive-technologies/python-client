@@ -71,7 +71,6 @@ class Device(dtoutputs.OutputBase):
         self.device_id: str = device['name'].split('/')[-1]
         self.project_id: str = device['name'].split('/')[1]
         self.device_type: str = device['type']
-        self.product_number: str = device['productNumber']
         self.labels: dict = device['labels']
 
         # Set display_name if `name` label key exists.
@@ -84,6 +83,12 @@ class Device(dtoutputs.OutputBase):
             self.is_emulated = True
         else:
             self.is_emulated = False
+
+        # If it exists, set the product number.
+        # This is not present for emulated devices.
+        self.product_number: str = ''
+        if 'productNumber' in device:
+            self.product_number = device['productNumber']
 
         # If it exists, set the reported object.
         self.reported = None
