@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
 
+# v0.6.2
+### Fixed
+- [#77](https://github.com/disruptive-technologies/python-client/pull/77) Fixed a bug where Device constructor crashed if productNumber was missing in response.
+
 # v0.6.1
 ### Fixed
 - [#74](https://github.com/disruptive-technologies/python-client/pull/74) Fixed a bug where the stream would simply exit silently if an error were returned by the API.
