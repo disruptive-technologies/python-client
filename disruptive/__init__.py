@@ -1,5 +1,5 @@
 # Metadata
-__version__ = "0.6.2"
+__version__ = "0.7.0"
 
 # Authentication scheme.
 from disruptive.authentication import Auth  # noqa
