@@ -75,7 +75,7 @@ class TestEvents():
             transmission_mode='LOW_POWER_STANDARD_MODE',
             cloud_connectors=[
                 disruptive.events.NetworkStatusCloudConnector(
-                    cloudconnector_id='123',
+                    device_id='123',
                     signal_strength=73,
                     rssi=22,
                 ),
