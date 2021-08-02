@@ -846,8 +846,8 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
 
     Attributes
     ----------
-    cloudconnector_id : str
-        Cloud Connector identifier.
+    device_id : str
+        Device ID of the Cloud Connector.
     signal_strength : int
         The percentage signal strength (0% to 100%) between
         the sensor and Cloud Connector.
@@ -858,7 +858,7 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
     """
 
     def __init__(self,
-                 cloudconnector_id: str,
+                 device_id: str,
                  signal_strength: int,
                  rssi: int,
                  ):
@@ -867,8 +867,8 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
 
         Parameters
         ----------
-        cloudconnector_id : str
-            Cloud Connector identifier.
+        device_id : str
+            Device ID of the Cloud Connector.
         signal_strength : int
             The percentage signal strength (0% to 100%) between
             the sensor and Cloud Connector.
@@ -882,20 +882,20 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, {})
 
         # Unpack attributes.
-        self.cloudconnector_id: str = cloudconnector_id
+        self.device_id: str = device_id
         self.signal_strength: int = signal_strength
         self.rssi: int = rssi
 
     def __repr__(self) -> str:
         string = '{}.{}('\
-            'cloudconnector_id={}, '\
+            'device_id={}, '\
             'signal_strength={}, '\
             'rssi={}'\
             ')'
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
-            repr(self.cloudconnector_id),
+            repr(self.device_id),
             self.signal_strength,
             self.rssi,
         )
@@ -919,7 +919,7 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            cloudconnector_id=data['id'],
+            device_id=data['id'],
             signal_strength=data['signalStrength'],
             rssi=data['rssi'],
         )
@@ -1063,8 +1063,8 @@ class NetworkStatus(_EventData):
             data['cloud_connectors'] = []
             for ccon in self.cloud_connectors:
                 ccon_data: dict = dict()
-                if ccon.cloudconnector_id is not None:
-                    ccon_data['id'] = ccon.cloudconnector_id
+                if ccon.device_id is not None:
+                    ccon_data['id'] = ccon.device_id
                 if ccon.signal_strength is not None:
                     ccon_data['signalStrength'] = ccon.signal_strength
                 if len(ccon_data) > 0:
