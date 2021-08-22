@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import disruptive.transforms as dttrans
 
 
@@ -52,8 +54,10 @@ class OutputBase(object):
             # Fetch and evaluate the attribute value / type.
             val = getattr(obj, a)
 
-            # Class objects should be dumped recursively.
-            if hasattr(val, '__dict__'):
+            # Class objects should be dumped recursively, except for
+            # those that are an instance of datetime, like pandas timestamps.
+            if hasattr(val, '__dict__') and not isinstance(val, datetime):
+                # Other classes should print name with content recursively.
                 out.append('{}{}: {} = {}'.format(
                     l1, a, type(val).__name__,
                     str(val.__class__.__name__) + '('))
