@@ -38,7 +38,13 @@ dt.default_auth = dt.Auth.service_account(key_id, secret, email)
 
 ## Usage
 
-Once authenticated, most functionality can be accessed through resource methods on the format `disruptive.<Resource>.<method>()`.
+Once authenticated, most functionality can be accessed through resource methods on the following format.
+
+```
+disruptive.<Resource>.<method>()
+```
+
+A few common uses are showcased in the snippet below. See the [Python API Reference](https://developer.disruptive-technologies.com/api/libraries/python/) for full documentation.
 
 ```python
 import disruptive as dt
