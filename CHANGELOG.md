@@ -1,6 +1,9 @@
 # Changelog
 All notable changes, fixes, and additions to the project is listed in this changelog.  
-After major version v1.0.0, the project adheres to [semantic versioning](https://semver.org/).
+The project adheres to [semantic versioning](https://semver.org/).
+
+# v1.0.0
+Moved to development stage Production/Stable.
 
 # v0.7.1
 ### Fixed
