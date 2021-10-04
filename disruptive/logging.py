@@ -49,7 +49,7 @@ def _log_flag_exceeds(level: str | dict) -> bool:
         return False
 
     # Verify set value is valid.
-    if disruptive.log_level not in levels:
+    if disruptive.log_level.lower() not in levels:
         # As an invalid log_level has been provided, reset it
         # to default before raising the exception.
         disruptive.log_level = "info"
@@ -61,7 +61,7 @@ def _log_flag_exceeds(level: str | dict) -> bool:
         )
 
     # Check if level is exceeded.
-    if levels[level] >= levels[disruptive.log_level]:
+    if levels[level] >= levels[disruptive.log_level.lower()]:
         return True
     else:
         return False
