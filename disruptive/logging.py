@@ -50,6 +50,10 @@ def _log_flag_exceeds(level: str | dict) -> bool:
 
     # Verify set value is valid.
     if disruptive.log_level not in levels:
+        # As an invalid log_level has been provided, reset it
+        # to default before raising the exception.
+        disruptive.log_level = "info"
+
         raise dterrors.ConfigurationError(
             'Invalid logging level {}. '
             'Must be either None, "debug", "info", '
