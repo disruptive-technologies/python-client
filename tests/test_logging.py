@@ -1,7 +1,9 @@
+import pytest
 from unittest.mock import patch
 
 import disruptive
 import disruptive.logging as dtlog
+import disruptive.errors as dterrors
 
 
 class TestLogging():
@@ -82,4 +84,32 @@ class TestLogging():
             warning=False,
             error=False,
         )
+        disruptive.log_level = None
+
+    def test_case_insensitive(self):
+        disruptive.log_level = "CRITICAL"
+        self._check_level_called(
+            msg='Test message.',
+            debug=False,
+            info=False,
+            warning=False,
+            error=False,
+        )
+        disruptive.log_level = None
+
+    def test_invalid_level_reset(self):
+        disruptive.log_level = "SOME_INVALID_STRING"
+        with pytest.raises(dterrors.ConfigurationError):
+            self._check_level_called(
+                msg='Test message.',
+                debug=False,
+                info=False,
+                warning=False,
+                error=False,
+                critical=False,
+            )
+
+            # Log level should be reset to default.
+            assert disruptive.log_level == 'info'
+
         disruptive.log_level = None
