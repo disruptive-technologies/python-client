@@ -220,7 +220,7 @@ class Device(dtoutputs.OutputBase):
         """
         Transfers all specified devices to the target project.
 
-        The caller must be have the permissions of either `project.admin` or
+        The caller must have the permissions of either `project.admin` or
         `organization.admin` in both the source- and target project.
 
         Parameters
