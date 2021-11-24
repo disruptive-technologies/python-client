@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.0.2
+### Changed
+- Updates to the [reference documentation](https://developer.disruptive-technologies.com/api/libraries/python/index.html).
+
 # v1.0.1
 ### Fixed
 - [#82](https://github.com/disruptive-technologies/python-client/pull/82) Invalid `log_level` string would cause recusion fixed.
