@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.0.3
+### Changed
+- [#86](https://github.com/disruptive-technologies/python-client/pull/86) Added custom User-Agent header.
+
 # v1.0.2
 ### Changed
 - Updates to the [reference documentation](https://developer.disruptive-technologies.com/api/libraries/python/index.html).
