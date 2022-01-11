@@ -61,16 +61,20 @@ class RequestMock():
         if self.request_patcher.call_count != n:
             raise AssertionError
 
-    def assert_requested(self,
-                         method,
-                         url,
-                         params={},
-                         headers={'Authorization': ''},
-                         body=None,
-                         data=None,
-                         timeout=dt.request_timeout,
-                         stream=False,
-                         ):
+    def assert_requested(
+        self,
+        method,
+        url,
+        params={},
+        headers={
+            'Authorization': '',
+            'User-Agent': f'DisruptivePythonAPI/{dt.__version__}'
+        },
+        body=None,
+        data=None,
+        timeout=dt.request_timeout,
+        stream=False,
+    ):
         self.request_patcher.assert_called_with(
             method=method,
             url=url,
