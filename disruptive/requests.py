@@ -92,6 +92,9 @@ class DTRequest():
                          timeout: int,
                          ) -> tuple[DTResponse, Any]:
 
+        # Add custom user agent.
+        headers['User-Agent'] = f'DisruptivePythonAPI/{dt.__version__}'
+
         # Attempt to send the request.
         try:
             # Use the requests package to send the request.
