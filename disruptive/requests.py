@@ -278,6 +278,9 @@ class DTRequest():
         else:
             headers['Authorization'] = dt.default_auth.get_token()
 
+        # Add custom user agent.
+        headers['User-Agent'] = f'DisruptivePythonAPI/{dt.__version__}'
+
         # Set up a simple catch-all retry policy.
         nth_attempt = 1
         while True:
