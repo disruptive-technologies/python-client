@@ -11,6 +11,9 @@ import disruptive.logging as dtlog
 import disruptive.errors as dterrors
 
 
+USER_AGENT = f'DisruptivePythonAPI/{dt.__version__}'
+
+
 class DTRequest():
 
     def __init__(self, method: str, url: str, **kwargs: Any):
@@ -91,6 +94,9 @@ class DTRequest():
                          data: Optional[str],
                          timeout: int,
                          ) -> tuple[DTResponse, Any]:
+
+        # Add custom user agent.
+        headers['User-Agent'] = USER_AGENT
 
         # Attempt to send the request.
         try:
@@ -274,6 +280,9 @@ class DTRequest():
             headers['Authorization'] = kwargs['auth'].get_token()
         else:
             headers['Authorization'] = dt.default_auth.get_token()
+
+        # Add custom user agent.
+        headers['User-Agent'] = USER_AGENT
 
         # Set up a simple catch-all retry policy.
         nth_attempt = 1
