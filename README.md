@@ -24,17 +24,31 @@ pip install .
 
 ### Requirements
 
-- Python 3.7+
+- Python 3.7, 3.8, 3.9, 3.10
 
 ## Authentication
 
-Using [Service Account](https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts) credentials, setting `disruptive.default_auth` authenticates the package:
+The package is authenticated by providing [Service Account](https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts) credentials in either of the following ways.
 
+- By setting the following environment variables:
+```bash
+export DT_SERVICE_ACCOUNT_KEY_ID="<SERVICE_ACCOUNT_KEY_ID>"
+export DT_SERVICE_ACCOUNT_SECRET="<SERVICE_ACCOUNT_SECRET>"
+export DT_SERVICE_ACCOUNT_EMAIL="<SERVICE_ACCOUNT_EMAIL>"
+```
+
+- By providing the credentials programmatically:
 ```python
 import disruptive as dt
 
-dt.default_auth = dt.Auth.service_account(key_id, secret, email)
+dt.default_auth = dt.Auth.service_account(
+    key_id="<SERVICE_ACCOUNT_KEY_ID>",
+    secret="<SERVICE_ACCOUNT_SECRET>",
+    email="<SERVICE_ACCOUNT_EMAIL>",
+)
 ```
+
+See [Python API Authentication](https://developer.disruptive-technologies.com/api/libraries/python/client/authentication.html) for more details.
 
 ## Usage
 
