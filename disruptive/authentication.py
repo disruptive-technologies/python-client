@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import time
 import urllib.parse
 from typing import Any
@@ -70,7 +71,7 @@ class Unauthenticated(_AuthRoutineBase):
 
     def refresh(self) -> None:
         """
-        If called, this function does not but raise an error as no
+        If called, this function does nothing but raise an error as no
         authentication routine has been called to update the configuration
         variable, nor has an authentication object been provided.
 
@@ -81,11 +82,24 @@ class Unauthenticated(_AuthRoutineBase):
             auth kwarg has been provided.
 
         """
-        raise dterrors.Unauthorized(
-            'No authentication method set.'
-            ' See developer.d21s.com/api/libraries/python/'
-            'authentication.html'
-        )
+
+        msg = 'Missing Service Account credentials.\n\n' \
+            'Either set the following environment variables:\n\n' \
+            '    DT_SERVICE_ACCOUNT_KEY_ID: Unique Service Account key ID.\n' \
+            '    DT_SERVICE_ACCOUNT_SECRET: Unique Service Account secret.\n' \
+            '    DT_SERVICE_ACCOUNT_EMAIL: Unique Service Account email.\n\n' \
+            'or provide them programmatically:\n\n' \
+            '    import disruptive as dt\n\n' \
+            '    dt.default_auth = dt.Auth.service_account(\n' \
+            '        key_id="<SERVICE_ACCOUNT_KEY_ID>",\n' \
+            '        secret="<SERVICE_ACCOUNT_SECRET>",\n' \
+            '        email="<SERVICE_ACCOUNT_EMAIL>",\n' \
+            '    )\n\n' \
+            'See https://developer.d21s.com/api/' \
+            'libraries/python/client/authentication.html' \
+            ' for more details.\n'
+
+        raise dterrors.Unauthorized(msg)
 
 
 class ServiceAccountAuth(_AuthRoutineBase):
@@ -265,6 +279,18 @@ class Auth():
         })
 
         return ServiceAccountAuth(key_id, secret, email)
+
+    @staticmethod
+    def _service_account_env_vars() -> Unauthenticated | ServiceAccountAuth:
+
+        key_id = os.getenv('DT_SERVICE_ACCOUNT_KEY_ID', '')
+        secret = os.getenv('DT_SERVICE_ACCOUNT_SECRET', '')
+        email = os.getenv('DT_SERVICE_ACCOUNT_EMAIL', '')
+
+        if '' in [key_id, secret, email]:
+            return Unauthenticated()
+        else:
+            return Auth.service_account(key_id, secret, email)
 
     @staticmethod
     def _verify_str_credentials(credentials: dict) -> None:

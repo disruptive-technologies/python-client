@@ -4,16 +4,8 @@ __version__ = "1.0.3"
 # Authentication scheme.
 from disruptive.authentication import Auth  # noqa
 
-# When auth is an instance of Auth set with the default constructor,
-# the package is unauthenticated, throwing an Unauthorized error at call.
-# To authorize, either overwrite the global variable `auth` or provide
-# each individual method with the same auth object.
-#
-# Available authentication methods:
-# auth = disruptive.Auth.service_account(key_id, secret, email)
-#
-# Initialize package with unauthenticated object.
-default_auth = Auth.unauthenticated()
+# Initialize package with environment variables authentication scheme.
+default_auth = Auth._service_account_env_vars()
 
 # Resources.
 from disruptive.resources.device import Device  # noqa
