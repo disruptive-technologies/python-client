@@ -269,6 +269,15 @@ class Auth():
         auth : ServiceAccountAuth
             Object to initialize and maintain authentication to the REST API.
 
+        Examples
+        --------
+        >>> # Authenticate using Service Account credentials.
+        >>> dt.default_auth = dt.Auth.service_account(
+        >>>     key_id="<SERVICE_ACCOUNT_KEY_ID>",
+        >>>     secret="<SERVICE_ACCOUNT_KEY_ID>",
+        >>>     email="<SERVICE_ACCOUNT_KEY_ID>",
+        >>> )
+
         """
 
         # Check that credentials are populated strings.
