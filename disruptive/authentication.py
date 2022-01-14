@@ -216,8 +216,8 @@ class ServiceAccountAuth(_AuthRoutineBase):
             )
         except dterrors.BadRequest:
             # Re-raise exception with more specific information.
-            raise dterrors.BadRequest(
-                'Could not authenticate with the provided credentials.\n'
+            raise dterrors.Unauthorized(
+                'Could not authenticate with the provided credentials.\n\n'
                 'Read more: https://developer.d21s.com/docs/authentication'
                 '/oauth2#common-errors'
             )
