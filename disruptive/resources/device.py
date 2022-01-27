@@ -510,6 +510,8 @@ class Reported(dtoutputs.OutputBase):
         Object representing reported cellularStatus event data.
     co2 : Co2, None
         Object representing reported co2 event data.
+    pressure : Pressure, None
+        Object representing reported pressure event data.
 
     """
 
