@@ -28,6 +28,12 @@ class RequestMock():
     def __init__(self, mocker):
         self._mocker = mocker
 
+        # Reset default authentication to unauthenticated.
+        # This is to avoid conflict when running tests in an
+        # environment where valid auth credentials are present.
+        # We are not interested in these affecting the tests.
+        dt.default_auth = dt.Auth.unauthenticated()
+
         self.json = {}
         self.status_code = 200
         self.headers = {}
