@@ -1677,13 +1677,13 @@ class Pressure(_EventData):
 
     def __repr__(self) -> str:
         string = '{}.{}('\
-            'ppm={}, '\
+            'pascal={}, '\
             'timestamp={}'\
             ')'
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
-            self.ppm,
+            self.pascal,
             repr(dttrans.to_iso8601(self.timestamp)),
         )
 
