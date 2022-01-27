@@ -14,6 +14,7 @@ from disruptive.events.events import LabelsChanged  # noqa
 from disruptive.events.events import ConnectionStatus  # noqa
 from disruptive.events.events import EthernetStatus  # noqa
 from disruptive.events.events import CellularStatus  # noqa
+from disruptive.events.events import Co2  # noqa
 
 # Module constants.
 from disruptive.events.events import TOUCH  # noqa
@@ -29,3 +30,4 @@ from disruptive.events.events import LABELS_CHANGED  # noqa
 from disruptive.events.events import CONNECTION_STATUS  # noqa
 from disruptive.events.events import ETHERNET_STATUS  # noqa
 from disruptive.events.events import CELLULAR_STATUS  # noqa
+from disruptive.events.events import CO2  # noqa
