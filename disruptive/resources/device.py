@@ -47,10 +47,11 @@ class Device(dtoutputs.OutputBase):
     TOUCH_COUNTER = 'touchCounter'
     WATER_DETECTOR = 'waterDetector'
     CLOUD_CONNECTOR = 'ccon'
+    CO2 = 'co2'
     DEVICE_TYPES = [
         TEMPERATURE, PROXIMITY, TOUCH, HUMIDITY,
         PROXIMITY_COUNTER, TOUCH_COUNTER, WATER_DETECTOR,
-        CLOUD_CONNECTOR,
+        CLOUD_CONNECTOR, CO2,
     ]
 
     def __init__(self, device: dict) -> None:
@@ -507,6 +508,8 @@ class Reported(dtoutputs.OutputBase):
         Object representing reported ethernetStatus event data.
     cellular_status : CellularStatus, None
         Object representing reported cellularStatus event data.
+    co2 : Co2, None
+        Object representing reported co2 event data.
 
     """
 
