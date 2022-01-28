@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# Unreleased
+### Added
+- [#89](https://github.com/disruptive-technologies/python-client/pull/89) Added support for new Co2 sensor and its Co2- and Pressure event types.
+
 # v1.1.0
 ### Added
 - [#87](https://github.com/disruptive-technologies/python-client/pull/87) Package will now authenticate using service account credential environment variables if set.
