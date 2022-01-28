@@ -642,193 +642,247 @@ created_temperature_emulator = {
     }
 }
 
+touch_event = {
+    "eventId": "01",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "touch",
+    "data": {
+        "touch": {
+            "updateTime": "2019-05-16T08:13:15.361624Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+temperature_event = {
+    "eventId": "02",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "temperature",
+    "data": {
+        "temperature": {
+            "value": 24.9,
+            "samples": [
+                {
+                    "value": 24.9,
+                    "sampleTime": "2019-05-16T08:15:18.318751Z"
+                }
+            ],
+            "updateTime": "2019-05-16T08:15:18.318751Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+object_present_event = {
+    "eventId": "03",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "objectPresent",
+    "data": {
+        "objectPresent": {
+            "state": "NOT_PRESENT",
+            "updateTime": "2019-05-16T08:37:10.711412Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+humidity_event = {
+    "eventId": "04",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "humidity",
+    "data": {
+        "humidity": {
+            "temperature": 22.45,
+            "relativeHumidity": 17,
+            "updateTime": "2019-05-16T06:13:46.369000Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+object_present_count_event = {
+    "eventId": "05",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "objectPresentCount",
+    "data": {
+        "objectPresentCount": {
+            "total": 4176,
+            "updateTime": "2019-05-16T08:23:43.209000Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+touch_count_event = {
+    "eventId": "06",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "touchCount",
+    "data": {
+        "touchCount": {
+            "total": 469,
+            "updateTime": "2019-05-16T08:25:21.604000Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+water_present_event = {
+    "eventId": "07",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "waterPresent",
+    "data": {
+        "waterPresent": {
+            "state": "PRESENT",
+            "updateTime": "2019-05-16T08:43:16.266000Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+network_status_event = {
+    "eventId": "08",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "networkStatus",
+    "data": {
+        "networkStatus": {
+            "signalStrength": 45,
+            "rssi": -83,
+            "updateTime": "2019-05-16T08:21:21.076013Z",
+            "cloudConnectors": [
+                {
+                    "id": "bdkjbo2v0000uk377c4g",
+                    "signalStrength": 45,
+                    "rssi": -83
+                }
+            ],
+            "transmissionMode": "LOW_POWER_STANDARD_MODE"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+battery_status_event = {
+    "eventId": "09",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "batteryStatus",
+    "data": {
+        "batteryStatus": {
+            "percentage": 100,
+            "updateTime": "2019-05-16T08:21:21.076013Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+labels_changed_event = {
+    "eventId": "10",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "labelsChanged",
+    "data": {
+        "added": {
+            "label-key": "label-value"
+        },
+        "modified": {
+            "label-key": "new-label-value"
+        },
+        "removed": [
+            "remove-key1",
+            "remove-key2"
+        ]
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+connection_status_event = {
+    "eventId": "11",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "connectionStatus",
+    "data": {
+        "connectionStatus": {
+            "connection": "ETHERNET",
+            "available": [
+                "CELLULAR",
+                "ETHERNET"
+            ],
+            "updateTime": "2019-05-16T08:21:21.076013Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+ethernet_status_event = {
+    "eventId": "12",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "ethernetStatus",
+    "data": {
+        "ethernetStatus": {
+            "macAddress": "f0:b5:b7:00:0a:08",
+            "ipAddress": "10.0.0.1",
+            "errors": [],
+            "updateTime": "2019-05-16T08:21:21.076013Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+cellular_status_event = {
+    "eventId": "13",
+    "targetName": "/projets/project_id/devices/device_id ",
+    "eventType": "cellularStatus",
+    "data": {
+        "cellularStatus": {
+            "signalStrength": 80,
+            "errors": [],
+            "updateTime": "2019-05-16T08:21:21.076013Z"
+        }
+    },
+    "timestamp": "1970-01-01T00:00:00Z"
+}
+
+co2_event = {
+    "eventId": "u7pbuijjnlactnn1p510",
+    "targetName": "projects/i75ivl3go7df88ctp0uu/devices/b6sfppl7rihg1dm4ud8g",
+    "eventType": "co2",
+    "data": {
+        "co2": {
+            "ppm": 526,
+            "updateTime": "2022-01-27T15:50:34.471000Z"
+        }
+    },
+    "timestamp": "2022-01-27T15:50:34.471000Z"
+}
+
+pressure_event = {
+    "eventId": "c0pbuiurq6u6ltshi151",
+    "targetName": "projects/c75ivl3go7df88ctp0ug/devices/u6sfppl7rihg0dm4ud7s",
+    "eventType": "pressure",
+    "data": {
+        "pressure": {
+            "pascal": 99301,
+            "updateTime": "2022-01-27T15:50:34.471000Z"
+        }
+    },
+    "timestamp": "2022-01-27T15:50:34.471000Z"
+}
+
 event_history_each_type = {
     'nextPageToken': '',
     'events': [
-        {
-            "eventId": "01",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "touch",
-            "data": {
-                "touch": {
-                    "updateTime": "2019-05-16T08:13:15.361624Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "02",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "temperature",
-            "data": {
-                "temperature": {
-                    "value": 24.9,
-                    "samples": [
-                        {
-                            "value": 24.9,
-                            "sampleTime": "2019-05-16T08:15:18.318751Z"
-                        }
-                    ],
-                    "updateTime": "2019-05-16T08:15:18.318751Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "03",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "objectPresent",
-            "data": {
-                "objectPresent": {
-                    "state": "NOT_PRESENT",
-                    "updateTime": "2019-05-16T08:37:10.711412Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "04",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "humidity",
-            "data": {
-                "humidity": {
-                    "temperature": 22.45,
-                    "relativeHumidity": 17,
-                    "updateTime": "2019-05-16T06:13:46.369000Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "05",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "objectPresentCount",
-            "data": {
-                "objectPresentCount": {
-                    "total": 4176,
-                    "updateTime": "2019-05-16T08:23:43.209000Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "06",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "touchCount",
-            "data": {
-                "touchCount": {
-                    "total": 469,
-                    "updateTime": "2019-05-16T08:25:21.604000Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "07",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "waterPresent",
-            "data": {
-                "waterPresent": {
-                    "state": "PRESENT",
-                    "updateTime": "2019-05-16T08:43:16.266000Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "08",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "networkStatus",
-            "data": {
-                "networkStatus": {
-                    "signalStrength": 45,
-                    "rssi": -83,
-                    "updateTime": "2019-05-16T08:21:21.076013Z",
-                    "cloudConnectors": [
-                        {
-                            "id": "bdkjbo2v0000uk377c4g",
-                            "signalStrength": 45,
-                            "rssi": -83
-                        }
-                    ],
-                    "transmissionMode": "LOW_POWER_STANDARD_MODE"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "09",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "batteryStatus",
-            "data": {
-                "batteryStatus": {
-                    "percentage": 100,
-                    "updateTime": "2019-05-16T08:21:21.076013Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "10",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "labelsChanged",
-            "data": {
-                "added": {
-                    "label-key": "label-value"
-                },
-                "modified": {
-                    "label-key": "new-label-value"
-                },
-                "removed": [
-                    "remove-key1",
-                    "remove-key2"
-                ]
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "11",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "connectionStatus",
-            "data": {
-                "connectionStatus": {
-                    "connection": "ETHERNET",
-                    "available": [
-                        "CELLULAR",
-                        "ETHERNET"
-                    ],
-                    "updateTime": "2019-05-16T08:21:21.076013Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "12",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "ethernetStatus",
-            "data": {
-                "ethernetStatus": {
-                    "macAddress": "f0:b5:b7:00:0a:08",
-                    "ipAddress": "10.0.0.1",
-                    "errors": [],
-                    "updateTime": "2019-05-16T08:21:21.076013Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
-        {
-            "eventId": "13",
-            "targetName": "/projets/project_id/devices/device_id ",
-            "eventType": "cellularStatus",
-            "data": {
-                "cellularStatus": {
-                    "signalStrength": 80,
-                    "errors": [],
-                    "updateTime": "2019-05-16T08:21:21.076013Z"
-                }
-            },
-            "timestamp": "1970-01-01T00:00:00Z"
-        },
+        touch_event,
+        temperature_event,
+        object_present_event,
+        humidity_event,
+        object_present_count_event,
+        touch_count_event,
+        water_present_event,
+        network_status_event,
+        battery_status_event,
+        labels_changed_event,
+        connection_status_event,
+        ethernet_status_event,
+        cellular_status_event,
+        co2_event,
+        pressure_event,
     ]
 }
 

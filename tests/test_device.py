@@ -365,3 +365,27 @@ class TestDevice():
 
         # Assert empty string as product number.
         assert d.product_number == ''
+
+    def test_reported_constructor(self):
+        events = [
+            dtapiresponses.touch_event,
+            dtapiresponses.temperature_event,
+            dtapiresponses.object_present_event,
+            dtapiresponses.humidity_event,
+            dtapiresponses.object_present_count_event,
+            dtapiresponses.touch_count_event,
+            dtapiresponses.water_present_event,
+            dtapiresponses.network_status_event,
+            dtapiresponses.battery_status_event,
+            dtapiresponses.labels_changed_event,
+            dtapiresponses.connection_status_event,
+            dtapiresponses.ethernet_status_event,
+            dtapiresponses.cellular_status_event,
+            dtapiresponses.co2_event,
+            dtapiresponses.pressure_event,
+        ]
+
+        for event in events:
+            device_dict = dtapiresponses.temperature_sensor
+            device_dict['reported'] = event['data']
+            _ = disruptive.Device(device_dict)

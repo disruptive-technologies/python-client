@@ -134,3 +134,21 @@ class TestEvents():
 
         y = eval(repr(x))
         assert x._raw == y._raw
+
+    def test_co2(self):
+        x = disruptive.events.Co2(
+            ppm=300,
+            timestamp=datetime.now(),
+        )
+
+        y = eval(repr(x))
+        assert x._raw == y._raw
+
+    def test_pressure(self):
+        x = disruptive.events.Pressure(
+            pascal=700,
+            timestamp=datetime.now(),
+        )
+
+        y = eval(repr(x))
+        assert x._raw == y._raw

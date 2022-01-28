@@ -22,6 +22,8 @@ LABELS_CHANGED = 'labelsChanged'
 CONNECTION_STATUS = 'connectionStatus'
 ETHERNET_STATUS = 'ethernetStatus'
 CELLULAR_STATUS = 'cellularStatus'
+CO2 = 'co2'
+PRESSURE = 'pressure'
 
 
 class _EventData(dtoutputs.OutputBase):
@@ -1550,6 +1552,178 @@ class CellularStatus(_EventData):
         return data
 
 
+class Co2(_EventData):
+    """
+    Represents the data found in a co2 event.
+
+    Attributes
+    ----------
+    ppm : float
+        Co2 concentration in parts per million.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
+
+    """
+
+    def __init__(self,
+                 ppm: float,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
+        """
+        Constructs the Co2 object.
+
+        Parameters
+        ----------
+        ppm : float
+            Co2 concentration in parts per million.
+        timestamp : datetime, str, optional
+            Timestamp in either datetime or string iso8601 format
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
+
+        """
+
+        # Set parameter attributes.
+        self.ppm: float = ppm
+        self.timestamp: Optional[datetime | str] = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'co2')
+
+    def __repr__(self) -> str:
+        string = '{}.{}('\
+            'ppm={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.ppm,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
+    @classmethod
+    def _from_raw(cls, data: dict) -> Co2:
+        """
+        Constructs a Co2 object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : Co2
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            ppm=data['ppm'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self) -> dict:
+        data: dict = dict()
+        if self.ppm is not None:
+            data['ppm'] = self.ppm
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
+
+
+class Pressure(_EventData):
+    """
+    Represents the data found in a pressure event.
+
+    Attributes
+    ----------
+    pascal : int
+       Barometric pressure in pascal.
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
+
+    """
+
+    def __init__(self,
+                 pascal: float,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
+        """
+        Constructs the Pressure object.
+
+        Parameters
+        ----------
+        pascal : int
+            Barometric pressure in pascal.
+        timestamp : datetime, str, optional
+            Timestamp in either datetime or string iso8601 format
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
+
+        """
+
+        # Set parameter attributes.
+        self.pascal: float = pascal
+        self.timestamp: Optional[datetime | str] = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'pressure')
+
+    def __repr__(self) -> str:
+        string = '{}.{}('\
+            'pascal={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.pascal,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
+    @classmethod
+    def _from_raw(cls, data: dict) -> Pressure:
+        """
+        Constructs a Pressure object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : Pressure
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            pascal=data['pascal'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self) -> dict:
+        data: dict = dict()
+        if self.pascal is not None:
+            data['pascal'] = self.pascal
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
+
+
 class Event(dtoutputs.OutputBase):
     """
     Represents device events.
@@ -1712,6 +1886,18 @@ class __EventsMap():
             attr_name='cellular_status',
             class_name='CellularStatus',
             is_keyed=True,
+        ),
+        'co2': __TypeNames(
+            api_name='co2',
+            attr_name='co2',
+            class_name='Co2',
+            is_keyed=True,
+        ),
+        'pressure': __TypeNames(
+            api_name='pressure',
+            attr_name='pressure',
+            class_name='Pressure',
+            is_keyed=True,
         )
     }
 
@@ -1722,5 +1908,5 @@ _EventType = Union[
     Touch, Temperature, ObjectPresent, Humidity, ObjectPresentCount,
     TouchCount, WaterPresent, NetworkStatus, NetworkStatusCloudConnector,
     BatteryStatus, LabelsChanged, ConnectionStatus, EthernetStatus,
-    CellularStatus,
+    CellularStatus, Co2, Pressure,
 ]
