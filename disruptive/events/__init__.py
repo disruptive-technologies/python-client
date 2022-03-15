@@ -33,3 +33,4 @@ from disruptive.events.events import ETHERNET_STATUS  # noqa
 from disruptive.events.events import CELLULAR_STATUS  # noqa
 from disruptive.events.events import CO2  # noqa
 from disruptive.events.events import PRESSURE  # noqa
+from disruptive.events.events import EVENT_TYPES  # noqa
