@@ -31,8 +31,8 @@ class Device(dtoutputs.OutputBase):
         The product number of the device.
     labels : dict
         Label keys and values.
-    is_emulator : bool
-        True if the device is an emulator, otherwise False.
+    is_emulated : bool
+        True if the device is emulated, otherwise False.
     reported : Reported
         Object containing the data from the most recent events.
 
