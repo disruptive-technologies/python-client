@@ -1,4 +1,8 @@
-# Project imports.
+from dataclasses import dataclass
+from datetime import datetime
+
+import pytest
+
 import disruptive as dt
 import tests.api_responses as dtapiresponses
 
@@ -57,111 +61,205 @@ class TestEmulator():
         assert d is None
 
     def test_publish_event(self, request_mock):
-        # Call Emulator.publish_event() method.
-        d = dt.Emulator.publish_event(
-            device_id='device_id',
-            project_id='project_id',
-            data=dt.events.Touch(
-                timestamp='1970-01-01T00:00:00Z',
-            ),
-        )
-
-        # Verify expected outgoing parameters in request.
+        project_id = 'test_project'
+        device_id = 'test_device'
         url = dt.emulator_base_url
-        url += '/projects/project_id/devices/device_id:publish'
-        request_mock.assert_requested(
-            method='POST',
-            url=url,
-            body={
-                'touch': {
-                    'updateTime': '1970-01-01T00:00:00Z',
-                }
-            }
-        )
+        url += f'/projects/{project_id}/devices/{device_id}:publish'
+        args = {'device_id': device_id, 'project_id': project_id}
+        now = datetime.utcnow()
 
-        # Assert single request sent.
-        request_mock.assert_request_count(1)
+        @dataclass
+        class TestCase:
+            name: str
+            give_type: str
+            give_data: object
+            want_err: Exception
 
-        # Assert output is None.
-        assert d is None
-
-    def test_temperature_without_samples(self, request_mock):
-        # Call Emulator.publish_event() method.
-        d = dt.Emulator.publish_event(
-            device_id='device_id',
-            project_id='project_id',
-            data=dt.events.Temperature(
-                celsius=55,
-                timestamp='1970-01-01T00:00:00Z',
+        tests = [
+            TestCase(
+                name='touch',
+                give_type=dt.events.TOUCH,
+                give_data=dt.events.Touch(now),
+                want_err=None,
             ),
-        )
-
-        # Verify expected outgoing parameters in request.
-        url = dt.emulator_base_url
-        url += '/projects/project_id/devices/device_id:publish'
-        request_mock.assert_requested(
-            method='POST',
-            url=url,
-            body={
-                'temperature': {
-                    'value': 55,
-                    'updateTime': '1970-01-01T00:00:00Z',
-                }
-            }
-        )
-
-        # Assert single request sent.
-        request_mock.assert_request_count(1)
-
-        # Assert output is None.
-        assert d is None
-
-    def test_temperature_with_timestamped_samples(self, request_mock):
-        # Call Emulator.publish_event() method.
-        d = dt.Emulator.publish_event(
-            device_id='device_id',
-            project_id='project_id',
-            data=dt.events.Temperature(
-                celsius=55,
-                samples=[
-                    dt.events.TemperatureSample(
-                        celsius=55,
-                        timestamp='1970-01-01T00:00:00Z',
-                    ),
-                    dt.events.TemperatureSample(
-                        celsius=56,
-                        timestamp='1970-01-01T00:00:01Z',
-                    ),
-                    dt.events.TemperatureSample(
-                        celsius=57,
-                        timestamp='1970-01-01T00:00:02Z',
-                    ),
-                ],
-                timestamp='1970-01-01T00:00:00Z',
+            TestCase(
+                name='temperature w/o samples',
+                give_type=dt.events.TEMPERATURE,
+                give_data=dt.events.Temperature(
+                    timestamp=now,
+                    celsius=23.0,
+                ),
+                want_err=None,
             ),
-        )
-
-        # Verify expected outgoing parameters in request.
-        url = dt.emulator_base_url
-        url += '/projects/project_id/devices/device_id:publish'
-        request_mock.assert_requested(
-            method='POST',
-            url=url,
-            body={
-                'temperature': {
-                    'value': 55,
-                    'samples': [
-                        {'value': 55, 'sampleTime': '1970-01-01T00:00:00Z'},
-                        {'value': 56, 'sampleTime': '1970-01-01T00:00:01Z'},
-                        {'value': 57, 'sampleTime': '1970-01-01T00:00:02Z'},
+            TestCase(
+                name='temperature w/ samples',
+                give_type=dt.events.TEMPERATURE,
+                give_data=dt.events.Temperature(
+                    timestamp=now,
+                    celsius=23.0,
+                    samples=[
+                        dt.events.TemperatureSample(23.1, now),
+                        dt.events.TemperatureSample(23.2, now),
+                        dt.events.TemperatureSample(23.3, now),
+                        dt.events.TemperatureSample(23.4, now),
+                        dt.events.TemperatureSample(23.5, now),
                     ],
-                    'updateTime': '1970-01-01T00:00:00Z',
-                }
-            }
-        )
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='object present',
+                give_type=dt.events.OBJECT_PRESENT,
+                give_data=dt.events.ObjectPresent(
+                    timestamp=now,
+                    state='PRESENT',
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='humidity',
+                give_type=dt.events.HUMIDITY,
+                give_data=dt.events.Humidity(
+                    timestamp=now,
+                    celsius=23.2,
+                    relative_humidity=77.7,
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='object present count',
+                give_type=dt.events.OBJECT_PRESENT_COUNT,
+                give_data=dt.events.ObjectPresentCount(
+                    timestamp=now,
+                    total=2338,
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='touch count',
+                give_type=dt.events.TOUCH_COUNT,
+                give_data=dt.events.TouchCount(
+                    timestamp=now,
+                    total=2338,
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='water present',
+                give_type=dt.events.WATER_PRESENT,
+                give_data=dt.events.WaterPresent(
+                    timestamp=now,
+                    state='PRESENT',
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='network status',
+                give_type=dt.events.NETWORK_STATUS,
+                give_data=dt.events.NetworkStatus(
+                    timestamp=now,
+                    signal_strength=98,
+                    rssi=-66,
+                    transmission_mode='LOW_POWER_STANDARD_MODE',
+                    cloud_connectors=[
+                        dt.events.NetworkStatusCloudConnector(
+                            device_id='ccon 1',
+                            signal_strength=99,
+                            rssi=-77,
+                        ),
+                        dt.events.NetworkStatusCloudConnector(
+                            device_id='ccon 2',
+                            signal_strength=88,
+                            rssi=-61,
+                        ),
+                    ],
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='battery status',
+                give_type=dt.events.BATTERY_STATUS,
+                give_data=dt.events.BatteryStatus(
+                    timestamp=now,
+                    percentage=78,
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='labels changed',
+                give_type=dt.events.LABELS_CHANGED,
+                give_data=dt.events.LabelsChanged(
+                    timestamp=now,
+                    added={'a': 1},
+                    modified={'b': 2},
+                    removed=['c'],
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='connection status',
+                give_type=dt.events.CONNECTION_STATUS,
+                give_data=dt.events.ConnectionStatus(
+                    timestamp=now,
+                    connection='ETHERNET',
+                    available=['ETHERNET', 'CELLULAR'],
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='ethernet status',
+                give_type=dt.events.ETHERNET_STATUS,
+                give_data=dt.events.EthernetStatus(
+                    timestamp=now,
+                    mac_address='abc',
+                    ip_address='123',
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='cellular status',
+                give_type=dt.events.CELLULAR_STATUS,
+                give_data=dt.events.CellularStatus(
+                    timestamp=now,
+                    signal_strength=87,
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='co2',
+                give_type=dt.events.CO2,
+                give_data=dt.events.Co2(
+                    timestamp=now,
+                    ppm=2000,
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='pressure',
+                give_type=dt.events.PRESSURE,
+                give_data=dt.events.Pressure(
+                    timestamp=now,
+                    pascal=899,
+                ),
+                want_err=None,
+            ),
+        ]
 
-        # Assert single request sent.
-        request_mock.assert_request_count(1)
+        i = 0
+        for test in tests:
+            args['data'] = test.give_data
 
-        # Assert output is None.
-        assert d is None
+            if test.want_err is None:
+                dt.Emulator.publish_event(**args)
+
+                request_mock.assert_requested(
+                    method='POST',
+                    url=url,
+                    body={test.give_type: test.give_data._raw},
+                )
+
+                request_mock.assert_request_count(i + 1)
+                i += 1
+            else:
+                with pytest.raises(test.want_err):
+                    dt.Emulator.publish_event(**args)
