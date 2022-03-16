@@ -129,7 +129,9 @@ class Emulator():
                       disruptive.events.BatteryStatus |
                       disruptive.events.ConnectionStatus |
                       disruptive.events.EthernetStatus |
-                      disruptive.events.CellularStatus,
+                      disruptive.events.CellularStatus |
+                      disruptive.events.Co2 |
+                      disruptive.events.Pressure,
                       **kwargs: Any,
                       ) -> None:
         """
