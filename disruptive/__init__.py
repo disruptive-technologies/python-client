@@ -20,6 +20,8 @@ from disruptive.resources.emulator import Emulator  # noqa
 
 # Additional helper modules.
 import disruptive.events as events  # noqa
+import disruptive.outputs as outputs  # noqa
+import disruptive.errors as errors  # noqa
 
 # If set, logs of chosen level and higher are printed to console.
 # Available levels are: debug, info, warning, error, critical.
