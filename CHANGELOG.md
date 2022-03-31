@@ -7,6 +7,9 @@ The project adheres to [semantic versioning](https://semver.org/).
 - [#91](https://github.com/disruptive-technologies/python-client/pull/91) Added missing `Co2`- and `Pressure` events in `publish_event()` parameter types.
 - [#92](https://github.com/disruptive-technologies/python-client/pull/92) Added members `errors` and `outputs` to disruptive module.
 
+### Changed
+- [#93](https://github.com/disruptive-technologies/python-client/pull/93) Attribute `Project.id` deprecated in favor of `Project.project_id`.
+
 # v1.2.1
 ### Fixed
 - [#90](https://github.com/disruptive-technologies/python-client/pull/90) Added missing `EVENT_TYPES` constant of list of all types.
