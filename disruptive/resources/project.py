@@ -15,7 +15,7 @@ class Project(OutputBase):
 
     Attributes
     ----------
-    id : str
+    project_id : str
         Unique project ID.
     display_name : str
         The provided display name.
@@ -47,7 +47,8 @@ class Project(OutputBase):
         OutputBase.__init__(self, project)
 
         # Unpack attributes from dictionary.
-        self.id: str = project['name'].split('/')[-1]
+        self.project_id: str = project['name'].split('/')[-1]
+        self.id: str = self.project_id  # Deprecated in favor of project_id.
         self.display_name: str = project['displayName']
         self.organization_id: str = project['organization'].split('/')[-1]
         self.organization_display_name: str = \
