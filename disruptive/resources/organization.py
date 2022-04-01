@@ -46,7 +46,7 @@ class Organization(OutputBase):
                          **kwargs: Any,
                          ) -> Organization:
         """
-        Gets the current state of a single organization.
+        Get a single organization.
 
         Parameters
         ----------
@@ -64,7 +64,7 @@ class Organization(OutputBase):
         Examples
         --------
         >>> # Fetch information about a specific organization.
-        >>> org = disruptive.Organization.get_organization('<ORGANIZATION_ID>')
+        >>> org = dt.Organization.get_organization('<ORGANIZATION_ID>')
 
         """
 
@@ -80,7 +80,7 @@ class Organization(OutputBase):
     @classmethod
     def list_organizations(cls, **kwargs: Any) -> list[Organization]:
         """
-        Gets a list of the current state of all available organizations.
+        Gets a list of all available organizations.
 
         Parameters
         ----------
@@ -96,7 +96,7 @@ class Organization(OutputBase):
         Examples
         --------
         >>> # Fetch information about all available organizations.
-        >>> orgs = disruptive.Organization.list_organizations()
+        >>> orgs = dt.Organization.list_organizations()
 
         """
 
@@ -113,7 +113,7 @@ class Organization(OutputBase):
                      **kwargs: Any,
                      ) -> list[Member]:
         """
-        Gets a list of the current state of all members in an organization.
+        Gets a list of all members in an organization.
 
         Parameters
         ----------
@@ -131,7 +131,7 @@ class Organization(OutputBase):
         Examples
         --------
         >>> # Fetch information about all members in an organization.
-        >>> members = disruptive.Organization.list_members('<ORGANIZATION_ID>')
+        >>> members = dt.Organization.list_members('<ORGANIZATION_ID>')
 
         """
 
@@ -176,10 +176,10 @@ class Organization(OutputBase):
         Examples
         --------
         >>> # Add a new member to an organization.
-        >>> member = disruptive.Organization.add_member(
+        >>> member = dt.Organization.add_member(
         ...     organization_id='<ORGANIZATION_ID>',
         ...     email='<EMAIL_ADDRESS>',
-        ...     roles=[disruptive.Role.ORGANIZATION_ADMIN],
+        ...     roles=[dt.Role.ORGANIZATION_ADMIN],
         ... )
 
         """
@@ -227,7 +227,7 @@ class Organization(OutputBase):
         Examples
         --------
         >>> # Fetch information about a specific member in an organization.
-        >>> org = disruptive.Organization.get_organization(
+        >>> org = dt.Organization.get_organization(
         ...     member_id='<MEMBER_ID>',
         ...     organization_id='<ORGANIZATION_ID>',
         ... )
@@ -253,6 +253,7 @@ class Organization(OutputBase):
                       ) -> None:
         """
         Revoke a member's membership in the specified organization.
+        This does not delete the underlying Service Account or User.
 
         Parameters
         ----------
@@ -269,7 +270,7 @@ class Organization(OutputBase):
         Examples
         --------
         >>> # Revoke the membership of a member in an organization.
-        >>> org = disruptive.Organization.remove_member(
+        >>> org = dt.Organization.remove_member(
         ...     member_id='<MEMBER_ID>',
         ...     organization_id='<ORGANIZATION_ID>',
         ... )
@@ -319,7 +320,7 @@ class Organization(OutputBase):
         Examples
         --------
         >>> # Fetch the pending invite URL for a member.
-        >>> org = disruptive.Organization.get_member_invite_url(
+        >>> org = dt.Organization.get_member_invite_url(
         ...     member_id='<MEMBER_ID>',
         ...     organization_id='<ORGANIZATION_ID>',
         ... )
@@ -362,7 +363,7 @@ class Organization(OutputBase):
         Examples
         --------
         >>> # List all available permissions in an organization.
-        >>> org = disruptive.Organization.list_permissions(
+        >>> org = dt.Organization.list_permissions(
         ...     organization_id='<ORGANIZATION_ID>',
         ... )
 

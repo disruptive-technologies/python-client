@@ -22,11 +22,15 @@ class Stream():
                      **kwargs: Any,
                      ) -> Generator:
         """
-        Streams events for one, several, or all devices in a project.
+        Stream events for one, multiple, or all device(s) in a project.
 
         Implements a basic retry-routine. If connection is lost, the stream
-        will attempt to reconnect with an exponential backoff. Potential
-        lost events while reconnecting are, however, not acocunted for.
+        will attempt to reconnect with an exponential backoff. Events that
+        are published during reconnection are not accounted for.
+
+        If you want to forward your data in a server-to-server
+        integration, consider using Data Connectors for a simpler
+        and more reliable service with an added at-least-once guarantee.
 
         Parameters
         ----------
@@ -54,33 +58,30 @@ class Stream():
 
         Examples
         --------
-        >>> # Stream real-time events from all devices in a project.
+        >>> # Sream real-time events from all devices in a project.
         >>> for event in dt.Stream.event_stream('<PROJECT_ID>'):
         ...     print(event)
 
-        >>> # Stream real-time events from one device in a project.
-        >>> for event in dt.Stream.event_stream(project_id='<PROJECT_ID>',
-        ...                                     device_ids=['<DEVICE_ID>'],
-        ...                                     ):
+        >>> # Sream real-time temperature- and touch events
+        >>> # only from temperature devices that have set
+        >>> # the labels `room-number=99` or `group=red`.
+        >>> stream = dt.Stream.event_stream(
+        ...     project_id='<PROJECT_ID>',
+        ...     label_filters={
+        ...         'room-number': '99',
+        ...         'group': 'red',
+        ...     },
+        ...     device_types=[
+        ...         dt.Device.TEMPERATURE,
+        ...     ],
+        ...     event_types=[
+        ...         dt.events.TOUCH,
+        ...         dt.events.TEMPERATURE,
+        ...     ],
+        ... )
+        >>>
+        >>> for event in stream:
         ...     print(event)
-
-        >>> # Stream real-time touch events from a select list of
-        >>> # humidity- and touch sensors, but only those with
-        >>> # a 'v1' label in room number 99.
-        >>> for e in dt.Stream.event_stream(project_id='<PROJECT_ID>',
-        ...                                 device_ids=[
-        ...                                     '<DEVICE_ID_1>',
-        ...                                     '<DEVICE_ID_2>',
-        ...                                     '<DEVICE_ID_3>',
-        ...                                 ]
-        ...                                 event_types=['touch'],
-        ...                                 device_types=['humidity', 'touch'],
-        ...                                 label_filters={
-        ...                                     'v1': None,
-        ...                                     'room-number': '99',
-        ...                                 },
-        ...                                 ):
-        ...     print(e.data)
 
         """
 

@@ -98,7 +98,7 @@ class DataConnector(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Fetch information about a specific Data Connector.
-        >>> dcon = disruptive.DataConnector.get_data_connector(
+        >>> dcon = dt.DataConnector.get_data_connector(
         ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -139,9 +139,7 @@ class DataConnector(dtoutputs.OutputBase):
         Examples
         --------
         >>> # List information about all Data Connectors in a project.
-        >>> dcons = disruptive.DataConnector.list_data_connectors(
-        ...     project_id='<PROJECT_ID>',
-        ... )
+        >>> dcons = dt.DataConnector.list_data_connectors('<PROJECT_ID>')
 
         """
 
@@ -192,14 +190,35 @@ class DataConnector(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> # Create a new Data Connector.
-        >>> dcon = disruptive.DataConnector.create_data_connector(
+        >>> # Create a new Data Connector with default settings.
+        >>> dcon = dt.DataConnector.create_data_connector(
         ...     project_id='<PROJECT_ID>',
-        ...     config=disruptive.DataConnector.HttpPushConfig(
+        ...     config=dt.DataConnector.HttpPushConfig(
         ...         url='<HTTPS_ENDPOINT_URL>',
         ...         signature_secret='some-good-secret',
         ...     ),
         ...     display_name='my-first-dcon',
+        ... )
+
+        >>> # Create a new Data Connector that is initially
+        >>> # disabled and sets a custome header in the request.
+        >>> # It should also only forward touch events, including
+        >>> # the labels 'room-number' and 'group'.
+        >>> dcon = dt.DataConnector.create_data_connector(
+        ...     project_id='<PROJECT_ID>',
+        ...     config=dt.DataConnector.HttpPushConfig(
+        ...         url='<ENDPOINT_URL>',
+        ...         signature_secret='<GOOD_SECRET>',
+        ...         headers={'CUSTOM_HEADER_1': 'HEADER_KEY'},
+        ...     ),
+        ...     STATUS='USER_DISABLED',
+        ...     event_types=[
+        ...         dt.events.TOUCH,
+        ...     ],
+        ...     labels=[
+        ...         'room-number',
+        ...         'group',
+        ...     ],
         ... )
 
         """
@@ -274,22 +293,26 @@ class DataConnector(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Update only the display_name of a Data Connector.
-        >>> dcon = disruptive.DataConnector.update_data_connector(
+        >>> dcon = dt.DataConnector.update_data_connector(
         ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ... )
 
-        >>> # Update both the display_name, labels, and forwarded event types.
-        >>> dcon = disruptive.DataConnector.update_data_connector(
+        >>> # Update display_name, labels, and forwarded event types.
+        forwarded event types.
+        >>> dcon = dt.DataConnector.update_data_connector(
         ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
-        ...     labels=['room-number', 'customer-id'],
+        ...     labels=[
+        ...         'room-number',
+        ...         'customer-id',
+        ...     ],
         ...     event_types=[
-        ...         disruptive.events.TOUCH,
-        ...         disruptive.events.TEMPERATURE,
-        ...         ],
+        ...         dt.events.TOUCH,
+        ...         dt.events.TEMPERATURE,
+        ...     ],
         ... )
 
         """
@@ -343,7 +366,7 @@ class DataConnector(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Delete the specified Data Connector.
-        >>> disruptive.DataConnector.delete_data_connector(
+        >>> dt.DataConnector.delete_data_connector(
         ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -387,7 +410,7 @@ class DataConnector(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Get the 3h metrics of the specified Data Connector.
-        >>> metrics = disruptive.DataConnector.get_metrics(
+        >>> metrics = dt.DataConnector.get_metrics(
         ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -431,7 +454,7 @@ class DataConnector(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Synchronize the specified Data Connector.
-        >>> disruptive.DataConnector.sync_data_connector(
+        >>> dt.DataConnector.sync_data_connector(
         ...     data_connector_id='<DATA_CONNECTOR_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )

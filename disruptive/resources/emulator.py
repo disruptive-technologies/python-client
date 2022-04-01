@@ -18,7 +18,7 @@ class Emulator():
     def create_device(project_id: str,
                       device_type: str,
                       display_name: Optional[str] = None,
-                      labels: Optional[dict[str, str]] = {},
+                      labels: dict[str, str] = {},
                       **kwargs: Any,
                       ) -> Device:
         """
@@ -48,9 +48,9 @@ class Emulator():
         Examples
         --------
         >>> # Create a new emulated humidity sensor.
-        >>> disruptive.Emulator.create_device(
+        >>> device = dt.Emulator.create_device(
         ...     project_id='<PROJECT_ID>',
-        ...     device_type=disruptive.Device.HUMIDITY,
+        ...     device_type=dt.Device.HUMIDITY,
         ...     display_name='new-humidity-sensor',
         ...     labels={
         ...         'room-number': '99',
@@ -101,7 +101,7 @@ class Emulator():
         Examples
         --------
         >>> # Delete an emulated device.
-        >>> disruptive.Emulator.delete_device('<DEVICE_ID>', '<PROJECT_ID>')
+        >>> dt.Emulator.delete_device('<DEVICE_ID>', '<PROJECT_ID>')
 
         """
 
@@ -156,10 +156,10 @@ class Emulator():
         Examples
         --------
         >>> # Publish a Humidity event from an emulated device.
-        >>> disruptive.Emulator.publish_event(
+        >>> dt.Emulator.publish_event(
         ...     device_id='<DEVICE_ID>',
         ...     project_id='<PROJECT_ID>',
-        ...     data=disruptive.events.Humidity(
+        ...     data=dt.events.Humidity(
         ...         celsius=23,
         ...         humidity=76,
         ...     ),
