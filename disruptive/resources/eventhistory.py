@@ -52,22 +52,22 @@ class EventHistory():
 
         Examples
         --------
-        >>> # Fetch all historic events the last 24 hours.
-        >>> events = disruptive.EventHistory.list_events(
+        >>> # Fetch all events in the last 24h for a device.
+        >>> events = dt.EventHistory.list_events(
         ...     device_id='<DEVICE_ID>',
         ...     project_id='<PROJECT_ID',
         ... )
 
-        >>> # Create a datetime object for 7 days ago.
-        >>> from datetime import datetime, timedelta
-        >>> seven_days_ago = datetime.now() - timedelta(7)
-        >>>
-        >>> # Fetch objectPresent event history the last 7 days.
-        ... events = dt.EventHistory.list_events(
-        ...     device_id='<DEVICE_ID>',
-        ...     project_id='<PROJECT_ID>',
-        ...     event_types=['objectPresent'],
-        ...     start_time=seven_days_ago,
+        >>> # Fetch all touch- and objectPresent events
+        >>> # for a device in the last 7 days.
+        >>> events = dt.EventHistory.list_events(
+        ...     device_id=DEVICE_1,
+        ...     project_id=PROJECT_ID,
+        ...     event_types=[
+        ...         dt.events.TOUCH,
+        ...         dt.events.OBJECT_PRESENT,
+        ...     ],
+        ...     start_time=datetime.utcnow() - timedelta(7),
         ... )
 
         """

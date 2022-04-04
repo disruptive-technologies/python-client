@@ -17,6 +17,8 @@ class Project(OutputBase):
     ----------
     project_id : str
         Unique project ID.
+    id : str
+        Unique project ID (Deprecated in favor of project_id).
     display_name : str
         The provided display name.
     organization_id : str
@@ -63,7 +65,7 @@ class Project(OutputBase):
                     **kwargs: Any,
                     ) -> Project:
         """
-        Gets the current state of a single project.
+        Fetch a single project.
 
         Parameters
         ----------
@@ -80,10 +82,8 @@ class Project(OutputBase):
 
         Examples
         --------
-        >>> # Fetch information about a specific project.
-        >>> project = disruptive.Project.get_project(
-        ...     project_id='<PROJECT_ID>',
-        ... )
+        >>> # Fetch a single project.
+        >>> project = dt.Project.get_project('<PROJECT_ID>')
 
         """
 
@@ -103,14 +103,14 @@ class Project(OutputBase):
                       **kwargs: Any,
                       ) -> list[Project]:
         """
-        Gets a list of the current state of all available projects.
+        Fetch a list of all available projects.
 
         Parameters
         ----------
-        organization_id : str
-            Unique organization ID.
+        organization_id : str, optional
+            Specify an organization by its unique identifier.
         query : str, optional
-            Keyword based search for project- and organization display names.
+            Keyword-based search for project- and organization display names.
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
@@ -122,10 +122,8 @@ class Project(OutputBase):
 
         Examples
         --------
-        >>> # Fetch information about all projects in an organization.
-        >>> projects = disruptive.Project.list_projects(
-        ...     organization_id='<ORGANIZATION_ID>',
-        ... )
+        >>> # Fetch a list of all available projects.
+        >>> projects = dt.Project.list_projects()
 
         """
 
@@ -174,8 +172,8 @@ class Project(OutputBase):
 
         Examples
         --------
-        >>> # Create a new project.
-        >>> project = disruptive.Project.create_project(
+        >>> # Create a new project with the name "my-new-project".
+        >>> project = dt.Project.create_project(
         ...     organization_id='<ORGANIZATION_ID>',
         ...     display_name='my-new-project',
         ... )
@@ -217,8 +215,8 @@ class Project(OutputBase):
 
         Examples
         --------
-        >>> # Update the display_name of a project.
-        >>> disruptive.Project.update_project(
+        >>> # Update the display_name of a project to "new-name".
+        >>> dt.Project.update_project(
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ... )
@@ -266,9 +264,7 @@ class Project(OutputBase):
         Examples
         --------
         >>> # Delete the specified project.
-        >>> disruptive.Project.delete_project(
-        ...     project_id='<PROJECT_ID>',
-        ... )
+        >>> dt.Project.delete_project('<PROJECT_ID>')
 
         """
 
@@ -286,7 +282,7 @@ class Project(OutputBase):
                      **kwargs: Any,
                      ) -> list[Member]:
         """
-        Gets a list of the current state of all members in a project.
+        Gets a list of all members in a project.
 
         Parameters
         ----------
@@ -304,9 +300,7 @@ class Project(OutputBase):
         Examples
         --------
         >>> # List all members in a project.
-        >>> members = disruptive.Project.list_members(
-        ...     project_id='<PROJECT_ID>',
-        ... )
+        >>> members = dt.Project.list_members('<PROJECT_ID>')
 
         """
 
@@ -336,7 +330,7 @@ class Project(OutputBase):
         project_id : str
             Unique ID of the project to add a member to.
         email : str
-            Email of the user or Service Account to be added.
+            User- or Service Account email address.
         roles : list[str]
             The :ref:`role(s) <role_types>` to provide the
             new member in the project.
@@ -351,11 +345,11 @@ class Project(OutputBase):
 
         Examples
         --------
-        >>> # Add a new project.developer member to a project.
-        >>> member = disruptive.Project.add_member(
+        >>> # Add a new member with the role project.developer.
+        >>> member = dt.Project.add_member(
         ...     project_id='<PROJECT_ID>',
         ...     email='<MEMBER_EMAIL_ADDRESS>',
-        ...     roles=[disruptive.Role.PROJECT_DEVELOPER],
+        ...     roles=[dt.Role.PROJECT_DEVELOPER],
         ... )
 
         """
@@ -381,12 +375,12 @@ class Project(OutputBase):
                    **kwargs: Any,
                    ) -> Member:
         """
-        Get the state of a member in the specified project.
+        Get a single member in the specified project.
 
         Parameters
         ----------
         member_id : str
-            Unique ID of the member to get.
+            Unique member identifier.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
         project_id : str
@@ -403,7 +397,7 @@ class Project(OutputBase):
         Examples
         --------
         >>> # Fetch information about the specified member.
-        >>> member = disruptive.Project.get_member(
+        >>> member = dt.Project.get_member(
         ...     member_id='<MEMBER_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -434,7 +428,7 @@ class Project(OutputBase):
         Parameters
         ----------
         member_id : str
-            Unique ID of the member to get.
+            Unique member identifier.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
         project_id : str
@@ -452,11 +446,11 @@ class Project(OutputBase):
 
         Examples
         --------
-        >>> # Update the role of a member.
-        >>> member = disruptive.Project.update_member(
+        >>> # Update a member's role to project.user.
+        >>> member = dt.Project.update_member(
         ...     member_id='<MEMBER_ID>',
         ...     project_id='<PROJECT_ID>',
-        ...     roles=[disruptive.Role.PROJECT_USER],
+        ...     roles=[dt.Role.PROJECT_USER],
         ... )
 
         """
@@ -486,11 +480,12 @@ class Project(OutputBase):
                       ) -> None:
         """
         Revoke a member's membership in the specified project.
+        This does not delete the underlying Service Account or User.
 
         Parameters
         ----------
         member_id : str
-            Unique ID of the member to get.
+            Unique member identifier.
             For Service Account members, this is the Service Account ID.
             For User members, this is the unique User ID.
         project_id : str
@@ -502,7 +497,7 @@ class Project(OutputBase):
         Examples
         --------
         >>> # Remove the specified member from a project.
-        >>> disruptive.Project.remove_member(
+        >>> dt.Project.remove_member(
         ...     member_id='<MEMBER_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -557,7 +552,7 @@ class Project(OutputBase):
         Examples
         --------
         >>> # Fetch the pending invite URL of a member.
-        >>> url = disruptive.Project.get_member_invite_url(
+        >>> url = dt.Project.get_member_invite_url(
         ...     member_id='<MEMBER_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -600,7 +595,7 @@ class Project(OutputBase):
         Examples
         --------
         >>> # List the available permissions in a project.
-        >>> permissions = disruptive.Project.list_permissions('<PROJECT_ID>')
+        >>> permissions = dt.Project.list_permissions('<PROJECT_ID>')
 
         """
 

@@ -124,8 +124,8 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> # Fetch information about the specified device.
-        >>> device = disruptive.Device.get_device('<DEVICE_ID>')
+        >>> # Fetch a single device.
+        >>> device = dt.Device.get_device('<DEVICE_ID>')
 
         """
 
@@ -154,7 +154,9 @@ class Device(dtoutputs.OutputBase):
         project_id : str
             Unique ID of the target project.
         query : str, optional
-            Keyword based search for device display name.
+            Keyword-based device search device type, labels, and identifiers.
+            Does not provide additional capabilities over setting explicit
+            parameters available in this method.
         device_ids : list[str], optional
             Specify devices by their unique IDs.
         device_types : list[str], optional
@@ -178,9 +180,27 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> # List information about all devices in a project.
-        >>> device_list = disruptive.Device.list_devices(
+        >>> # List all devices in a project.
+        >>> devices = dt.Device.list_devices(
         ...     project_id='<PROJECT_ID>',
+        ... )
+
+        >>> # List all touch, temperature, and proximity sensors
+        >>> # in a project that has both the labels "room-number"
+        >>> # and "external-id" set to spesific values, then
+        >>> # sort by their most recent touch event time.
+        >>> devices = dt.Device.list_devices(
+        ...     project_id=PROJECT_ID,
+        ...     device_types=[
+        ...         dt.Device.TOUCH,
+        ...         dt.Device.TEMPERATURE,
+        ...         dt.Device.PROXIMITY,
+        ...     ],
+        ...     label_filters={
+        ...         'room-number': '99',
+        ...         'external-id': '55E21B',
+        ...     },
+        ...     order_by='reported.touch.updateTime',
         ... )
 
         """
@@ -244,11 +264,11 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> # Move a device from on project to another.
-        >>> err = disruptive.Device.transfer_devices(
+        >>> # Transfer a device from one project to another.
+        >>> err = dt.Device.transfer_devices(
         ...     device_ids=[
         ...         '<DEVICE_ID_1>',
-        ...         '<DEVICE_ID_2',
+        ...         '<DEVICE_ID_2>',
         ...     ],
         ...     source_project_id='<SOURCE_PROJECT_ID>',
         ...     target_project_id='<TARGET_PROJECT_ID>',
@@ -285,7 +305,7 @@ class Device(dtoutputs.OutputBase):
                   **kwargs: Any,
                   ) -> list[LabelUpdateError]:
         """
-        Set a label (key and value) for a single device.
+        Set a label key and value for a single device.
 
         If a label key already exists, the value is updated.
 
@@ -312,7 +332,7 @@ class Device(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Add a new `room-number` label to a device.
-        >>> disruptive.Device.set_label(
+        >>> err = dt.Device.set_label(
         ...     device_id='<DEVICE_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     key='room-number',
@@ -365,7 +385,7 @@ class Device(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Remove the `room-number` label from a device.
-        >>> disruptive.Device.remove_label(
+        >>> dt.Device.remove_label(
         ...     device_id='<DEVICE_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     key='room-number',
@@ -429,26 +449,23 @@ class Device(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> # Add 3 new labels to 2 different devices, and remove 1.
-        >>> disruptive.Device.batch_update_labels(
+        >>> # Add 3 new and remove 2 old labels for a few devices.
+        >>> err = dt.Device.batch_update_labels(
         ...     device_ids=[
-        ...         '<DEVICE_ID_1>',
-        ...         '<DEVICE_ID_2>',
+        ...         '<DEVICE_1>',
+        ...         '<DEVICE_2>',
+        ...         '<DEVICE_3>',
         ...     ],
         ...     project_id='<PROJECT_ID>',
         ...     set_labels={
-        ...         'new-label-1': 'value-1',
-        ...         'new-label-2': 'value-2',
-        ...         'new-label-3': 'value-3',
+        ...         'room-number': '99',
+        ...         'group': 'favorite',
+        ...         'alias': 'cookies',
         ...     },
-        ... )
-
-        >>> # Add 1 and remove 1 label from a single device.
-        >>> disruptive.Device.batch_update_labels(
-        ...     device_ids=['<DEVICE_ID_1>']
-        ...     project_id='<PROJECT_ID>',
-        ...     set_labels={'new-label': 'new-value'},
-        ...     remove_labels=['old-label'],
+        ...     remove_labels=[
+        ...         'external-id',
+        ...         'old-tag',
+        ...     ],
         ... )
 
         """

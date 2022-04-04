@@ -83,7 +83,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Fetch information about a specific Service Account.
-        >>> sa = disruptive.ServiceAccount.get_service_account(
+        >>> sa = dt.ServiceAccount.get_service_account(
         ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -126,7 +126,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Fetch a list of all Service Accounts in a project.
-        >>> sas = disruptive.ServiceAccount.list_service_accounts(
+        >>> sas = dt.ServiceAccount.list_service_accounts(
         ...     project_id='<PROJECT_ID>',
         ... )
 
@@ -174,7 +174,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Create a new Service Account with basic auth enabled.
-        >>> sa = disruptive.ServiceAccount.create_service_account(
+        >>> sa = dt.ServiceAccount.create_service_account(
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-service-account',
         ...     basic_auth_enabled=True,
@@ -231,14 +231,14 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Update only the `display_name` of a Service Account.
-        >>> sa = disruptive.ServiceAccount.update_service_account(
+        >>> sa = dt.ServiceAccount.update_service_account(
         ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
         ... )
 
         >>> # Update both `display_name` and `basic_auth_enabled`.
-        >>> sa = disruptive.ServiceAccount.update_service_account(
+        >>> sa = dt.ServiceAccount.update_service_account(
         ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ...     display_name='new-name',
@@ -289,7 +289,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Delete a single Service Account.
-        >>> disruptive.ServiceAccount.delete_service_account(
+        >>> dt.ServiceAccount.delete_service_account(
         ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -337,7 +337,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Get information about a specific key.
-        >>> key = disruptive.ServiceAccount.get_key(
+        >>> key = dt.ServiceAccount.get_key(
         ...     key_id='<KEY_ID>',
         ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
@@ -384,7 +384,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # List all keys for a specific Service Account.
-        >>> keys = disruptive.ServiceAccount.list_keys(
+        >>> keys = dt.ServiceAccount.list_keys(
         ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -431,7 +431,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Create a new key for a specific Service Account.
-        >>> key = disruptive.ServiceAccount.create_key(
+        >>> key = dt.ServiceAccount.create_key(
         ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',
         ... )
@@ -475,7 +475,7 @@ class ServiceAccount(dtoutputs.OutputBase):
         Examples
         --------
         >>> # Delete a specific key on a Service Account.
-        >>> disruptive.ServiceAccount.delete_key(
+        >>> dt.ServiceAccount.delete_key(
         ...     key_id='<KEY_ID',
         ...     service_account_id='<SERVICE_ACCOUNT_ID>',
         ...     project_id='<PROJECT_ID>',

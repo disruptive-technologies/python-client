@@ -78,7 +78,7 @@ class Role(OutputBase):
         Examples
         --------
         >>> # Fetch information about the project.developer role.
-        >>> role = disruptive.Role.get_role(disruptive.Role.PROJECT_DEVELOPER)
+        >>> role = dt.Role.get_role(dt.Role.PROJECT_DEVELOPER)
 
         """
 
@@ -107,7 +107,7 @@ class Role(OutputBase):
         Examples
         --------
         >>> # Fetch information about all available roles.
-        >>> roles = disruptive.Role.list_roles()
+        >>> roles = dt.Role.list_roles()
 
         """
 
