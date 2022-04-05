@@ -334,13 +334,13 @@ class DTRequest():
                         raise dterrors.UnknownError(payload)
 
                 # If the stream finished, but without an error, break the loop.
-                dtlog.info('Stream ended without an error.')
-                break
+                msg = 'Stream ended without an error.'
+                raise dterrors.ConnectionError(msg)
 
             except KeyboardInterrupt:
                 break
 
-            except requests.exceptions.RequestException as e:
+            except Exception as e:
                 error, should_retry, sleeptime = dterrors.parse_request_error(
                     e, {}, nth_attempt)
 
