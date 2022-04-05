@@ -98,6 +98,9 @@ class DTRequest():
         # Add custom user agent.
         headers['User-Agent'] = USER_AGENT
 
+        # Define default response values.
+        res = None
+
         # Attempt to send the request.
         try:
             # Use the requests package to send the request.
@@ -119,7 +122,10 @@ class DTRequest():
             return DTResponse({}, None, {}), e
         except ValueError as e:
             # Requests' .json() fails when no json is returned (code 405).
-            return DTResponse({}, res.status_code, res.headers), e
+            if res is None:
+                return DTResponse({}, 0, {}), e
+            else:
+                return DTResponse({}, res.status_code, res.headers), e
 
     def _send_request(self, nth_attempt: int = 1) -> dict:
         """
