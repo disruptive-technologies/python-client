@@ -303,10 +303,13 @@ class DTRequest():
                     data=None,
                 )
 
+                if stream.encoding is None:
+                    stream.encoding = 'utf-8'
+
                 # Iterate through the events as they come in (one per line).
-                for line in stream.iter_lines():
+                for line in stream.iter_lines(decode_unicode=True):
                     # Decode the response payload and break on error.
-                    payload = json.loads(line.decode('ascii'))
+                    payload = json.loads(line)
                     if 'result' in payload:
                         # Reset retry counter.
                         nth_attempt = 1

@@ -14,13 +14,17 @@ class RequestsReponseMock():
         self.status_code = status_code
         self.headers = headers
         self.iter_data = iter_data
+        self.encoding = None
 
     def json(self):
         return self._json
 
-    def iter_lines(self):
+    def iter_lines(self, decode_unicode=False):
         for d in self.iter_data:
-            yield d
+            if decode_unicode:
+                yield d
+            else:
+                yield d
 
 
 class RequestMock():
