@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# Unreleased
+### Fixed
+  - [#95](https://github.com/disruptive-technologies/python-client/pull/95) Changed stream decoding from ascii to utf-8.
+
 # v1.2.2
 ### Added
 - [#91](https://github.com/disruptive-technologies/python-client/pull/91) Added `Co2`- and `Pressure` events in `publish_event()` parameter types.
