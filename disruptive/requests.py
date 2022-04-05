@@ -347,8 +347,9 @@ class DTRequest():
                 break
 
             except Exception as e:
-                error, should_retry, sleeptime = dterrors.parse_request_error(
-                    e, {}, nth_attempt)
+                # ConnectionErrors should always be retried.
+                result = dterrors.parse_request_error(e, {}, nth_attempt)
+                error, should_retry, sleeptime = result
 
                 # Print the error and try again up to max_request_attempts.
                 if nth_attempt < request_attempts and should_retry:

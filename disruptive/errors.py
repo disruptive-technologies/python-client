@@ -283,8 +283,12 @@ def parse_request_error(caught_error: Exception,
 
     """
 
+    # Disruptive ConnectionErrors should always retry.
+    if isinstance(caught_error, ConnectionError):
+        return caught_error, True, nth_attempt**2
+
     # Read Timeouts should be attempted again.
-    if isinstance(caught_error, requests.exceptions.ReadTimeout):
+    elif isinstance(caught_error, requests.exceptions.ReadTimeout):
         return (
             ReadTimeout('Connection timed out.'),
             True,
