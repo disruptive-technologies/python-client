@@ -26,6 +26,9 @@ class RequestsReponseMock():
             else:
                 yield d
 
+        # In order to stop stream in the tests, raise KeyboardInterrupt.
+        raise KeyboardInterrupt
+
 
 class RequestMock():
 

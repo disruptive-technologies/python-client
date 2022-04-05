@@ -13,8 +13,12 @@ from disruptive.events import Event
 class TestStream():
 
     def test_event_stream_arguments(self, request_mock):
+        request_mock.iter_data = [
+            dtapiresponses.stream_temperature_event
+        ]
+
         # Call stream with customer kwargs.
-        for event in disruptive.Stream.event_stream(
+        for _ in disruptive.Stream.event_stream(
             project_id='project_id',
             device_ids=['id1', 'id2', 'id3'],
             label_filters={
@@ -55,7 +59,7 @@ class TestStream():
 
         # Mock logging function, which should trigger once for each ping.
         with patch('disruptive.logging.debug') as log_mock:
-            for event in disruptive.Stream.event_stream('project_id'):
+            for _ in disruptive.Stream.event_stream('project_id'):
                 pass
 
             # Assert logging called with expected message.
@@ -99,7 +103,7 @@ class TestStream():
         # Catch ConnectionError caused by exhausted retries.
         with pytest.raises(dterrors.ReadTimeout):
             # Start a stream, which should rause an error causing retries.
-            for event in disruptive.Stream.event_stream(
+            for _ in disruptive.Stream.event_stream(
                     project_id='project_id',
                     request_attempts=8):
                 pass
@@ -117,7 +121,7 @@ class TestStream():
         # Catch ConnectionError caused by exhausted retries.
         with pytest.raises(dterrors.ConnectionError):
             # Start a stream, which should rause an error causing retries.
-            for event in disruptive.Stream.event_stream(
+            for _ in disruptive.Stream.event_stream(
                     project_id='project_id',
                     request_attempts=7):
                 pass
