@@ -334,8 +334,15 @@ def parse_api_status_code(status_code: Optional[int],
 
     """
 
+    # If not status code is provided, assume it *couldn't* be
+    # set due to an internal error.
+    if status_code is None:
+        status_code = 500
+
     # Check for API errors.
-    if status_code == 200:
+    if status_code < 100:
+        return InternalServerError(data), True, nth_attempt**2
+    elif status_code == 200:
         return None, False, None
     elif status_code == 400:
         return BadRequest(data), False, None
