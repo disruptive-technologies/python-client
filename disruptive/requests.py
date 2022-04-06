@@ -281,12 +281,6 @@ class DTRequest():
         # Add ping parameter to dictionary.
         params['ping_interval'] = str(PING_INTERVAL) + 's'
 
-        # If provided, override package-wide auth with argument.
-        if 'auth' in kwargs:
-            headers['Authorization'] = kwargs['auth'].get_token()
-        else:
-            headers['Authorization'] = dt.default_auth.get_token()
-
         # Add custom user agent.
         headers['User-Agent'] = USER_AGENT
 
@@ -294,6 +288,12 @@ class DTRequest():
         nth_attempt = 1
         while True:
             try:
+                # Set the authorization header each retry in case we expire.
+                if 'auth' in kwargs:
+                    headers['Authorization'] = kwargs['auth'].get_token()
+                else:
+                    headers['Authorization'] = dt.default_auth.get_token()
+
                 # Set up a stream connection.
                 # Connection will timeout and reconnect if no single event
                 # is received in an interval of ping_interval + ping_jitter.
@@ -346,7 +346,27 @@ class DTRequest():
             except KeyboardInterrupt:
                 break
 
-            except Exception as e:
+            except dterrors.DTApiError as e:
+                # Should always retry errors inheriting DTApiErrors.
+                if nth_attempt < request_attempts:
+                    sleeptime = nth_attempt**2
+
+                    dtlog.error(str(e))
+                    dtlog.warning('Reconnecting in {}s.'.format(sleeptime))
+
+                    # Exponential backoff in sleep time.
+                    time.sleep(sleeptime)
+
+                    # Iterate attempt counter.
+                    nth_attempt += 1
+                    dtlog.info('Connection attempt {}/{}.'.format(
+                        nth_attempt,
+                        request_attempts,
+                    ))
+                else:
+                    raise e
+
+            except requests.exceptions.RequestException as e:
                 # ConnectionErrors should always be retried.
                 result = dterrors.parse_request_error(e, {}, nth_attempt)
                 error, should_retry, sleeptime = result
