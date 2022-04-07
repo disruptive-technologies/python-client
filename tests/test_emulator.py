@@ -73,7 +73,7 @@ class TestEmulator():
             name: str
             give_type: str
             give_data: object
-            want_err: Exception
+            want_err: Exception | None
 
         tests = [
             TestCase(
@@ -240,6 +240,15 @@ class TestEmulator():
                 give_data=dt.events.Pressure(
                     timestamp=now,
                     pascal=899,
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='motion',
+                give_type=dt.events.MOTION,
+                give_data=dt.events.Motion(
+                    timestamp=now,
+                    state='NO_MOTION_DETECTED',
                 ),
                 want_err=None,
             ),

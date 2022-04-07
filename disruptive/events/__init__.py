@@ -16,6 +16,7 @@ from disruptive.events.events import EthernetStatus  # noqa
 from disruptive.events.events import CellularStatus  # noqa
 from disruptive.events.events import Co2  # noqa
 from disruptive.events.events import Pressure  # noqa
+from disruptive.events.events import Motion  # noqa
 
 # Module constants.
 from disruptive.events.events import TOUCH  # noqa
@@ -33,4 +34,5 @@ from disruptive.events.events import ETHERNET_STATUS  # noqa
 from disruptive.events.events import CELLULAR_STATUS  # noqa
 from disruptive.events.events import CO2  # noqa
 from disruptive.events.events import PRESSURE  # noqa
+from disruptive.events.events import MOTION  # noqa
 from disruptive.events.events import EVENT_TYPES  # noqa

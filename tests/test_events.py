@@ -152,3 +152,12 @@ class TestEvents():
 
         y = eval(repr(x))
         assert x._raw == y._raw
+
+    def test_motion(self):
+        x = disruptive.events.Motion(
+            state='NO_MOTION_DETECTED',
+            timestamp=datetime.now(),
+        )
+
+        y = eval(repr(x))
+        assert x._raw == y._raw

@@ -24,10 +24,11 @@ ETHERNET_STATUS = 'ethernetStatus'
 CELLULAR_STATUS = 'cellularStatus'
 CO2 = 'co2'
 PRESSURE = 'pressure'
+MOTION = 'motion'
 EVENT_TYPES = [
     TOUCH, TEMPERATURE, OBJECT_PRESENT, HUMIDITY, OBJECT_PRESENT_COUNT,
     TOUCH_COUNT, WATER_PRESENT, NETWORK_STATUS, BATTERY_STATUS, LABELS_CHANGED,
-    CONNECTION_STATUS, ETHERNET_STATUS, CELLULAR_STATUS, CO2, PRESSURE,
+    CONNECTION_STATUS, ETHERNET_STATUS, CELLULAR_STATUS, CO2, PRESSURE, MOTION,
 ]
 
 
@@ -1729,6 +1730,93 @@ class Pressure(_EventData):
         return data
 
 
+class Motion(_EventData):
+    """
+    Represents the data found in a motion event.
+
+    Attributes
+    ----------
+    state : str
+        Indicates whether "MOTION_DETECTED" or "NO_MOTION_DETECTED".
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
+
+    """
+
+    def __init__(self,
+                 state: str,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
+        """
+        Constructs the Motion object, inheriting parent class
+        and setting the type-specific attributes.
+
+        Parameters
+        ----------
+        state : str
+            Indicates whether "MOTION_DETECTED" or "NO_MOTION_DETECTED".
+        timestamp : datetime, str, optional
+            Timestamp in either datetime or string iso8601 format
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
+
+        """
+
+        # Set parameter attributes.
+        self.state: str = state
+        self.timestamp: Optional[datetime | str] = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'motion')
+
+    def __repr__(self) -> str:
+        string = '{}.{}('\
+            'state={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            repr(self.state),
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
+    @classmethod
+    def _from_raw(cls, data: dict) -> Motion:
+        """
+        Constructs a Motion object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : Motion
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            state=data['state'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self) -> dict:
+        data: dict = dict()
+        if self.state is not None:
+            data['state'] = self.state
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
+
+
 class Event(dtoutputs.OutputBase):
     """
     Represents device events.
@@ -1903,6 +1991,12 @@ class __EventsMap():
             attr_name='pressure',
             class_name='Pressure',
             is_keyed=True,
+        ),
+        'motion': __TypeNames(
+            api_name='motion',
+            attr_name='motion',
+            class_name='Motion',
+            is_keyed=True,
         )
     }
 
@@ -1913,5 +2007,5 @@ _EventType = Union[
     Touch, Temperature, ObjectPresent, Humidity, ObjectPresentCount,
     TouchCount, WaterPresent, NetworkStatus, NetworkStatusCloudConnector,
     BatteryStatus, LabelsChanged, ConnectionStatus, EthernetStatus,
-    CellularStatus, Co2, Pressure,
+    CellularStatus, Co2, Pressure, Motion,
 ]
