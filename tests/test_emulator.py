@@ -1,3 +1,4 @@
+from typing import Optional
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -73,7 +74,7 @@ class TestEmulator():
             name: str
             give_type: str
             give_data: object
-            want_err: Exception | None
+            want_err: Optional[Exception]
 
         tests = [
             TestCase(
