@@ -5,6 +5,7 @@ The project adheres to [semantic versioning](https://semver.org/).
 # Unreleased
 ### Fixed
   - [#95](https://github.com/disruptive-technologies/python-client/pull/95) Changed stream decoding from ascii to utf-8.
+  - [#97](https://github.com/disruptive-technologies/python-client/pull/97) Retry policy refined to account for more exceptions.
 
 ### Added
 - [#98](https://github.com/disruptive-technologies/python-client/pull/98) Added support for motion sensor and event.
