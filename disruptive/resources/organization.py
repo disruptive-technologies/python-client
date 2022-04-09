@@ -19,6 +19,8 @@ class Organization(OutputBase):
         Unique organization ID.
     display_name : str
         The provided display name.
+    raw : dict[str, str]
+        Unmodified API response JSON.
 
     """
 

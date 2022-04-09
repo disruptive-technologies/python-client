@@ -29,6 +29,8 @@ class ServiceAccount(dtoutputs.OutputBase):
         Timestamp of when the Service Account was created.
     update_time : datetime
         Timestamp of when the Service Account was last updated.
+    raw : dict[str, str]
+        Unmodified API response JSON.
 
     """
 
@@ -514,6 +516,8 @@ class Key(dtoutputs.OutputBase):
         contains the key secret. This is displayed once, and is otherwise None.
     create_time : datetime
         Timestamp of when the key was created.
+    raw : dict[str, str]
+        Unmodified API response JSON.
 
     """
 

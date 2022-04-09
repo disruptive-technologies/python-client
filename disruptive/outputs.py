@@ -7,6 +7,11 @@ class OutputBase(object):
     """
     Represents common features for all returnable objects.
 
+    Attributes
+    ----------
+    raw : dict[str, str]
+        Unmodified API response JSON.
+
     """
 
     def __init__(self, raw: dict) -> None:
@@ -15,13 +20,14 @@ class OutputBase(object):
 
         Parameters
         ----------
-        raw : dict
-            Unmodified dictionary of data received from the REST API.
+        raw : dict[str, str]
+            Unmodified API response JSON.
 
         """
 
         # Set attribute from input argument.
         self._raw = raw
+        self.raw: dict[str, str] = raw
 
     def __repr__(self) -> str:
         return '{}.{}({})'.format(
@@ -50,6 +56,9 @@ class OutputBase(object):
             # Skip private attributes.
             if a.startswith('_'):
                 continue
+            # Also skip raw as it would only be duplicate information.
+            elif a == 'raw':
+                continue
 
             # Fetch and evaluate the attribute value / type.
             val = getattr(obj, a)
@@ -67,7 +76,7 @@ class OutputBase(object):
             elif isinstance(val, list):
                 out.append('{}{}: {} = {}'.format(
                     l1, a, type(val).__name__, '['))
-                self.__str__list(out, val, level+1, n_spaces, l2)
+                self.__str__list(out, val, level+1, l2)
                 out.append(l1 + '],')
 
             # Other types can be printed directly.
@@ -85,7 +94,6 @@ class OutputBase(object):
                     out: list,
                     lst: list,
                     level: int,
-                    n_spaces: int,
                     l1: str,
                     ) -> list:
         for val in lst:
@@ -122,6 +130,8 @@ class Member(OutputBase):
         Whether the member is a USER or SERVICE_ACCOUNT.
     create_time : datetime
         Timestamp of when the member was created.
+    raw : dict[str, str]
+        Unmodified API response JSON.
 
     """
 
