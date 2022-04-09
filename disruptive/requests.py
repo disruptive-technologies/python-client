@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 import time
 import json
 from typing import Optional, Any, Generator
@@ -98,6 +99,9 @@ class DTRequest():
         # Add custom user agent.
         headers['User-Agent'] = USER_AGENT
 
+        # Define default response values.
+        res = None
+
         # Attempt to send the request.
         try:
             # Use the requests package to send the request.
@@ -119,9 +123,12 @@ class DTRequest():
             return DTResponse({}, None, {}), e
         except ValueError as e:
             # Requests' .json() fails when no json is returned (code 405).
-            return DTResponse({}, res.status_code, res.headers), e
+            if res is None:
+                return DTResponse({}, 0, {}), e
+            else:
+                return DTResponse({}, res.status_code, res.headers), e
 
-    def _send_request(self, nth_attempt: int = 1) -> dict:
+    def _send_request(self, nth_attempt: int = 0) -> dict:
         """
         Combines all the information and sends a request.
 
@@ -173,14 +180,13 @@ class DTRequest():
 
         # Check if retry is required.
         if should_retry and nth_attempt < self.request_attempts:
-            dtlog.error(error)
             dtlog.warning('Reconnecting in {}s.'.format(sleeptime))
 
             # Sleep if necessary.
             if sleeptime is not None:
                 time.sleep(sleeptime)
 
-            dtlog.info('Connection attempt {}/{}.'.format(
+            dtlog.info('Connection attempt {} of {}.'.format(
                 nth_attempt+1,
                 self.request_attempts,
             ))
@@ -275,19 +281,19 @@ class DTRequest():
         # Add ping parameter to dictionary.
         params['ping_interval'] = str(PING_INTERVAL) + 's'
 
-        # If provided, override package-wide auth with argument.
-        if 'auth' in kwargs:
-            headers['Authorization'] = kwargs['auth'].get_token()
-        else:
-            headers['Authorization'] = dt.default_auth.get_token()
-
         # Add custom user agent.
         headers['User-Agent'] = USER_AGENT
 
         # Set up a simple catch-all retry policy.
-        nth_attempt = 1
+        nth_attempt = 0
         while True:
             try:
+                # Set the authorization header each retry in case we expire.
+                if 'auth' in kwargs:
+                    headers['Authorization'] = kwargs['auth'].get_token()
+                else:
+                    headers['Authorization'] = dt.default_auth.get_token()
+
                 # Set up a stream connection.
                 # Connection will timeout and reconnect if no single event
                 # is received in an interval of ping_interval + ping_jitter.
@@ -312,7 +318,7 @@ class DTRequest():
                     payload = json.loads(line)
                     if 'result' in payload:
                         # Reset retry counter.
-                        nth_attempt = 1
+                        nth_attempt = 0
 
                         # Check for ping event.
                         event = payload['result']['event']
@@ -334,19 +340,19 @@ class DTRequest():
                         raise dterrors.UnknownError(payload)
 
                 # If the stream finished, but without an error, break the loop.
-                dtlog.info('Stream ended without an error.')
-                break
+                msg = 'Stream ended without an error.'
+                raise dterrors.ConnectionError(msg)
 
             except KeyboardInterrupt:
                 break
 
-            except requests.exceptions.RequestException as e:
-                error, should_retry, sleeptime = dterrors.parse_request_error(
-                    e, {}, nth_attempt)
+            except dterrors.DTApiError as e:
+                # Except for Unauthorized, retry all DTApiErrors.
+                if isinstance(e, dterrors.Unauthorized):
+                    raise e
+                elif nth_attempt < request_attempts:
+                    sleeptime = nth_attempt**2
 
-                # Print the error and try again up to max_request_attempts.
-                if nth_attempt < request_attempts and should_retry:
-                    dtlog.error(error)
                     dtlog.warning('Reconnecting in {}s.'.format(sleeptime))
 
                     # Exponential backoff in sleep time.
@@ -354,13 +360,40 @@ class DTRequest():
 
                     # Iterate attempt counter.
                     nth_attempt += 1
-                    dtlog.info('Connection attempt {}/{}.'.format(
+                    dtlog.info('Connection attempt {} of {}.'.format(
+                        nth_attempt,
+                        request_attempts,
+                    ))
+                else:
+                    # To avoid printing the entire chain of re-raised
+                    # exceptions, limit the traceback.
+                    sys.tracebacklimit = 0
+                    raise e
+
+            except requests.exceptions.RequestException as e:
+                # ConnectionErrors should always be retried.
+                result = dterrors.parse_request_error(e, {}, nth_attempt)
+                error, should_retry, sleeptime = result
+
+                # Print the error and try again up to max_request_attempts.
+                if nth_attempt < request_attempts and should_retry:
+                    dtlog.warning('Reconnecting in {}s.'.format(sleeptime))
+
+                    # Exponential backoff in sleep time.
+                    time.sleep(sleeptime)
+
+                    # Iterate attempt counter.
+                    nth_attempt += 1
+                    dtlog.info('Connection attempt {} of {}.'.format(
                         nth_attempt,
                         request_attempts,
                     ))
 
                 else:
-                    raise error
+                    # To avoid printing the entire chain of re-raised
+                    # exceptions, limit the traceback.
+                    sys.tracebacklimit = 0
+                    raise error from e
 
 
 class DTResponse():

@@ -35,4 +35,4 @@ emulator_base_url = 'https://emulator.disruptive-technologies.com/v2'
 # worth considering, these variable determine how long to wait without an
 # answer, and how many times the package should retry before raising an error.
 request_timeout = 3  # seconds
-request_attempts = 5  # attempts
+request_attempts = 3  # attempts

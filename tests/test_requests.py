@@ -269,7 +269,7 @@ class TestRequests():
             )
 
         # Verify it did in fact retry that many times.
-        request_mock.assert_request_count(99)
+        request_mock.assert_request_count(100)
 
     def test_request_attempts_invalid(self, request_mock):
         # Catch expected error as retries are exhausted.
