@@ -9,6 +9,7 @@ The project adheres to [semantic versioning](https://semver.org/).
 
 ### Added
 - [#98](https://github.com/disruptive-technologies/python-client/pull/98) Added support for motion sensor and event.
+- [#99](https://github.com/disruptive-technologies/python-client/pull/99) Added raw attribute to all resource result classes.
 
 # v1.2.2
 ### Changed
