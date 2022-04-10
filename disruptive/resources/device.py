@@ -35,6 +35,8 @@ class Device(dtoutputs.OutputBase):
         True if the device is emulated, otherwise False.
     reported : Reported
         Object containing the data from the most recent events.
+    raw : dict[str, str]
+        Unmodified API response JSON.
 
     """
 

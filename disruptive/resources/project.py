@@ -17,8 +17,6 @@ class Project(OutputBase):
     ----------
     project_id : str
         Unique project ID.
-    id : str
-        Unique project ID (Deprecated in favor of project_id).
     display_name : str
         The provided display name.
     organization_id : str
@@ -31,6 +29,10 @@ class Project(OutputBase):
         Number of Cloud Connectors in project.
     is_inventory : bool
         True if project is organization inventory, otherwise False.
+    id : str
+        Unique project ID (Deprecated in favor of project_id).
+    raw : dict[str, str]
+        Unmodified API response JSON.
 
     """
 

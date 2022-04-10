@@ -23,6 +23,8 @@ class Role(OutputBase):
         Description of what the role entails.
     permissions : list[str]
         List of permissions provided with the role.
+    raw : dict[str, str]
+        Unmodified API response JSON.
 
     """
 

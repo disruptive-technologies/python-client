@@ -39,6 +39,8 @@ class DataConnector(dtoutputs.OutputBase):
     labels : list[str]
         Device labels are not included by default and will only be forwarded
         with the event if the key is specified in this list.
+    raw : dict[str, str]
+        Unmodified API response JSON.
 
     """
 

@@ -1833,6 +1833,8 @@ class Event(dtoutputs.OutputBase):
         Unique ID of the source project.
     data : :ref:`Event Data <eventdata>`
         An object representing type-specific event data.
+    raw : dict[str, str]
+        Unmodified API response JSON.
 
     """
 
