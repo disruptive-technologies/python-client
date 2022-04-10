@@ -2,7 +2,7 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# v1.3.0
 ### Fixed
   - [#95](https://github.com/disruptive-technologies/python-client/pull/95) Changed stream decoding from ascii to utf-8.
   - [#97](https://github.com/disruptive-technologies/python-client/pull/97) Retry policy refined to account for more exceptions.
