@@ -101,7 +101,7 @@ class Device(dtoutputs.OutputBase):
     @classmethod
     def get_device(cls,
                    device_id: str,
-                   project_id: str = '-',
+                   project_id: Optional[str] = None,
                    **kwargs: Any,
                    ) -> Device:
         """
@@ -130,6 +130,10 @@ class Device(dtoutputs.OutputBase):
         >>> device = dt.Device.get_device('<DEVICE_ID>')
 
         """
+
+        # If project_id is not given, use wildcard "-".
+        if project_id is None:
+            project_id = '-'
 
         # Construct URL
         url = '/projects/{}/devices/{}'.format(project_id, device_id)
