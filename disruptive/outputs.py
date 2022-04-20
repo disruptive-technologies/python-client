@@ -118,6 +118,10 @@ class Member(OutputBase):
 
     Attributes
     ----------
+    member_id : str
+        Unique member identifier.
+        For Service Account members, this is the Service Account ID.
+        For User members, this is the User ID.
     display_name : str
         Provided member display name.
     roles : list[str]
@@ -145,6 +149,7 @@ class Member(OutputBase):
         OutputBase.__init__(self, member)
 
         # Unpack attributes from dictionary.
+        self.member_id = member['name'].split('/')[-1]
         self.display_name = member['displayName']
         self.roles = [r.split('/')[-1] for r in member['roles']]
         self.status = member['status']

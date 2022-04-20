@@ -2,6 +2,7 @@ from typing import Optional, Any
 from dataclasses import dataclass
 
 import disruptive
+import disruptive.transforms as dttrans
 import tests.api_responses as dtapiresponses
 
 
@@ -33,6 +34,33 @@ class TestOutputs():
 
             # Evaluate the repr aswell.
             eval(repr(obj))
+
+    def test_member_class(self):
+        @dataclass
+        class TestCase:
+            name: str
+            give_raw: dict
+
+        tests = [
+            TestCase(
+                name='success',
+                give_raw=dtapiresponses.user_member,
+            ),
+        ]
+
+        for test in tests:
+            member = disruptive.outputs.Member(test.give_raw)
+
+            raw = test.give_raw
+
+            assert member.member_id == raw['name'].split('/')[-1]
+            assert member.display_name == raw['displayName']
+            assert member.email == raw['email']
+            assert member.roles == [r.split('/')[-1] for r in raw['roles']]
+            assert member.status == raw['status']
+            assert member.email == raw['email']
+            assert member.account_type == raw['accountType']
+            assert member.create_time == dttrans.to_datetime(raw['createTime'])
 
     def test_raw_attribute(self, request_mock):
         @dataclass
