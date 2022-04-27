@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.3.3
+### Added
+  - [#102](https://github.com/disruptive-technologies/python-client/pull/102) Type-checkers like MyPy will now assume we're PEP 561 compliant.
+
 # v1.3.2
 ### Fixed
   - [#101](https://github.com/disruptive-technologies/python-client/pull/101) `Member` class should have attribute `member_id`.
