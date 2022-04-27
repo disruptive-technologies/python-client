@@ -27,7 +27,7 @@ class OutputBase(object):
 
         # Set attribute from input argument.
         self._raw = raw
-        self.raw: dict[str, str] = raw
+        self.raw: dict = raw
 
     def __repr__(self) -> str:
         return '{}.{}({})'.format(
