@@ -2,26 +2,26 @@
 __version__ = "1.3.3"
 
 # Authentication scheme.
-from disruptive.authentication import Auth  # noqa
+from disruptive.authentication import Auth as Auth  # noqa
 
 # Initialize package with environment variables authentication scheme.
 default_auth = Auth._service_account_env_vars()
 
 # Resources.
-from disruptive.resources.device import Device  # noqa
-from disruptive.resources.data_connector import DataConnector  # noqa
-from disruptive.resources.organization import Organization  # noqa
-from disruptive.resources.project import Project  # noqa
-from disruptive.resources.stream import Stream  # noqa
-from disruptive.resources.eventhistory import EventHistory  # noqa
-from disruptive.resources.service_account import ServiceAccount  # noqa
-from disruptive.resources.role import Role  # noqa
-from disruptive.resources.emulator import Emulator  # noqa
+from disruptive.resources.device import Device as Device  # noqa
+from disruptive.resources.data_connector import DataConnector as DataConnector  # noqa
+from disruptive.resources.organization import Organization as Organization  # noqa
+from disruptive.resources.project import Project as Project  # noqa
+from disruptive.resources.stream import Stream as Stream  # noqa
+from disruptive.resources.eventhistory import EventHistory as EventHistory  # noqa
+from disruptive.resources.service_account import ServiceAccount as ServiceAccount  # noqa
+from disruptive.resources.role import Role as Role  # noqa
+from disruptive.resources.emulator import Emulator as Emulator  # noqa
 
 # Additional helper modules.
-import disruptive.events as events  # noqa
-import disruptive.outputs as outputs  # noqa
-import disruptive.errors as errors  # noqa
+from disruptive import events as events  # noqa
+from disruptive import outputs as outputs  # noqa
+from disruptive import errors as errors  # noqa
 
 # If set, logs of chosen level and higher are printed to console.
 # Available levels are: debug, info, warning, error, critical.
