@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.3.5
+### Fixed
+  - [#104](https://github.com/disruptive-technologies/python-client/pull/104) Ensure event constants and classes are re-exported and seen by LSPs.
+
 # v1.3.4
 ### Fixed
   - [#103](https://github.com/disruptive-technologies/python-client/pull/103) Ensure modules are re-exported and seen by LSPs.
