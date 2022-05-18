@@ -161,3 +161,12 @@ class TestEvents():
 
         y = eval(repr(x))
         assert x._raw == y._raw
+
+    def test_desk_occupancy(self):
+        x = disruptive.events.DeskOccupancy(
+            state='OCCUPIED',
+            timestamp=datetime.now(),
+        )
+
+        y = eval(repr(x))
+        assert x._raw == y._raw
