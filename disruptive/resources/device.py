@@ -50,10 +50,11 @@ class Device(dtoutputs.OutputBase):
     WATER_DETECTOR = 'waterDetector'
     CLOUD_CONNECTOR = 'ccon'
     CO2 = 'co2'
+    DESK_OCCUPANCY = 'deskOccupancy'
     DEVICE_TYPES = [
         TEMPERATURE, PROXIMITY, TOUCH, HUMIDITY,
         PROXIMITY_COUNTER, TOUCH_COUNTER, WATER_DETECTOR,
-        CLOUD_CONNECTOR, CO2,
+        CLOUD_CONNECTOR, CO2, DESK_OCCUPANCY,
     ]
 
     def __init__(self, device: dict) -> None:
@@ -535,6 +536,8 @@ class Reported(dtoutputs.OutputBase):
         Object representing reported co2 event data.
     pressure : Pressure, None
         Object representing reported pressure event data.
+    desk_occupancy : DeskOccupancy, None
+        Object representing reported deskOccupancy event data.
 
     """
 
