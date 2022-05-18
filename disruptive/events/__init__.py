@@ -17,6 +17,7 @@ from disruptive.events.events import CellularStatus as CellularStatus # noqa
 from disruptive.events.events import Co2 as Co2  # noqa
 from disruptive.events.events import Pressure as Pressure  # noqa
 from disruptive.events.events import Motion as Motion  # noqa
+from disruptive.events.events import DeskOccupancy as DeskOccupancy  # noqa
 
 # Module constants.
 from disruptive.events.events import TOUCH as TOUCH  # noqa
@@ -35,4 +36,5 @@ from disruptive.events.events import CELLULAR_STATUS as CELLULAR_STATUS # noqa
 from disruptive.events.events import CO2 as CO2 # noqa
 from disruptive.events.events import PRESSURE as PRESSURE  # noqa
 from disruptive.events.events import MOTION as MOTION  # noqa
+from disruptive.events.events import DESK_OCCUPANCY as DESK_OCCUPANCY  # noqa
 from disruptive.events.events import EVENT_TYPES as EVENT_TYPES  # noqa
