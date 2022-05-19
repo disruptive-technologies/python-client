@@ -1567,7 +1567,7 @@ class Co2(_EventData):
 
     Attributes
     ----------
-    ppm : float
+    ppm : int
         Co2 concentration in parts per million.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
@@ -1575,7 +1575,7 @@ class Co2(_EventData):
     """
 
     def __init__(self,
-                 ppm: float,
+                 ppm: int,
                  timestamp: Optional[datetime | str] = None,
                  ) -> None:
         """
@@ -1583,7 +1583,7 @@ class Co2(_EventData):
 
         Parameters
         ----------
-        ppm : float
+        ppm : int
             Co2 concentration in parts per million.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
@@ -1592,7 +1592,7 @@ class Co2(_EventData):
         """
 
         # Set parameter attributes.
-        self.ppm: float = ppm
+        self.ppm: int = ppm
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
