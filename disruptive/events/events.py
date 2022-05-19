@@ -962,14 +962,15 @@ class NetworkStatus(_EventData):
 
     """
 
-    def __init__(
-        self,
-        signal_strength: int,
-        rssi: int,
-        transmission_mode: str,
-        cloud_connectors: list[NetworkStatusCloudConnector],
-        timestamp: Optional[datetime | str] = None
-    ) -> None:
+    def __init__(self,
+                 signal_strength: Optional[int] = None,
+                 rssi: Optional[int] = None,
+                 transmission_mode: Optional[str] = None,
+                 cloud_connectors:
+                 Optional[list[NetworkStatusCloudConnector]] = None,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
+
         """
         Constructs the NetworkStatus object.
 
@@ -993,10 +994,10 @@ class NetworkStatus(_EventData):
         """
 
         # Set attributes.
-        self.signal_strength: int = signal_strength
-        self.rssi: int = rssi
-        self.transmission_mode: str = transmission_mode
-        self.cloud_connectors: list[NetworkStatusCloudConnector] = \
+        self.signal_strength: Optional[int] = signal_strength
+        self.rssi: Optional[int] = rssi
+        self.transmission_mode: Optional[str] = transmission_mode
+        self.cloud_connectors: Optional[list[NetworkStatusCloudConnector]] = \
             cloud_connectors
         self.timestamp: Optional[datetime | str] = timestamp
 
