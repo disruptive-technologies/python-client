@@ -5,6 +5,7 @@ The project adheres to [semantic versioning](https://semver.org/).
 # Unreleased
 ### Fixed
   - [#106](https://github.com/disruptive-technologies/python-client/pull/106) NetworkStatus event parameters made optional to better reflect API.
+  - [#107](https://github.com/disruptive-technologies/python-client/pull/107) `Co2` event parameter `ppm` should be int.
 ### Added
   - [#105](https://github.com/disruptive-technologies/python-client/pull/105) Added support for new Desk Occupancy sensor and event.
 
