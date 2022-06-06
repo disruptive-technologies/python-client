@@ -3,6 +3,10 @@ All notable changes, fixes, and additions to the project is listed in this chang
 The project adheres to [semantic versioning](https://semver.org/).
 
 # Unreleased
+### Added
+- [#108](https://github.com/disruptive-technologies/python-client/pull/108) Emulator desk occupancy support.
+
+# v1.4.0
 ### Fixed
   - [#106](https://github.com/disruptive-technologies/python-client/pull/106) NetworkStatus event parameters made optional to better reflect API.
   - [#107](https://github.com/disruptive-technologies/python-client/pull/107) `Co2` event parameter `ppm` should be int.
