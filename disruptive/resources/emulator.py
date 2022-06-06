@@ -132,7 +132,8 @@ class Emulator():
                       disruptive.events.CellularStatus |
                       disruptive.events.Co2 |
                       disruptive.events.Pressure |
-                      disruptive.events.Motion,
+                      disruptive.events.Motion |
+                      disruptive.events.DeskOccupancy,
                       **kwargs: Any,
                       ) -> None:
         """
