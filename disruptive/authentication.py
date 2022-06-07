@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import json
 import time
 import urllib.parse
 from typing import Any
@@ -113,6 +114,10 @@ class ServiceAccountAuth(_AuthRoutineBase):
 
     """
 
+    supported_algorithms = ['HS256']
+    token_endpoint = 'https://identity.'\
+        'disruptive-technologies.com/oauth2/token'
+
     def __init__(self, key_id: str, secret: str, email: str):
         # Inherit parent class methods and attributes.
         super().__init__()
@@ -122,9 +127,8 @@ class ServiceAccountAuth(_AuthRoutineBase):
         self._secret: str = secret
         self._email: str = email
 
-        # Set default URLs.
-        self.token_endpoint = 'https://identity.'\
-            'disruptive-technologies.com/oauth2/token'
+        # Default to HS256 algorithm.
+        self._algorithm = self.supported_algorithms[0]
 
     @property
     def key_id(self) -> str:
@@ -146,6 +150,38 @@ class ServiceAccountAuth(_AuthRoutineBase):
             repr(self.secret),
             repr(self.email),
         )
+
+    @property
+    def algorithm(self) -> str:
+        return self._algorithm
+
+    @algorithm.setter
+    def algorithm(self, algorithm: str) -> None:
+        if algorithm in self.supported_algorithms:
+            self._algorithm = algorithm
+        else:
+            raise dterrors.ConfigurationError(
+                f'unsupported algorithm {algorithm}'
+            )
+
+    @classmethod
+    def from_credentials_file(cls, credentials: dict) -> ServiceAccountAuth:
+        for key in ['keyId', 'secret', 'email', 'algorithm', 'tokenEndpoint']:
+            if key not in credentials['serviceAccount']:
+                raise dterrors.ConfigurationError(
+                    f'Invalid credentials file. Missing field "{key}".'
+                )
+
+        cfg = credentials['serviceAccount']
+        auth_obj = cls(
+            key_id=cfg['keyId'],
+            secret=cfg['secret'],
+            email=cfg['email'],
+        )
+        auth_obj.algorithm = cfg['algorithm']
+        auth_obj.token_endpoint = cfg['tokenEndpoint']
+
+        return auth_obj
 
     def refresh(self) -> None:
         """
@@ -178,7 +214,7 @@ class ServiceAccountAuth(_AuthRoutineBase):
 
         # Construct the JWT header.
         jwt_headers: dict[str, str] = {
-            'alg': 'HS256',
+            'alg': self.algorithm,
             'kid': self.key_id,
         }
 
@@ -194,7 +230,7 @@ class ServiceAccountAuth(_AuthRoutineBase):
         encoded_jwt: str = jwt.encode(
             payload=jwt_payload,
             key=self.secret,
-            algorithm='HS256',
+            algorithm=self.algorithm,
             headers=jwt_headers,
         )
 
@@ -226,6 +262,29 @@ class ServiceAccountAuth(_AuthRoutineBase):
         return access_token_response
 
 
+def _service_account_env_vars() -> Unauthenticated | ServiceAccountAuth:
+    key_id = os.getenv('DT_SERVICE_ACCOUNT_KEY_ID', '')
+    secret = os.getenv('DT_SERVICE_ACCOUNT_SECRET', '')
+    email = os.getenv('DT_SERVICE_ACCOUNT_EMAIL', '')
+
+    if '' in [key_id, secret, email]:
+        return Unauthenticated()
+    else:
+        return Auth.service_account(key_id, secret, email)
+
+
+def _credentials_file() -> Unauthenticated | ServiceAccountAuth:
+    file_path = os.getenv('DT_CREDENTIALS_FILE')
+    if file_path is not None:
+        with open(file_path, 'r') as f:
+            credentials = json.load(f)
+
+        if 'serviceAccount' in credentials:
+            return ServiceAccountAuth.from_credentials_file(credentials)
+
+    return Unauthenticated()
+
+
 class Auth():
     """
     Authenticates the API using a factory design pattern.
@@ -239,6 +298,15 @@ class Auth():
     with indicators on how to properly authenticate.
 
     """
+
+    @staticmethod
+    def init() -> Unauthenticated | ServiceAccountAuth:
+        for method in [_credentials_file, _service_account_env_vars]:
+            auth = method()
+            if not isinstance(auth, Unauthenticated):
+                return auth
+
+        return Unauthenticated()
 
     @staticmethod
     def unauthenticated() -> Unauthenticated:
@@ -288,18 +356,6 @@ class Auth():
         })
 
         return ServiceAccountAuth(key_id, secret, email)
-
-    @staticmethod
-    def _service_account_env_vars() -> Unauthenticated | ServiceAccountAuth:
-
-        key_id = os.getenv('DT_SERVICE_ACCOUNT_KEY_ID', '')
-        secret = os.getenv('DT_SERVICE_ACCOUNT_SECRET', '')
-        email = os.getenv('DT_SERVICE_ACCOUNT_EMAIL', '')
-
-        if '' in [key_id, secret, email]:
-            return Unauthenticated()
-        else:
-            return Auth.service_account(key_id, secret, email)
 
     @staticmethod
     def _verify_str_credentials(credentials: dict) -> None:
