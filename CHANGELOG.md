@@ -2,7 +2,7 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# v1.4.1
 ### Added
 - [#108](https://github.com/disruptive-technologies/python-client/pull/108) Emulator desk occupancy support.
 
