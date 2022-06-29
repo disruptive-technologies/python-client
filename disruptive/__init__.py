@@ -2,7 +2,7 @@
 __version__ = '1.4.1'
 
 # If set, logs of chosen level and higher are printed to console.
-# Available levels are: debug, info, warning, error, critical.
+# Default value None results in no logs at any level.
 log_level = None
 
 # REST API base URLs of which all endpoints are an expansion.
@@ -36,3 +36,4 @@ from disruptive.resources.emulator import Emulator as Emulator  # noqa
 from disruptive import events as events  # noqa
 from disruptive import outputs as outputs  # noqa
 from disruptive import errors as errors  # noqa
+from disruptive import logging as logging  # noqa

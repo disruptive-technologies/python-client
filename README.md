@@ -89,9 +89,9 @@ for event in dt.Stream.event_stream(sensor.project_id):
 ```
 
 ## Logging
-The simplest method is enabled by setting `disruptive.log_level` with a string level.
+The simplest method is enabled by setting `disruptive.log_level`.
 ```python
-dt.log_level = 'info'
+dt.log_level = dt.logging.INFO
 ```
 If more fine-grained control is desired, the standard library `logging` can also be used.
 ```python
@@ -102,7 +102,7 @@ logging.basicConfig(
 )
 logging.getLogger('disruptive').setLevel(logging.INFO)
 ``` 
-For both methods, the standard levels `debug`, `info`, `warning`, `error`, and `critical` are available.
+For both methods, the standard levels `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL` are supported.
 
 ## Examples
 A few [examples](https://developer.disruptive-technologies.com/api/libraries/python/client/examples.html) has been provided. Before running, the required environment variables listed at the start of each example must be set.

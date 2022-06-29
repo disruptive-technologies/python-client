@@ -6,70 +6,71 @@ from datetime import datetime
 import disruptive
 import disruptive.errors as dterrors
 
+DEBUG = 'DEBUG'
+INFO = 'INFO'
+WARNING = 'WARNING'
+ERROR = 'ERROR'
+CRITICAL = 'CRITICAL'
+LOG_LEVELS = [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
 # Fetch the disruptive logger, but with disabled output.
 logger = logging.getLogger('disruptive')
 logger.setLevel(99)
 
-levels = {'debug': 1, 'info': 2, 'warning': 3, 'error': 4, 'critical': 5}
-
 
 def debug(msg: str | dict) -> None:
-    if _log_flag_exceeds('debug'):
-        _fmt_log(msg, 'DEBUG')
+    if _log_flag_exceeds(DEBUG):
+        _fmt_log(msg, DEBUG)
     logger.debug(msg)
 
 
 def info(msg: str | dict) -> None:
-    if _log_flag_exceeds('info'):
-        _fmt_log(msg, 'INFO')
+    if _log_flag_exceeds(INFO):
+        _fmt_log(msg, INFO)
     logger.info(msg)
 
 
 def warning(msg: str | dict) -> None:
-    if _log_flag_exceeds('warning'):
-        _fmt_log(msg, 'WARNING')
+    if _log_flag_exceeds(WARNING):
+        _fmt_log(msg, WARNING)
     logger.warning(msg)
 
 
 def error(msg: str | dict) -> None:
-    if _log_flag_exceeds('error'):
-        _fmt_log(msg, 'ERROR')
+    if _log_flag_exceeds(ERROR):
+        _fmt_log(msg, ERROR)
     logger.error(msg)
 
 
 def critical(msg: str | dict) -> None:
-    if _log_flag_exceeds('critical'):
-        _fmt_log(msg, 'CRITICAL')
+    if _log_flag_exceeds(CRITICAL):
+        _fmt_log(msg, CRITICAL)
     logger.critical(msg)
 
 
-def _log_flag_exceeds(level: str | dict) -> bool:
-    # If None, never True.
-    if disruptive.log_level is None:
+def _log_flag_exceeds(level: str) -> bool:
+    # If not string, never True.
+    if not isinstance(disruptive.log_level, str):
         return False
 
+    set_level = disruptive.log_level.upper()
+
     # Verify set value is valid.
-    if disruptive.log_level.lower() not in levels:
+    if set_level not in LOG_LEVELS:
         # As an invalid log_level has been provided, reset it
         # to default before raising the exception.
-        disruptive.log_level = "info"
+        disruptive.log_level = INFO
 
-        raise dterrors.ConfigurationError(
-            'Invalid logging level {}. '
-            'Must be either None, "debug", "info", '
-            '"warning", "error", or "critical".'.format(disruptive.log_level)
-        )
+        msg = f'Invalid log_level {disruptive.log_level}.\n' \
+              f'Must be either of {LOG_LEVELS}.'
+        raise dterrors.ConfigurationError(msg)
 
     # Check if level is exceeded.
-    if levels[level] >= levels[disruptive.log_level.lower()]:
+    if LOG_LEVELS.index(level) >= LOG_LEVELS.index(set_level):
         return True
     else:
         return False
 
 
-def _fmt_log(msg: str | dict, level: str | dict) -> None:
-    print('[{}] {:<8} - {}'.format(
-        datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3],
-        level,
-        msg,
-    ))
+def _fmt_log(msg: str | dict, level: str) -> None:
+    print(f'[{datetime.now().isoformat()}] {level:<8} - {msg}')
