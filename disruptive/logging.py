@@ -61,7 +61,7 @@ def _log_flag_exceeds(level: str) -> bool:
         # to default before raising the exception.
         disruptive.log_level = INFO
 
-        msg = f'Invalid log_level {disruptive.log_level}.\n' \
+        msg = f'Invalid log_level {set_level}.\n' \
               f'Must be either of {LOG_LEVELS}.'
         raise dterrors.ConfigurationError(msg)
 
