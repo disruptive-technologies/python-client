@@ -276,6 +276,12 @@ def _service_account_env_vars() -> Unauthenticated | ServiceAccountAuth:
 def _credentials_file() -> Unauthenticated | ServiceAccountAuth:
     file_path = os.getenv('DT_CREDENTIALS_FILE')
     if file_path is not None:
+        if not os.path.exists(file_path):
+            msg = 'Missing credentials file.\n\n' \
+                'Environment variable DT_CREDENTIALS_FILE is set, but' \
+                ' no file found at target path.\n' \
+                f'{file_path}'
+            raise FileNotFoundError(msg)
         with open(file_path, 'r') as f:
             credentials = json.load(f)
 
