@@ -100,7 +100,7 @@ class EventHistory(list):
         # Return list of Event objects of paginated GET response.
         return EventHistory(Event.from_mixed_list(res))
 
-    def to_dataframe(self):
+    def to_dataframe(self) -> Any:
         """
         Experimental function to convert a list of events to DataFrame.
         The `pandas` package is not, and will not, be a dependency of
@@ -124,9 +124,9 @@ class EventHistory(list):
         """
 
         try:
-            import pandas
+            import pandas  # type: ignore
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('Pandas not installed!')
+            raise ModuleNotFoundError('Missing package `pandas`.')
 
         rows = []
         for event in self:
@@ -150,5 +150,8 @@ class EventHistory(list):
             errors='ignore',
         )
 
-        return df
+        # Convert columns headers from camelCase to snake_case for consistency.
+        map = {name: dttrans.camel_to_snake_case(name) for name in df.columns}
+        df = df.rename(columns=map)
 
+        return df
