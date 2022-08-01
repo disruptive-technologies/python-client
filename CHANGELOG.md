@@ -5,6 +5,7 @@ The project adheres to [semantic versioning](https://semver.org/).
 # v1.4.2
 ### Added
 - [#112](https://github.com/disruptive-technologies/python-client/pull/112) Event state constants for code completion ease.
+- [#113](https://github.com/disruptive-technologies/python-client/pull/113) Experimental events `DataFrame` support.
 
 # v1.4.1
 ### Added
