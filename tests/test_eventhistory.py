@@ -1,3 +1,4 @@
+from typing import List
 from unittest import mock
 from dataclasses import dataclass
 
@@ -53,7 +54,7 @@ class TestEventHistory():
             name: str
             pandas_installed: bool
             give_events: disruptive.EventHistory
-            want_cols: list[str]
+            want_cols: List[str]
             want_len: int
 
         tests = [
