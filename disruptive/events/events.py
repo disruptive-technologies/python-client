@@ -419,6 +419,9 @@ class ObjectPresent(_EventData):
 
     """
 
+    STATE_PRESENT = 'PRESENT'
+    STATE_NOT_PRESENT = 'NOT_PRESENT'
+
     def __init__(self,
                  state: str,
                  timestamp: Optional[datetime | str] = None,
@@ -777,6 +780,9 @@ class WaterPresent(_EventData):
         Timestamp of when the event was received by a Cloud Connector.
 
     """
+
+    STATE_PRESENT = 'PRESENT'
+    STATE_NOT_PRESENT = 'NOT_PRESENT'
 
     def __init__(self,
                  state: str,
@@ -1746,6 +1752,9 @@ class Motion(_EventData):
 
     """
 
+    STATE_MOTION_DETECTED = 'MOTION_DETECTED'
+    STATE_NO_MOTION_DETECTED = 'NO_MOTION_DETECTED'
+
     def __init__(self,
                  state: str,
                  timestamp: Optional[datetime | str] = None,
@@ -1832,6 +1841,9 @@ class DeskOccupancy(_EventData):
         Timestamp of when the event was received by a Cloud Connector.
 
     """
+
+    STATE_OCCUPIED = 'OCCUPIED'
+    STATE_NOT_OCCUPIED = 'NOT_OCCUPIED'
 
     def __init__(self,
                  state: str,
