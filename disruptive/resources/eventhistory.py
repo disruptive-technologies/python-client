@@ -103,13 +103,16 @@ class EventHistory(list):
     def to_dataframe(self) -> Any:
         """
         Experimental function to convert a list of events to DataFrame.
+        Requires the installation of additional packages.
+        >> pip install disruptive[extra]
+
         The `pandas` package is not, and will not, be a dependency of
-        the core `disruptive` package, but this may be a way of adding
-        significant convenience to the output format for data-science use.
+        the core `disruptive` package. However, supporting DataFrames is a
+        significant enough convenience that we're experimenting with it here.
         May be removed in the future if we decide that this is not a good idea.
 
-        The columns `device_id`, `event_id`, and `event_type` is static, then
-        one additional column is added for every eventData field present.
+        The columns `device_id`, `event_id`, and `event_type` are static, then
+        one additional column is concatenated for every eventData field.
 
         Returns
         -------
@@ -126,7 +129,11 @@ class EventHistory(list):
         try:
             import pandas  # type: ignore
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('Missing package `pandas`.')
+            raise ModuleNotFoundError(
+                'Missing package `pandas`.\n\n'
+                'to_dataframe() requires additional third-party packages.\n'
+                '>> pip install disruptive[extra]'
+            )
 
         rows = []
         for event in self:

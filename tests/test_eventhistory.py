@@ -1,3 +1,8 @@
+from unittest import mock
+from dataclasses import dataclass
+
+import pytest
+
 import disruptive
 from disruptive.events.events import Event
 import tests.api_responses as dtapiresponses
@@ -39,3 +44,80 @@ class TestEventHistory():
         assert isinstance(h, list)
         for e in h:
             assert isinstance(e, Event)
+
+    def test_to_dataframe(self, request_mock):
+        cols = ['device_id', 'event_id', 'event_type']
+
+        @dataclass
+        class TestCase:
+            name: str
+            pandas_installed: bool
+            give_events: disruptive.EventHistory
+            want_cols: list[str]
+            want_len: int
+
+        tests = [
+            TestCase(
+                name='pandas installed',
+                pandas_installed=True,
+                give_events=disruptive.EventHistory([
+                    disruptive.events.Event(dtapiresponses.touch_event),
+                ]),
+                want_cols=cols + ['update_time'],
+                want_len=1,
+            ),
+            TestCase(
+                name='pandas not installed',
+                pandas_installed=False,
+                give_events=disruptive.EventHistory([
+                    disruptive.events.Event(dtapiresponses.touch_event),
+                ]),
+                want_cols=cols,
+                want_len=0,
+            ),
+            TestCase(
+                name='no events in response',
+                pandas_installed=True,
+                give_events=disruptive.EventHistory([
+                ]),
+                want_cols=[],
+                want_len=0,
+            ),
+            TestCase(
+                name='touch events',
+                pandas_installed=True,
+                give_events=disruptive.EventHistory([
+                    disruptive.events.Event(dtapiresponses.touch_event),
+                    disruptive.events.Event(dtapiresponses.touch_event),
+                    disruptive.events.Event(dtapiresponses.touch_event),
+                ]),
+                want_cols=cols + ['update_time'],
+                want_len=3,
+            ),
+            TestCase(
+                name='touch + temperature events',
+                pandas_installed=True,
+                give_events=disruptive.EventHistory([
+                    disruptive.events.Event(dtapiresponses.touch_event),
+                    disruptive.events.Event(dtapiresponses.touch_event),
+                    disruptive.events.Event(dtapiresponses.temperature_event),
+                    disruptive.events.Event(dtapiresponses.temperature_event),
+                    disruptive.events.Event(dtapiresponses.touch_event),
+                ]),
+                want_cols=cols + ['update_time', 'sample_time', 'value'],
+                want_len=5,
+            ),
+        ]
+
+        for test in tests:
+            if test.pandas_installed:
+                df = test.give_events.to_dataframe()
+                assert len(df) == test.want_len
+                assert len(df.columns) == len(test.want_cols)
+                for col in test.want_cols:
+                    assert col in df.columns
+            else:
+                patch = 'builtins.__import__'
+                with mock.patch(patch, side_effect=ModuleNotFoundError):
+                    with pytest.raises(ModuleNotFoundError):
+                        test.give_events.to_dataframe()
