@@ -118,3 +118,7 @@ def _celsius_to_fahrenheit(celsius: float) -> float:
     """
 
     return (celsius * (9/5)) + 32
+
+
+def camel_to_snake_case(x: str) -> str:
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', x).lower()

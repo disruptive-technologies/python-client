@@ -3,15 +3,16 @@ from __future__ import annotations
 from typing import Optional, Any
 from datetime import datetime
 
+import disruptive
 import disruptive.requests as dtrequests
 import disruptive.transforms as dttrans
 from disruptive.events.events import Event
 
 
-class EventHistory():
+class EventHistory(list):
     """
-    Contains staticmethods for streaming events.
-    Used for namespacing only and thus does not have a constructor
+    Namespacing type of event history methods.
+    Inherits list, with some extra functionality.
 
     """
 
@@ -22,7 +23,7 @@ class EventHistory():
                     start_time: Optional[str | datetime] = None,
                     end_time: Optional[str | datetime] = None,
                     **kwargs: Any,
-                    ) -> list[Event]:
+                    ) -> EventHistory:
         """
         Get the event history for a single device.
 
@@ -47,7 +48,7 @@ class EventHistory():
 
         Returns
         -------
-        events : list[Event]
+        events : EventHistory[Event]
             A list of all events fetched by the call.
 
         Examples
@@ -97,5 +98,67 @@ class EventHistory():
         )
 
         # Return list of Event objects of paginated GET response.
-        events: list[Event] = Event.from_mixed_list(res)
-        return events
+        return EventHistory(Event.from_mixed_list(res))
+
+    def to_dataframe(self) -> Any:
+        """
+        Experimental function to convert a list of events to DataFrame.
+        Requires the installation of additional packages.
+        >> pip install disruptive[extra]
+
+        The `pandas` package is not, and will not, be a dependency of
+        the core `disruptive` package. However, supporting DataFrames is a
+        significant enough convenience that we're experimenting with it here.
+        May be removed in the future if we decide that this is not a good idea.
+
+        The columns `device_id`, `event_id`, and `event_type` are static, then
+        one additional column is concatenated for every eventData field.
+
+        Returns
+        -------
+        df : pandas.DataFrame
+            DataFrame of all events in response.
+
+        Raises
+        ------
+        ModueNotFoundError
+            If we pandas package is not installed.
+
+        """
+
+        try:
+            import pandas  # type: ignore
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                'Missing package `pandas`.\n\n'
+                'to_dataframe() requires additional third-party packages.\n'
+                '>> pip install disruptive[extra]'
+            )
+
+        rows = []
+        for event in self:
+            base = {
+                'device_id': event.device_id,
+                'event_id': event.event_id,
+                'event_type': event.event_type,
+            }
+
+            if event.event_type == disruptive.events.TEMPERATURE:
+                rows += [{
+                        **base,
+                        **sample.raw,
+                    } for sample in event.data.samples
+                ]
+            else:
+                rows.append({**base, **event.data.raw})
+
+        df = pandas.json_normalize(
+            rows, None, ['device_id', 'event_id', 'event_type'],
+            errors='ignore',
+        )
+
+        # Convert columns headers from camelCase to snake_case for consistency.
+        map = {name: dttrans.camel_to_snake_case(name) for name in df.columns}
+        df = df.rename(columns=map)
+
+        return df

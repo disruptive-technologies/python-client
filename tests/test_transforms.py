@@ -1,10 +1,8 @@
-# Standard library imports
 from datetime import datetime, timezone, timedelta
+from dataclasses import dataclass
 
-# Third-party imports.
 import pytest
 
-# Project imports.
 import disruptive.transforms as dttrans
 import disruptive.errors as dterrors
 
@@ -100,3 +98,37 @@ class TestTransforms():
     def test_validate_iso8601_format_date_only(self):
         inp = '1970-01-01'
         assert dttrans.validate_iso8601_format(inp) is False
+
+    def test_camel_to_snake_case(self):
+        @dataclass
+        class TestCase:
+            name: str
+            give_str: str
+            want_str: str
+
+        tests = [
+            TestCase(
+                name='single case',
+                give_str='camelCase',
+                want_str='camel_case',
+            ),
+            TestCase(
+                name='multiple cases',
+                give_str='camelCaseDoesntBelongInPython',
+                want_str='camel_case_doesnt_belong_in_python',
+            ),
+            TestCase(
+                name='keep dots',
+                give_str='name.camelCase',
+                want_str='name.camel_case',
+            ),
+            TestCase(
+                name='keep spaces',
+                give_str='name and camelCase',
+                want_str='name and camel_case',
+            ),
+        ]
+
+        for test in tests:
+            snake_case = dttrans.camel_to_snake_case(test.give_str)
+            assert snake_case == test.want_str, test.name
