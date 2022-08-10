@@ -255,6 +255,66 @@ class UnknownError(DTApiError):
         super().__init__(message)
 
 
+# -------------------------- ClaimErrors ---------------------------
+class ClaimError(DTApiError):
+    """
+    Covers errors related to claiming functions.
+    These are mostly captured requests exceptions.
+
+    """
+
+    def __init__(self, error: dict) -> None:
+        super().__init__(error)
+
+        # Unmodified API json response.
+        self.raw = error
+
+
+class ClaimErrorDeviceAlreadyClaimed(ClaimError):
+    """
+    The devices has already been claimed.
+
+    """
+
+    def __init__(self, error: dict) -> None:
+        # Inherit from ClaimError parent.
+        super().__init__(error)
+
+        self.device_id: str = error['deviceId']
+        self.code: str = error['code']
+        self.message: str = error['message']
+
+
+class ClaimErrorKitNotFound(ClaimError):
+    """
+    The kit was not found.
+
+    """
+
+    def __init__(self, error: dict) -> None:
+        # Inherit from ClaimError parent.
+        super().__init__(error)
+
+        self.kit_id: str = error['kitId']
+        self.code: str = error['code']
+        self.message: str = error['message']
+
+
+class ClaimErrorDeviceNotFound(ClaimError):
+    """
+    The device was not found.
+
+    """
+
+    def __init__(self, error: dict) -> None:
+        # Inherit from ClaimError parent.
+        super().__init__(error)
+
+        self.device_id: str = error['deviceId']
+        self.code: str = error['code']
+        self.message: str = error['message']
+
+
 # ------------------------- error handling -------------------------
 def parse_request_error(caught_error: Exception,
                         data: dict,
