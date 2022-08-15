@@ -11,6 +11,13 @@ class Claim(dtoutputs.OutputBase):
     """
     Namespacing for claim methods.
 
+    Attributes
+    ----------
+    type : str
+        Whether or not the claim is for a KIT or DEVICE.
+    claimed_item : Claim.Kit | Claim.Device
+        An object representing the kit or device claim.
+
     """
 
     KIT = 'KIT'
@@ -39,8 +46,11 @@ class Claim(dtoutputs.OutputBase):
     def claim_info(cls, identifier: str, **kwargs: Any) -> Claim:
         """
         Get the claim information for either a kit or device.
-        The identifier can be found in the sensor QR code or
-        as an xid printed directly on the sensor.
+
+        For sensors, the identifier can be found in either
+        the QR code or printed directly on the sensor.
+        For kits, the identifier can be found both as text
+        and a QR code printed on the box.
 
         Parameters
         ----------
@@ -158,6 +168,17 @@ class Claim(dtoutputs.OutputBase):
         """
         Namespacing type for a claimed device.
 
+        Attributes
+        ----------
+        device_id : str
+            Unique device identifier.
+        device_type : str
+            :ref:`Device type <device_type_constants>`.
+        product_number : str
+            The device product number.
+        is_claimed : bool
+            Whether or not the devices has been claimed.
+
         """
 
         def __init__(self, device: dict) -> None:
@@ -178,6 +199,15 @@ class Claim(dtoutputs.OutputBase):
     class Kit(dtoutputs.OutputBase):
         """
         Namespacing type for a claimed kit.
+
+        Attributes
+        ----------
+        kit_id : str
+            Unique kit identifier.
+        display_name : str
+            Human reabable kit name.
+        devices : list[Claim.Device]
+            List of devices in the kit.
 
         """
 
