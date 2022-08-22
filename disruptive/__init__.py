@@ -31,6 +31,7 @@ from disruptive.resources.eventhistory import EventHistory as EventHistory  # no
 from disruptive.resources.service_account import ServiceAccount as ServiceAccount  # noqa
 from disruptive.resources.role import Role as Role  # noqa
 from disruptive.resources.emulator import Emulator as Emulator  # noqa
+from disruptive.resources.claim import Claim as Claim  # noqa
 
 # Additional helper modules.
 from disruptive import events as events  # noqa

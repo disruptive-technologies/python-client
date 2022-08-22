@@ -955,3 +955,139 @@ batch_label_response = {
         }
     ]
 }
+
+claim_error_device_already_claimed = {
+    'deviceId': 'b',
+    'code': 'ALREADY_CLAIMED',
+    'message': 'The device was previously claimed',
+}
+
+claim_error_device_not_found = {
+    'deviceId': 'c',
+    'code': 'NOT_FOUND',
+    'message': 'The device was not found',
+}
+
+claim_error_kit_not_found = {
+    'kitId': 'd',
+    'code': 'NOT_FOUND',
+    'message': 'The kit was not found',
+}
+
+claimed_devices = {
+    'claimedDevices': [
+        {
+            'deviceId': 'a',
+            'deviceType': 'temperature',
+            'productNumber': 'a',
+            'isClaimed': True,
+        },
+        {
+            'deviceId': 'b',
+            'deviceType': 'temperature',
+            'productNumber': 'b',
+            'isClaimed': True,
+        },
+    ],
+    'claimErrors': {
+        'devices': [],
+        'kits': [],
+    }
+}
+
+claimed_device_already_claimed = {
+    'claimedDevices': [
+        {
+            'deviceId': 'a',
+            'deviceType': 'temperature',
+            'productNumber': 'a',
+            'isClaimed': True,
+        },
+    ],
+    'claimErrors': {
+        'devices': [
+            claim_error_device_already_claimed,
+        ],
+        'kits': [],
+    }
+}
+
+claimed_device_not_found = {
+    'claimedDevices': [
+        {
+            'deviceId': 'a',
+            'deviceType': 'temperature',
+            'productNumber': 'a',
+            'isClaimed': True,
+        },
+    ],
+    'claimErrors': {
+        'devices': [
+            claim_error_device_not_found,
+        ],
+        'kits': [],
+    }
+}
+
+claimed_kit_not_found = {
+    'claimedDevices': [
+        {
+            'deviceId': 'a',
+            'deviceType': 'temperature',
+            'productNumber': 'a',
+            'isClaimed': True,
+        },
+    ],
+    'claimErrors': {
+        'devices': [],
+        'kits': [claim_error_kit_not_found],
+    }
+}
+
+claim_info_kit = {
+    'type': 'KIT',
+    'kit': {
+        'kitId': 'fff000',
+        'displayName': 'Starter Kit EU, 5 sensors',
+        'sensors': {
+            'totalCount': 5,
+            'claimedCount': 0,
+        },
+        'cloudConnectors': {
+            'totalCount': 1,
+            'claimedCount': 0,
+        },
+        'devices': [
+            {
+                'deviceId': 'a',
+                'deviceType': 'touch',
+                'productNumber': '',
+                'isClaimed': True,
+            },
+            {
+                'deviceId': 'b',
+                'deviceType': 'proximity',
+                'productNumber': '',
+                'isClaimed': True,
+             },
+            {
+                'deviceId': 'c',
+                'deviceType': 'temperature',
+                'productNumber': '',
+                'isClaimed': True,
+            },
+            {
+                'deviceId': 'd',
+                'deviceType': 'proximity',
+                'productNumber': '',
+                'isClaimed': True,
+            },
+            {
+                'deviceId': 'e',
+                'deviceType': 'temperature',
+                'productNumber': '',
+                'isClaimed': True,
+            },
+        ],
+    },
+}
