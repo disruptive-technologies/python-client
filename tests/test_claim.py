@@ -78,7 +78,7 @@ class TestClaim():
         for test in tests:
             request_mock.json = test.give_res
             devices, errors = disruptive.Claim.claim(
-                project_id=test.give_project_id,
+                target_project_id=test.give_project_id,
                 kid_ids=test.give_kit_ids,
                 device_ids=test.give_device_ids,
                 dry_run=test.give_dry_run,

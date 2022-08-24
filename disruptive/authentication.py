@@ -347,10 +347,10 @@ class Auth():
         --------
         >>> # Authenticate using Service Account credentials.
         >>> dt.default_auth = dt.Auth.service_account(
-        >>>     key_id="<SERVICE_ACCOUNT_KEY_ID>",
-        >>>     secret="<SERVICE_ACCOUNT_KEY_ID>",
-        >>>     email="<SERVICE_ACCOUNT_KEY_ID>",
-        >>> )
+        ...     key_id="<SERVICE_ACCOUNT_KEY_ID>",
+        ...     secret="<SERVICE_ACCOUNT_KEY_ID>",
+        ...     email="<SERVICE_ACCOUNT_KEY_ID>",
+        ... )
 
         """
 
