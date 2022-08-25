@@ -133,6 +133,40 @@ class Claim(dtoutputs.OutputBase):
             List of errors that occured during claiming.
             If list is empty, all devices were claimed successfully.
 
+        Examples
+        --------
+        >>> # Claim all devices in a single kit.
+        >>> devices, errors = dt.Claim.claim(
+        ...     target_project_id='<TARGET_PROJECT_ID>',
+        ...     kit_ids=['<KIT_ID>'],
+        ... )
+
+        >>> # Claim specific devices.
+        >>> devices, errors = dt.Claim.claim(
+        ...     target_project_id='<TARGET_PROJECT_ID>',
+        ...     device_ids=[
+        ...         '<DEVICE_ID_1>',
+        ...         '<DEVICE_ID_2>',
+        ...         '<DEVICE_ID_3>',
+        ...     ],
+        ... )
+
+        >>> # Do a dry run where you simulate claiming a few kits and devices.
+        >>> # No kits or devices will be claim during this process.
+        >>> devices, errors = dt.Claim.claim(
+        ...     target_project_id='<TARGET_PROJECT_ID>',
+        ...     kit_ids=[
+        ...         '<KIT_ID_1>',
+        ...         '<KIT_ID_2>',
+        ...     ],
+        ...     device_ids=[
+        ...         '<DEVICE_ID_1>',
+        ...         '<DEVICE_ID_2>',
+        ...         '<DEVICE_ID_3>',
+        ...     ]
+        ...     dry_run=True,
+        ... )
+
         """
 
         url = f'/projects/{target_project_id}/devices:claim'
