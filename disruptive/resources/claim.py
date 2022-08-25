@@ -15,7 +15,7 @@ class Claim(dtoutputs.OutputBase):
     ----------
     type : str
         Whether or not the claim is for a KIT or DEVICE.
-    claimed_item : Claim.Kit | Claim.Device
+    claimed_item : Claim.ClaimKit | Claim.ClaimDevice
         An object representing the kit or device claim.
 
     """
@@ -40,7 +40,8 @@ class Claim(dtoutputs.OutputBase):
 
         # Unpack attributes from dictionary.
         self.type: str = claim['type']
-        self.claimed_item: Claim.Kit | Claim.Device = self._resolve_type(claim)
+        self.claimed_item: Claim.ClaimKit | Claim.ClaimDevice = \
+            self._resolve_type(claim)
 
     @classmethod
     def claim_info(cls, identifier: str, **kwargs: Any) -> Claim:
@@ -96,7 +97,7 @@ class Claim(dtoutputs.OutputBase):
               device_ids: Optional[List[str]] = None,
               dry_run: bool = False,
               **kwargs: Any,
-              ) -> Tuple[List[Claim.Device], List[Exception]]:
+              ) -> Tuple[List[Claim.ClaimDevice], List[Exception]]:
         """
         Claim multiple kits and/or devices to your project.
 
@@ -126,7 +127,7 @@ class Claim(dtoutputs.OutputBase):
 
         Returns
         -------
-        devices : list[Claim.Device]
+        devices : list[Claim.ClaimDevice]
             List of successfully claimed devices.
         errors : list[ClaimError]
             List of errors that occured during claiming.
@@ -180,7 +181,7 @@ class Claim(dtoutputs.OutputBase):
         res = dtrequests.DTRequest.post(url, body=body, **kwargs)
 
         return (
-            [Claim.Device(d) for d in res['claimedDevices']],
+            [Claim.ClaimDevice(d) for d in res['claimedDevices']],
             Claim._parse_claim_errors(res['claimErrors']),
         )
 
@@ -198,7 +199,7 @@ class Claim(dtoutputs.OutputBase):
                 errors.append(dterrors.ClaimError(error))
         return errors
 
-    def _resolve_type(self, claim: dict) -> Claim.Kit | Claim.Device:
+    def _resolve_type(self, claim: dict) -> Claim.ClaimKit | Claim.ClaimDevice:
         """
         Return either Kit or Device depending on type.
 
@@ -209,19 +210,19 @@ class Claim(dtoutputs.OutputBase):
 
         Returns
         -------
-        claim_item : Claim.Kit | Claim.Device
+        claim_item : Claim.ClaimKit | Claim.ClaimDevice
             Either a Kit or Device object depending on type.
 
         """
 
         if claim['type'] == Claim.KIT:
-            return Claim.Kit(claim['kit'])
+            return Claim.ClaimKit(claim['kit'])
         elif claim['type'] == Claim.DEVICE:
-            return Claim.Device(claim['device'])
+            return Claim.ClaimDevice(claim['device'])
         else:
             raise KeyError(f'unknown claim type {claim["type"]}')
 
-    class Device(dtoutputs.OutputBase):
+    class ClaimDevice(dtoutputs.OutputBase):
         """
         Namespacing type for a claimed device.
 
@@ -253,7 +254,7 @@ class Claim(dtoutputs.OutputBase):
             self.product_number: str = device['productNumber']
             self.is_claimed: bool = device['isClaimed']
 
-    class Kit(dtoutputs.OutputBase):
+    class ClaimKit(dtoutputs.OutputBase):
         """
         Namespacing type for a claimed kit.
 
@@ -263,14 +264,14 @@ class Claim(dtoutputs.OutputBase):
             Unique kit identifier.
         display_name : str
             Human reabable kit name.
-        devices : list[Claim.Device]
+        devices : list[Claim.ClaimDevice]
             List of devices in the kit.
 
         """
 
         def __init__(self, kit: dict) -> None:
             """
-            Constructs the claimed Kit object from raw response.
+            Constructs the claimed kit object from raw response.
 
             """
 
@@ -280,5 +281,5 @@ class Claim(dtoutputs.OutputBase):
             # Unpack attributes from raw response dictionary.
             self.kit_id: str = kit['kitId']
             self.display_name: str = kit['displayName']
-            self.devices: List[Claim.Device] \
-                = [Claim.Device(d) for d in kit['devices']]
+            self.devices: List[Claim.ClaimDevice] \
+                = [Claim.ClaimDevice(d) for d in kit['devices']]
