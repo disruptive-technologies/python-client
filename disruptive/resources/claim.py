@@ -54,7 +54,7 @@ class Claim(dtoutputs.OutputBase):
         and a QR code printed on the box.
 
         For more information, see the
-        `REST API Documentation <https://developer.disruptive-
+        `REST API Claim Info Documentation <https://developer.disruptive-
         technologies.com/api#/Claiming%20Devices%20%26%20Kits/
         get_claim_info>`_.
 
@@ -100,13 +100,12 @@ class Claim(dtoutputs.OutputBase):
         """
         Claim multiple kits and/or devices to your project.
 
-        Claiming a kit/device does two things:
-        - Starts the subscription of the device(s). If the device(s)
-          has a pre-paid period, this will be activated.
-        - Adds the device(s) to your project.
+        Claiming a kit/device does two things. It starts the device
+        subscriptions, where any pre-paid period will be activated.
+        It also adds the devices to your project.
 
         For more information, see the
-        `REST API Documentation <https://developer.disruptive-
+        `REST API Claim Documentation <https://developer.disruptive-
         technologies.com/api#/Claiming%20Devices%20%26%20Kits/
         post_projects__project__devices_claim>`_.
 
