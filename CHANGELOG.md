@@ -2,7 +2,7 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# v1.5.0
 ### Added
 - [#114](https://github.com/disruptive-technologies/python-client/pull/114) Implemented Claim API under the `dt.Claim` namespace.
 
