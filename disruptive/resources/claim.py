@@ -45,27 +45,41 @@ class Claim(dtoutputs.OutputBase):
     @classmethod
     def claim_info(cls, identifier: str, **kwargs: Any) -> Claim:
         """
-        Get the claim information for either a kit or device.
+        Get claim information for either a device
+        or a kit by looking up an identifier.
 
         For sensors, the identifier can be found in either
         the QR code or printed directly on the sensor.
         For kits, the identifier can be found both as text
         and a QR code printed on the box.
 
+        For more information, see the
+        `REST API Documentation <https://developer.disruptive-
+        technologies.com/api#/Claiming%20Devices%20%26%20Kits/
+        get_claim_info>`_.
+
         Parameters
         ----------
         identifier : str
-            Unique ID of the target Device or Kit.
+            Unique identifier of the target Kit or Device.
 
         Returns
         -------
-        claim : Device | Kit
-            Claim information about the requested Device or Kit.
+        claim : Claim
+            Claim information about the requested Kit or Device.
 
         Raises
         ------
         TypeError
             If provided identifier is not str type.
+
+        Examples
+        --------
+        >>> # Get claim information about a kit.
+        >>> claim = dt.Claim.claim_info('<KIT_ID>')
+
+        >>> # Get claim information about a device.
+        >>> claim = dt.Claim.claim_info('<DEVICE_ID>')
 
         """
 
@@ -77,19 +91,29 @@ class Claim(dtoutputs.OutputBase):
         return cls(dtrequests.DTRequest.get(url, **kwargs))
 
     @staticmethod
-    def claim(project_id: str,
+    def claim(target_project_id: str,
               kit_ids: Optional[List[str]] = None,
               device_ids: Optional[List[str]] = None,
               dry_run: bool = False,
               **kwargs: Any,
               ) -> Tuple[List[Claim.Device], List[Exception]]:
         """
-        Claim a number of kits and/or devices to your project.
+        Claim multiple kits and/or devices to your project.
+
+        Claiming a kit/device does two things:
+        - Starts the subscription of the device(s). If the device(s)
+          has a pre-paid period, this will be activated.
+        - Adds the device(s) to your project.
+
+        For more information, see the
+        `REST API Documentation <https://developer.disruptive-
+        technologies.com/api#/Claiming%20Devices%20%26%20Kits/
+        post_projects__project__devices_claim>`_.
 
         Parameters
         ----------
-        project_id : str
-            Unique identifier of target project.
+        target_project_id : str
+            Unique identifier of project into which you wish to claim.
         kit_ids : list[str], optional
             List of unique kit IDs to claim.
         device_ids : list[str], optional
@@ -111,7 +135,7 @@ class Claim(dtoutputs.OutputBase):
 
         """
 
-        url = f'/projects/{project_id}/devices:claim'
+        url = f'/projects/{target_project_id}/devices:claim'
         url += f'?dryRun={str(dry_run).lower()}'
 
         body = {}
