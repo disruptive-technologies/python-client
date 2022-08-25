@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.5.1
+### Fixed
+- [#116](https://github.com/disruptive-technologies/python-client/pull/116) Namespace conflict between `dt.Device` and `dt.Claim.Device` in documentation.
+
 # v1.5.0
 ### Added
 - [#114](https://github.com/disruptive-technologies/python-client/pull/114) Implemented Claim API under the `dt.Claim` namespace.
