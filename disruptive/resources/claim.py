@@ -95,7 +95,7 @@ class Claim(dtoutputs.OutputBase):
     def claim(target_project_id: str,
               kit_ids: Optional[List[str]] = None,
               device_ids: Optional[List[str]] = None,
-              dry_run: bool = False,
+              dry_run: bool = True,
               **kwargs: Any,
               ) -> Tuple[List[Claim.ClaimDevice], List[Exception]]:
         """
@@ -119,8 +119,10 @@ class Claim(dtoutputs.OutputBase):
         device_ids : list[str], optional
             List of unique device IDs to claim.
         dry_run : bool, optional
+            Default True.
             Test your claim request during development.
-            No kits or devices will be claimed.
+            No kits or devices will be claimed while True.
+            Set to False in production or no devices will be claimed.
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
@@ -135,13 +137,13 @@ class Claim(dtoutputs.OutputBase):
 
         Examples
         --------
-        >>> # Claim all devices in a single kit.
+        >>> # Do a dry_run where you simulate claiming a kit.
         >>> devices, errors = dt.Claim.claim(
         ...     target_project_id='<TARGET_PROJECT_ID>',
         ...     kit_ids=['<KIT_ID>'],
         ... )
 
-        >>> # Claim specific devices.
+        >>> # Do a dry_run where you simulate claiming three devices.
         >>> devices, errors = dt.Claim.claim(
         ...     target_project_id='<TARGET_PROJECT_ID>',
         ...     device_ids=[
@@ -151,8 +153,8 @@ class Claim(dtoutputs.OutputBase):
         ...     ],
         ... )
 
-        >>> # Do a dry run where you simulate claiming a few kits and devices.
-        >>> # No kits or devices will be claim during this process.
+        >>> # Turn off dry_run and claim 2 kits and 3 devices.
+        >>> # This action is not reversible.
         >>> devices, errors = dt.Claim.claim(
         ...     target_project_id='<TARGET_PROJECT_ID>',
         ...     kit_ids=[
@@ -164,7 +166,7 @@ class Claim(dtoutputs.OutputBase):
         ...         '<DEVICE_ID_2>',
         ...         '<DEVICE_ID_3>',
         ...     ]
-        ...     dry_run=True,
+        ...     dry_run=False,
         ... )
 
         """
