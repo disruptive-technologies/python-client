@@ -312,7 +312,7 @@ class TestRequests():
         )
 
         # Catch the expected ConnectionError that should be raised.
-        with pytest.raises(disruptive.errors.UnknownError):
+        with pytest.raises(requests.exceptions.RequestException):
             # Call Device.get_device(), overriden all defaults with kwargs.
             _ = disruptive.Device.get_device(
                 device_id='device_id',
@@ -327,7 +327,7 @@ class TestRequests():
         )
 
         # Catch the expected ConnectionError that should be raised.
-        with pytest.raises(disruptive.errors.UnknownError):
+        with pytest.raises(requests.exceptions.RequestException):
             # Call Device.get_device(), overriden all defaults with kwargs.
             _ = disruptive.Device.get_device(
                 device_id='device_id',
