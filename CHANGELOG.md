@@ -2,6 +2,14 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# Unreleased
+### Fixed
+- [#120](https://github.com/disruptive-technologies/python-client/pull/120) Unhandled `RequestExceptions` now raised directly.
+- [#119](https://github.com/disruptive-technologies/python-client/pull/119) Redirected `/v2/:claim-info` to `/v2/claimInfo`.
+
+### Added
+- [#118](https://github.com/disruptive-technologies/python-client/pull/118) Python 3.11 support.
+
 # v1.5.2
 ### Fixed
 - [#117](https://github.com/disruptive-technologies/python-client/pull/117) Method `dt.Claim.claim` parameter `dry_run` True by default.
