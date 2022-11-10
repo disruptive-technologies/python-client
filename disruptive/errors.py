@@ -359,8 +359,8 @@ def parse_request_error(caught_error: Exception,
             nth_attempt**2,
         )
     else:
-        # Uncategorized error has been raised.
-        return UnknownError(data), False, None
+        # Unhandled error has been raised.
+        return caught_error, False, None
 
 
 def parse_api_status_code(status_code: Optional[int],
