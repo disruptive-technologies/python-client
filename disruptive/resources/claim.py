@@ -87,7 +87,7 @@ class Claim(dtoutputs.OutputBase):
         if not isinstance(identifier, str):
             raise TypeError(f'Identifier must be str, got {type(identifier)}.')
 
-        url = f':claim-info?identifier={identifier}'
+        url = f'/claimInfo?identifier={identifier}'
 
         return cls(dtrequests.DTRequest.get(url, **kwargs))
 
