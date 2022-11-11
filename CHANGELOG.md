@@ -2,7 +2,7 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# v1.5.3
 ### Fixed
 - [#120](https://github.com/disruptive-technologies/python-client/pull/120) Unhandled `RequestExceptions` now raised directly.
 - [#119](https://github.com/disruptive-technologies/python-client/pull/119) Redirected `/v2/:claim-info` to `/v2/claimInfo`.
