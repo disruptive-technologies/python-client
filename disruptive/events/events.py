@@ -1848,6 +1848,7 @@ class DeskOccupancy(_EventData):
     def __init__(self,
                  state: str,
                  timestamp: Optional[datetime | str] = None,
+                 remarks: Optional[list[str]] = None,
                  ) -> None:
         """
         Constructs the DeskOccupancy object, inheriting parent class
@@ -1860,12 +1861,17 @@ class DeskOccupancy(_EventData):
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
             (i.e. yyyy-MM-ddTHH:mm:ssZ).
+        remarks : list[str], optional
+            Additional information about the estimated state, given as
+            a list of string remarks.
+            See https://developer.d21s.com/docs/concepts/events#remarks.
 
         """
 
         # Set parameter attributes.
         self.state: str = state
         self.timestamp: Optional[datetime | str] = timestamp
+        self.remarks: Optional[list[str]] = remarks
 
         # Inherit parent _EventData class init with repacked data dictionary.
         _EventData.__init__(self, self.__repack(), 'deskOccupancy')
@@ -1873,13 +1879,15 @@ class DeskOccupancy(_EventData):
     def __repr__(self) -> str:
         string = '{}.{}('\
             'state={}, '\
-            'timestamp={}'\
+            'timestamp={}, '\
+            'remarks={}'\
             ')'
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
             repr(self.state),
             repr(dttrans.to_iso8601(self.timestamp)),
+            repr(self.remarks),
         )
 
     @classmethod
@@ -1903,6 +1911,7 @@ class DeskOccupancy(_EventData):
         obj = cls(
             state=data['state'],
             timestamp=data['updateTime'],
+            remarks=data['remarks'],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1916,6 +1925,8 @@ class DeskOccupancy(_EventData):
             data['state'] = self.state
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
+        if self.remarks is not None:
+            data['remarks'] = self.remarks
         return data
 
 
