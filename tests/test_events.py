@@ -166,6 +166,7 @@ class TestEvents():
         x = disruptive.events.DeskOccupancy(
             state='OCCUPIED',
             timestamp=datetime.now(),
+            remarks=['INCOMPLETE_DATA'],
         )
 
         y = eval(repr(x))
