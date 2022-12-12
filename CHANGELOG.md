@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.5.4
+### Added
+- [#121](https://github.com/disruptive-technologies/python-client/pull/121) Support for new `remarks` field in `deskOccupancy` events.
+
 # v1.5.3
 ### Fixed
 - [#120](https://github.com/disruptive-technologies/python-client/pull/120) Unhandled `RequestExceptions` now raised directly.
