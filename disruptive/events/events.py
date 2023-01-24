@@ -1837,6 +1837,10 @@ class DeskOccupancy(_EventData):
     ----------
     state : str
         Indicates whether the sensor predicts "OCCUPIED" or "NOT_OCCUPIED".
+    remarks : list[str], optional
+        Additional information about the estimated state, given as
+        a list of string remarks.
+        See https://developer.d21s.com/docs/concepts/events#remarks.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
