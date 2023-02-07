@@ -29,9 +29,11 @@ from disruptive.resources.project import Project as Project  # noqa
 from disruptive.resources.stream import Stream as Stream  # noqa
 from disruptive.resources.eventhistory import EventHistory as EventHistory  # noqa
 from disruptive.resources.service_account import ServiceAccount as ServiceAccount  # noqa
+from disruptive.resources.service_account import Key as Key  # noqa
 from disruptive.resources.role import Role as Role  # noqa
 from disruptive.resources.emulator import Emulator as Emulator  # noqa
 from disruptive.resources.claim import Claim as Claim  # noqa
+from disruptive.outputs import Member as Member  # noqa
 
 # Additional helper modules.
 from disruptive import events as events  # noqa
