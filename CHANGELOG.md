@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.5.6
+### Fixed
+- [#123](https://github.com/disruptive-technologies/python-client/pull/123) Added missing constant `disrutpive.Device.MOTION`.
+
 # v1.5.5
 ### Fixed
 - [#122](https://github.com/disruptive-technologies/python-client/pull/122) Explicit definition of `Key` and `Member` classes.
