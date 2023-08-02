@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# Unreleased
+### Changed
+- Bumped pandas extras dependency to major 2.0.
+
 # v1.5.6
 ### Fixed
 - [#123](https://github.com/disruptive-technologies/python-client/pull/123) Added missing constant `disruptive.Device.MOTION`.
