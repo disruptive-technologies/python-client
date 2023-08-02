@@ -382,6 +382,7 @@ class TestDevice():
             dtapiresponses.ethernet_status_event,
             dtapiresponses.cellular_status_event,
             dtapiresponses.co2_event,
+            dtapiresponses.motion_event,
             dtapiresponses.pressure_event,
         ]
 

@@ -852,6 +852,19 @@ co2_event = {
     "timestamp": "2022-01-27T15:50:34.471000Z"
 }
 
+motion_event = {
+    'eventId': '9j53ftiet8nog4fac7ug',
+    'targetName': 'projects/ci429ep0vlodur6n23f0/devices/emucj4fj3epdjrin69t0v80',
+    'eventType': 'motion',
+    'data': {
+        'motion': {
+            'state': 'MOTION_DETECTED',
+            'updateTime': '2023-08-02T11:03:18.595777Z',
+        },
+    },
+    'timestamp': '2023-08-02T11:03:18.595777Z',
+}
+
 pressure_event = {
     "eventId": "c0pbuiurq6u6ltshi151",
     "targetName": "projects/c75ivl3go7df88ctp0ug/devices/u6sfppl7rihg0dm4ud7s",
@@ -882,6 +895,7 @@ event_history_each_type = {
         ethernet_status_event,
         cellular_status_event,
         co2_event,
+        motion_event,
         pressure_event,
     ]
 }
