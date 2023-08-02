@@ -27,8 +27,4 @@ lint: venv
 	source ${VENV}/bin/activate && mypy --config-file ./mypy.ini disruptive/ && flake8 disruptive/
 
 clean:
-	rm -rf build/ dist/ pip-wheel-metadata/ *.egg-info
-	find . -name '__pycache__' -exec rm --force --recursive {} +
-	rm -rf .pytest_cache/ .mypy_cache/
-	rm -rf $(VENV)
-	rm -f coverage.xml
+	rm -rf build/ dist/ pip-wheel-metadata/ *.egg-info .pytest_cache/ .mypy_cache/ $(VENV) coverage.xml
