@@ -4,7 +4,7 @@ The project adheres to [semantic versioning](https://semver.org/).
 
 # v1.5.6
 ### Fixed
-- [#123](https://github.com/disruptive-technologies/python-client/pull/123) Added missing constant `disrutpive.Device.MOTION`.
+- [#123](https://github.com/disruptive-technologies/python-client/pull/123) Added missing constant `disruptive.Device.MOTION`.
 
 # v1.5.5
 ### Fixed
