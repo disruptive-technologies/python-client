@@ -1,7 +1,5 @@
-# Third-part imports.
 import pytest
 
-# Project imports.
 from tests.framework import RequestMock
 
 

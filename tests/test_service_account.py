@@ -1,4 +1,3 @@
-# Project imports.
 import disruptive
 import tests.api_responses as dtapiresponses
 import disruptive.transforms as dttrans
