@@ -1,4 +1,5 @@
-# Project imports.
+import sys
+
 import disruptive as dt
 from disruptive.authentication import Unauthenticated
 
@@ -81,7 +82,10 @@ class RequestMock():
         params={},
         headers={
             'Authorization': '',
-            'User-Agent': f'DisruptivePythonAPI/{dt.__version__}'
+            'User-Agent': 'DisruptivePythonAPI/{} Python/{}'.format(
+                dt.__version__,
+                f'{sys.version_info.major}.{sys.version_info.minor}',
+            )
         },
         body=None,
         data=None,
