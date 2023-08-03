@@ -5,6 +5,7 @@ The project adheres to [semantic versioning](https://semver.org/).
 # Unreleased
 ### Changed
 - Bumped pandas extras dependency to major 2.0.
+- Python 3.7 is end-of-life and has been deprecated.
 
 # v1.5.6
 ### Fixed
