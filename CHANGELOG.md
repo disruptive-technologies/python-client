@@ -2,10 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
-# Unreleased
+# v1.6.0
 ### Changed
-- Bumped pandas extras dependency to major 2.0.
-- Python 3.7 is end-of-life and has been deprecated.
+- [#124](https://github.com/disruptive-technologies/python-client/pull/124) Bumped pandas extras dependency to major 2.0.
+- [#125](https://github.com/disruptive-technologies/python-client/pull/125) Python 3.7 is end-of-life and has been deprecated.
 
 # v1.5.6
 ### Fixed

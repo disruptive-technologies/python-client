@@ -1,5 +1,5 @@
 # Metadata
-__version__ = '1.5.6'
+__version__ = '1.6.0'
 
 # If set, logs of chosen level and higher are printed to console.
 # Default value None results in no logs at any level.
