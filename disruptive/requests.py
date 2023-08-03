@@ -12,7 +12,10 @@ import disruptive.logging as dtlog
 import disruptive.errors as dterrors
 
 
-USER_AGENT = f'DisruptivePythonAPI/{dt.__version__}'
+USER_AGENT = 'DisruptivePythonAPI/{} Python/{}'.format(
+    dt.__version__,
+    f'{sys.version_info.major}.{sys.version_info.minor}',
+)
 
 
 class DTRequest():
