@@ -30,14 +30,12 @@ def to_iso8601(ts: Optional[str | datetime]) -> Optional[str]:
 
     # If not string, datetime is also fine as it can be converted.
     elif isinstance(ts, datetime):
-        # Use built-in functions for converting to string.
-        dt = ts.isoformat()
-
-        # Add timezone information if lacking.
-        if '+' not in dt:
-            dt += 'Z'
-        elif '+00:00' in dt:
-            dt = dt.replace('+00:00', 'Z')
+        if ts.tzinfo is None:
+            dt = ts.isoformat() + 'Z'
+        else:
+            dt = ts.isoformat()
+            if dt.endswith('+00:00'):
+                dt = dt.replace('+00:00', 'Z')
 
         return dt
 
