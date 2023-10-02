@@ -145,3 +145,6 @@ notes.md
 
 # Markdown preview output.
 README.pdf
+
+# macOS metadata
+.DS_Store
