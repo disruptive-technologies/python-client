@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.6.1
+### Fixed
+- [#126](https://github.com/disruptive-technologies/python-client/pull/126) Fixed an issue where UTC tzinfo "Z" was appended to iso-strings already containing tzinfo, resulting in an invalid format.
+
 # v1.6.0
 ### Changed
 - [#124](https://github.com/disruptive-technologies/python-client/pull/124) Bumped pandas extras dependency to major 2.0.
