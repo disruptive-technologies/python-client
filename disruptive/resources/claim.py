@@ -44,7 +44,7 @@ class Claim(dtoutputs.OutputBase):
             self._resolve_type(claim)
 
     @classmethod
-    def claim_info(cls, identifier: str, **kwargs: Any) -> Claim:
+    def claim_info(cls, identifier: str, organization_id: Optional[str] = None, **kwargs: Any) -> Claim:
         """
         Get claim information for either a device
         or a kit by looking up an identifier.
@@ -63,6 +63,9 @@ class Claim(dtoutputs.OutputBase):
         ----------
         identifier : str
             Unique identifier of the target Kit or Device.
+
+        organization_id : str, optional
+            The identifier of the organization that will claim the devices or kits.
 
         Returns
         -------
@@ -88,6 +91,10 @@ class Claim(dtoutputs.OutputBase):
             raise TypeError(f'Identifier must be str, got {type(identifier)}.')
 
         url = f'/claimInfo?identifier={identifier}'
+
+        # Add organization resource name to url if organization_id is provided.
+        if organization_id is not None:
+            url += f'&organization=organizations/{organization_id}'
 
         return cls(dtrequests.DTRequest.get(url, **kwargs))
 
