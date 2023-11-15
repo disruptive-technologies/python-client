@@ -1,6 +1,7 @@
+import sys
 from typing import Optional
 from dataclasses import dataclass
-from datetime import datetime
+import datetime
 
 import pytest
 
@@ -67,7 +68,12 @@ class TestEmulator():
         url = dt.emulator_base_url
         url += f'/projects/{project_id}/devices/{device_id}:publish'
         args = {'device_id': device_id, 'project_id': project_id}
-        now = datetime.utcnow()
+
+        # datetime.datetime.utcnow() is deprecated in Python 3.12
+        if sys.version_info.major >= 3 and sys.version_info.minor >= 11:
+            now = datetime.datetime.now(datetime.UTC)
+        else:
+            now = datetime.datetime.utcnow()
 
         @dataclass
         class TestCase:
