@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.6.3
+### Added
+- [#130](https://github.com/disruptive-technologies/python-client/pull/130) Added support for Python 3.12.
+
 # v1.6.2
 ### Added
 - [#129](https://github.com/disruptive-technologies/python-client/pull/129) Added optional `organization_id` in method `claim_info()`.
