@@ -139,6 +139,7 @@ dmypy.json
 
 # Testbench for writing package.
 bench.py
+bench.ipynb
 
 # Notes / todos.
 notes.md

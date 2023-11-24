@@ -8,29 +8,30 @@ import disruptive.logging as dtlog
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
 
-# Event-type constants.
-TOUCH = 'touch'
-TEMPERATURE = 'temperature'
-OBJECT_PRESENT = 'objectPresent'
-HUMIDITY = 'humidity'
-OBJECT_PRESENT_COUNT = 'objectPresentCount'
-TOUCH_COUNT = 'touchCount'
-WATER_PRESENT = 'waterPresent'
-NETWORK_STATUS = 'networkStatus'
-BATTERY_STATUS = 'batteryStatus'
-LABELS_CHANGED = 'labelsChanged'
-CONNECTION_STATUS = 'connectionStatus'
-ETHERNET_STATUS = 'ethernetStatus'
-CELLULAR_STATUS = 'cellularStatus'
-CO2 = 'co2'
-PRESSURE = 'pressure'
-MOTION = 'motion'
-DESK_OCCUPANCY = 'deskOccupancy'
+TOUCH: str = 'touch'
+TEMPERATURE: str = 'temperature'
+OBJECT_PRESENT: str = 'objectPresent'
+HUMIDITY: str = 'humidity'
+OBJECT_PRESENT_COUNT: str = 'objectPresentCount'
+TOUCH_COUNT: str = 'touchCount'
+WATER_PRESENT: str = 'waterPresent'
+NETWORK_STATUS: str = 'networkStatus'
+BATTERY_STATUS: str = 'batteryStatus'
+LABELS_CHANGED: str = 'labelsChanged'
+CONNECTION_STATUS: str = 'connectionStatus'
+ETHERNET_STATUS: str = 'ethernetStatus'
+CELLULAR_STATUS: str = 'cellularStatus'
+CO2: str = 'co2'
+PRESSURE: str = 'pressure'
+MOTION: str = 'motion'
+DESK_OCCUPANCY: str = 'deskOccupancy'
+CONTACT: str = 'contact'
+PROBE_WIRE_STATUS: str = 'probeWireStatus'
 EVENT_TYPES = [
     TOUCH, TEMPERATURE, OBJECT_PRESENT, HUMIDITY, OBJECT_PRESENT_COUNT,
     TOUCH_COUNT, WATER_PRESENT, NETWORK_STATUS, BATTERY_STATUS, LABELS_CHANGED,
     CONNECTION_STATUS, ETHERNET_STATUS, CELLULAR_STATUS, CO2, PRESSURE, MOTION,
-    DESK_OCCUPANCY,
+    DESK_OCCUPANCY, CONTACT, PROBE_WIRE_STATUS,
 ]
 
 
@@ -1934,6 +1935,185 @@ class DeskOccupancy(_EventData):
         return data
 
 
+class Contact(_EventData):
+    """
+    Represents the data found in a contact event.
+
+    Attributes
+    ----------
+    state : str
+        Indicates whether the sensor detects "CLOSED" or "OPEN".
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
+
+    """
+
+    STATE_CLOSED: str = 'CLOSED'
+    STATE_OPEN: str = 'OPEN'
+
+    def __init__(self,
+                 state: str,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
+        """
+        Constructs the Contact object, inheriting parent class
+        and setting the type-specific attributes.
+
+        Parameters
+        ----------
+        state : str
+            Indicates whether the sensor predicts "CLOSED" or "OPEN".
+        timestamp : datetime, str, optional
+            Timestamp in either datetime or string ISO8601 format
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
+
+        """
+
+        self.state: str = state
+        self.timestamp: Optional[datetime | str] = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'contact')
+
+    def __repr__(self) -> str:
+        string = '{}.{}('\
+            'state={}, '\
+            'timestamp={}, '\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            repr(self.state),
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
+    @classmethod
+    def _from_raw(cls, data: dict) -> Contact:
+        """
+        Constructs a Contact object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : Contact
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            state=data['state'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self) -> dict:
+        data: dict = dict()
+        if self.state is not None:
+            data['state'] = self.state
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
+
+
+class ProbeWireStatus(_EventData):
+    """
+    Represents the data found in a contact event.
+
+    Attributes
+    ----------
+    timestamp : datetime
+        Timestamp of when the event was received by a Cloud Connector.
+
+    """
+
+    STATE_INVALID_WIRE_CONFIGURATION: str = 'INVALID_WIRE_CONFIGURATION'
+    STATE_TWO_WIRE: str = 'TWO_WIRE'
+    STATE_THREE_WIRE: str = 'THREE_WIRE'
+    STATE_FOUR_WIRE: str = 'FOUR_WIRE'
+
+    def __init__(self,
+                 state: str,
+                 timestamp: Optional[datetime | str] = None,
+                 ) -> None:
+        """
+        Constructs the ProbeWireStatus object, inheriting parent class
+        and setting the type-specific attributes.
+
+        Parameters
+        ----------
+        state : str
+            Probe wire status. Can be either "INVALID_WIRE_CONFIGURATION",
+            "TWO_WIRE", "THREE_WIRE", or "FOUR_WIRE".
+        timestamp : datetime, str, optional
+            Timestamp in either datetime or string ISO8601 format
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
+
+        """
+
+        self.state: str = state
+        self.timestamp: Optional[datetime | str] = timestamp
+
+        # Inherit parent _EventData class init with repacked data dictionary.
+        _EventData.__init__(self, self.__repack(), 'probeWireStatus')
+
+    def __repr__(self) -> str:
+        string = '{}.{}('\
+            'state={}, '\
+            'timestamp={}, '\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            repr(self.state),
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
+    @classmethod
+    def _from_raw(cls, data: dict) -> ProbeWireStatus:
+        """
+        Constructs a ProbeWireStatus object from API response data.
+
+        Parameters
+        ----------
+        data : dict
+            API response data dictionary.
+
+        Returns
+        -------
+        obj : Contact
+            Object constructed from the API response data.
+
+        """
+
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            state=data['state'],
+            timestamp=data['updateTime'],
+        )
+
+        # Re-inherit from parent, but now providing response data.
+        _EventData.__init__(obj, data, obj.event_type)
+
+        return obj
+
+    def __repack(self) -> dict:
+        data: dict = dict()
+        if self.state is not None:
+            data['state'] = self.state
+        if self.timestamp is not None:
+            data['updateTime'] = self.timestamp
+        return data
+
+
 class Event(dtoutputs.OutputBase):
     """
     Represents device events.
@@ -2121,6 +2301,18 @@ class __EventsMap():
             api_name='deskOccupancy',
             attr_name='desk_occupancy',
             class_name='DeskOccupancy',
+            is_keyed=True,
+        ),
+        'contact': __TypeNames(
+            api_name='contact',
+            attr_name='contact',
+            class_name='Contact',
+            is_keyed=True,
+        ),
+        'probeWireStatus': __TypeNames(
+            api_name='probeWireStatus',
+            attr_name='probe_wire_status',
+            class_name='ProbeWireStatus',
             is_keyed=True,
         ),
     }
