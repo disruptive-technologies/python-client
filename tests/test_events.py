@@ -1,4 +1,5 @@
 from datetime import datetime
+from dataclasses import dataclass
 
 import disruptive
 
@@ -171,3 +172,49 @@ class TestEvents():
 
         y = eval(repr(x))
         assert x._raw == y._raw
+
+    def test_contact(self):
+        now = datetime.now()
+
+        @dataclass
+        class TestCase:
+            state: str
+            timestamp: datetime
+
+        testcases = [
+            TestCase(state='OPEN', timestamp=now),
+            TestCase(state='CLOSED', timestamp=now),
+        ]
+
+        for testcase in testcases:
+            x = disruptive.events.Contact(
+                state=testcase.state,
+                timestamp=testcase.timestamp,
+            )
+
+            y = eval(repr(x))
+            assert x._raw == y._raw
+
+    def test_probe_wire_status(self):
+        now = datetime.now()
+
+        @dataclass
+        class TestCase:
+            state: str
+            timestamp: datetime
+
+        testcases = [
+            TestCase(state='INVALID_WIRE_CONFIGURATION', timestamp=now),
+            TestCase(state='TWO_WIRE', timestamp=now),
+            TestCase(state='THREE_WIRE', timestamp=now),
+            TestCase(state='FOUR_WIRE', timestamp=now),
+        ]
+
+        for testcase in testcases:
+            x = disruptive.events.ProbeWireStatus(
+                state=testcase.state,
+                timestamp=testcase.timestamp,
+            )
+
+            y = eval(repr(x))
+            assert x._raw == y._raw

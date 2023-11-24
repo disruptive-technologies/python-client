@@ -133,7 +133,9 @@ class Emulator():
                       disruptive.events.Co2 |
                       disruptive.events.Pressure |
                       disruptive.events.Motion |
-                      disruptive.events.DeskOccupancy,
+                      disruptive.events.DeskOccupancy |
+                      disruptive.events.Contact |
+                      disruptive.events.ProbeWireStatus,
                       **kwargs: Any,
                       ) -> None:
         """

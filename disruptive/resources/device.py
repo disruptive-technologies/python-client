@@ -41,17 +41,18 @@ class Device(dtoutputs.OutputBase):
     """
 
     # Constants for the various device types.
-    TEMPERATURE = 'temperature'
-    PROXIMITY = 'proximity'
-    TOUCH = 'touch'
-    HUMIDITY = 'humidity'
-    PROXIMITY_COUNTER = 'proximityCounter'
-    TOUCH_COUNTER = 'touchCounter'
-    WATER_DETECTOR = 'waterDetector'
-    CLOUD_CONNECTOR = 'ccon'
-    CO2 = 'co2'
-    MOTION = 'motion'
-    DESK_OCCUPANCY = 'deskOccupancy'
+    TEMPERATURE: str = 'temperature'
+    PROXIMITY: str = 'proximity'
+    TOUCH: str = 'touch'
+    HUMIDITY: str = 'humidity'
+    PROXIMITY_COUNTER: str = 'proximityCounter'
+    TOUCH_COUNTER: str = 'touchCounter'
+    WATER_DETECTOR: str = 'waterDetector'
+    CLOUD_CONNECTOR: str = 'ccon'
+    CO2: str = 'co2'
+    MOTION: str = 'motion'
+    DESK_OCCUPANCY: str = 'deskOccupancy'
+    CONTACT: str = 'contact'
     DEVICE_TYPES = [
         TEMPERATURE, PROXIMITY, TOUCH, HUMIDITY,
         PROXIMITY_COUNTER, TOUCH_COUNTER, WATER_DETECTOR,

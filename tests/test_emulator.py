@@ -259,6 +259,24 @@ class TestEmulator():
                 ),
                 want_err=None,
             ),
+            TestCase(
+                name='contact',
+                give_type=dt.events.CONTACT,
+                give_data=dt.events.Contact(
+                    timestamp=now,
+                    state='OPEN',
+                ),
+                want_err=None,
+            ),
+            TestCase(
+                name='probeWireStatus',
+                give_type=dt.events.PROBE_WIRE_STATUS,
+                give_data=dt.events.ProbeWireStatus(
+                    timestamp=now,
+                    state='THREE_WIRE',
+                ),
+                want_err=None,
+            ),
         ]
 
         i = 0
