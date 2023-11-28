@@ -56,7 +56,7 @@ class Device(dtoutputs.OutputBase):
     DEVICE_TYPES = [
         TEMPERATURE, PROXIMITY, TOUCH, HUMIDITY,
         PROXIMITY_COUNTER, TOUCH_COUNTER, WATER_DETECTOR,
-        CLOUD_CONNECTOR, CO2, MOTION, DESK_OCCUPANCY,
+        CLOUD_CONNECTOR, CO2, MOTION, DESK_OCCUPANCY, CONTACT,
     ]
 
     def __init__(self, device: dict) -> None:
