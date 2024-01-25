@@ -503,7 +503,7 @@ class Humidity(_EventData):
 
     Attributes
     ----------
-    temperature : float
+    celsius : float
         Temperature value in Celsius.
     relative_humidity : float
         Relative humidity in percent.
@@ -522,7 +522,7 @@ class Humidity(_EventData):
 
         Parameters
         ----------
-        temperature : float
+        celsius : float
             Temperature value in Celsius.
         relative_humidity : float
             Relative humidity in percent.
