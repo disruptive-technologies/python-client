@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.6.5
+### Fixed
+- [#133](https://github.com/disruptive-technologies/python-client/pull/133) Added missing state on `ProbeWireStatus` event.
+
 # v1.6.4
 ### Added
 - [#132](https://github.com/disruptive-technologies/python-client/pull/132) Added support for `Contact` and `ProbeWireStatus` events.
