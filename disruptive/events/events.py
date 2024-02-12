@@ -2036,6 +2036,8 @@ class ProbeWireStatus(_EventData):
     """
 
     STATE_INVALID_WIRE_CONFIGURATION: str = 'INVALID_WIRE_CONFIGURATION'
+    STATE_INVALID_COEFFICIENT_CONFIGURATION: str \
+        = 'INVALID_COEFFICIENT_CONFIGURATION'
     STATE_TWO_WIRE: str = 'TWO_WIRE'
     STATE_THREE_WIRE: str = 'THREE_WIRE'
     STATE_FOUR_WIRE: str = 'FOUR_WIRE'
@@ -2052,7 +2054,8 @@ class ProbeWireStatus(_EventData):
         ----------
         state : str
             Probe wire status. Can be either "INVALID_WIRE_CONFIGURATION",
-            "TWO_WIRE", "THREE_WIRE", or "FOUR_WIRE".
+            "INVALID_COEFFICIENT_CONFIGURATION", "TWO_WIRE",
+            "THREE_WIRE", or "FOUR_WIRE".
         timestamp : datetime, str, optional
             Timestamp in either datetime or string ISO8601 format
             (i.e. yyyy-MM-ddTHH:mm:ssZ).
