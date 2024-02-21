@@ -1291,14 +1291,23 @@ class ConnectionStatus(_EventData):
     Attributes
     ----------
     connection : str
-        Whether the Cloud Connector is on "ETHERNET", "CELLULAR", or "OFFLINE".
+        Whether the current connection is
+        SDS, ETHERNET, CELLULAR, or OFFLINE.
     available : list[str]
-        Lists available connections. Can contain
-        "ETHERNET", "CELLULAR", or both.
+        A list of the string types of networks available to the device.
+        For Cloud Connectors, this can contain the values
+        ETHERNET, CELLULAR, or both. For Sensors, it will contain
+        only SDS when its online. This field will be empty when
+        the device's connection is OFFLINE.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
     """
+
+    CONNECTION_SDS: str = 'SDS'
+    CONNECTION_ETHERNET: str = 'ETHERNET'
+    CONNECTION_CELLULAR: str = 'CELLULAR'
+    CONNECTION_OFFLINE: str = 'OFFLINE'
 
     def __init__(self,
                  connection: str,
@@ -1311,14 +1320,16 @@ class ConnectionStatus(_EventData):
         Parameters
         ----------
         connection : str
-            Whether the Cloud Connector is on
-            "ETHERNET", "CELLULAR", or "OFFLINE".
+            Whether the current connection is
+            SDS, ETHERNET, CELLULAR, or OFFLINE.
         available : list[str]
-            Lists available connections.
-            Can contain "ETHERNET", "CELLULAR", or both.
-        timestamp : datetime, str, optional
-            Timestamp in either datetime or string iso8601 format
-            (i.e. yyyy-MM-ddTHH:mm:ssZ).
+            A list of the string types of networks available to the device.
+            For Cloud Connectors, this can contain the values
+            ETHERNET, CELLULAR, or both. For Sensors, it will contain
+            only SDS when its online. This field will be empty when
+            the device's connection is OFFLINE.
+        timestamp : datetime
+            Timestamp of when the event was received by a Cloud Connector.
 
         """
 
