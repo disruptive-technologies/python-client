@@ -235,6 +235,8 @@ class Temperature(_EventData):
         Temperature value in Fahrenheit.
     samples : list[TemperatureSample]
         Temperature values sampled over a single heartbeat.
+    is_backfilled : bool
+        Indicates if the temperature event is backfilled.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
@@ -243,6 +245,7 @@ class Temperature(_EventData):
     def __init__(self,
                  celsius: float,
                  samples: Optional[list] = None,
+                 is_backfilled: Optional[bool] = None,
                  timestamp: Optional[datetime | str] = None,
                  ) -> None:
         """
@@ -255,6 +258,8 @@ class Temperature(_EventData):
             Temperature value in Celsius.
         samples : list[TemperatureSample]
             Temperature values sampled over a single heartbeat.
+        is_backfilled : bool
+            Indicates if the temperature event is backfilled.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
             (i.e. yyyy-MM-ddTHH:mm:ssZ).
@@ -265,6 +270,7 @@ class Temperature(_EventData):
         self.celsius: float = celsius
         self.samples: Optional[list] = samples
         self.fahrenheit: float = dttrans._celsius_to_fahrenheit(celsius)
+        self.is_backfilled: Optional[bool] = is_backfilled
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
@@ -274,6 +280,7 @@ class Temperature(_EventData):
         string = '{}.{}('\
             'celsius={}, '\
             'samples={}, '\
+            'is_backfilled={}, '\
             'timestamp={}'\
             ')'
         return string.format(
@@ -281,6 +288,7 @@ class Temperature(_EventData):
             self.__class__.__name__,
             self.celsius,
             self.samples,
+            self.is_backfilled,
             repr(dttrans.to_iso8601(self.timestamp)),
         )
 
@@ -313,6 +321,7 @@ class Temperature(_EventData):
         obj = cls(
             celsius=data['value'],
             samples=sample_objs,
+            is_backfilled=data['isBackfilled'],
             timestamp=data['updateTime'],
         )
 
@@ -327,6 +336,8 @@ class Temperature(_EventData):
             data['value'] = self.celsius
         if self.samples is not None:
             data['samples'] = [s._raw for s in self.samples]
+        if self.is_backfilled is not None:
+            data['isBackfilled'] = self.is_backfilled
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
         return data
