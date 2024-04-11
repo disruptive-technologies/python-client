@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.6.7
+### Added
+- [#135](https://github.com/disruptive-technologies/python-client/pull/135) Added new value `is_backfilled` to `Temperature` event.
+
 # v1.6.6
 ### Fixed
 - [#134](https://github.com/disruptive-technologies/python-client/pull/134) Added connection constants to `ConnectionStatus` event.
