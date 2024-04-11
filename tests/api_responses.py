@@ -145,6 +145,7 @@ temperature_sensor = {
         },
         "temperature": {
             "value": -27,
+            "isBackfilled": False,
             "samples": [
                 {
                     "value": -27,
@@ -661,6 +662,7 @@ temperature_event = {
     "data": {
         "temperature": {
             "value": 24.9,
+            "isBackfilled": False,
             "samples": [
                 {
                     "value": 24.9,
@@ -908,7 +910,8 @@ stream_temperature_event = b'{"result":{"event":{"eventId":'\
     b'"d1vtobtd83ut9sd2bj9g","targetName":"projects/914u9p094l47cdv1o3pg'\
     b'/devices/emui17m69nlq0bgk44smcng","eventType":"temperature","data"'\
     b':{"temperature":{"value":5,"updateTime":"2021-04-21T08:'\
-    b'15:43.512330Z","samples":[{"value":5,"sampleTime":"2021-04-21T08:'\
+    b'15:43.512330Z","isBackfilled":"False",'\
+    b'"samples":[{"value":5,"sampleTime":"2021-04-21T08:'\
     b'15:43.512330Z"}]}},"timestamp":"2021-04-21T08:15:43.512330Z"}}}'
 
 stream_networkstatus_event = b'{"result":{"event":{"eventId":"c1vtubtd83it'\

@@ -17,6 +17,7 @@ class TestEvents():
     def test_temperature(self):
         x = disruptive.events.Temperature(
             celsius=23,
+            is_backfilled=False,
             timestamp=datetime.now(),
         )
 
