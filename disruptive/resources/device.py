@@ -4,7 +4,7 @@ from typing import Optional, Any
 
 import disruptive.logging as dtlog
 import disruptive.requests as dtrequests
-import disruptive.events.events as dtevents
+from disruptive.events import events
 import disruptive.outputs as dtoutputs
 from disruptive.errors import TransferDeviceError, LabelUpdateError
 
@@ -80,15 +80,14 @@ class Device(dtoutputs.OutputBase):
         self.labels: dict = device['labels']
 
         # Set display_name if `name` label key exists.
-        self.display_name = None
+        self.display_name: str | None = None
         if 'name' in self.labels:
             self.display_name = self.labels['name']
 
         # Determine if the device is an emulator by checking id prefix.
+        self.is_emulated: bool = False
         if self.device_id.startswith('emu') and len(self.device_id) == 23:
             self.is_emulated = True
-        else:
-            self.is_emulated = False
 
         # If it exists, set the product number.
         # This is not present for emulated devices.
@@ -97,7 +96,7 @@ class Device(dtoutputs.OutputBase):
             self.product_number = device['productNumber']
 
         # If it exists, set the reported object.
-        self.reported = None
+        self.reported: Reported | None = None
         if 'reported' in device:
             self.reported = Reported(device['reported'])
 
@@ -538,10 +537,35 @@ class Reported(dtoutputs.OutputBase):
         Object representing reported co2 event data.
     pressure : Pressure, None
         Object representing reported pressure event data.
+    motion : Motion, None
+        Object representing reported motion event data.
     desk_occupancy : DeskOccupancy, None
         Object representing reported deskOccupancy event data.
+    contact : Contact, None
+        Object representing reported contact event data.
+    probe_wire_status : ProbeWireStatus, None
+        Object representing reported probeWireStatus event data.
 
     """
+
+    touch: events.Touch | None = None
+    temperature: events.Temperature | None = None
+    object_present: events.ObjectPresent | None = None
+    humidity: events.Humidity | None = None
+    object_present_count: events.ObjectPresentCount | None = None
+    touch_count: events.TouchCount | None = None
+    water_present: events.WaterPresent | None = None
+    network_status: events.NetworkStatus | None = None
+    battery_status: events.BatteryStatus | None = None
+    connection_status: events.ConnectionStatus | None = None
+    ethernet_status: events.EthernetStatus | None = None
+    cellular_status: events.CellularStatus | None = None
+    co2: events.Co2 | None = None
+    pressure: events.Pressure | None = None
+    motion: events.Motion | None = None
+    desk_occupancy: events.DeskOccupancy | None = None
+    contact: events.Contact | None = None
+    probe_wire_status: events.ProbeWireStatus | None = None
 
     def __init__(self, reported: dict) -> None:
         """
@@ -556,15 +580,6 @@ class Reported(dtoutputs.OutputBase):
 
         # Inherit parent Event class init.
         dtoutputs.OutputBase.__init__(self, reported)
-
-        # Set default attribute values.
-        for key in dtevents._EVENTS_MAP._api_names:
-            # Skip labelsChanged as it does not exist in reported.
-            if key == 'labelsChanged':
-                continue
-
-            # Set attribute to None.
-            setattr(self, dtevents._EVENTS_MAP._api_names[key].attr_name, None)
 
         # Unpack the reported dictionary data.
         self.__unpack()
@@ -587,14 +602,14 @@ class Reported(dtoutputs.OutputBase):
             repacked = {key: self._raw[key]}
 
             # Check if key exists in map of known events.
-            if key in dtevents._EVENTS_MAP._api_names:
+            if key in events._EVENTS_MAP._api_names:
                 # Initialize appropriate data instance.
-                data = dtevents._EventData.from_event_type(repacked, key)
+                data = events._EventData.from_event_type(repacked, key)
 
                 # Set attribute according to event type.
                 setattr(
                     self,
-                    dtevents._EVENTS_MAP._api_names[key].attr_name,
+                    events._EVENTS_MAP._api_names[key].attr_name,
                     data,
                 )
             else:
