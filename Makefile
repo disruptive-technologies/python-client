@@ -9,10 +9,10 @@ SHELL := /bin/bash
 venv: $(VENV)/bin/activate
 
 $(VENV)/bin/activate: setup.py
-	$(PIP) install --upgrade pip virtualenv
-	@test -d $(VENV) || $(PYTHON) -m virtualenv --clear $(VENV)
+	@test -d $(VENV) || $(PYTHON) -m venv $(VENV)
 	${VENV}/bin/python -m pip install --upgrade pip
 	${VENV}/bin/python -m pip install -e .[dev,extra]
+	@touch $(VENV)/bin/activate
 
 build: venv
 	${VENV}/bin/python setup.py sdist bdist_wheel
