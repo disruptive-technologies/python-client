@@ -46,21 +46,23 @@ class TestEventHistory():
         for e in h:
             assert isinstance(e, Event)
 
-    def test_to_dataframe(self, request_mock):
+    def test_to_pandas_polars(self, request_mock):
         cols = ['device_id', 'event_id', 'event_type']
 
         @dataclass
         class TestCase:
             name: str
             pandas_installed: bool
+            polars_installed: bool
             give_events: disruptive.EventHistory
             want_cols: List[str]
             want_len: int
 
         tests = [
             TestCase(
-                name='pandas installed',
-                pandas_installed=True,
+                name='none installed',
+                pandas_installed=False,
+                polars_installed=False,
                 give_events=disruptive.EventHistory([
                     disruptive.events.Event(dtapiresponses.touch_event),
                 ]),
@@ -68,8 +70,19 @@ class TestEventHistory():
                 want_len=1,
             ),
             TestCase(
-                name='pandas not installed',
+                name='pandas installed',
+                pandas_installed=True,
+                polars_installed=False,
+                give_events=disruptive.EventHistory([
+                    disruptive.events.Event(dtapiresponses.touch_event),
+                ]),
+                want_cols=cols + ['update_time'],
+                want_len=1,
+            ),
+            TestCase(
+                name='none installed',
                 pandas_installed=False,
+                polars_installed=False,
                 give_events=disruptive.EventHistory([
                     disruptive.events.Event(dtapiresponses.touch_event),
                 ]),
@@ -79,6 +92,7 @@ class TestEventHistory():
             TestCase(
                 name='no events in response',
                 pandas_installed=True,
+                polars_installed=True,
                 give_events=disruptive.EventHistory([
                 ]),
                 want_cols=[],
@@ -87,6 +101,7 @@ class TestEventHistory():
             TestCase(
                 name='touch events',
                 pandas_installed=True,
+                polars_installed=True,
                 give_events=disruptive.EventHistory([
                     disruptive.events.Event(dtapiresponses.touch_event),
                     disruptive.events.Event(dtapiresponses.touch_event),
@@ -98,6 +113,7 @@ class TestEventHistory():
             TestCase(
                 name='touch + temperature events',
                 pandas_installed=True,
+                polars_installed=True,
                 give_events=disruptive.EventHistory([
                     disruptive.events.Event(dtapiresponses.touch_event),
                     disruptive.events.Event(dtapiresponses.touch_event),
@@ -112,13 +128,25 @@ class TestEventHistory():
 
         for test in tests:
             if test.pandas_installed:
-                df = test.give_events.to_dataframe()
-                assert len(df) == test.want_len
-                assert len(df.columns) == len(test.want_cols)
+                df_pandas = test.give_events.to_pandas()
+                assert len(df_pandas) == test.want_len
+                assert len(df_pandas.columns) == len(test.want_cols)
                 for col in test.want_cols:
-                    assert col in df.columns
+                    assert col in df_pandas.columns
             else:
                 patch = 'builtins.__import__'
                 with mock.patch(patch, side_effect=ModuleNotFoundError):
                     with pytest.raises(ModuleNotFoundError):
-                        test.give_events.to_dataframe()
+                        test.give_events.to_pandas()
+
+            if test.polars_installed:
+                df_polars = test.give_events.to_polars()
+                assert df_polars.height == test.want_len
+                assert len(df_polars.columns) == len(test.want_cols)
+                for col in test.want_cols:
+                    assert col in df_polars.columns
+            else:
+                patch = 'builtins.__import__'
+                with mock.patch(patch, side_effect=ModuleNotFoundError):
+                    with pytest.raises(ModuleNotFoundError):
+                        test.give_events.to_polars()

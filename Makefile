@@ -8,7 +8,7 @@ SHELL := /bin/bash
 
 venv: $(VENV)/bin/activate
 
-$(VENV)/bin/activate: setup.py
+$(VENV)/bin/activate: setup.py setup.cfg
 	@test -d $(VENV) || $(PYTHON) -m venv $(VENV)
 	${VENV}/bin/python -m pip install --upgrade pip
 	${VENV}/bin/python -m pip install -e .[dev,extra]

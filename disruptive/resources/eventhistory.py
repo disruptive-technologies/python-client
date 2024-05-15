@@ -100,40 +100,20 @@ class EventHistory(list):
         # Return list of Event objects of paginated GET response.
         return EventHistory(Event.from_mixed_list(res))
 
-    def to_dataframe(self) -> Any:
+    def _to_dataframe_format(self) -> list[dict]:
         """
-        Experimental function to convert a list of events to DataFrame.
-        Requires the installation of additional packages.
-        >> pip install disruptive[extra]
+        Experimental function to convert a list of events to a list
+        of dictionaries of a DataFrame friendly format.
 
-        The `pandas` package is not, and will not, be a dependency of
-        the core `disruptive` package. However, supporting DataFrames is a
-        significant enough convenience that we're experimenting with it here.
-        May be removed in the future if we decide that this is not a good idea.
-
-        The columns `device_id`, `event_id`, and `event_type` are static, then
-        one additional column is concatenated for every eventData field.
+        The fields `device_id`, `event_id`, and `event_type` are static, then
+        one additional fields are added for every eventData field.
 
         Returns
         -------
-        df : pandas.DataFrame
-            DataFrame of all events in response.
-
-        Raises
-        ------
-        ModueNotFoundError
-            If we pandas package is not installed.
+        rows : list[dict]
+            List of event dictionaries.
 
         """
-
-        try:
-            import pandas  # type: ignore
-        except ModuleNotFoundError:
-            raise ModuleNotFoundError(
-                'Missing package `pandas`.\n\n'
-                'to_dataframe() requires additional third-party packages.\n'
-                '>> pip install disruptive[extra]'
-            )
 
         rows = []
         for event in self:
@@ -152,6 +132,36 @@ class EventHistory(list):
             else:
                 rows.append({**base, **event.data.raw})
 
+        return rows
+
+    def to_pandas(self) -> Any:
+        """
+        Experimental function to convert events into a pandas DataFrame.
+        See `_to_dataframe_format()` for column information.
+
+        Requires the installation of additional packages.
+        >> pip install pandas
+        or
+        >> pip install disruptive[extra]
+
+        Raises
+        ------
+        ModueNotFoundError
+            If the pandas package is not installed.
+
+        """
+
+        try:
+            import pandas  # type: ignore
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                'Missing package `pandas`.\n\n'
+                'to_dataframe() requires additional third-party packages.\n'
+                '>> pip install disruptive[extra]'
+            )
+
+        rows = self._to_dataframe_format()
+
         df = pandas.json_normalize(
             rows, None, ['device_id', 'event_id', 'event_type'],
             errors='ignore',
@@ -160,5 +170,41 @@ class EventHistory(list):
         # Convert columns headers from camelCase to snake_case for consistency.
         map = {name: dttrans.camel_to_snake_case(name) for name in df.columns}
         df = df.rename(columns=map)
+
+        return df
+
+    def to_polars(self) -> Any:
+        """
+        Experimental function to convert events into a polars DataFrame.
+        See `_to_dataframe_format()` for column information.
+
+        Requires the installation of additional packages.
+        >> pip install polars
+        or
+        >> pip install disruptive[extra]
+
+        Raises
+        ------
+        ModueNotFoundError
+            If the polars package is not installed.
+
+        """
+
+        try:
+            import polars  # type: ignore
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                'Missing package `pandas`.\n\n'
+                'to_dataframe() requires additional third-party packages.\n'
+                '>> pip install disruptive[extra]'
+            )
+
+        rows = self._to_dataframe_format()
+
+        df = polars.DataFrame(rows)
+
+        # Convert columns headers from camelCase to snake_case for consistency.
+        map = {name: dttrans.camel_to_snake_case(name) for name in df.columns}
+        df = df.rename(mapping=map)
 
         return df
