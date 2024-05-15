@@ -191,7 +191,7 @@ class EventHistory(list):
         """
 
         try:
-            import polars  # type: ignore
+            import polars as pl  # type: ignore
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 'Missing package `pandas`.\n\n'
@@ -201,10 +201,17 @@ class EventHistory(list):
 
         rows = self._to_dataframe_format()
 
-        df = polars.DataFrame(rows)
+        df = pl.DataFrame(rows)
 
         # Convert columns headers from camelCase to snake_case for consistency.
         map = {name: dttrans.camel_to_snake_case(name) for name in df.columns}
         df = df.rename(mapping=map)
+
+        # Convert timestamp columns to datetime type.
+        if 'update_time' in df.columns \
+                and df['update_time'].dtype == pl.String:
+            df = df.with_columns([
+                pl.col('update_time').str.to_datetime(),
+            ])
 
         return df
