@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Any
+from typing import Any
 
 import pytest
 
@@ -15,11 +15,11 @@ class TestClaim():
         class TestCase:
             name: str
             give_project_id: str
-            give_device_ids: List[str]
-            give_kit_ids: List[str]
+            give_device_ids: list[str]
+            give_kit_ids: list[str]
             give_dry_run: bool
             give_res: dict
-            want_device_ids: List[str]
+            want_device_ids: list[str]
             want_error: Any
 
         tests = [
