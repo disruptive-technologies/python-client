@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Optional, List, Tuple
+from typing import Any, Optional
 
 import disruptive.outputs as dtoutputs
 import disruptive.requests as dtrequests
@@ -104,11 +104,11 @@ class Claim(dtoutputs.OutputBase):
 
     @staticmethod
     def claim(target_project_id: str,
-              kit_ids: Optional[List[str]] = None,
-              device_ids: Optional[List[str]] = None,
+              kit_ids: Optional[list[str]] = None,
+              device_ids: Optional[list[str]] = None,
               dry_run: bool = True,
               **kwargs: Any,
-              ) -> Tuple[List[Claim.ClaimDevice], List[Exception]]:
+              ) -> tuple[list[Claim.ClaimDevice], list[Exception]]:
         """
         Claim multiple kits and/or devices to your project.
 
@@ -199,8 +199,8 @@ class Claim(dtoutputs.OutputBase):
         )
 
     @staticmethod
-    def _parse_claim_errors(res_errors: dict) -> List[Exception]:
-        errors: List[Exception] = []
+    def _parse_claim_errors(res_errors: dict) -> list[Exception]:
+        errors: list[Exception] = []
         for error in res_errors['devices'] + res_errors['kits']:
             if error['code'] == 'ALREADY_CLAIMED':
                 errors.append(dterrors.ClaimErrorDeviceAlreadyClaimed(error))
@@ -294,5 +294,5 @@ class Claim(dtoutputs.OutputBase):
             # Unpack attributes from raw response dictionary.
             self.kit_id: str = kit['kitId']
             self.display_name: str = kit['displayName']
-            self.devices: List[Claim.ClaimDevice] \
+            self.devices: list[Claim.ClaimDevice] \
                 = [Claim.ClaimDevice(d) for d in kit['devices']]
