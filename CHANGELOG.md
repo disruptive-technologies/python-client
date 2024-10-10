@@ -2,6 +2,13 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.7.0
+### Added
+- [#139](https://github.com/disruptive-technologies/python-client/pull/139) Added support for Python 3.13.
+
+### Changed
+- [#138](https://github.com/disruptive-technologies/python-client/pull/138) Deprecated Python 3.8 due to End-Of-Life.
+
 # v1.6.9
 ### Added
 - [ec5f3dd](https://github.com/disruptive-technologies/python-client/commit/ec5f3dd2e707ff04465b73e132280df9886d7229) `EventHistory` now supports both `to_pandas()` and `to_polars()` when extra dependencies are installed.
