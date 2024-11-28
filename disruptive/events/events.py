@@ -518,6 +518,9 @@ class Humidity(_EventData):
         Temperature value in Celsius.
     relative_humidity : float
         Relative humidity in percent.
+    samples : list[HumiditySample]
+        Relative humidity and temperature values sampled over
+        a single heartbeat.
     timestamp : datetime
         Timestamp of when the event was received by a Cloud Connector.
 
@@ -526,6 +529,7 @@ class Humidity(_EventData):
     def __init__(self,
                  celsius: float,
                  relative_humidity: float,
+                 samples: Optional[list] = None,
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
@@ -537,6 +541,9 @@ class Humidity(_EventData):
             Temperature value in Celsius.
         relative_humidity : float
             Relative humidity in percent.
+        samples : list[HumiditySample]
+            Relative humidity and temperature values sampled over
+            a single heartbeat.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
             (i.e. yyyy-MM-ddTHH:mm:ssZ).
@@ -547,6 +554,7 @@ class Humidity(_EventData):
         self.celsius: float = celsius
         self.fahrenheit: float = dttrans._celsius_to_fahrenheit(celsius)
         self.relative_humidity: float = relative_humidity
+        self.samples: Optional[list] = samples
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
@@ -556,6 +564,7 @@ class Humidity(_EventData):
         string = '{}.{}('\
             'celsius={}, '\
             'relative_humidity={}, '\
+            'samples={}, '\
             'timestamp={}'\
             ')'
         return string.format(
@@ -563,6 +572,7 @@ class Humidity(_EventData):
             self.__class__.__name__,
             self.celsius,
             self.relative_humidity,
+            self.samples,
             repr(dttrans.to_iso8601(self.timestamp)),
         )
 
@@ -583,10 +593,20 @@ class Humidity(_EventData):
 
         """
 
+        # Convert samples dictionaries to HumiditySample objects.
+        sample_objs = []
+        for sample in data['samples']:
+            sample_objs.append(HumiditySample(
+                celsius=sample['temperature'],
+                relative_humidity=sample['relativeHumidity'],
+                timestamp=sample['sampleTime'],
+            ))
+
         # Construct the object with unpacked parameters.
         obj = cls(
             celsius=data['temperature'],
             relative_humidity=data['relativeHumidity'],
+            samples=sample_objs,
             timestamp=data['updateTime'],
         )
 
@@ -603,6 +623,92 @@ class Humidity(_EventData):
             data['relativeHumidity'] = self.relative_humidity
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
+        return data
+
+
+class HumiditySample(dtoutputs.OutputBase):
+    """
+    Represents a single temperature event sample from a heartbeat period.
+
+    Attributes
+    ----------
+    celsius : float
+        Temperature value in Celsius.
+    fahrenheit : float
+        Temperature value in Fahrenheit.
+    relative_humidity : float
+        Relative humidity in percent.
+    timestamp : datetime
+        Interpolated inter-heartbeat timestamp.
+
+    """
+
+    def __init__(self,
+                 celsius: float,
+                 relative_humidity: float,
+                 timestamp: datetime | str,
+                 ) -> None:
+        """
+        Constructs the TemperatureSample object. The `fahrenheit` attribute is
+        calculated from the provided `celsius` parameter.
+
+        Parameters
+        ----------
+        celsius : float
+            Temperature value in Celsius.
+        relative_humidity : float
+            Relative humidity in percent.
+        timestamp : datetime, str, optional
+            Timestamp in either datetime or string iso8601 format
+            (i.e. yyyy-MM-ddTHH:mm:ssZ).
+
+        """
+
+        # Set parameter attributes.
+        self.celsius: float = celsius
+        self.fahrenheit: float = dttrans._celsius_to_fahrenheit(celsius)
+        self.relative_humidity: float = relative_humidity
+        self.timestamp = dttrans.to_datetime(timestamp)
+
+        # Inherit parent class.
+        dtoutputs.OutputBase.__init__(self, self.__repack())
+
+    def __repr__(self) -> str:
+        string = '{}.{}('\
+            'celsius={}, '\
+            'relative_humidity={}, '\
+            'timestamp={}'\
+            ')'
+        return string.format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.celsius,
+            self.relative_humidity,
+            repr(dttrans.to_iso8601(self.timestamp)),
+        )
+
+    @classmethod
+    def _from_raw(cls, data: dict) -> HumiditySample:
+        # Construct the object with unpacked parameters.
+        obj = cls(
+            celsius=data['temperature'],
+            relative_humidity=data['relativeHumidity'],
+            timestamp=data['sampleTime'],
+        )
+
+        # Inherit parent class.
+        dtoutputs.OutputBase.__init__(obj, data)
+
+        return obj
+
+    def __repack(self) -> dict:
+        data: dict = dict()
+        if self.celsius is not None:
+            data['celsius'] = self.celsius
+        if self.relative_humidity is not None:
+            data['relativeHumidity'] = self.relative_humidity
+        if self.timestamp is not None:
+            data['sampleTime'] = dttrans.to_iso8601(self.timestamp)
         return data
 
 

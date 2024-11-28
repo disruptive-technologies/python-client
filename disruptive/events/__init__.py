@@ -4,6 +4,7 @@ from disruptive.events.events import Temperature as Temperature  # noqa
 from disruptive.events.events import TemperatureSample as TemperatureSample  # noqa
 from disruptive.events.events import ObjectPresent as ObjectPresent  # noqa
 from disruptive.events.events import Humidity as Humidity  # noqa
+from disruptive.events.events import HumiditySample as HumiditySample  # noqa
 from disruptive.events.events import ObjectPresentCount as ObjectPresentCount  # noqa
 from disruptive.events.events import TouchCount as TouchCount # noqa
 from disruptive.events.events import WaterPresent as WaterPresent # noqa
