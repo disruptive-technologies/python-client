@@ -34,14 +34,38 @@ class TestEvents():
         assert x._raw == y._raw
 
     def test_humidity(self):
-        x = disruptive.events.Humidity(
-            celsius=23,
-            relative_humidity=99.9,
-            timestamp=datetime.now(),
-        )
+        now = datetime.now()
 
-        y = eval(repr(x))
-        assert x._raw == y._raw
+        testcases = [
+            disruptive.events.Humidity(
+                celsius=23,
+                relative_humidity=50,
+                timestamp=now,
+            ),
+            disruptive.events.Humidity(
+                celsius=23,
+                relative_humidity=50,
+                samples=[
+                    disruptive.events.HumiditySample(
+                        celsius=23,
+                        relative_humidity=50,
+                        timestamp=now,
+                    ),
+                ],
+                timestamp=now,
+            ),
+        ]
+
+        for t in testcases:
+            x = disruptive.events.Humidity(
+                celsius=t.celsius,
+                relative_humidity=t.relative_humidity,
+                timestamp=t.timestamp,
+            )
+            y = eval(repr(x))
+            print(x.raw)
+            print(y.raw)
+            assert x._raw == y._raw
 
     def test_object_present_count(self):
         x = disruptive.events.ObjectPresentCount(

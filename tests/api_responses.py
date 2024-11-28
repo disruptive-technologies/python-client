@@ -73,6 +73,13 @@ humidity_sensor = {
         "humidity": {
             "temperature": 0,
             "relativeHumidity": 0,
+            "samples": [
+                {
+                    "temperature": 0,
+                    "relativeHumidity": 0,
+                    "sampleTime": "2021-03-13T16:05:30.185800Z"
+                }
+            ],
             "updateTime": "2021-03-13T16:05:30.185800Z"
         },
         "touch": {
@@ -696,6 +703,13 @@ humidity_event = {
         "humidity": {
             "temperature": 22.45,
             "relativeHumidity": 17,
+            "samples": [
+                {
+                    "temperature": 22.45,
+                    "relativeHumidity": 17,
+                    "sampleTime": "2019-05-16T06:13:46.369000Z"
+                }
+            ],
             "updateTime": "2019-05-16T06:13:46.369000Z"
         }
     },
