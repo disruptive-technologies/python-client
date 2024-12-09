@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import Optional, Union
 from datetime import datetime
+from typing import Optional, Union
 
 import disruptive
 import disruptive.logging as dtlog
@@ -530,6 +530,7 @@ class Humidity(_EventData):
                  celsius: float,
                  relative_humidity: float,
                  samples: Optional[list] = None,
+                 is_backfilled: Optional[bool] = None,
                  timestamp: Optional[datetime | str] = None,
                  ):
         """
@@ -544,6 +545,8 @@ class Humidity(_EventData):
         samples : list[HumiditySample]
             Relative humidity and temperature values sampled over
             a single heartbeat.
+        is_backfilled : bool
+            Indicates if the humidity event is backfilled.
         timestamp : datetime, str, optional
             Timestamp in either datetime or string iso8601 format
             (i.e. yyyy-MM-ddTHH:mm:ssZ).
@@ -555,6 +558,7 @@ class Humidity(_EventData):
         self.fahrenheit: float = dttrans._celsius_to_fahrenheit(celsius)
         self.relative_humidity: float = relative_humidity
         self.samples: Optional[list] = samples
+        self.is_backfilled: Optional[bool] = is_backfilled
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
@@ -565,6 +569,7 @@ class Humidity(_EventData):
             'celsius={}, '\
             'relative_humidity={}, '\
             'samples={}, '\
+            'is_backfilled={}, '\
             'timestamp={}'\
             ')'
         return string.format(
@@ -573,6 +578,7 @@ class Humidity(_EventData):
             self.celsius,
             self.relative_humidity,
             self.samples,
+            self.is_backfilled,
             repr(dttrans.to_iso8601(self.timestamp)),
         )
 
@@ -607,6 +613,7 @@ class Humidity(_EventData):
             celsius=data['temperature'],
             relative_humidity=data['relativeHumidity'],
             samples=sample_objs,
+            is_backfilled=data['isBackfilled'],
             timestamp=data['updateTime'],
         )
 
@@ -621,6 +628,8 @@ class Humidity(_EventData):
             data['temperature'] = self.celsius
         if self.relative_humidity is not None:
             data['relativeHumidity'] = self.relative_humidity
+        if self.is_backfilled is not None:
+            data['isBackfilled'] = self.is_backfilled
         if self.timestamp is not None:
             data['updateTime'] = self.timestamp
         return data

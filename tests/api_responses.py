@@ -80,6 +80,7 @@ humidity_sensor = {
                     "sampleTime": "2021-03-13T16:05:30.185800Z"
                 }
             ],
+            "isBackfilled": False,
             "updateTime": "2021-03-13T16:05:30.185800Z"
         },
         "touch": {
@@ -710,6 +711,7 @@ humidity_event = {
                     "sampleTime": "2019-05-16T06:13:46.369000Z"
                 }
             ],
+            "isBackfilled": False,
             "updateTime": "2019-05-16T06:13:46.369000Z"
         }
     },
