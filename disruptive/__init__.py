@@ -1,5 +1,5 @@
 # Metadata
-__version__ = '1.7.0'
+__version__ = '1.7.1'
 
 # If set, logs of chosen level and higher are printed to console.
 # Default value None results in no logs at any level.
@@ -21,22 +21,24 @@ from disruptive.authentication import Auth as Auth  # noqa
 # Initialize package with environment variables authentication scheme.
 default_auth = Auth.init()
 
+# Additional helper modules.
+from disruptive import errors as errors  # noqa
+from disruptive import events as events  # noqa
+from disruptive import logging as logging  # noqa
+from disruptive import outputs as outputs  # noqa
+from disruptive.outputs import Member as Member  # noqa
+from disruptive.resources.claim import Claim as Claim  # noqa
+from disruptive.resources.data_connector import DataConnector as DataConnector  # noqa
+
 # Resources.
 from disruptive.resources.device import Device as Device  # noqa
-from disruptive.resources.data_connector import DataConnector as DataConnector  # noqa
+from disruptive.resources.emulator import Emulator as Emulator  # noqa
+from disruptive.resources.eventhistory import EventHistory as EventHistory  # noqa
 from disruptive.resources.organization import Organization as Organization  # noqa
 from disruptive.resources.project import Project as Project  # noqa
-from disruptive.resources.stream import Stream as Stream  # noqa
-from disruptive.resources.eventhistory import EventHistory as EventHistory  # noqa
-from disruptive.resources.service_account import ServiceAccount as ServiceAccount  # noqa
-from disruptive.resources.service_account import Key as Key  # noqa
 from disruptive.resources.role import Role as Role  # noqa
-from disruptive.resources.emulator import Emulator as Emulator  # noqa
-from disruptive.resources.claim import Claim as Claim  # noqa
-from disruptive.outputs import Member as Member  # noqa
-
-# Additional helper modules.
-from disruptive import events as events  # noqa
-from disruptive import outputs as outputs  # noqa
-from disruptive import errors as errors  # noqa
-from disruptive import logging as logging  # noqa
+from disruptive.resources.service_account import Key as Key  # noqa
+from disruptive.resources.service_account import (  # noqa
+    ServiceAccount as ServiceAccount,
+)
+from disruptive.resources.stream import Stream as Stream  # noqa

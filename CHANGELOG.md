@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.7.1
+### Added
+- [#140](https://github.com/disruptive-technologies/python-client/pull/140) Added support for humidity samples.
+
 # v1.7.0
 ### Added
 - [#139](https://github.com/disruptive-technologies/python-client/pull/139) Added support for Python 3.13.
