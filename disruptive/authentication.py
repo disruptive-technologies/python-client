@@ -5,10 +5,51 @@ import json
 import time
 import urllib.parse
 from typing import Any
-
-import jwt
+import base64
+import hmac
+import hashlib
 
 from disruptive import requests as dtrequests, errors as dterrors
+
+
+def base64url_encode(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).rstrip(b"=").decode("utf-8")
+
+
+def base64url_decode(data: str) -> bytes:
+    padding = '=' * (4 - (len(data) % 4))
+    return base64.urlsafe_b64decode(data + padding)
+
+
+def create_jwt(payload: dict,
+               secret: str,
+               algorithm: str,
+               headers: dict,
+               ) -> str:
+    headers["typ"] = "JWT"
+
+    header_encoded = base64url_encode(data=json.dumps(
+        obj=headers,
+        separators=(',', ':'),
+    ).encode("utf-8"))
+    payload_encoded = base64url_encode(json.dumps(
+        obj=payload,
+        separators=(',', ':'),
+    ).encode("utf-8"))
+
+    message = f"{header_encoded}.{payload_encoded}"
+
+    if algorithm == "HS256":
+        signature = hmac.new(
+            key=secret.encode("utf-8"),
+            msg=message.encode("utf-8"),
+            digestmod=hashlib.sha256,
+        ).digest()
+    else:
+        raise ValueError(f"Unsupported algorithm: {algorithm}")
+
+    signature_encoded = base64url_encode(signature)
+    return f"{message}.{signature_encoded}"
 
 
 class _AuthRoutineBase(object):
@@ -227,9 +268,9 @@ class ServiceAccountAuth(_AuthRoutineBase):
         }
 
         # Sign and encode JWT with the secret.
-        encoded_jwt: str = jwt.encode(
+        encoded_jwt: str = create_jwt(
             payload=jwt_payload,
-            key=self.secret,
+            secret=self.secret,
             algorithm=self.algorithm,
             headers=jwt_headers,
         )
