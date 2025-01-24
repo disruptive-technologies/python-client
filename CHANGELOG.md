@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.7.2
+### Added
+- [#141](https://github.com/disruptive-technologies/python-client/pull/141) Drop PyJWT dependency.
+
 # v1.7.1
 ### Added
 - [#140](https://github.com/disruptive-technologies/python-client/pull/140) Added support for humidity samples.
