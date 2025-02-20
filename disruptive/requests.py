@@ -12,14 +12,13 @@ import disruptive.logging as dtlog
 import disruptive.errors as dterrors
 
 
-USER_AGENT = 'DisruptivePythonAPI/{} Python/{}'.format(
+USER_AGENT = "DisruptivePythonAPI/{} Python/{}".format(
     dt.__version__,
-    f'{sys.version_info.major}.{sys.version_info.minor}',
+    f"{sys.version_info.major}.{sys.version_info.minor}",
 )
 
 
-class DTRequest():
-
+class DTRequest:
     def __init__(self, method: str, url: str, **kwargs: Any):
         # Set attributes from parameters.
         self.method = method
@@ -44,63 +43,63 @@ class DTRequest():
         self.full_url = self.base_url + self.url
 
     def _unpack_kwargs(self, **kwargs: Any) -> None:
-        if 'params' in kwargs:
-            self.params = kwargs['params']
-        if 'headers' in kwargs:
-            self.headers = kwargs['headers']
-        if 'body' in kwargs:
-            self.body = kwargs['body']
-        if 'data' in kwargs:
-            self.data = kwargs['data']
+        if "params" in kwargs:
+            self.params = kwargs["params"]
+        if "headers" in kwargs:
+            self.headers = kwargs["headers"]
+        if "body" in kwargs:
+            self.body = kwargs["body"]
+        if "data" in kwargs:
+            self.data = kwargs["data"]
 
         # Check if request_timeout is overriden.
-        if 'request_timeout' in kwargs:
-            self.request_timeout = kwargs['request_timeout']
+        if "request_timeout" in kwargs:
+            self.request_timeout = kwargs["request_timeout"]
 
         # Check if request_attempts is overriden.
-        if 'request_attempts' in kwargs:
-            self.request_attempts = kwargs['request_attempts']
+        if "request_attempts" in kwargs:
+            self.request_attempts = kwargs["request_attempts"]
 
         # Check if base_url is overriden.
-        if 'base_url' in kwargs:
-            self.base_url = kwargs['base_url']
+        if "base_url" in kwargs:
+            self.base_url = kwargs["base_url"]
 
         # Add authorization header to request except when explicitly otherwise.
-        if 'skip_auth' not in kwargs or kwargs['skip_auth'] is False:
+        if "skip_auth" not in kwargs or kwargs["skip_auth"] is False:
             # If provided, override the package-wide auth with provided object.
-            if 'auth' in kwargs:
-                self.headers['Authorization'] = kwargs['auth'].get_token()
+            if "auth" in kwargs:
+                self.headers["Authorization"] = kwargs["auth"].get_token()
             # If not, use package-wide auth object.
             else:
-                self.headers['Authorization'] = dt.default_auth.get_token()
+                self.headers["Authorization"] = dt.default_auth.get_token()
 
     def _sanitize_arguments(self) -> None:
         # Check that request_timeout > 0.
         if self.request_timeout <= 0:
             raise dterrors.ConfigurationError(
-                'Configuration parameter request_timeout has value {}, but '
-                'must be float greater than 0.'.format(self.request_timeout)
+                "Configuration parameter request_timeout has value {}, but "
+                "must be float greater than 0.".format(self.request_timeout)
             )
 
         # Check that request_attempts > 0.
         if self.request_attempts <= 0:
             raise dterrors.ConfigurationError(
-                'Configuration parameter request_attempts has value {}, but '
-                'must be integer greater than 0.'.format(self.request_attempts)
+                "Configuration parameter request_attempts has value {}, but "
+                "must be integer greater than 0.".format(self.request_attempts)
             )
 
-    def _request_wrapper(self,
-                         method: str,
-                         url: str,
-                         params: dict,
-                         headers: dict,
-                         body: Optional[dict],
-                         data: Optional[str],
-                         timeout: int,
-                         ) -> tuple[DTResponse, Any]:
-
+    def _request_wrapper(
+        self,
+        method: str,
+        url: str,
+        params: dict,
+        headers: dict,
+        body: Optional[dict],
+        data: Optional[str],
+        timeout: int,
+    ) -> tuple[DTResponse, Any]:
         # Add custom user agent.
-        headers['User-Agent'] = USER_AGENT
+        headers["User-Agent"] = USER_AGENT
 
         # Define default response values.
         res = None
@@ -148,10 +147,9 @@ class DTRequest():
         """
 
         # Log the request.
-        dtlog.debug('Request [{}] to {}.'.format(
-            self.method,
-            self.base_url + self.url
-        ))
+        dtlog.debug(
+            "Request [{}] to {}.".format(self.method, self.base_url + self.url)
+        )
 
         res, req_error = self._request_wrapper(
             method=self.method,
@@ -164,9 +162,7 @@ class DTRequest():
         )
 
         # Log the response.
-        dtlog.debug('Response [{}].'.format(
-            res.status_code
-        ))
+        dtlog.debug("Response [{}].".format(res.status_code))
 
         # If _request_wrapper raised an exception, the request failed.
         if req_error is not None:
@@ -183,19 +179,21 @@ class DTRequest():
 
         # Check if retry is required.
         if should_retry and nth_attempt < self.request_attempts:
-            dtlog.warning('Reconnecting in {}s.'.format(sleeptime))
+            dtlog.warning("Reconnecting in {}s.".format(sleeptime))
 
             # Sleep if necessary.
             if sleeptime is not None:
                 time.sleep(sleeptime)
 
-            dtlog.info('Connection attempt {} of {}.'.format(
-                nth_attempt+1,
-                self.request_attempts,
-            ))
+            dtlog.info(
+                "Connection attempt {} of {}.".format(
+                    nth_attempt + 1,
+                    self.request_attempts,
+                )
+            )
 
             # Attempt the request again recursively, iterating counter.
-            res.data = self._send_request(nth_attempt+1)
+            res.data = self._send_request(nth_attempt + 1)
 
         else:
             # If set, raise the error chosen by dterrors.parse_error().
@@ -207,35 +205,36 @@ class DTRequest():
 
     @classmethod
     def get(cls, url: str, **kwargs: Any) -> dict:
-        req = cls('GET', url, **kwargs)
+        req = cls("GET", url, **kwargs)
         response: dict = req._send_request()
         return response
 
     @classmethod
     def post(cls, url: str, **kwargs: Any) -> dict:
-        req = cls('POST', url, **kwargs)
+        req = cls("POST", url, **kwargs)
         response: dict = req._send_request()
         return response
 
     @classmethod
     def patch(cls, url: str, **kwargs: Any) -> dict:
-        req = cls('PATCH', url, **kwargs)
+        req = cls("PATCH", url, **kwargs)
         response: dict = req._send_request()
         return response
 
     @classmethod
     def delete(cls, url: str, **kwargs: Any) -> dict:
-        req = cls('DELETE', url, **kwargs)
+        req = cls("DELETE", url, **kwargs)
         response: dict = req._send_request()
         return response
 
     @classmethod
-    def paginated_get(cls,
-                      url: str,
-                      pagination_key: str,
-                      params: dict[str, str] = {},
-                      **kwargs: Any,
-                      ) -> list:
+    def paginated_get(
+        cls,
+        url: str,
+        pagination_key: str,
+        params: dict[str, str] = {},
+        **kwargs: Any,
+    ) -> list:
         # Initialize output list.
         results = []
 
@@ -244,8 +243,8 @@ class DTRequest():
             response = cls.get(url, params=params, **kwargs)
             results += response[pagination_key]
 
-            if len(response['nextPageToken']) > 0:
-                params['pageToken'] = response['nextPageToken']
+            if len(response["nextPageToken"]) > 0:
+                params["pageToken"] = response["nextPageToken"]
             else:
                 break
 
@@ -274,35 +273,35 @@ class DTRequest():
         error = None
 
         # Unpack kwargs.
-        params = kwargs['params'] if 'params' in kwargs else {}
-        headers = kwargs['headers'] if 'headers' in kwargs else {}
-        if 'request_attempts' in kwargs:
-            request_attempts = kwargs['request_attempts']
+        params = kwargs["params"] if "params" in kwargs else {}
+        headers = kwargs["headers"] if "headers" in kwargs else {}
+        if "request_attempts" in kwargs:
+            request_attempts = kwargs["request_attempts"]
         else:
             request_attempts = dt.request_attempts
 
         # Add ping parameter to dictionary.
-        params['ping_interval'] = str(PING_INTERVAL) + 's'
+        params["ping_interval"] = str(PING_INTERVAL) + "s"
 
         # Add custom user agent.
-        headers['User-Agent'] = USER_AGENT
+        headers["User-Agent"] = USER_AGENT
 
         # Set up a simple catch-all retry policy.
         nth_attempt = 0
         while True:
             try:
                 # Set the authorization header each retry in case we expire.
-                if 'auth' in kwargs:
-                    headers['Authorization'] = kwargs['auth'].get_token()
+                if "auth" in kwargs:
+                    headers["Authorization"] = kwargs["auth"].get_token()
                 else:
-                    headers['Authorization'] = dt.default_auth.get_token()
+                    headers["Authorization"] = dt.default_auth.get_token()
 
                 # Set up a stream connection.
                 # Connection will timeout and reconnect if no single event
                 # is received in an interval of ping_interval + ping_jitter.
-                dtlog.info('Starting stream...')
+                dtlog.info("Starting stream...")
                 stream = requests.request(
-                    method='GET',
+                    method="GET",
                     url=url,
                     stream=True,
                     timeout=PING_INTERVAL + PING_JITTER,
@@ -313,29 +312,28 @@ class DTRequest():
                 )
 
                 if stream.encoding is None:
-                    stream.encoding = 'utf-8'
+                    stream.encoding = "utf-8"
 
                 # Iterate through the events as they come in (one per line).
                 for line in stream.iter_lines(decode_unicode=True):
                     # Decode the response payload and break on error.
                     payload = json.loads(line)
-                    if 'result' in payload:
+                    if "result" in payload:
                         # Reset retry counter.
                         nth_attempt = 0
 
                         # Check for ping event.
-                        event = payload['result']['event']
-                        if event['eventType'] == 'ping':
-                            dtlog.debug('Ping received.')
+                        event = payload["result"]["event"]
+                        if event["eventType"] == "ping":
+                            dtlog.debug("Ping received.")
                             continue
 
                         # Yield event to generator.
                         yield event
 
-                    elif 'error' in payload:
+                    elif "error" in payload:
                         error, _, _ = dterrors.parse_api_status_code(
-                            payload['error']['code'],
-                            payload, None, 0
+                            payload["error"]["code"], payload, None, 0
                         )
                         raise error
 
@@ -343,7 +341,7 @@ class DTRequest():
                         raise dterrors.UnknownError(payload)
 
                 # If the stream finished, but without an error, break the loop.
-                msg = 'Stream ended without an error.'
+                msg = "Stream ended without an error."
                 raise dterrors.ConnectionError(msg)
 
             except KeyboardInterrupt:
@@ -356,17 +354,19 @@ class DTRequest():
                 elif nth_attempt < request_attempts:
                     sleeptime = nth_attempt**2
 
-                    dtlog.warning('Reconnecting in {}s.'.format(sleeptime))
+                    dtlog.warning("Reconnecting in {}s.".format(sleeptime))
 
                     # Exponential backoff in sleep time.
                     time.sleep(sleeptime)
 
                     # Iterate attempt counter.
                     nth_attempt += 1
-                    dtlog.info('Connection attempt {} of {}.'.format(
-                        nth_attempt,
-                        request_attempts,
-                    ))
+                    dtlog.info(
+                        "Connection attempt {} of {}.".format(
+                            nth_attempt,
+                            request_attempts,
+                        )
+                    )
                 else:
                     # To avoid printing the entire chain of re-raised
                     # exceptions, limit the traceback.
@@ -380,17 +380,19 @@ class DTRequest():
 
                 # Print the error and try again up to max_request_attempts.
                 if nth_attempt < request_attempts and should_retry:
-                    dtlog.warning('Reconnecting in {}s.'.format(sleeptime))
+                    dtlog.warning("Reconnecting in {}s.".format(sleeptime))
 
                     # Exponential backoff in sleep time.
                     time.sleep(sleeptime)
 
                     # Iterate attempt counter.
                     nth_attempt += 1
-                    dtlog.info('Connection attempt {} of {}.'.format(
-                        nth_attempt,
-                        request_attempts,
-                    ))
+                    dtlog.info(
+                        "Connection attempt {} of {}.".format(
+                            nth_attempt,
+                            request_attempts,
+                        )
+                    )
 
                 else:
                     # To avoid printing the entire chain of re-raised
@@ -399,14 +401,13 @@ class DTRequest():
                     raise error from e
 
 
-class DTResponse():
-
-    def __init__(self,
-                 data: dict,
-                 status_code: Optional[int],
-                 headers: Any,
-                 ):
-
+class DTResponse:
+    def __init__(
+        self,
+        data: dict,
+        status_code: Optional[int],
+        headers: Any,
+    ):
         self.data = data
         self.status_code = status_code
         self.headers = headers

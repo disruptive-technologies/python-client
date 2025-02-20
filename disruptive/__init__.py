@@ -1,13 +1,13 @@
 # Metadata
-__version__ = '1.7.3'
+__version__ = "1.7.3"
 
 # If set, logs of chosen level and higher are printed to console.
 # Default value None results in no logs at any level.
 log_level = None
 
 # REST API base URLs of which all endpoints are an expansion.
-base_url = 'https://api.disruptive-technologies.com/v2'
-emulator_base_url = 'https://emulator.disruptive-technologies.com/v2'
+base_url = "https://api.disruptive-technologies.com/v2"
+emulator_base_url = "https://emulator.disruptive-technologies.com/v2"
 
 # If a request response contains an error for which a series of retries is
 # worth considering, these variable determine how long to wait without an

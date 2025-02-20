@@ -6,15 +6,15 @@ from datetime import datetime
 import disruptive
 import disruptive.errors as dterrors
 
-DEBUG = 'DEBUG'
-INFO = 'INFO'
-WARNING = 'WARNING'
-ERROR = 'ERROR'
-CRITICAL = 'CRITICAL'
+DEBUG = "DEBUG"
+INFO = "INFO"
+WARNING = "WARNING"
+ERROR = "ERROR"
+CRITICAL = "CRITICAL"
 LOG_LEVELS = [DEBUG, INFO, WARNING, ERROR, CRITICAL]
 
 # Fetch the disruptive logger, but with disabled output.
-logger = logging.getLogger('disruptive')
+logger = logging.getLogger("disruptive")
 logger.setLevel(99)
 
 
@@ -61,8 +61,9 @@ def _log_flag_exceeds(level: str) -> bool:
         # to default before raising the exception.
         disruptive.log_level = INFO
 
-        msg = f'Invalid log_level {set_level}.\n' \
-              f'Must be either of {LOG_LEVELS}.'
+        msg = (
+            f"Invalid log_level {set_level}.\nMust be either of {LOG_LEVELS}."
+        )
         raise dterrors.ConfigurationError(msg)
 
     # Check if level is exceeded.
@@ -73,4 +74,4 @@ def _log_flag_exceeds(level: str) -> bool:
 
 
 def _fmt_log(msg: str | dict, level: str) -> None:
-    print(f'[{datetime.now().isoformat()}] {level:<8} - {msg}')
+    print(f"[{datetime.now().isoformat()}] {level:<8} - {msg}")

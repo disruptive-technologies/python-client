@@ -45,7 +45,7 @@ class DataConnector(dtoutputs.OutputBase):
     """
 
     # Constants for the various Data Connector configuration types.
-    HTTP_PUSH = 'HTTP_PUSH'
+    HTTP_PUSH = "HTTP_PUSH"
     DATA_CONNECTOR_TYPES = [HTTP_PUSH]
 
     def __init__(self, data_connector: dict) -> None:
@@ -64,21 +64,22 @@ class DataConnector(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, data_connector)
 
         # Unpack attributes from dictionary.
-        self.data_connector_id: str = data_connector['name'].split('/')[-1]
-        self.project_id: str = data_connector['name'].split('/')[1]
-        self.status: str = data_connector['status']
-        self.display_name: str = data_connector['displayName']
-        self.event_types: list[str] = data_connector['events']
-        self.labels: list[str] = data_connector['labels']
-        self.data_connector_type: str = data_connector['type']
+        self.data_connector_id: str = data_connector["name"].split("/")[-1]
+        self.project_id: str = data_connector["name"].split("/")[1]
+        self.status: str = data_connector["status"]
+        self.display_name: str = data_connector["displayName"]
+        self.event_types: list[str] = data_connector["events"]
+        self.labels: list[str] = data_connector["labels"]
+        self.data_connector_type: str = data_connector["type"]
         self.config = self._from_dict(data_connector)
 
     @classmethod
-    def get_data_connector(cls,
-                           data_connector_id: str,
-                           project_id: str,
-                           **kwargs: Any,
-                           ) -> DataConnector:
+    def get_data_connector(
+        cls,
+        data_connector_id: str,
+        project_id: str,
+        **kwargs: Any,
+    ) -> DataConnector:
         """
         Gets the current state of a single Data Connector.
 
@@ -108,20 +109,23 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL
-        url = '/projects/{}/dataconnectors/{}'
+        url = "/projects/{}/dataconnectors/{}"
         url = url.format(project_id, data_connector_id)
 
         # Return DataConnector object of GET request response.
-        return cls(dtrequests.DTRequest.get(
-            url=url,
-            **kwargs,
-        ))
+        return cls(
+            dtrequests.DTRequest.get(
+                url=url,
+                **kwargs,
+            )
+        )
 
     @classmethod
-    def list_data_connectors(cls,
-                             project_id: str,
-                             **kwargs: Any,
-                             ) -> list[DataConnector]:
+    def list_data_connectors(
+        cls,
+        project_id: str,
+        **kwargs: Any,
+    ) -> list[DataConnector]:
         """
         Gets a list of the current state of all Data Connectors in a project.
 
@@ -147,22 +151,23 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Return list of DataConnector objects of paginated GET response.
         data_connectors = dtrequests.DTRequest.paginated_get(
-            url='/projects/{}/dataconnectors'.format(project_id),
-            pagination_key='dataConnectors',
+            url="/projects/{}/dataconnectors".format(project_id),
+            pagination_key="dataConnectors",
             **kwargs,
         )
         return [cls(dcon) for dcon in data_connectors]
 
     @classmethod
-    def create_data_connector(cls,
-                              project_id: str,
-                              config: disruptive.DataConnector.HttpPushConfig,
-                              display_name: str = '',
-                              status: str = 'ACTIVE',
-                              event_types: list[str] = [],
-                              labels: list[str] = [],
-                              **kwargs: Any,
-                              ) -> DataConnector:
+    def create_data_connector(
+        cls,
+        project_id: str,
+        config: disruptive.DataConnector.HttpPushConfig,
+        display_name: str = "",
+        status: str = "ACTIVE",
+        event_types: list[str] = [],
+        labels: list[str] = [],
+        **kwargs: Any,
+    ) -> DataConnector:
         """
         Creates a new Data Connector in the specified project.
 
@@ -227,26 +232,28 @@ class DataConnector(dtoutputs.OutputBase):
 
         # Construct request body dictionary.
         body: dict = dict()
-        body['status'] = status
-        body['events'] = event_types
-        body['labels'] = labels
+        body["status"] = status
+        body["events"] = event_types
+        body["labels"] = labels
         if len(display_name) > 0:
-            body['displayName'] = display_name
+            body["displayName"] = display_name
 
         # Add the appropriate field depending on config.
-        body['type'] = config.data_connector_type
+        body["type"] = config.data_connector_type
         key, value = config._to_dict()
         body[key] = value
 
         # Construct URL.
-        url = '/projects/{}/dataconnectors'.format(project_id)
+        url = "/projects/{}/dataconnectors".format(project_id)
 
         # Return DataConnector object of POST request response.
-        return cls(dtrequests.DTRequest.post(
-            url=url,
-            body=body,
-            **kwargs,
-        ))
+        return cls(
+            dtrequests.DTRequest.post(
+                url=url,
+                body=body,
+                **kwargs,
+            )
+        )
 
     @classmethod
     def update_data_connector(
@@ -322,13 +329,13 @@ class DataConnector(dtoutputs.OutputBase):
         # Construct request body dictionary.
         body: dict = dict()
         if display_name is not None:
-            body['displayName'] = display_name
+            body["displayName"] = display_name
         if status is not None:
-            body['status'] = status
+            body["status"] = status
         if event_types is not None:
-            body['events'] = event_types
+            body["events"] = event_types
         if labels is not None:
-            body['labels'] = labels
+            body["labels"] = labels
 
         # Add the appropriate field depending on config.
         if config is not None:
@@ -336,22 +343,25 @@ class DataConnector(dtoutputs.OutputBase):
             body[key] = value
 
         # Construct URL.
-        url = '/projects/{}/dataconnectors/{}'
+        url = "/projects/{}/dataconnectors/{}"
         url = url.format(project_id, data_connector_id)
 
         # Return DataConnector object of PATCH request response.
-        return cls(dtrequests.DTRequest.patch(
-            url=url,
-            body=body,
-            **kwargs,
-        ))
+        return cls(
+            dtrequests.DTRequest.patch(
+                url=url,
+                body=body,
+                **kwargs,
+            )
+        )
 
     @classmethod
-    def delete_data_connector(cls,
-                              data_connector_id: str,
-                              project_id: str,
-                              **kwargs: Any,
-                              ) -> None:
+    def delete_data_connector(
+        cls,
+        data_connector_id: str,
+        project_id: str,
+        **kwargs: Any,
+    ) -> None:
         """
         Deletes the specified Data Connector.
 
@@ -376,7 +386,7 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = '/projects/{}/dataconnectors/{}'
+        url = "/projects/{}/dataconnectors/{}"
         url = url.format(project_id, data_connector_id)
 
         # Send DELETE request, but return nothing.
@@ -386,11 +396,12 @@ class DataConnector(dtoutputs.OutputBase):
         )
 
     @classmethod
-    def get_metrics(cls,
-                    data_connector_id: str,
-                    project_id: str,
-                    **kwargs: Any,
-                    ) -> Metric:
+    def get_metrics(
+        cls,
+        data_connector_id: str,
+        project_id: str,
+        **kwargs: Any,
+    ) -> Metric:
         """
         Get the metrics of the last 3 hours for a Data Connector.
 
@@ -420,22 +431,25 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = '/projects/{}/dataconnectors/{}'
+        url = "/projects/{}/dataconnectors/{}"
         url = url.format(project_id, data_connector_id)
-        url += ':metrics'
+        url += ":metrics"
 
         # Return Metric object of GET request response.
-        return Metric(dtrequests.DTRequest.get(
-            url=url,
-            **kwargs,
-        ))
+        return Metric(
+            dtrequests.DTRequest.get(
+                url=url,
+                **kwargs,
+            )
+        )
 
     @classmethod
-    def sync_data_connector(cls,
-                            data_connector_id: str,
-                            project_id: str,
-                            **kwargs: Any,
-                            ) -> None:
+    def sync_data_connector(
+        cls,
+        data_connector_id: str,
+        project_id: str,
+        **kwargs: Any,
+    ) -> None:
         """
         Synchronizes the current Data Connector state.
 
@@ -464,9 +478,9 @@ class DataConnector(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = '/projects/{}/dataconnectors/{}'
+        url = "/projects/{}/dataconnectors/{}"
         url = url.format(project_id, data_connector_id)
-        url += ':sync'
+        url += ":sync"
 
         # Send POST request, but return nothing.
         dtrequests.DTRequest.post(
@@ -477,27 +491,29 @@ class DataConnector(dtoutputs.OutputBase):
     @classmethod
     def _from_dict(cls, data_connector: dict) -> Optional[HttpPushConfig]:
         # Isolate the Data Connector type.
-        data_connector_type = data_connector['type']
+        data_connector_type = data_connector["type"]
 
         # Select the appropriate config depending on type.
-        if data_connector_type == 'HTTP_PUSH':
+        if data_connector_type == "HTTP_PUSH":
             # Isolate config field.
-            config = data_connector['httpConfig']
+            config = data_connector["httpConfig"]
 
             # Create and return an HttpPush object.
             return cls.HttpPushConfig(
-                url=config['url'],
-                signature_secret=config['signatureSecret'],
-                headers=config['headers'],
+                url=config["url"],
+                signature_secret=config["signatureSecret"],
+                headers=config["headers"],
             )
         else:
             # If this else statement runs, no config is available for type.
-            dtlog.warning('No config available for {} Data Connectors.'.format(
-                data_connector_type
-            ))
+            dtlog.warning(
+                "No config available for {} Data Connectors.".format(
+                    data_connector_type
+                )
+            )
             return None
 
-    class HttpPushConfig():
+    class HttpPushConfig:
         """
         Type-specific configurations for the HTTP_PUSH Data Connector.
 
@@ -512,13 +528,14 @@ class DataConnector(dtoutputs.OutputBase):
 
         """
 
-        data_connector_type = 'HTTP_PUSH'
+        data_connector_type = "HTTP_PUSH"
 
-        def __init__(self,
-                     url: Optional[str] = None,
-                     signature_secret: Optional[str] = None,
-                     headers: Optional[dict] = None,
-                     ) -> None:
+        def __init__(
+            self,
+            url: Optional[str] = None,
+            signature_secret: Optional[str] = None,
+            headers: Optional[dict] = None,
+        ) -> None:
             """
             Constructs the HttpPushConfig object.
 
@@ -541,12 +558,12 @@ class DataConnector(dtoutputs.OutputBase):
         def _to_dict(self) -> tuple[str, dict]:
             config: dict = dict()
             if self.url is not None:
-                config['url'] = self.url
+                config["url"] = self.url
             if self.signature_secret is not None:
-                config['signatureSecret'] = self.signature_secret
+                config["signatureSecret"] = self.signature_secret
             if self.headers is not None:
-                config['headers'] = self.headers
-            return 'httpConfig', config
+                config["headers"] = self.headers
+            return "httpConfig", config
 
 
 class Metric(dtoutputs.OutputBase):
@@ -574,6 +591,6 @@ class Metric(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, metric)
 
         # Unpack attributes from dictionary.
-        self.success_count = metric['metrics']['successCount']
-        self.error_count = metric['metrics']['errorCount']
-        self.latency = metric['metrics']['latency99p']
+        self.success_count = metric["metrics"]["successCount"]
+        self.error_count = metric["metrics"]["errorCount"]
+        self.latency = metric["metrics"]["latency99p"]

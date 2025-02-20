@@ -4,8 +4,7 @@ import disruptive.transforms as dttrans
 from disruptive.resources.service_account import Key
 
 
-class TestServiceAccount():
-
+class TestServiceAccount:
     def test_repr(self, request_mock):
         # Update the response data with Service Account data.
         res = dtapiresponses.service_account1
@@ -13,8 +12,8 @@ class TestServiceAccount():
 
         # Fetch a Service Account.
         x = disruptive.ServiceAccount.get_service_account(
-            service_account_id='service_account_id',
-            project_id='project_id',
+            service_account_id="service_account_id",
+            project_id="project_id",
         )
 
         # Evaluate __repr__ function and compare copy.
@@ -28,17 +27,17 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         s = disruptive.ServiceAccount.get_service_account(
-            'service_account_id',
-            'project_id',
+            "service_account_id",
+            "project_id",
         )
 
         # Assert attributes unpacked correctly.
-        assert s.service_account_id == res['name'].split('/')[-1]
-        assert s.email == res['email']
-        assert s.display_name == res['displayName']
-        assert s.basic_auth_enabled == res['enableBasicAuth']
-        assert s.create_time == dttrans.to_datetime(res['createTime'])
-        assert s.update_time == dttrans.to_datetime(res['updateTime'])
+        assert s.service_account_id == res["name"].split("/")[-1]
+        assert s.email == res["email"]
+        assert s.display_name == res["displayName"]
+        assert s.basic_auth_enabled == res["enableBasicAuth"]
+        assert s.create_time == dttrans.to_datetime(res["createTime"])
+        assert s.update_time == dttrans.to_datetime(res["updateTime"])
 
     def test_get_service_account(self, request_mock):
         # Update the response data with Service Account data.
@@ -46,15 +45,16 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         s = disruptive.ServiceAccount.get_service_account(
-            'service_account_id',
-            'project_id',
+            "service_account_id",
+            "project_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects/project_id/'
-            + 'serviceaccounts/service_account_id',
+            method="GET",
+            url=disruptive.base_url
+            + "/projects/project_id/"
+            + "serviceaccounts/service_account_id",
         )
 
         # Verify single request sent.
@@ -69,13 +69,13 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint
         sas = disruptive.ServiceAccount.list_service_accounts(
-            'project_id',
+            "project_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects/project_id/serviceaccounts',
+            method="GET",
+            url=disruptive.base_url + "/projects/project_id/serviceaccounts",
         )
 
         # Verify single request sent.
@@ -91,16 +91,16 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         s = disruptive.ServiceAccount.create_service_account(
-            'project_id',
-            'new-sa',
+            "project_id",
+            "new-sa",
             True,
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='POST',
-            url=disruptive.base_url+'/projects/project_id/serviceaccounts',
-            body={'displayName': 'new-sa', 'enableBasicAuth': True},
+            method="POST",
+            url=disruptive.base_url + "/projects/project_id/serviceaccounts",
+            body={"displayName": "new-sa", "enableBasicAuth": True},
         )
 
         # Verify single request sent.
@@ -115,9 +115,9 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         s = disruptive.ServiceAccount.update_service_account(
-            service_account_id='service_account_id',
-            project_id='project_id',
-            display_name='service-account-1',
+            service_account_id="service_account_id",
+            project_id="project_id",
+            display_name="service-account-1",
             basic_auth_enabled=False,
         )
 
@@ -126,10 +126,14 @@ class TestServiceAccount():
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='PATCH',
-            url=disruptive.base_url+'/projects/project_id/'
-            + 'serviceaccounts/service_account_id',
-            body={'displayName': 'service-account-1', 'enableBasicAuth': False}
+            method="PATCH",
+            url=disruptive.base_url
+            + "/projects/project_id/"
+            + "serviceaccounts/service_account_id",
+            body={
+                "displayName": "service-account-1",
+                "enableBasicAuth": False,
+            },
         )
 
         # Assert attributes in output Device object.
@@ -141,8 +145,8 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         disruptive.ServiceAccount.delete_service_account(
-            service_account_id='service_account_id',
-            project_id='project_id',
+            service_account_id="service_account_id",
+            project_id="project_id",
         )
 
         # Verify single request sent.
@@ -150,9 +154,10 @@ class TestServiceAccount():
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='DELETE',
-            url=disruptive.base_url+'/projects/project_id/'
-            + 'serviceaccounts/service_account_id',
+            method="DELETE",
+            url=disruptive.base_url
+            + "/projects/project_id/"
+            + "serviceaccounts/service_account_id",
         )
 
     def test_key_attributes(self, request_mock):
@@ -162,14 +167,14 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         k = disruptive.ServiceAccount.get_key(
-            'service_account_id',
-            'key_id',
-            'project_id',
+            "service_account_id",
+            "key_id",
+            "project_id",
         )
 
         # Assert attributes unpacked correctly.
-        assert k.key_id == res['name'].split('/')[-1]
-        assert k.create_time == dttrans.to_datetime(res['createTime'])
+        assert k.key_id == res["name"].split("/")[-1]
+        assert k.create_time == dttrans.to_datetime(res["createTime"])
         assert k.secret is None
 
     def test_key_secret_set(self, request_mock):
@@ -179,12 +184,12 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         k = disruptive.ServiceAccount.create_key(
-            'service_account_id',
-            'project_id',
+            "service_account_id",
+            "project_id",
         )
 
         # Assert attributes unpacked correctly.
-        assert k.secret == res['secret']
+        assert k.secret == res["secret"]
 
     def test_get_key(self, request_mock):
         # Update the response data with Service Account data.
@@ -192,16 +197,17 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         key = disruptive.ServiceAccount.get_key(
-            service_account_id='service_account_id',
-            key_id='key_id',
-            project_id='project_id',
+            service_account_id="service_account_id",
+            key_id="key_id",
+            project_id="project_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects/project_id/'
-            + 'serviceaccounts/service_account_id/keys/key_id',
+            method="GET",
+            url=disruptive.base_url
+            + "/projects/project_id/"
+            + "serviceaccounts/service_account_id/keys/key_id",
         )
 
         # Verify single request sent.
@@ -216,15 +222,16 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         keys = disruptive.ServiceAccount.list_keys(
-            service_account_id='service_account_id',
-            project_id='project_id',
+            service_account_id="service_account_id",
+            project_id="project_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects/project_id/'
-            + 'serviceaccounts/service_account_id/keys',
+            method="GET",
+            url=disruptive.base_url
+            + "/projects/project_id/"
+            + "serviceaccounts/service_account_id/keys",
         )
 
         # Verify single request sent.
@@ -240,15 +247,16 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         key = disruptive.ServiceAccount.create_key(
-            service_account_id='service_account_id',
-            project_id='project_id',
+            service_account_id="service_account_id",
+            project_id="project_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='POST',
-            url=disruptive.base_url+'/projects/project_id/'
-            + 'serviceaccounts/service_account_id/keys',
+            method="POST",
+            url=disruptive.base_url
+            + "/projects/project_id/"
+            + "serviceaccounts/service_account_id/keys",
         )
 
         # Verify single request sent.
@@ -263,16 +271,17 @@ class TestServiceAccount():
 
         # Call the appropriate endpoint.
         disruptive.ServiceAccount.delete_key(
-            service_account_id='service_account_id',
-            key_id='key_id',
-            project_id='project_id',
+            service_account_id="service_account_id",
+            key_id="key_id",
+            project_id="project_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='DELETE',
-            url=disruptive.base_url+'/projects/project_id/'
-            + 'serviceaccounts/service_account_id/keys/key_id',
+            method="DELETE",
+            url=disruptive.base_url
+            + "/projects/project_id/"
+            + "serviceaccounts/service_account_id/keys/key_id",
         )
 
         # Verify single request sent.

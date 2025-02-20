@@ -4,8 +4,7 @@ from dataclasses import dataclass
 import disruptive
 
 
-class TestEvents():
-
+class TestEvents:
     def test_touch(self):
         x = disruptive.events.Touch(
             timestamp=datetime.now(),
@@ -26,7 +25,7 @@ class TestEvents():
 
     def test_object_present(self):
         x = disruptive.events.ObjectPresent(
-            state='PRESENT',
+            state="PRESENT",
             timestamp=datetime.now(),
         )
 
@@ -87,7 +86,7 @@ class TestEvents():
 
     def test_water_present(self):
         x = disruptive.events.WaterPresent(
-            state='NOT_PRESENT',
+            state="NOT_PRESENT",
             timestamp=datetime.now(),
         )
 
@@ -98,10 +97,10 @@ class TestEvents():
         x = disruptive.events.NetworkStatus(
             signal_strength=73,
             rssi=22,
-            transmission_mode='LOW_POWER_STANDARD_MODE',
+            transmission_mode="LOW_POWER_STANDARD_MODE",
             cloud_connectors=[
                 disruptive.events.NetworkStatusCloudConnector(
-                    device_id='123',
+                    device_id="123",
                     signal_strength=73,
                     rssi=22,
                 ),
@@ -123,9 +122,9 @@ class TestEvents():
 
     def test_labels_changed(self):
         x = disruptive.events.LabelsChanged(
-            added={'key1': 'value1', 'key2': 'value2'},
-            modified={'key3': 'value3'},
-            removed=['key4'],
+            added={"key1": "value1", "key2": "value2"},
+            modified={"key3": "value3"},
+            removed=["key4"],
             timestamp=datetime.now(),
         )
 
@@ -134,8 +133,8 @@ class TestEvents():
 
     def test_connection_status(self):
         x = disruptive.events.ConnectionStatus(
-            connection='ETHERNET',
-            available=['ETHERNET', 'CELLULAR'],
+            connection="ETHERNET",
+            available=["ETHERNET", "CELLULAR"],
             timestamp=datetime.now(),
         )
 
@@ -144,8 +143,8 @@ class TestEvents():
 
     def test_ethernet_status(self):
         x = disruptive.events.EthernetStatus(
-            mac_address='123',
-            ip_address='abc',
+            mac_address="123",
+            ip_address="abc",
             timestamp=datetime.now(),
         )
 
@@ -181,7 +180,7 @@ class TestEvents():
 
     def test_motion(self):
         x = disruptive.events.Motion(
-            state='NO_MOTION_DETECTED',
+            state="NO_MOTION_DETECTED",
             timestamp=datetime.now(),
         )
 
@@ -190,9 +189,9 @@ class TestEvents():
 
     def test_desk_occupancy(self):
         x = disruptive.events.DeskOccupancy(
-            state='OCCUPIED',
+            state="OCCUPIED",
             timestamp=datetime.now(),
-            remarks=['INCOMPLETE_DATA'],
+            remarks=["INCOMPLETE_DATA"],
         )
 
         y = eval(repr(x))
@@ -207,8 +206,8 @@ class TestEvents():
             timestamp: datetime
 
         testcases = [
-            TestCase(state='OPEN', timestamp=now),
-            TestCase(state='CLOSED', timestamp=now),
+            TestCase(state="OPEN", timestamp=now),
+            TestCase(state="CLOSED", timestamp=now),
         ]
 
         for testcase in testcases:
@@ -229,10 +228,10 @@ class TestEvents():
             timestamp: datetime
 
         testcases = [
-            TestCase(state='INVALID_WIRE_CONFIGURATION', timestamp=now),
-            TestCase(state='TWO_WIRE', timestamp=now),
-            TestCase(state='THREE_WIRE', timestamp=now),
-            TestCase(state='FOUR_WIRE', timestamp=now),
+            TestCase(state="INVALID_WIRE_CONFIGURATION", timestamp=now),
+            TestCase(state="TWO_WIRE", timestamp=now),
+            TestCase(state="THREE_WIRE", timestamp=now),
+            TestCase(state="FOUR_WIRE", timestamp=now),
         ]
 
         for testcase in testcases:

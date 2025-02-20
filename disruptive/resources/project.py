@@ -51,21 +51,23 @@ class Project(OutputBase):
         OutputBase.__init__(self, project)
 
         # Unpack attributes from dictionary.
-        self.project_id: str = project['name'].split('/')[-1]
+        self.project_id: str = project["name"].split("/")[-1]
         self.id: str = self.project_id  # Deprecated in favor of project_id.
-        self.display_name: str = project['displayName']
-        self.organization_id: str = project['organization'].split('/')[-1]
-        self.organization_display_name: str = \
-            project['organizationDisplayName']
-        self.sensor_count: int = project['sensorCount']
-        self.cloud_connector_count: int = project['cloudConnectorCount']
-        self.is_inventory: bool = project['inventory']
+        self.display_name: str = project["displayName"]
+        self.organization_id: str = project["organization"].split("/")[-1]
+        self.organization_display_name: str = project[
+            "organizationDisplayName"
+        ]
+        self.sensor_count: int = project["sensorCount"]
+        self.cloud_connector_count: int = project["cloudConnectorCount"]
+        self.is_inventory: bool = project["inventory"]
 
     @classmethod
-    def get_project(cls,
-                    project_id: str,
-                    **kwargs: Any,
-                    ) -> Project:
+    def get_project(
+        cls,
+        project_id: str,
+        **kwargs: Any,
+    ) -> Project:
         """
         Fetch a single project.
 
@@ -90,20 +92,23 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = '/projects/{}'.format(project_id)
+        url = "/projects/{}".format(project_id)
 
         # Return Project object of GET request response.
-        return cls(dtrequests.DTRequest.get(
-            url=url,
-            **kwargs,
-        ))
+        return cls(
+            dtrequests.DTRequest.get(
+                url=url,
+                **kwargs,
+            )
+        )
 
     @classmethod
-    def list_projects(cls,
-                      organization_id: Optional[str] = None,
-                      query: Optional[str] = None,
-                      **kwargs: Any,
-                      ) -> list[Project]:
+    def list_projects(
+        cls,
+        organization_id: Optional[str] = None,
+        query: Optional[str] = None,
+        **kwargs: Any,
+    ) -> list[Project]:
         """
         Fetch a list of all available projects.
 
@@ -130,30 +135,31 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = '/projects'
+        url = "/projects"
 
         # Construct parameters dictionary.
         params = {}
         if organization_id is not None:
-            params['organization'] = 'organizations/' + organization_id
+            params["organization"] = "organizations/" + organization_id
         if query is not None:
-            params['query'] = query
+            params["query"] = query
 
         # Return list of Project objects of paginated GET response.
         responses = dtrequests.DTRequest.paginated_get(
             url=url,
-            pagination_key='projects',
+            pagination_key="projects",
             params=params,
             **kwargs,
         )
         return [cls(r) for r in responses]
 
     @classmethod
-    def create_project(cls,
-                       organization_id: str,
-                       display_name: str,
-                       **kwargs: Any,
-                       ) -> Project:
+    def create_project(
+        cls,
+        organization_id: str,
+        display_name: str,
+        **kwargs: Any,
+    ) -> Project:
         """
         Create a new project in the specified organization.
 
@@ -183,25 +189,28 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = '/projects'
+        url = "/projects"
 
         # Construct request body.
         body: dict = dict()
-        body['organization'] = 'organizations/' + organization_id
-        body['displayName'] = display_name
+        body["organization"] = "organizations/" + organization_id
+        body["displayName"] = display_name
 
         # Return Project object of POST request response.
-        return cls(dtrequests.DTRequest.post(
-            url=url,
-            body=body,
-            **kwargs,
-        ))
+        return cls(
+            dtrequests.DTRequest.post(
+                url=url,
+                body=body,
+                **kwargs,
+            )
+        )
 
     @staticmethod
-    def update_project(project_id: str,
-                       display_name: Optional[str] = None,
-                       **kwargs: Any,
-                       ) -> None:
+    def update_project(
+        project_id: str,
+        display_name: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Updates the display name a specified project.
 
@@ -226,12 +235,12 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = '/projects/' + project_id
+        url = "/projects/" + project_id
 
         # Construct request body.
         body = {}
         if display_name is not None:
-            body['displayName'] = display_name
+            body["displayName"] = display_name
 
         # Send PATCH request, but return nothing.
         dtrequests.DTRequest.patch(
@@ -241,9 +250,10 @@ class Project(OutputBase):
         )
 
     @staticmethod
-    def delete_project(project_id: str,
-                       **kwargs: Any,
-                       ) -> None:
+    def delete_project(
+        project_id: str,
+        **kwargs: Any,
+    ) -> None:
         """
         Deletes the specified project.
 
@@ -271,7 +281,7 @@ class Project(OutputBase):
         """
 
         # Construct URL.
-        url = '/projects/' + project_id
+        url = "/projects/" + project_id
 
         # Send DELETE request, but return nothing.
         dtrequests.DTRequest.delete(
@@ -280,9 +290,10 @@ class Project(OutputBase):
         )
 
     @staticmethod
-    def list_members(project_id: str,
-                     **kwargs: Any,
-                     ) -> list[Member]:
+    def list_members(
+        project_id: str,
+        **kwargs: Any,
+    ) -> list[Member]:
         """
         Gets a list of all members in a project.
 
@@ -307,23 +318,24 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = '/projects/{}/members'.format(project_id)
+        url = "/projects/{}/members".format(project_id)
 
         # Return list of Member objects of paginated GET response.
         members = dtrequests.DTRequest.paginated_get(
             url=url,
-            pagination_key='members',
+            pagination_key="members",
             **kwargs,
         )
         members_list: list[Member] = [Member(m) for m in members]
         return members_list
 
     @staticmethod
-    def add_member(project_id: str,
-                   email: str,
-                   roles: list[str],
-                   **kwargs: Any,
-                   ) -> Member:
+    def add_member(
+        project_id: str,
+        email: str,
+        roles: list[str],
+        **kwargs: Any,
+    ) -> Member:
         """
         Add a new member to the specified project.
 
@@ -357,25 +369,28 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = '/projects/{}/members'.format(project_id)
+        url = "/projects/{}/members".format(project_id)
 
         # Construct request body.
         body: dict = dict()
-        body['roles'] = ['roles/' + r for r in roles]
-        body['email'] = email
+        body["roles"] = ["roles/" + r for r in roles]
+        body["email"] = email
 
         # Return Member object of POST request response.
-        return Member(dtrequests.DTRequest.post(
-            url=url,
-            body=body,
-            **kwargs,
-        ))
+        return Member(
+            dtrequests.DTRequest.post(
+                url=url,
+                body=body,
+                **kwargs,
+            )
+        )
 
     @staticmethod
-    def get_member(member_id: str,
-                   project_id: str,
-                   **kwargs: Any,
-                   ) -> Member:
+    def get_member(
+        member_id: str,
+        project_id: str,
+        **kwargs: Any,
+    ) -> Member:
         """
         Get a single member in the specified project.
 
@@ -407,23 +422,26 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = '/projects/{}/members/{}'.format(
+        url = "/projects/{}/members/{}".format(
             project_id,
             member_id,
         )
 
         # Return Member object of GET request response.
-        return Member(dtrequests.DTRequest.get(
-            url=url,
-            **kwargs,
-        ))
+        return Member(
+            dtrequests.DTRequest.get(
+                url=url,
+                **kwargs,
+            )
+        )
 
     @staticmethod
-    def update_member(member_id: str,
-                      project_id: str,
-                      roles: list[str],
-                      **kwargs: Any,
-                      ) -> Member:
+    def update_member(
+        member_id: str,
+        project_id: str,
+        roles: list[str],
+        **kwargs: Any,
+    ) -> Member:
         """
         Update the role(s) of the specified member.
 
@@ -458,7 +476,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = '/projects/{}/members/{}'.format(
+        url = "/projects/{}/members/{}".format(
             project_id,
             member_id,
         )
@@ -466,20 +484,23 @@ class Project(OutputBase):
         # Construct request body.
         body: dict = dict()
         if roles is not None:
-            body['roles'] = ['roles/' + r for r in roles]
+            body["roles"] = ["roles/" + r for r in roles]
 
         # Return updated Member object of PATCH request response.
-        return Member(dtrequests.DTRequest.patch(
-            url=url,
-            body=body,
-            **kwargs,
-        ))
+        return Member(
+            dtrequests.DTRequest.patch(
+                url=url,
+                body=body,
+                **kwargs,
+            )
+        )
 
     @staticmethod
-    def remove_member(member_id: str,
-                      project_id: str,
-                      **kwargs: Any,
-                      ) -> None:
+    def remove_member(
+        member_id: str,
+        project_id: str,
+        **kwargs: Any,
+    ) -> None:
         """
         Revoke a member's membership in the specified project.
         This does not delete the underlying Service Account or User.
@@ -507,7 +528,7 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = '/projects/{}/members/{}'.format(
+        url = "/projects/{}/members/{}".format(
             project_id,
             member_id,
         )
@@ -519,10 +540,11 @@ class Project(OutputBase):
         )
 
     @staticmethod
-    def get_member_invite_url(member_id: str,
-                              project_id: str,
-                              **kwargs: Any,
-                              ) -> str:
+    def get_member_invite_url(
+        member_id: str,
+        project_id: str,
+        **kwargs: Any,
+    ) -> str:
         """
         Get the invite URL for a member with pending invite.
 
@@ -562,22 +584,26 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = '/projects/{}/members/{}'.format(
-            project_id,
-            member_id,
-        ) + ':getInviteUrl'
+        url = (
+            "/projects/{}/members/{}".format(
+                project_id,
+                member_id,
+            )
+            + ":getInviteUrl"
+        )
 
         # Return url string in GET response.
         invite_url: str = dtrequests.DTRequest.get(
             url=url,
             **kwargs,
-        )['inviteUrl']
+        )["inviteUrl"]
         return invite_url
 
     @staticmethod
-    def list_permissions(project_id: str,
-                         **kwargs: Any,
-                         ) -> list[str]:
+    def list_permissions(
+        project_id: str,
+        **kwargs: Any,
+    ) -> list[str]:
         """
         List permissions available to the caller in the specified project.
 
@@ -602,12 +628,12 @@ class Project(OutputBase):
         """
 
         # Construct URL
-        url = '/projects/{}/permissions'.format(project_id)
+        url = "/projects/{}/permissions".format(project_id)
 
         # Return list of permissions in GET response.
         permissions: list[str] = dtrequests.DTRequest.paginated_get(
             url=url,
-            pagination_key='permissions',
+            pagination_key="permissions",
             **kwargs,
         )
         return permissions

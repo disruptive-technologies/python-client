@@ -6,14 +6,13 @@ import disruptive.transforms as dttrans
 import tests.api_responses as dtapiresponses
 
 
-class TestOutputs():
-
+class TestOutputs:
     def test_str_dunder(self):
         # Fetch some events.
         history = dtapiresponses.event_history_each_type
 
         # Iterate events in history.
-        for event in history['events']:
+        for event in history["events"]:
             # Construct event object.
             obj = disruptive.events.Event(event)
 
@@ -25,7 +24,7 @@ class TestOutputs():
         history = dtapiresponses.event_history_each_type
 
         # Iterate events in history.
-        for event in history['events']:
+        for event in history["events"]:
             # Construct event object.
             obj = disruptive.events.Event(event)
 
@@ -43,7 +42,7 @@ class TestOutputs():
 
         tests = [
             TestCase(
-                name='success',
+                name="success",
                 give_raw=dtapiresponses.user_member,
             ),
         ]
@@ -53,14 +52,14 @@ class TestOutputs():
 
             raw = test.give_raw
 
-            assert member.member_id == raw['name'].split('/')[-1]
-            assert member.display_name == raw['displayName']
-            assert member.email == raw['email']
-            assert member.roles == [r.split('/')[-1] for r in raw['roles']]
-            assert member.status == raw['status']
-            assert member.email == raw['email']
-            assert member.account_type == raw['accountType']
-            assert member.create_time == dttrans.to_datetime(raw['createTime'])
+            assert member.member_id == raw["name"].split("/")[-1]
+            assert member.display_name == raw["displayName"]
+            assert member.email == raw["email"]
+            assert member.roles == [r.split("/")[-1] for r in raw["roles"]]
+            assert member.status == raw["status"]
+            assert member.email == raw["email"]
+            assert member.account_type == raw["accountType"]
+            assert member.create_time == dttrans.to_datetime(raw["createTime"])
 
     def test_raw_attribute(self, request_mock):
         @dataclass
@@ -73,70 +72,70 @@ class TestOutputs():
 
         tests = [
             TestCase(
-                name='data connector raw',
+                name="data connector raw",
                 give_method=disruptive.DataConnector.get_data_connector,
                 give_params={
-                    'data_connector_id': '-',
-                    'project_id': '-',
+                    "data_connector_id": "-",
+                    "project_id": "-",
                 },
                 give_req=dtapiresponses.simple_data_connector,
                 want_err=None,
             ),
             TestCase(
-                name='device raw',
+                name="device raw",
                 give_method=disruptive.Device.get_device,
-                give_params={'device_id': '-'},
+                give_params={"device_id": "-"},
                 give_req=dtapiresponses.touch_sensor,
                 want_err=None,
             ),
             TestCase(
-                name='organization raw',
+                name="organization raw",
                 give_method=disruptive.Organization.get_organization,
-                give_params={'organization_id': '-'},
+                give_params={"organization_id": "-"},
                 give_req=dtapiresponses.organization,
                 want_err=None,
             ),
             TestCase(
-                name='member raw',
+                name="member raw",
                 give_method=disruptive.Organization.get_member,
                 give_params={
-                    'member_id': '-',
-                    'organization_id': '-',
+                    "member_id": "-",
+                    "organization_id": "-",
                 },
                 give_req=dtapiresponses.user_member,
                 want_err=None,
             ),
             TestCase(
-                name='project raw',
+                name="project raw",
                 give_method=disruptive.Project.get_project,
-                give_params={'project_id': '-'},
+                give_params={"project_id": "-"},
                 give_req=dtapiresponses.small_project,
                 want_err=None,
             ),
             TestCase(
-                name='role raw',
+                name="role raw",
                 give_method=disruptive.Role.get_role,
-                give_params={'role': '-'},
+                give_params={"role": "-"},
                 give_req=dtapiresponses.project_user_role,
                 want_err=None,
             ),
             TestCase(
-                name='service account raw',
+                name="service account raw",
                 give_method=disruptive.ServiceAccount.get_service_account,
                 give_params={
-                    'service_account_id': '-',
-                    'project_id': '-',
+                    "service_account_id": "-",
+                    "project_id": "-",
                 },
                 give_req=dtapiresponses.service_account1,
                 want_err=None,
             ),
             TestCase(
-                name='service account key raw',
+                name="service account key raw",
                 give_method=disruptive.ServiceAccount.get_key,
                 give_params={
-                    'key_id': '-',
-                    'service_account_id': '-',
-                    'project_id': '-',
+                    "key_id": "-",
+                    "service_account_id": "-",
+                    "project_id": "-",
                 },
                 give_req=dtapiresponses.key_without_secret,
                 want_err=None,

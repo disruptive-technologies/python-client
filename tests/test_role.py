@@ -2,8 +2,7 @@ import disruptive
 import tests.api_responses as dtapiresponses
 
 
-class TestRole():
-
+class TestRole:
     def test_repr(self, request_mock):
         # Update the response data with role data.
         res = dtapiresponses.project_user_role
@@ -11,7 +10,7 @@ class TestRole():
 
         # Fetch a role.
         x = disruptive.Role.get_role(
-            role='project_user',
+            role="project_user",
         )
 
         # Evaluate __repr__ function and compare copy.
@@ -24,25 +23,25 @@ class TestRole():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        p = disruptive.Role.get_role('project.user')
+        p = disruptive.Role.get_role("project.user")
 
         # Assert attributes unpacked correctly.
-        assert p.role == res['name'].split('/')[-1]
-        assert p.display_name == res['displayName']
-        assert p.description == res['description']
-        assert p.permissions == res['permissions']
+        assert p.role == res["name"].split("/")[-1]
+        assert p.display_name == res["displayName"]
+        assert p.description == res["description"]
+        assert p.permissions == res["permissions"]
 
     def test_get_role(self, request_mock):
         # Update the response data with role data.
         request_mock.json = dtapiresponses.project_developer_role
 
         # Call the appropriate endpoint.
-        r = disruptive.Role.get_role('project.developer')
+        r = disruptive.Role.get_role("project.developer")
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/roles/project.developer',
+            method="GET",
+            url=disruptive.base_url + "/roles/project.developer",
         )
 
         # Assert single request sent.
@@ -60,8 +59,8 @@ class TestRole():
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/roles',
+            method="GET",
+            url=disruptive.base_url + "/roles",
         )
 
         # Assert single request sent.

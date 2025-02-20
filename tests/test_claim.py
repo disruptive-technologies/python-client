@@ -8,8 +8,7 @@ import disruptive.errors as dterrors
 import tests.api_responses as dtapiresponses
 
 
-class TestClaim():
-
+class TestClaim:
     def test_claim(self, request_mock):
         @dataclass
         class TestCase:
@@ -24,53 +23,53 @@ class TestClaim():
 
         tests = [
             TestCase(
-                name='claim devices',
-                give_project_id='p1',
-                give_device_ids=['a', 'b'],
+                name="claim devices",
+                give_project_id="p1",
+                give_device_ids=["a", "b"],
                 give_kit_ids=[],
                 give_dry_run=False,
                 give_res=dtapiresponses.claimed_devices,
-                want_device_ids=['a', 'b'],
+                want_device_ids=["a", "b"],
                 want_error=None,
             ),
             TestCase(
-                name='claim kits',
-                give_project_id='p1',
+                name="claim kits",
+                give_project_id="p1",
                 give_device_ids=[],
-                give_kit_ids=['k1'],
+                give_kit_ids=["k1"],
                 give_dry_run=False,
                 give_res=dtapiresponses.claimed_devices,
-                want_device_ids=['a', 'b'],
+                want_device_ids=["a", "b"],
                 want_error=None,
             ),
             TestCase(
-                name='device already claimed',
-                give_project_id='p1',
-                give_device_ids=['a'],
+                name="device already claimed",
+                give_project_id="p1",
+                give_device_ids=["a"],
                 give_kit_ids=[],
                 give_dry_run=False,
                 give_res=dtapiresponses.claimed_device_already_claimed,
-                want_device_ids=['a'],
+                want_device_ids=["a"],
                 want_error=dterrors.ClaimErrorDeviceAlreadyClaimed,
             ),
             TestCase(
-                name='device not found',
-                give_project_id='p1',
-                give_device_ids=['a'],
+                name="device not found",
+                give_project_id="p1",
+                give_device_ids=["a"],
                 give_kit_ids=[],
                 give_dry_run=False,
                 give_res=dtapiresponses.claimed_device_not_found,
-                want_device_ids=['a'],
+                want_device_ids=["a"],
                 want_error=dterrors.ClaimErrorDeviceNotFound,
             ),
             TestCase(
-                name='kit not found',
-                give_project_id='p1',
+                name="kit not found",
+                give_project_id="p1",
                 give_device_ids=[],
-                give_kit_ids=['a'],
+                give_kit_ids=["a"],
                 give_dry_run=False,
                 give_res=dtapiresponses.claimed_kit_not_found,
-                want_device_ids=['a'],
+                want_device_ids=["a"],
                 want_error=dterrors.ClaimErrorKitNotFound,
             ),
         ]
@@ -85,8 +84,9 @@ class TestClaim():
             )
 
             for i in range(len(devices)):
-                assert devices[i].device_id == test.want_device_ids[i], \
+                assert devices[i].device_id == test.want_device_ids[i], (
                     test.name
+                )
 
                 for error in errors:
                     if test.want_error is not None:
@@ -106,13 +106,13 @@ class TestClaim():
 
         tests = [
             TestCase(
-                name='test 1',
-                give_identifier='id1',
+                name="test 1",
+                give_identifier="id1",
                 give_res=dtapiresponses.claim_info_kit,
                 want_err=None,
             ),
             TestCase(
-                name='identifier type conflict',
+                name="identifier type conflict",
                 give_identifier=99,
                 give_res={},
                 want_err=TypeError,
@@ -138,38 +138,38 @@ class TestClaim():
 
         tests = [
             TestCase(
-                name='unknown code ClaimError',
+                name="unknown code ClaimError",
                 give_res={
-                    'devices': [{'code': 'UNKNOWN_CODE'}],
-                    'kits': [{'code': 'UNKNOWN_CODE'}],
+                    "devices": [{"code": "UNKNOWN_CODE"}],
+                    "kits": [{"code": "UNKNOWN_CODE"}],
                 },
                 want_err=dterrors.ClaimError,
             ),
             TestCase(
-                name='device already claimed',
+                name="device already claimed",
                 give_res={
-                    'devices': [
+                    "devices": [
                         dtapiresponses.claim_error_device_already_claimed,
                     ],
-                    'kits': [],
+                    "kits": [],
                 },
                 want_err=dterrors.ClaimErrorDeviceAlreadyClaimed,
             ),
             TestCase(
-                name='device not found',
+                name="device not found",
                 give_res={
-                    'devices': [
+                    "devices": [
                         dtapiresponses.claim_error_device_not_found,
                     ],
-                    'kits': [],
+                    "kits": [],
                 },
                 want_err=dterrors.ClaimErrorDeviceNotFound,
             ),
             TestCase(
-                name='kit not found',
+                name="kit not found",
                 give_res={
-                    'devices': [],
-                    'kits': [
+                    "devices": [],
+                    "kits": [
                         dtapiresponses.claim_error_kit_not_found,
                     ],
                 },

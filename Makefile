@@ -24,7 +24,7 @@ coverage: venv
 	source ${VENV}/bin/activate && pytest --cov=disruptive tests/
 
 lint: venv
-	source ${VENV}/bin/activate && mypy --config-file ./mypy.ini disruptive/ && flake8 disruptive/
+	source ${VENV}/bin/activate && mypy --config-file ./mypy.ini disruptive/ && ruff check .
 
 clean:
 	rm -rf build/ dist/ pip-wheel-metadata/ *.egg-info .pytest_cache/ .mypy_cache/ $(VENV) coverage.xml

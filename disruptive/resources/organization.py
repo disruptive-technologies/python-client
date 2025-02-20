@@ -39,14 +39,15 @@ class Organization(OutputBase):
         OutputBase.__init__(self, organization)
 
         # Unpack attributes from dictionary.
-        self.organization_id: str = organization['name'].split('/')[-1]
-        self.display_name: str = organization['displayName']
+        self.organization_id: str = organization["name"].split("/")[-1]
+        self.display_name: str = organization["displayName"]
 
     @classmethod
-    def get_organization(cls,
-                         organization_id: str,
-                         **kwargs: Any,
-                         ) -> Organization:
+    def get_organization(
+        cls,
+        organization_id: str,
+        **kwargs: Any,
+    ) -> Organization:
         """
         Get a single organization.
 
@@ -71,13 +72,15 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = '/organizations/{}'.format(organization_id)
+        url = "/organizations/{}".format(organization_id)
 
         # Return Organization object of GET request response.
-        return cls(dtrequests.DTRequest.get(
-            url=url,
-            **kwargs,
-        ))
+        return cls(
+            dtrequests.DTRequest.get(
+                url=url,
+                **kwargs,
+            )
+        )
 
     @classmethod
     def list_organizations(cls, **kwargs: Any) -> list[Organization]:
@@ -104,16 +107,17 @@ class Organization(OutputBase):
 
         # Return list of Organization objects of paginated GET response.
         orgs = dtrequests.DTRequest.paginated_get(
-            url='/organizations',
-            pagination_key='organizations',
+            url="/organizations",
+            pagination_key="organizations",
             **kwargs,
         )
         return [cls(org) for org in orgs]
 
     @staticmethod
-    def list_members(organization_id: str,
-                     **kwargs: Any,
-                     ) -> list[Member]:
+    def list_members(
+        organization_id: str,
+        **kwargs: Any,
+    ) -> list[Member]:
         """
         Gets a list of all members in an organization.
 
@@ -138,22 +142,23 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = '/organizations/{}/members'.format(organization_id)
+        url = "/organizations/{}/members".format(organization_id)
 
         # Return list of Member objects of paginated GET response.
         members = dtrequests.DTRequest.paginated_get(
             url=url,
-            pagination_key='members',
+            pagination_key="members",
             **kwargs,
         )
         return [Member(m) for m in members]
 
     @staticmethod
-    def add_member(organization_id: str,
-                   email: str,
-                   roles: list[str],
-                   **kwargs: Any,
-                   ) -> Member:
+    def add_member(
+        organization_id: str,
+        email: str,
+        roles: list[str],
+        **kwargs: Any,
+    ) -> Member:
         """
         Add a new member to the specified organization.
 
@@ -187,25 +192,28 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = '/organizations/{}/members'.format(organization_id)
+        url = "/organizations/{}/members".format(organization_id)
 
         # Construct request body.
         body: dict = dict()
-        body['roles'] = ['roles/' + r for r in roles]
-        body['email'] = email
+        body["roles"] = ["roles/" + r for r in roles]
+        body["email"] = email
 
         # Return Member object of POST request response.
-        return Member(dtrequests.DTRequest.post(
-            url=url,
-            body=body,
-            **kwargs,
-        ))
+        return Member(
+            dtrequests.DTRequest.post(
+                url=url,
+                body=body,
+                **kwargs,
+            )
+        )
 
     @staticmethod
-    def get_member(member_id: str,
-                   organization_id: str,
-                   **kwargs: Any,
-                   ) -> Member:
+    def get_member(
+        member_id: str,
+        organization_id: str,
+        **kwargs: Any,
+    ) -> Member:
         """
         Get a member from the specified organization.
 
@@ -237,22 +245,25 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = '/organizations/{}/members/{}'.format(
+        url = "/organizations/{}/members/{}".format(
             organization_id,
             member_id,
         )
 
         # Return Member object of GET request response.
-        return Member(dtrequests.DTRequest.get(
-            url=url,
-            **kwargs,
-        ))
+        return Member(
+            dtrequests.DTRequest.get(
+                url=url,
+                **kwargs,
+            )
+        )
 
     @staticmethod
-    def remove_member(member_id: str,
-                      organization_id: str,
-                      **kwargs: Any,
-                      ) -> None:
+    def remove_member(
+        member_id: str,
+        organization_id: str,
+        **kwargs: Any,
+    ) -> None:
         """
         Revoke a member's membership in the specified organization.
         This does not delete the underlying Service Account or User.
@@ -280,7 +291,7 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = '/organizations/{}/members/{}'.format(
+        url = "/organizations/{}/members/{}".format(
             organization_id,
             member_id,
         )
@@ -292,10 +303,11 @@ class Organization(OutputBase):
         )
 
     @staticmethod
-    def get_member_invite_url(member_id: str,
-                              organization_id: str,
-                              **kwargs: Any,
-                              ) -> str:
+    def get_member_invite_url(
+        member_id: str,
+        organization_id: str,
+        **kwargs: Any,
+    ) -> str:
         """
         Get the invite URL for a member with pending invite.
 
@@ -330,22 +342,26 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = '/organizations/{}/members/{}'.format(
-            organization_id,
-            member_id,
-        ) + ':getInviteUrl'
+        url = (
+            "/organizations/{}/members/{}".format(
+                organization_id,
+                member_id,
+            )
+            + ":getInviteUrl"
+        )
 
         # Return url string in GET response.
         invite_url: str = dtrequests.DTRequest.get(
             url=url,
             **kwargs,
-        )['inviteUrl']
+        )["inviteUrl"]
         return invite_url
 
     @staticmethod
-    def list_permissions(organization_id: str,
-                         **kwargs: Any,
-                         ) -> list[str]:
+    def list_permissions(
+        organization_id: str,
+        **kwargs: Any,
+    ) -> list[str]:
         """
         List permissions available in the specified organization.
 
@@ -372,12 +388,12 @@ class Organization(OutputBase):
         """
 
         # Construct URL
-        url = '/organizations/{}/permissions'.format(organization_id)
+        url = "/organizations/{}/permissions".format(organization_id)
 
         # Return list of permissions in GET response.
         permissions: list[str] = dtrequests.DTRequest.paginated_get(
             url=url,
-            pagination_key='permissions',
+            pagination_key="permissions",
             **kwargs,
         )
         return permissions
