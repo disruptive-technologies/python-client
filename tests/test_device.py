@@ -1,9 +1,9 @@
 from unittest.mock import patch
 
 import disruptive
+import disruptive.errors as dterrors
 import disruptive.events.events as dtevents
 import tests.api_responses as dtapiresponses
-import disruptive.errors as dterrors
 
 
 class TestDevice():
@@ -88,7 +88,7 @@ class TestDevice():
         request_mock.assert_request_count(1)
 
         # output should be list.
-        assert type(devices) == list
+        assert isinstance(devices, list)
 
         # Assert output is list of Device.
         for d in devices:
@@ -126,7 +126,7 @@ class TestDevice():
         request_mock.assert_request_count(1)
 
         # output should be list.
-        assert type(devices) == list
+        assert isinstance(devices, list)
 
         # Assert output is list of Device.
         for d in devices:
