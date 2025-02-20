@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from typing import Optional, Any
+import warnings
+from typing import Any, Optional
 
 import disruptive.logging as dtlog
-import disruptive.requests as dtrequests
-from disruptive.events import events
 import disruptive.outputs as dtoutputs
-from disruptive.errors import TransferDeviceError, LabelUpdateError
+import disruptive.requests as dtrequests
+from disruptive.errors import LabelUpdateError, TransferDeviceError
+from disruptive.events import events
 
 
 class Device(dtoutputs.OutputBase):
@@ -151,16 +152,21 @@ class Device(dtoutputs.OutputBase):
                      device_types: Optional[list[str]] = None,
                      label_filters: Optional[dict[str, str]] = None,
                      order_by: Optional[str] = None,
+                     organization_id: Optional[str] = None,
+                     project_ids: Optional[list[str]] = None,
                      **kwargs: Any,
                      ) -> list[Device]:
         """
-        Gets a list of the current state of all devices in a
-        project, including emulated devices.
+        Gets a list of devices from either a project or
+        projects in an organization.
 
         Parameters
         ----------
         project_id : str
-            Unique ID of the target project.
+            Either a unique ID of the target project, or
+            wildcard `"-"` to list devices from all projects
+            in an organization. If `"-"` is provided, the
+            parameter `organization_id` must be set.
         query : str, optional
             Keyword-based device search device type, labels, and identifiers.
             Does not provide additional capabilities over setting explicit
@@ -177,6 +183,14 @@ class Device(dtoutputs.OutputBase):
             The field name you want to order the response by.
             Referred to using dot notation (i.e. "reported.temperature.value").
             Default order is ascending, but can be flipped by prefixing "-".
+        organization_id : str, optional
+            Unique ID of the target organization.
+            Required if `project_id` is wildcard `"-"`.
+            Ignored if `project_id` is unique project ID.
+        project_ids : list[str], optional
+            Filter by a list of project IDs.
+            Optional if `project_id` is wildcard `"-"`.
+            Ignored if `project_id` is unique project ID.
         **kwargs
             Arbitrary keyword arguments.
             See the :ref:`Configuration <configuration>` page.
@@ -191,6 +205,12 @@ class Device(dtoutputs.OutputBase):
         >>> # List all devices in a project.
         >>> devices = dt.Device.list_devices(
         ...     project_id='<PROJECT_ID>',
+        ... )
+
+        >>> # List all devices in an organization.
+        >>> devices = dt.Device.list_devices(
+        ...     project_id='-',
+        ...     organization_id='<ORGANIZATION_ID>',
         ... )
 
         >>> # List all touch, temperature, and proximity sensors
@@ -213,7 +233,27 @@ class Device(dtoutputs.OutputBase):
 
         """
 
-        # Construct parameters dictionary.
+        # Enforce organization_id if project_id is wildcard.
+        if project_id == '-' and organization_id is None:
+            raise ValueError(
+                'Parameter `organization_id` is required when '
+                '`project_id` is wildcard `"-"`.'
+            )
+
+        # Warn about unsupported combination of parameters.
+        if project_id != '-' and organization_id is not None:
+            warnings.warn(
+                'Parameter `organization_id` is ignored when '
+                '`project_id` is not wildcard "-".',
+                UserWarning,
+            )
+        if project_id != '-' and project_ids is not None:
+            warnings.warn(
+                'Parameter `project_ids` is ignored when '
+                '`project_id` is not wildcard "-".',
+                UserWarning,
+            )
+
         params: dict = dict()
         if query is not None:
             params['query'] = query
@@ -223,6 +263,10 @@ class Device(dtoutputs.OutputBase):
             params['device_types'] = device_types
         if order_by is not None:
             params['order_by'] = order_by
+        if organization_id is not None:
+            params['organization'] = 'organizations/' + organization_id
+        if project_ids is not None:
+            params['projects'] = ['projects/' + xid for xid in project_ids]
 
         # Convert label_filters dictionary to list of strings.
         if label_filters is not None:
@@ -233,7 +277,7 @@ class Device(dtoutputs.OutputBase):
 
         # Return list of Device objects of paginated GET response.
         devices = dtrequests.DTRequest.paginated_get(
-            url='/projects/{}/devices'.format(project_id),
+            url=f'/projects/{project_id}/devices',
             pagination_key='devices',
             params=params,
             **kwargs,
