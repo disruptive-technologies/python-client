@@ -2,8 +2,5 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.black]
-force-exclude = '.*'
-
-[tool.ruff.format]
-exclude = ["*"]
+[tool.ruff]
+line-length = 79

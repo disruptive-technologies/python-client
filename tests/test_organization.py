@@ -2,8 +2,7 @@ import disruptive
 import tests.api_responses as dtapiresponses
 
 
-class TestOrganization():
-
+class TestOrganization:
     def test_repr(self, request_mock):
         # Update the response data with organization data.
         res = dtapiresponses.organization
@@ -11,7 +10,7 @@ class TestOrganization():
 
         # Fetch an organization.
         x = disruptive.Organization.get_organization(
-            organization_id='organization_id',
+            organization_id="organization_id",
         )
 
         # Evaluate __repr__ function and compare copy.
@@ -24,23 +23,23 @@ class TestOrganization():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        o = disruptive.Organization.get_organization('organization_id')
+        o = disruptive.Organization.get_organization("organization_id")
 
         # Assert attributes unpacked correctly.
-        assert o.organization_id == res['name'].split('/')[-1]
-        assert o.display_name == res['displayName']
+        assert o.organization_id == res["name"].split("/")[-1]
+        assert o.display_name == res["displayName"]
 
     def test_get_organization(self, request_mock):
         # Update the response data with organization data.
         request_mock.json = dtapiresponses.organization
 
         # Call the appropriate endpoint.
-        o = disruptive.Organization.get_organization('organization_id')
+        o = disruptive.Organization.get_organization("organization_id")
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/organizations/organization_id',
+            method="GET",
+            url=disruptive.base_url + "/organizations/organization_id",
         )
 
         # Assert single request sent.
@@ -58,8 +57,8 @@ class TestOrganization():
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/organizations',
+            method="GET",
+            url=disruptive.base_url + "/organizations",
         )
 
         # Assert single request sent.
@@ -74,12 +73,12 @@ class TestOrganization():
         request_mock.json = dtapiresponses.members
 
         # Call the appropriate endpoint
-        members = disruptive.Organization.list_members('org_id')
+        members = disruptive.Organization.list_members("org_id")
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/organizations/org_id/members',
+            method="GET",
+            url=disruptive.base_url + "/organizations/org_id/members",
         )
 
         # Assert single request sent.
@@ -95,19 +94,19 @@ class TestOrganization():
 
         # Call the appropriate endpoint
         member = disruptive.Organization.add_member(
-            organization_id='org_id',
-            email='service_account_email@domain.com',
-            roles=['organization.admin'],
+            organization_id="org_id",
+            email="service_account_email@domain.com",
+            roles=["organization.admin"],
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='POST',
-            url=disruptive.base_url+'/organizations/org_id/members',
+            method="POST",
+            url=disruptive.base_url + "/organizations/org_id/members",
             body={
-                'roles': ['roles/organization.admin'],
-                'email': 'service_account_email@domain.com',
-            }
+                "roles": ["roles/organization.admin"],
+                "email": "service_account_email@domain.com",
+            },
         )
 
         # Assert single request sent.
@@ -122,14 +121,15 @@ class TestOrganization():
 
         # Call the appropriate endpoint
         member = disruptive.Organization.get_member(
-            organization_id='org_id',
-            member_id='member_id',
+            organization_id="org_id",
+            member_id="member_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/organizations/org_id/members/member_id',
+            method="GET",
+            url=disruptive.base_url
+            + "/organizations/org_id/members/member_id",
         )
 
         # Assert single request sent.
@@ -144,14 +144,15 @@ class TestOrganization():
 
         # Call the appropriate endpoint
         response = disruptive.Organization.remove_member(
-            organization_id='org_id',
-            member_id='member_id',
+            organization_id="org_id",
+            member_id="member_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='DELETE',
-            url=disruptive.base_url+'/organizations/org_id/members/member_id',
+            method="DELETE",
+            url=disruptive.base_url
+            + "/organizations/org_id/members/member_id",
         )
 
         # Assert single request sent.
@@ -162,27 +163,28 @@ class TestOrganization():
 
     def test_get_member_invite_url(self, request_mock):
         # Update the response with an email string.
-        res = {'inviteUrl': 'some-email@domain.com'}
+        res = {"inviteUrl": "some-email@domain.com"}
         request_mock.json = res
 
         # Call the appropriate endpoint
         response = disruptive.Organization.get_member_invite_url(
-            organization_id='org_id',
-            member_id='member_id',
+            organization_id="org_id",
+            member_id="member_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/organizations/org_id/members/'
-            + 'member_id:getInviteUrl',
+            method="GET",
+            url=disruptive.base_url
+            + "/organizations/org_id/members/"
+            + "member_id:getInviteUrl",
         )
 
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
         # Assert output matches response content.
-        assert response == res['inviteUrl']
+        assert response == res["inviteUrl"]
 
     def test_list_permissions(self, request_mock):
         # Update the response with list of permissions.
@@ -190,16 +192,16 @@ class TestOrganization():
 
         # Call the appropriate endpoint
         response = disruptive.Organization.list_permissions(
-            organization_id='org_id',
+            organization_id="org_id",
         )
 
         # Assert output is of type list.
-        assert type(response) == list
+        assert isinstance(response, list)
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/organizations/org_id/permissions'
+            method="GET",
+            url=disruptive.base_url + "/organizations/org_id/permissions",
         )
 
         # Assert single request sent.
@@ -207,4 +209,4 @@ class TestOrganization():
 
         # Assert only strings in output list.
         for permission in response:
-            assert type(permission) == str
+            assert isinstance(permission, str)

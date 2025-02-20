@@ -20,8 +20,8 @@ class Claim(dtoutputs.OutputBase):
 
     """
 
-    KIT = 'KIT'
-    DEVICE = 'DEVICE'
+    KIT = "KIT"
+    DEVICE = "DEVICE"
     CLAIM_ITEMS = [KIT, DEVICE]
 
     def __init__(self, claim: dict) -> None:
@@ -39,16 +39,18 @@ class Claim(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, claim)
 
         # Unpack attributes from dictionary.
-        self.type: str = claim['type']
-        self.claimed_item: Claim.ClaimKit | Claim.ClaimDevice = \
+        self.type: str = claim["type"]
+        self.claimed_item: Claim.ClaimKit | Claim.ClaimDevice = (
             self._resolve_type(claim)
+        )
 
     @classmethod
-    def claim_info(cls,
-                   identifier: str,
-                   organization_id: Optional[str] = None,
-                   **kwargs: Any,
-                   ) -> Claim:
+    def claim_info(
+        cls,
+        identifier: str,
+        organization_id: Optional[str] = None,
+        **kwargs: Any,
+    ) -> Claim:
         """
         Get claim information for either a device
         or a kit by looking up an identifier.
@@ -92,23 +94,24 @@ class Claim(dtoutputs.OutputBase):
         """
 
         if not isinstance(identifier, str):
-            raise TypeError(f'Identifier must be str, got {type(identifier)}.')
+            raise TypeError(f"Identifier must be str, got {type(identifier)}.")
 
-        url = f'/claimInfo?identifier={identifier}'
+        url = f"/claimInfo?identifier={identifier}"
 
         # Add organization resource name to url if provided.
         if organization_id is not None:
-            url += f'&organization=organizations/{organization_id}'
+            url += f"&organization=organizations/{organization_id}"
 
         return cls(dtrequests.DTRequest.get(url, **kwargs))
 
     @staticmethod
-    def claim(target_project_id: str,
-              kit_ids: Optional[list[str]] = None,
-              device_ids: Optional[list[str]] = None,
-              dry_run: bool = True,
-              **kwargs: Any,
-              ) -> tuple[list[Claim.ClaimDevice], list[Exception]]:
+    def claim(
+        target_project_id: str,
+        kit_ids: Optional[list[str]] = None,
+        device_ids: Optional[list[str]] = None,
+        dry_run: bool = True,
+        **kwargs: Any,
+    ) -> tuple[list[Claim.ClaimDevice], list[Exception]]:
         """
         Claim multiple kits and/or devices to your project.
 
@@ -182,31 +185,31 @@ class Claim(dtoutputs.OutputBase):
 
         """
 
-        url = f'/projects/{target_project_id}/devices:claim'
-        url += f'?dryRun={str(dry_run).lower()}'
+        url = f"/projects/{target_project_id}/devices:claim"
+        url += f"?dryRun={str(dry_run).lower()}"
 
         body = {}
         if kit_ids is not None:
-            body['kitIds'] = kit_ids
+            body["kitIds"] = kit_ids
         if device_ids is not None:
-            body['deviceIds'] = device_ids
+            body["deviceIds"] = device_ids
 
         res = dtrequests.DTRequest.post(url, body=body, **kwargs)
 
         return (
-            [Claim.ClaimDevice(d) for d in res['claimedDevices']],
-            Claim._parse_claim_errors(res['claimErrors']),
+            [Claim.ClaimDevice(d) for d in res["claimedDevices"]],
+            Claim._parse_claim_errors(res["claimErrors"]),
         )
 
     @staticmethod
     def _parse_claim_errors(res_errors: dict) -> list[Exception]:
         errors: list[Exception] = []
-        for error in res_errors['devices'] + res_errors['kits']:
-            if error['code'] == 'ALREADY_CLAIMED':
+        for error in res_errors["devices"] + res_errors["kits"]:
+            if error["code"] == "ALREADY_CLAIMED":
                 errors.append(dterrors.ClaimErrorDeviceAlreadyClaimed(error))
-            elif error['code'] == 'NOT_FOUND' and 'deviceId' in error:
+            elif error["code"] == "NOT_FOUND" and "deviceId" in error:
                 errors.append(dterrors.ClaimErrorDeviceNotFound(error))
-            elif error['code'] == 'NOT_FOUND' and 'kitId' in error:
+            elif error["code"] == "NOT_FOUND" and "kitId" in error:
                 errors.append(dterrors.ClaimErrorKitNotFound(error))
             else:
                 errors.append(dterrors.ClaimError(error))
@@ -228,12 +231,12 @@ class Claim(dtoutputs.OutputBase):
 
         """
 
-        if claim['type'] == Claim.KIT:
-            return Claim.ClaimKit(claim['kit'])
-        elif claim['type'] == Claim.DEVICE:
-            return Claim.ClaimDevice(claim['device'])
+        if claim["type"] == Claim.KIT:
+            return Claim.ClaimKit(claim["kit"])
+        elif claim["type"] == Claim.DEVICE:
+            return Claim.ClaimDevice(claim["device"])
         else:
-            raise KeyError(f'unknown claim type {claim["type"]}')
+            raise KeyError(f"unknown claim type {claim['type']}")
 
     class ClaimDevice(dtoutputs.OutputBase):
         """
@@ -262,10 +265,10 @@ class Claim(dtoutputs.OutputBase):
             dtoutputs.OutputBase.__init__(self, device)
 
             # Unpack attributes from raw response dictionary.
-            self.device_id: str = device['deviceId']
-            self.device_type: str = device['deviceType']
-            self.product_number: str = device['productNumber']
-            self.is_claimed: bool = device['isClaimed']
+            self.device_id: str = device["deviceId"]
+            self.device_type: str = device["deviceType"]
+            self.product_number: str = device["productNumber"]
+            self.is_claimed: bool = device["isClaimed"]
 
     class ClaimKit(dtoutputs.OutputBase):
         """
@@ -292,7 +295,8 @@ class Claim(dtoutputs.OutputBase):
             dtoutputs.OutputBase.__init__(self, kit)
 
             # Unpack attributes from raw response dictionary.
-            self.kit_id: str = kit['kitId']
-            self.display_name: str = kit['displayName']
-            self.devices: list[Claim.ClaimDevice] \
-                = [Claim.ClaimDevice(d) for d in kit['devices']]
+            self.kit_id: str = kit["kitId"]
+            self.display_name: str = kit["displayName"]
+            self.devices: list[Claim.ClaimDevice] = [
+                Claim.ClaimDevice(d) for d in kit["devices"]
+            ]

@@ -62,10 +62,10 @@ class TransferDeviceError(BatchError):
         super().__init__(error)
 
         # Unpack error dictionary.
-        self.device_id: str = error['device'].split('/')[-1]
-        self.project_id: str = error['device'].split('/')[1]
-        self.status_code: str = error['status']['code']
-        self.message: str = error['status']['message']
+        self.device_id: str = error["device"].split("/")[-1]
+        self.project_id: str = error["device"].split("/")[1]
+        self.status_code: str = error["status"]["code"]
+        self.message: str = error["status"]["message"]
 
 
 class LabelUpdateError(BatchError):
@@ -92,10 +92,10 @@ class LabelUpdateError(BatchError):
         super().__init__(error)
 
         # Unpack error dictionary.
-        self.device_id: str = error['device'].split('/')[-1]
-        self.project_id: str = error['device'].split('/')[1]
-        self.status_code: str = error['status']['code']
-        self.message: str = error['status']['message']
+        self.device_id: str = error["device"].split("/")[-1]
+        self.project_id: str = error["device"].split("/")[1]
+        self.status_code: str = error["status"]["code"]
+        self.message: str = error["status"]["message"]
 
 
 # ------------------------- ServerError -------------------------
@@ -280,9 +280,9 @@ class ClaimErrorDeviceAlreadyClaimed(ClaimError):
         # Inherit from ClaimError parent.
         super().__init__(error)
 
-        self.device_id: str = error['deviceId']
-        self.code: str = error['code']
-        self.message: str = error['message']
+        self.device_id: str = error["deviceId"]
+        self.code: str = error["code"]
+        self.message: str = error["message"]
 
 
 class ClaimErrorKitNotFound(ClaimError):
@@ -295,9 +295,9 @@ class ClaimErrorKitNotFound(ClaimError):
         # Inherit from ClaimError parent.
         super().__init__(error)
 
-        self.kit_id: str = error['kitId']
-        self.code: str = error['code']
-        self.message: str = error['message']
+        self.kit_id: str = error["kitId"]
+        self.code: str = error["code"]
+        self.message: str = error["message"]
 
 
 class ClaimErrorDeviceNotFound(ClaimError):
@@ -310,16 +310,17 @@ class ClaimErrorDeviceNotFound(ClaimError):
         # Inherit from ClaimError parent.
         super().__init__(error)
 
-        self.device_id: str = error['deviceId']
-        self.code: str = error['code']
-        self.message: str = error['message']
+        self.device_id: str = error["deviceId"]
+        self.code: str = error["code"]
+        self.message: str = error["message"]
 
 
 # ------------------------- error handling -------------------------
-def parse_request_error(caught_error: Exception,
-                        data: dict,
-                        nth_attempt: int,
-                        ) -> tuple:
+def parse_request_error(
+    caught_error: Exception,
+    data: dict,
+    nth_attempt: int,
+) -> tuple:
     """
     Depending on the request error caught, choose a course of action.
 
@@ -346,7 +347,7 @@ def parse_request_error(caught_error: Exception,
     # Read Timeouts should be attempted again.
     if isinstance(caught_error, requests.exceptions.ReadTimeout):
         return (
-            ReadTimeout('Connection timed out.'),
+            ReadTimeout("Connection timed out."),
             True,
             nth_attempt**2,
         )
@@ -354,7 +355,7 @@ def parse_request_error(caught_error: Exception,
     # Connection errors should be attempted again.
     elif isinstance(caught_error, requests.exceptions.ConnectionError):
         return (
-            ConnectionError('Failed to establish connection.'),
+            ConnectionError("Failed to establish connection."),
             True,
             nth_attempt**2,
         )
@@ -363,11 +364,12 @@ def parse_request_error(caught_error: Exception,
         return caught_error, False, None
 
 
-def parse_api_status_code(status_code: Optional[int],
-                          data: dict,
-                          headers: Any,
-                          nth_attempt: int,
-                          ) -> Any:
+def parse_api_status_code(
+    status_code: Optional[int],
+    data: dict,
+    headers: Any,
+    nth_attempt: int,
+) -> Any:
     """
     Depending on the status code, returns an exception, retry boolean
     and, incemented retry attempt.
@@ -417,11 +419,11 @@ def parse_api_status_code(status_code: Optional[int],
     elif status_code == 409:
         return Conflict(data), False, None
     elif status_code == 429:
-        if 'Retry-After' in headers:
+        if "Retry-After" in headers:
             return (
                 TooManyRequests(data),
                 True,
-                int(headers['Retry-After']),
+                int(headers["Retry-After"]),
             )
         else:
             return TooManyRequests(data), False, None

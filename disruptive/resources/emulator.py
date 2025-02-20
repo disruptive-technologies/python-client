@@ -7,7 +7,7 @@ import disruptive.requests as dtrequests
 from disruptive.resources.device import Device
 
 
-class Emulator():
+class Emulator:
     """
     Contains staticmethods for the emulator resource.
     Used for namespacing only and thus does not have a constructor
@@ -15,12 +15,13 @@ class Emulator():
     """
 
     @staticmethod
-    def create_device(project_id: str,
-                      device_type: str,
-                      display_name: Optional[str] = None,
-                      labels: dict[str, str] = {},
-                      **kwargs: Any,
-                      ) -> Device:
+    def create_device(
+        project_id: str,
+        device_type: str,
+        display_name: Optional[str] = None,
+        labels: dict[str, str] = {},
+        **kwargs: Any,
+    ) -> Device:
         """
         Create a new emulated device with specified type and project.
 
@@ -61,30 +62,33 @@ class Emulator():
         """
 
         # Construct URL
-        url = '/projects/{}/devices'.format(project_id)
+        url = "/projects/{}/devices".format(project_id)
 
         # Construct body dictionary.
         body: dict = dict()
-        body['type'] = device_type
-        body['labels'] = labels
+        body["type"] = device_type
+        body["labels"] = labels
 
         # Add display_name to labels dictionary in body.
         if display_name is not None:
-            body['labels']['name'] = display_name
+            body["labels"]["name"] = display_name
 
         # Return Device object of GET request response.
-        return Device(dtrequests.DTRequest.post(
-            url=url,
-            base_url=disruptive.emulator_base_url,
-            body=body,
-            **kwargs,
-        ))
+        return Device(
+            dtrequests.DTRequest.post(
+                url=url,
+                base_url=disruptive.emulator_base_url,
+                body=body,
+                **kwargs,
+            )
+        )
 
     @staticmethod
-    def delete_device(device_id: str,
-                      project_id: str,
-                      **kwargs: Any,
-                      ) -> None:
+    def delete_device(
+        device_id: str,
+        project_id: str,
+        **kwargs: Any,
+    ) -> None:
         """
         Deletes the specified emulated device.
 
@@ -106,7 +110,7 @@ class Emulator():
         """
 
         # Construct URL
-        url = '/projects/{}/devices/{}'.format(project_id, device_id)
+        url = "/projects/{}/devices/{}".format(project_id, device_id)
 
         # Send DELETE request, but return nothing.
         dtrequests.DTRequest.delete(
@@ -116,28 +120,29 @@ class Emulator():
         )
 
     @staticmethod
-    def publish_event(device_id: str,
-                      project_id: str,
-                      data: disruptive.events.Touch |
-                      disruptive.events.Temperature |
-                      disruptive.events.ObjectPresent |
-                      disruptive.events.Humidity |
-                      disruptive.events.ObjectPresentCount |
-                      disruptive.events.TouchCount |
-                      disruptive.events.WaterPresent |
-                      disruptive.events.NetworkStatus |
-                      disruptive.events.BatteryStatus |
-                      disruptive.events.ConnectionStatus |
-                      disruptive.events.EthernetStatus |
-                      disruptive.events.CellularStatus |
-                      disruptive.events.Co2 |
-                      disruptive.events.Pressure |
-                      disruptive.events.Motion |
-                      disruptive.events.DeskOccupancy |
-                      disruptive.events.Contact |
-                      disruptive.events.ProbeWireStatus,
-                      **kwargs: Any,
-                      ) -> None:
+    def publish_event(
+        device_id: str,
+        project_id: str,
+        data: disruptive.events.Touch
+        | disruptive.events.Temperature
+        | disruptive.events.ObjectPresent
+        | disruptive.events.Humidity
+        | disruptive.events.ObjectPresentCount
+        | disruptive.events.TouchCount
+        | disruptive.events.WaterPresent
+        | disruptive.events.NetworkStatus
+        | disruptive.events.BatteryStatus
+        | disruptive.events.ConnectionStatus
+        | disruptive.events.EthernetStatus
+        | disruptive.events.CellularStatus
+        | disruptive.events.Co2
+        | disruptive.events.Pressure
+        | disruptive.events.Motion
+        | disruptive.events.DeskOccupancy
+        | disruptive.events.Contact
+        | disruptive.events.ProbeWireStatus,
+        **kwargs: Any,
+    ) -> None:
         """
         From the specified device, publish an event of the given type.
 
@@ -172,7 +177,7 @@ class Emulator():
         """
 
         # Construct URL
-        url = '/projects/{}/devices/{}:publish'.format(project_id, device_id)
+        url = "/projects/{}/devices/{}:publish".format(project_id, device_id)
 
         # Send POST request, but return nothing.
         dtrequests.DTRequest.post(

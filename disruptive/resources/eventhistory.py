@@ -17,13 +17,14 @@ class EventHistory(list):
     """
 
     @staticmethod
-    def list_events(device_id: str,
-                    project_id: str,
-                    event_types: Optional[list[str]] = None,
-                    start_time: Optional[str | datetime] = None,
-                    end_time: Optional[str | datetime] = None,
-                    **kwargs: Any,
-                    ) -> EventHistory:
+    def list_events(
+        device_id: str,
+        project_id: str,
+        event_types: Optional[list[str]] = None,
+        start_time: Optional[str | datetime] = None,
+        end_time: Optional[str | datetime] = None,
+        **kwargs: Any,
+    ) -> EventHistory:
         """
         Get the event history for a single device.
 
@@ -74,25 +75,25 @@ class EventHistory(list):
         """
 
         # Construct URL.
-        url = '/projects/{}/devices/{}/events'.format(project_id, device_id)
+        url = "/projects/{}/devices/{}/events".format(project_id, device_id)
 
         # Construct parameters dictionary.
         params: dict = dict()
         if event_types is not None:
-            params['eventTypes'] = event_types
+            params["eventTypes"] = event_types
 
         # Sanitize timestamps as they must be iso8601 format.
         start_time_iso8601 = dttrans.to_iso8601(start_time)
         if start_time_iso8601 is not None:
-            params['startTime'] = start_time_iso8601
+            params["startTime"] = start_time_iso8601
         end_time_iso8601 = dttrans.to_iso8601(end_time)
         if end_time_iso8601 is not None:
-            params['endTime'] = end_time_iso8601
+            params["endTime"] = end_time_iso8601
 
         # Send paginated GET request.
         res = dtrequests.DTRequest.paginated_get(
             url=url,
-            pagination_key='events',
+            pagination_key="events",
             params=params,
             **kwargs,
         )
@@ -118,16 +119,18 @@ class EventHistory(list):
         rows = []
         for event in self:
             base = {
-                'device_id': event.device_id,
-                'event_id': event.event_id,
-                'event_type': event.event_type,
+                "device_id": event.device_id,
+                "event_id": event.event_id,
+                "event_type": event.event_type,
             }
 
             if event.event_type == disruptive.events.TEMPERATURE:
-                rows += [{
+                rows += [
+                    {
                         **base,
                         **sample.raw,
-                    } for sample in event.data.samples
+                    }
+                    for sample in event.data.samples
                 ]
             else:
                 rows.append({**base, **event.data.raw})
@@ -155,16 +158,18 @@ class EventHistory(list):
             import pandas  # type: ignore
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
-                'Missing package `pandas`.\n\n'
-                'to_dataframe() requires additional third-party packages.\n'
-                '>> pip install disruptive[extra]'
+                "Missing package `pandas`.\n\n"
+                "to_dataframe() requires additional third-party packages.\n"
+                ">> pip install disruptive[extra]"
             )
 
         rows = self._to_dataframe_format()
 
         df = pandas.json_normalize(
-            rows, None, ['device_id', 'event_id', 'event_type'],
-            errors='ignore',
+            rows,
+            None,
+            ["device_id", "event_id", "event_type"],
+            errors="ignore",
         )
 
         # Convert columns headers from camelCase to snake_case for consistency.
@@ -194,9 +199,9 @@ class EventHistory(list):
             import polars as pl  # type: ignore
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
-                'Missing package `pandas`.\n\n'
-                'to_dataframe() requires additional third-party packages.\n'
-                '>> pip install disruptive[extra]'
+                "Missing package `pandas`.\n\n"
+                "to_dataframe() requires additional third-party packages.\n"
+                ">> pip install disruptive[extra]"
             )
 
         rows = self._to_dataframe_format()
@@ -208,10 +213,14 @@ class EventHistory(list):
         df = df.rename(mapping=map)
 
         # Convert timestamp columns to datetime type.
-        if 'update_time' in df.columns \
-                and df['update_time'].dtype == pl.String:
-            df = df.with_columns([
-                pl.col('update_time').str.to_datetime(),
-            ])
+        if (
+            "update_time" in df.columns
+            and df["update_time"].dtype == pl.String
+        ):
+            df = df.with_columns(
+                [
+                    pl.col("update_time").str.to_datetime(),
+                ]
+            )
 
         return df

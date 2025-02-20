@@ -42,22 +42,31 @@ class Device(dtoutputs.OutputBase):
     """
 
     # Constants for the various device types.
-    TEMPERATURE: str = 'temperature'
-    PROXIMITY: str = 'proximity'
-    TOUCH: str = 'touch'
-    HUMIDITY: str = 'humidity'
-    PROXIMITY_COUNTER: str = 'proximityCounter'
-    TOUCH_COUNTER: str = 'touchCounter'
-    WATER_DETECTOR: str = 'waterDetector'
-    CLOUD_CONNECTOR: str = 'ccon'
-    CO2: str = 'co2'
-    MOTION: str = 'motion'
-    DESK_OCCUPANCY: str = 'deskOccupancy'
-    CONTACT: str = 'contact'
+    TEMPERATURE: str = "temperature"
+    PROXIMITY: str = "proximity"
+    TOUCH: str = "touch"
+    HUMIDITY: str = "humidity"
+    PROXIMITY_COUNTER: str = "proximityCounter"
+    TOUCH_COUNTER: str = "touchCounter"
+    WATER_DETECTOR: str = "waterDetector"
+    CLOUD_CONNECTOR: str = "ccon"
+    CO2: str = "co2"
+    MOTION: str = "motion"
+    DESK_OCCUPANCY: str = "deskOccupancy"
+    CONTACT: str = "contact"
     DEVICE_TYPES = [
-        TEMPERATURE, PROXIMITY, TOUCH, HUMIDITY,
-        PROXIMITY_COUNTER, TOUCH_COUNTER, WATER_DETECTOR,
-        CLOUD_CONNECTOR, CO2, MOTION, DESK_OCCUPANCY, CONTACT,
+        TEMPERATURE,
+        PROXIMITY,
+        TOUCH,
+        HUMIDITY,
+        PROXIMITY_COUNTER,
+        TOUCH_COUNTER,
+        WATER_DETECTOR,
+        CLOUD_CONNECTOR,
+        CO2,
+        MOTION,
+        DESK_OCCUPANCY,
+        CONTACT,
     ]
 
     def __init__(self, device: dict) -> None:
@@ -75,38 +84,39 @@ class Device(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, device)
 
         # Unpack attributes from dictionary.
-        self.device_id: str = device['name'].split('/')[-1]
-        self.project_id: str = device['name'].split('/')[1]
-        self.device_type: str = device['type']
-        self.labels: dict = device['labels']
+        self.device_id: str = device["name"].split("/")[-1]
+        self.project_id: str = device["name"].split("/")[1]
+        self.device_type: str = device["type"]
+        self.labels: dict = device["labels"]
 
         # Set display_name if `name` label key exists.
         self.display_name: str | None = None
-        if 'name' in self.labels:
-            self.display_name = self.labels['name']
+        if "name" in self.labels:
+            self.display_name = self.labels["name"]
 
         # Determine if the device is an emulator by checking id prefix.
         self.is_emulated: bool = False
-        if self.device_id.startswith('emu') and len(self.device_id) == 23:
+        if self.device_id.startswith("emu") and len(self.device_id) == 23:
             self.is_emulated = True
 
         # If it exists, set the product number.
         # This is not present for emulated devices.
-        self.product_number: str = ''
-        if 'productNumber' in device:
-            self.product_number = device['productNumber']
+        self.product_number: str = ""
+        if "productNumber" in device:
+            self.product_number = device["productNumber"]
 
         # If it exists, set the reported object.
         self.reported: Reported | None = None
-        if 'reported' in device:
-            self.reported = Reported(device['reported'])
+        if "reported" in device:
+            self.reported = Reported(device["reported"])
 
     @classmethod
-    def get_device(cls,
-                   device_id: str,
-                   project_id: Optional[str] = None,
-                   **kwargs: Any,
-                   ) -> Device:
+    def get_device(
+        cls,
+        device_id: str,
+        project_id: Optional[str] = None,
+        **kwargs: Any,
+    ) -> Device:
         """
         Gets the current state of a single device.
 
@@ -136,26 +146,27 @@ class Device(dtoutputs.OutputBase):
 
         # If project_id is not given, use wildcard "-".
         if project_id is None:
-            project_id = '-'
+            project_id = "-"
 
         # Construct URL
-        url = '/projects/{}/devices/{}'.format(project_id, device_id)
+        url = "/projects/{}/devices/{}".format(project_id, device_id)
 
         # Return Device object of GET request response.
         return cls(dtrequests.DTRequest.get(url, **kwargs))
 
     @classmethod
-    def list_devices(cls,
-                     project_id: str,
-                     query: Optional[str] = None,
-                     device_ids: Optional[list[str]] = None,
-                     device_types: Optional[list[str]] = None,
-                     label_filters: Optional[dict[str, str]] = None,
-                     order_by: Optional[str] = None,
-                     organization_id: Optional[str] = None,
-                     project_ids: Optional[list[str]] = None,
-                     **kwargs: Any,
-                     ) -> list[Device]:
+    def list_devices(
+        cls,
+        project_id: str,
+        query: Optional[str] = None,
+        device_ids: Optional[list[str]] = None,
+        device_types: Optional[list[str]] = None,
+        label_filters: Optional[dict[str, str]] = None,
+        order_by: Optional[str] = None,
+        organization_id: Optional[str] = None,
+        project_ids: Optional[list[str]] = None,
+        **kwargs: Any,
+    ) -> list[Device]:
         """
         Gets a list of devices from either a project or
         projects in an organization.
@@ -234,62 +245,63 @@ class Device(dtoutputs.OutputBase):
         """
 
         # Enforce organization_id if project_id is wildcard.
-        if project_id == '-' and organization_id is None:
+        if project_id == "-" and organization_id is None:
             raise ValueError(
-                'Parameter `organization_id` is required when '
+                "Parameter `organization_id` is required when "
                 '`project_id` is wildcard `"-"`.'
             )
 
         # Warn about unsupported combination of parameters.
-        if project_id != '-' and organization_id is not None:
+        if project_id != "-" and organization_id is not None:
             warnings.warn(
-                'Parameter `organization_id` is ignored when '
+                "Parameter `organization_id` is ignored when "
                 '`project_id` is not wildcard "-".',
                 UserWarning,
             )
-        if project_id != '-' and project_ids is not None:
+        if project_id != "-" and project_ids is not None:
             warnings.warn(
-                'Parameter `project_ids` is ignored when '
+                "Parameter `project_ids` is ignored when "
                 '`project_id` is not wildcard "-".',
                 UserWarning,
             )
 
         params: dict = dict()
         if query is not None:
-            params['query'] = query
+            params["query"] = query
         if device_ids is not None:
-            params['device_ids'] = device_ids
+            params["device_ids"] = device_ids
         if device_types is not None:
-            params['device_types'] = device_types
+            params["device_types"] = device_types
         if order_by is not None:
-            params['order_by'] = order_by
+            params["order_by"] = order_by
         if organization_id is not None:
-            params['organization'] = 'organizations/' + organization_id
+            params["organization"] = "organizations/" + organization_id
         if project_ids is not None:
-            params['projects'] = ['projects/' + xid for xid in project_ids]
+            params["projects"] = ["projects/" + xid for xid in project_ids]
 
         # Convert label_filters dictionary to list of strings.
         if label_filters is not None:
             labels_list = []
             for key in label_filters:
-                labels_list.append(key + '=' + label_filters[key])
-            params['label_filters'] = labels_list
+                labels_list.append(key + "=" + label_filters[key])
+            params["label_filters"] = labels_list
 
         # Return list of Device objects of paginated GET response.
         devices = dtrequests.DTRequest.paginated_get(
-            url=f'/projects/{project_id}/devices',
-            pagination_key='devices',
+            url=f"/projects/{project_id}/devices",
+            pagination_key="devices",
             params=params,
             **kwargs,
         )
         return [cls(device) for device in devices]
 
     @staticmethod
-    def transfer_devices(device_ids: list[str],
-                         source_project_id: str,
-                         target_project_id: str,
-                         **kwargs: Any,
-                         ) -> list[TransferDeviceError]:
+    def transfer_devices(
+        device_ids: list[str],
+        source_project_id: str,
+        target_project_id: str,
+        **kwargs: Any,
+    ) -> list[TransferDeviceError]:
         """
         Transfers all specified devices to the target project.
 
@@ -329,33 +341,30 @@ class Device(dtoutputs.OutputBase):
         """
 
         # Construct list of devices.
-        name = 'projects/{}/devices/{}'
+        name = "projects/{}/devices/{}"
         devices = [name.format(source_project_id, xid) for xid in device_ids]
 
         # Construct request body dictionary.
-        body = {
-            "devices": devices
-        }
+        body = {"devices": devices}
 
         # Sent POST request.
         response = dtrequests.DTRequest.post(
-            url='/projects/{}/devices:transfer'.format(
-                target_project_id
-            ),
+            url="/projects/{}/devices:transfer".format(target_project_id),
             body=body,
             **kwargs,
         )
 
         # Return any transferErrors found in response.
-        return [TransferDeviceError(err) for err in response['transferErrors']]
+        return [TransferDeviceError(err) for err in response["transferErrors"]]
 
     @staticmethod
-    def set_label(device_id: str,
-                  project_id: str,
-                  key: str,
-                  value: str,
-                  **kwargs: Any,
-                  ) -> list[LabelUpdateError]:
+    def set_label(
+        device_id: str,
+        project_id: str,
+        key: str,
+        value: str,
+        **kwargs: Any,
+    ) -> list[LabelUpdateError]:
         """
         Set a label key and value for a single device.
 
@@ -394,25 +403,26 @@ class Device(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = '/projects/{}/devices:batchUpdate'.format(project_id)
+        url = "/projects/{}/devices:batchUpdate".format(project_id)
 
         # Construct request body dictionary.
         body: dict = dict()
-        body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
-        body['addLabels'] = {key: value}
+        body["devices"] = ["projects/" + project_id + "/devices/" + device_id]
+        body["addLabels"] = {key: value}
 
         # Sent POST request.
         response = dtrequests.DTRequest.post(url, body=body, **kwargs)
 
         # Return any batchErrors found in response.
-        return [LabelUpdateError(err) for err in response['batchErrors']]
+        return [LabelUpdateError(err) for err in response["batchErrors"]]
 
     @staticmethod
-    def remove_label(device_id: str,
-                     project_id: str,
-                     key: str,
-                     **kwargs: Any,
-                     ) -> list[LabelUpdateError]:
+    def remove_label(
+        device_id: str,
+        project_id: str,
+        key: str,
+        **kwargs: Any,
+    ) -> list[LabelUpdateError]:
         """
         Remove a label (key and value) from a single device.
 
@@ -446,26 +456,27 @@ class Device(dtoutputs.OutputBase):
         """
 
         # Construct URL.
-        url = '/projects/{}/devices:batchUpdate'.format(project_id)
+        url = "/projects/{}/devices:batchUpdate".format(project_id)
 
         # Construct request body dictionary.
         body: dict = dict()
-        body['devices'] = ['projects/' + project_id + '/devices/' + device_id]
-        body['removeLabels'] = [key]
+        body["devices"] = ["projects/" + project_id + "/devices/" + device_id]
+        body["removeLabels"] = [key]
 
         # Sent POST request.
         response = dtrequests.DTRequest.post(url, body=body, **kwargs)
 
         # Return any batchErrors found in response.
-        return [LabelUpdateError(err) for err in response['batchErrors']]
+        return [LabelUpdateError(err) for err in response["batchErrors"]]
 
     @staticmethod
-    def batch_update_labels(device_ids: list[str],
-                            project_id: str,
-                            set_labels: Optional[dict[str, str]] = None,
-                            remove_labels: Optional[list[str]] = None,
-                            **kwargs: Any,
-                            ) -> list[LabelUpdateError]:
+    def batch_update_labels(
+        device_ids: list[str],
+        project_id: str,
+        set_labels: Optional[dict[str, str]] = None,
+        remove_labels: Optional[list[str]] = None,
+        **kwargs: Any,
+    ) -> list[LabelUpdateError]:
         """
         Add, update, or remove multiple labels (key and value)
         on multiple devices
@@ -523,25 +534,25 @@ class Device(dtoutputs.OutputBase):
         """
 
         # Construct list of devices.
-        name = 'projects/{}/devices/{}'
+        name = "projects/{}/devices/{}"
         devices = [name.format(project_id, xid) for xid in device_ids]
 
         # Construct request body dictionary.
         body: dict = dict()
-        body['devices'] = devices
+        body["devices"] = devices
         if set_labels is not None:
-            body['addLabels'] = set_labels
+            body["addLabels"] = set_labels
         if remove_labels is not None:
-            body['removeLabels'] = remove_labels
+            body["removeLabels"] = remove_labels
 
         # Construct URL.
-        url = '/projects/{}/devices:batchUpdate'.format(project_id)
+        url = "/projects/{}/devices:batchUpdate".format(project_id)
 
         # Sent POST request.
         response = dtrequests.DTRequest.post(url, body=body, **kwargs)
 
         # Return any batchErrors found in response.
-        return [LabelUpdateError(err) for err in response['batchErrors']]
+        return [LabelUpdateError(err) for err in response["batchErrors"]]
 
 
 class Reported(dtoutputs.OutputBase):
@@ -657,4 +668,4 @@ class Reported(dtoutputs.OutputBase):
                     data,
                 )
             else:
-                dtlog.warning('Skipping unknown reported type {}.'.format(key))
+                dtlog.warning("Skipping unknown reported type {}.".format(key))

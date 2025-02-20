@@ -126,7 +126,7 @@ Run unit-tests against the currently active python version:
 make test
 ```
 
-Lint the package code using MyPy and flake8:
+Lint the package code using MyPy and ruff:
 ```
 make lint
 ```

@@ -2,8 +2,7 @@ import disruptive
 import tests.api_responses as dtapiresponses
 
 
-class TestProject():
-
+class TestProject:
     def test_repr(self, request_mock):
         # Update the response data with project data.
         res = dtapiresponses.small_project
@@ -11,7 +10,7 @@ class TestProject():
 
         # Fetch a project.
         x = disruptive.Project.get_project(
-            project_id='project_id',
+            project_id="project_id",
         )
 
         # Evaluate __repr__ function and compare copy.
@@ -24,27 +23,27 @@ class TestProject():
         request_mock.json = res
 
         # Call the appropriate endpoint.
-        p = disruptive.Project.get_project('project_id')
+        p = disruptive.Project.get_project("project_id")
 
         # Assert attributes unpacked correctly.
-        assert p.project_id == res['name'].split('/')[-1]
-        assert p.display_name == res['displayName']
-        assert p.organization_id == res['organization'].split('/')[-1]
-        assert p.organization_display_name == res['organizationDisplayName']
-        assert p.sensor_count == res['sensorCount']
-        assert p.cloud_connector_count == res['cloudConnectorCount']
+        assert p.project_id == res["name"].split("/")[-1]
+        assert p.display_name == res["displayName"]
+        assert p.organization_id == res["organization"].split("/")[-1]
+        assert p.organization_display_name == res["organizationDisplayName"]
+        assert p.sensor_count == res["sensorCount"]
+        assert p.cloud_connector_count == res["cloudConnectorCount"]
 
     def test_get_project(self, request_mock):
         # Update the response data with project data.
         request_mock.json = dtapiresponses.small_project
 
         # Call the appropriate endpoint.
-        p = disruptive.Project.get_project('project_id')
+        p = disruptive.Project.get_project("project_id")
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects/project_id',
+            method="GET",
+            url=disruptive.base_url + "/projects/project_id",
         )
 
         # Assert single request sent.
@@ -62,8 +61,8 @@ class TestProject():
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects',
+            method="GET",
+            url=disruptive.base_url + "/projects",
         )
 
         # Assert single request sent.
@@ -78,13 +77,13 @@ class TestProject():
         request_mock.json = dtapiresponses.empty_project
 
         # Call the appropriate endpoint.
-        p = disruptive.Project.create_project('org', 'name')
+        p = disruptive.Project.create_project("org", "name")
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='POST',
-            url=disruptive.base_url+'/projects',
-            body={'organization': 'organizations/org', 'displayName': 'name'},
+            method="POST",
+            url=disruptive.base_url + "/projects",
+            body={"organization": "organizations/org", "displayName": "name"},
         )
 
         # Assert single request sent.
@@ -98,13 +97,13 @@ class TestProject():
         request_mock.json = dtapiresponses.empty_project
 
         # Call the appropriate endpoint.
-        output = disruptive.Project.update_project('project_id', 'new-name')
+        output = disruptive.Project.update_project("project_id", "new-name")
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='PATCH',
-            url=disruptive.base_url+'/projects/project_id',
-            body={'displayName': 'new-name'},
+            method="PATCH",
+            url=disruptive.base_url + "/projects/project_id",
+            body={"displayName": "new-name"},
         )
 
         # Assert single request sent.
@@ -115,12 +114,12 @@ class TestProject():
 
     def test_delete_project(self, request_mock):
         # Call the appropriate endpoint.
-        output = disruptive.Project.delete_project('project_id')
+        output = disruptive.Project.delete_project("project_id")
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='DELETE',
-            url=disruptive.base_url+'/projects/project_id',
+            method="DELETE",
+            url=disruptive.base_url + "/projects/project_id",
         )
 
         # Assert single request sent.
@@ -134,12 +133,12 @@ class TestProject():
         request_mock.json = dtapiresponses.members
 
         # Call the appropriate endpoint
-        members = disruptive.Project.list_members('project_id')
+        members = disruptive.Project.list_members("project_id")
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects/project_id/members',
+            method="GET",
+            url=disruptive.base_url + "/projects/project_id/members",
         )
 
         # Assert single request sent.
@@ -156,19 +155,19 @@ class TestProject():
 
         # Call the appropriate endpoint
         member = disruptive.Project.add_member(
-            project_id='project_id',
-            email='service_account_email@domain.com',
-            roles=['project.developer'],
+            project_id="project_id",
+            email="service_account_email@domain.com",
+            roles=["project.developer"],
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='POST',
-            url=disruptive.base_url+'/projects/project_id/members',
+            method="POST",
+            url=disruptive.base_url + "/projects/project_id/members",
             body={
-                'roles': ['roles/project.developer'],
-                'email': 'service_account_email@domain.com',
-            }
+                "roles": ["roles/project.developer"],
+                "email": "service_account_email@domain.com",
+            },
         )
 
         # Assert single request sent.
@@ -183,14 +182,14 @@ class TestProject():
 
         # Call the appropriate endpoint
         member = disruptive.Project.get_member(
-            project_id='project_id',
-            member_id='member_id',
+            project_id="project_id",
+            member_id="member_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects/project_id/members/member_id',
+            method="GET",
+            url=disruptive.base_url + "/projects/project_id/members/member_id",
         )
 
         # Assert single request sent.
@@ -205,16 +204,16 @@ class TestProject():
 
         # Call the appropriate endpoint
         member = disruptive.Project.update_member(
-            project_id='project_id',
-            member_id='member_id',
-            roles=['project.developer'],
+            project_id="project_id",
+            member_id="member_id",
+            roles=["project.developer"],
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='PATCH',
-            url=disruptive.base_url+'/projects/project_id/members/member_id',
-            body={'roles': ['roles/project.developer']}
+            method="PATCH",
+            url=disruptive.base_url + "/projects/project_id/members/member_id",
+            body={"roles": ["roles/project.developer"]},
         )
 
         # Assert single request sent.
@@ -229,14 +228,14 @@ class TestProject():
 
         # Call the appropriate endpoint
         response = disruptive.Project.remove_member(
-            project_id='project_id',
-            member_id='member_id',
+            project_id="project_id",
+            member_id="member_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='DELETE',
-            url=disruptive.base_url+'/projects/project_id/members/member_id',
+            method="DELETE",
+            url=disruptive.base_url + "/projects/project_id/members/member_id",
         )
 
         # Assert single request sent.
@@ -247,27 +246,28 @@ class TestProject():
 
     def test_get_member_invite_url(self, request_mock):
         # Update the response with an email string.
-        res = {'inviteUrl': 'some-email@domain.com'}
+        res = {"inviteUrl": "some-email@domain.com"}
         request_mock.json = res
 
         # Call the appropriate endpoint
         response = disruptive.Project.get_member_invite_url(
-            project_id='project_id',
-            member_id='member_id',
+            project_id="project_id",
+            member_id="member_id",
         )
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects/project_id/members/'
-            + 'member_id:getInviteUrl',
+            method="GET",
+            url=disruptive.base_url
+            + "/projects/project_id/members/"
+            + "member_id:getInviteUrl",
         )
 
         # Assert single request sent.
         request_mock.assert_request_count(1)
 
         # Assert output matches response content.
-        assert response == res['inviteUrl']
+        assert response == res["inviteUrl"]
 
     def test_list_permissions(self, request_mock):
         # Update the response with list of permissions.
@@ -275,16 +275,16 @@ class TestProject():
 
         # Call the appropriate endpoint
         response = disruptive.Project.list_permissions(
-            project_id='project_id',
+            project_id="project_id",
         )
 
         # Assert output is of type list.
-        assert type(response) == list
+        assert isinstance(response, list)
 
         # Verify request parameters.
         request_mock.assert_requested(
-            method='GET',
-            url=disruptive.base_url+'/projects/project_id/permissions'
+            method="GET",
+            url=disruptive.base_url + "/projects/project_id/permissions",
         )
 
         # Assert single request sent.
@@ -292,4 +292,4 @@ class TestProject():
 
         # Assert only strings in output list.
         for permission in response:
-            assert type(permission) == str
+            assert isinstance(permission, str)

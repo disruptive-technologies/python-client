@@ -40,7 +40,7 @@ jobs:
       run: |
         make test
         
-    - name: Lint with mypy and flake8.
+    - name: Lint with mypy and ruff.
       run: |
         make lint
   

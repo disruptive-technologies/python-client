@@ -29,12 +29,16 @@ class Role(OutputBase):
     """
 
     # Constants for the available roles.
-    PROJECT_USER = 'project.user'
-    PROJECT_DEVELOPER = 'project.developer'
-    PROJECT_ADMIN = 'project.admin'
-    ORGANIZATION_ADMIN = 'organization.admin'
-    ROLES = [PROJECT_USER, PROJECT_DEVELOPER, PROJECT_ADMIN,
-             ORGANIZATION_ADMIN]
+    PROJECT_USER = "project.user"
+    PROJECT_DEVELOPER = "project.developer"
+    PROJECT_ADMIN = "project.admin"
+    ORGANIZATION_ADMIN = "organization.admin"
+    ROLES = [
+        PROJECT_USER,
+        PROJECT_DEVELOPER,
+        PROJECT_ADMIN,
+        ORGANIZATION_ADMIN,
+    ]
 
     def __init__(self, role: dict) -> None:
         """
@@ -51,16 +55,17 @@ class Role(OutputBase):
         OutputBase.__init__(self, role)
 
         # Unpack attributes from dictionary.
-        self.role: str = role['name'].split('/')[-1]
-        self.display_name: str = role['displayName']
-        self.description: str = role['description']
-        self.permissions: list[str] = role['permissions']
+        self.role: str = role["name"].split("/")[-1]
+        self.display_name: str = role["displayName"]
+        self.description: str = role["description"]
+        self.permissions: list[str] = role["permissions"]
 
     @classmethod
-    def get_role(cls,
-                 role: str,
-                 **kwargs: Any,
-                 ) -> Role:
+    def get_role(
+        cls,
+        role: str,
+        **kwargs: Any,
+    ) -> Role:
         """
         Gets a role specified by its name.
 
@@ -85,10 +90,12 @@ class Role(OutputBase):
         """
 
         # Return list of Role objects.
-        return cls(dtrequests.DTRequest.get(
-            url='/roles/' + role,
-            **kwargs,
-        ))
+        return cls(
+            dtrequests.DTRequest.get(
+                url="/roles/" + role,
+                **kwargs,
+            )
+        )
 
     @classmethod
     def list_roles(cls, **kwargs: Any) -> list[Role]:
@@ -115,8 +122,8 @@ class Role(OutputBase):
 
         # Return list of Role objects.
         response = dtrequests.DTRequest.paginated_get(
-            url='/roles',
-            pagination_key='roles',
+            url="/roles",
+            pagination_key="roles",
             **kwargs,
         )
         return [cls(r) for r in response]

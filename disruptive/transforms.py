@@ -9,9 +9,9 @@ import disruptive.errors as dterrors
 
 
 def base64_encode(string: str) -> str:
-    string_bytes = string.encode('ascii')
+    string_bytes = string.encode("ascii")
     base64_bytes = base64.b64encode(string_bytes)
-    base64_string = base64_bytes.decode('ascii')
+    base64_string = base64_bytes.decode("ascii")
     return base64_string
 
 
@@ -24,18 +24,20 @@ def to_iso8601(ts: Optional[str | datetime]) -> Optional[str]:
             return ts
         else:
             # Invalid iso8601 format, raise error.
-            msg = 'Timestamp format <{}> is invalid iso8601 format.\n' \
-                'Example: 2020-01-01T00:00:00Z'.format(ts)
+            msg = (
+                "Timestamp format <{}> is invalid iso8601 format.\n"
+                "Example: 2020-01-01T00:00:00Z".format(ts)
+            )
             raise dterrors.FormatError(msg)
 
     # If not string, datetime is also fine as it can be converted.
     elif isinstance(ts, datetime):
         if ts.tzinfo is None:
-            dt = ts.isoformat() + 'Z'
+            dt = ts.isoformat() + "Z"
         else:
             dt = ts.isoformat()
-            if dt.endswith('+00:00'):
-                dt = dt.replace('+00:00', 'Z')
+            if dt.endswith("+00:00"):
+                dt = dt.replace("+00:00", "Z")
 
         return dt
 
@@ -45,8 +47,10 @@ def to_iso8601(ts: Optional[str | datetime]) -> Optional[str]:
 
     # If any other type, raise TypeError.
     else:
-        msg = 'Got timestamp of type <{}>, expected ' \
-            'iso8601 <str> or <datetime>.'.format(type(ts).__name__)
+        msg = (
+            "Got timestamp of type <{}>, expected "
+            "iso8601 <str> or <datetime>.".format(type(ts).__name__)
+        )
         raise dterrors._raise_builtin(TypeError, msg)
 
 
@@ -61,11 +65,13 @@ def to_datetime(ts: Optional[str | datetime]) -> Optional[datetime]:
         # First, verify if string is valid iso8601 format.
         if validate_iso8601_format(ts):
             # Use built-in functions for converting to datetime.
-            return datetime.fromisoformat(ts.replace('Z', '+00:00'))
+            return datetime.fromisoformat(ts.replace("Z", "+00:00"))
         else:
             # Invalid iso8601 format, raise error.
-            msg = f'Timestamp format [{ts}] is invalid iso8601 format.\n' \
-                'Example: 2020-01-01T00:00:00Z'
+            msg = (
+                f"Timestamp format [{ts}] is invalid iso8601 format.\n"
+                "Example: 2020-01-01T00:00:00Z"
+            )
             raise dterrors.FormatError(msg)
 
     # If ts is None, return None.
@@ -74,10 +80,10 @@ def to_datetime(ts: Optional[str | datetime]) -> Optional[datetime]:
 
     # If any other type, raise TypeError.
     else:
-        msg = 'Got timestamp of type <{}>, expected ' \
-            'iso8601 <str> or <datetime>.'.format(
-                type(ts).__name__
-            )
+        msg = (
+            "Got timestamp of type <{}>, expected "
+            "iso8601 <str> or <datetime>.".format(type(ts).__name__)
+        )
         raise dterrors._raise_builtin(TypeError, msg)
 
 
@@ -88,9 +94,11 @@ def validate_iso8601_format(dt_str: str) -> bool:
     # that the datetime built-in method for checking iso8601 format
     # allows missing timezone infromation (i.e. Z or +-00:00 suffix).
     # This must be included in our API, and is why this regex exists.
-    iso8601_regex = r'^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-' \
-        '(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):' \
-        '([0-5][0-9])?(.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])$'
+    iso8601_regex = (
+        r"^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-"
+        "(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):"
+        "([0-5][0-9])?(.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])$"
+    )
     match_iso8601 = re.compile(iso8601_regex).match
 
     if match_iso8601(dt_str) is not None:
@@ -115,8 +123,8 @@ def _celsius_to_fahrenheit(celsius: float) -> float:
 
     """
 
-    return (celsius * (9/5)) + 32
+    return (celsius * (9 / 5)) + 32
 
 
 def camel_to_snake_case(x: str) -> str:
-    return re.sub(r'(?<!^)(?=[A-Z])', '_', x).lower()
+    return re.sub(r"(?<!^)(?=[A-Z])", "_", x).lower()

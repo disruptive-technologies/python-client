@@ -6,7 +6,7 @@ import disruptive.requests as dtrequests
 from disruptive.events.events import Event
 
 
-class Stream():
+class Stream:
     """
     Contains staticmethods for streaming events.
     Used for namespacing only and thus does not have a constructor
@@ -14,13 +14,14 @@ class Stream():
     """
 
     @staticmethod
-    def event_stream(project_id: str,
-                     device_ids: Optional[list[str]] = None,
-                     label_filters: Optional[dict] = None,
-                     device_types: Optional[list[str]] = None,
-                     event_types: Optional[list[str]] = None,
-                     **kwargs: Any,
-                     ) -> Generator:
+    def event_stream(
+        project_id: str,
+        device_ids: Optional[list[str]] = None,
+        label_filters: Optional[dict] = None,
+        device_types: Optional[list[str]] = None,
+        event_types: Optional[list[str]] = None,
+        **kwargs: Any,
+    ) -> Generator:
         """
         Stream events for one, multiple, or all device(s) in a project.
 
@@ -88,21 +89,21 @@ class Stream():
         # Construct parameters dictionary.
         params: dict = dict()
         if device_ids is not None:
-            params['device_ids'] = device_ids
+            params["device_ids"] = device_ids
         if device_types is not None:
-            params['device_types'] = device_types
+            params["device_types"] = device_types
         if label_filters is not None:
-            params['label_filters'] = []
+            params["label_filters"] = []
             for key in label_filters:
                 if isinstance(label_filters[key], str):
-                    string = key + '=' + label_filters[key]
-                    params['label_filters'].append(string)
+                    string = key + "=" + label_filters[key]
+                    params["label_filters"].append(string)
                 else:
-                    params['label_filters'].append(key)
+                    params["label_filters"].append(key)
         if event_types is not None:
-            params['event_types'] = event_types
+            params["event_types"] = event_types
 
         # Relay generator output.
-        url = '/projects/{}/devices:stream'.format(project_id)
+        url = "/projects/{}/devices:stream".format(project_id)
         for event in dtrequests.DTRequest.stream(url, params=params, **kwargs):
             yield Event(event)

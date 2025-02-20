@@ -8,30 +8,45 @@ import disruptive.logging as dtlog
 import disruptive.outputs as dtoutputs
 import disruptive.transforms as dttrans
 
-TOUCH: str = 'touch'
-TEMPERATURE: str = 'temperature'
-OBJECT_PRESENT: str = 'objectPresent'
-HUMIDITY: str = 'humidity'
-OBJECT_PRESENT_COUNT: str = 'objectPresentCount'
-TOUCH_COUNT: str = 'touchCount'
-WATER_PRESENT: str = 'waterPresent'
-NETWORK_STATUS: str = 'networkStatus'
-BATTERY_STATUS: str = 'batteryStatus'
-LABELS_CHANGED: str = 'labelsChanged'
-CONNECTION_STATUS: str = 'connectionStatus'
-ETHERNET_STATUS: str = 'ethernetStatus'
-CELLULAR_STATUS: str = 'cellularStatus'
-CO2: str = 'co2'
-PRESSURE: str = 'pressure'
-MOTION: str = 'motion'
-DESK_OCCUPANCY: str = 'deskOccupancy'
-CONTACT: str = 'contact'
-PROBE_WIRE_STATUS: str = 'probeWireStatus'
+TOUCH: str = "touch"
+TEMPERATURE: str = "temperature"
+OBJECT_PRESENT: str = "objectPresent"
+HUMIDITY: str = "humidity"
+OBJECT_PRESENT_COUNT: str = "objectPresentCount"
+TOUCH_COUNT: str = "touchCount"
+WATER_PRESENT: str = "waterPresent"
+NETWORK_STATUS: str = "networkStatus"
+BATTERY_STATUS: str = "batteryStatus"
+LABELS_CHANGED: str = "labelsChanged"
+CONNECTION_STATUS: str = "connectionStatus"
+ETHERNET_STATUS: str = "ethernetStatus"
+CELLULAR_STATUS: str = "cellularStatus"
+CO2: str = "co2"
+PRESSURE: str = "pressure"
+MOTION: str = "motion"
+DESK_OCCUPANCY: str = "deskOccupancy"
+CONTACT: str = "contact"
+PROBE_WIRE_STATUS: str = "probeWireStatus"
 EVENT_TYPES = [
-    TOUCH, TEMPERATURE, OBJECT_PRESENT, HUMIDITY, OBJECT_PRESENT_COUNT,
-    TOUCH_COUNT, WATER_PRESENT, NETWORK_STATUS, BATTERY_STATUS, LABELS_CHANGED,
-    CONNECTION_STATUS, ETHERNET_STATUS, CELLULAR_STATUS, CO2, PRESSURE, MOTION,
-    DESK_OCCUPANCY, CONTACT, PROBE_WIRE_STATUS,
+    TOUCH,
+    TEMPERATURE,
+    OBJECT_PRESENT,
+    HUMIDITY,
+    OBJECT_PRESENT_COUNT,
+    TOUCH_COUNT,
+    WATER_PRESENT,
+    NETWORK_STATUS,
+    BATTERY_STATUS,
+    LABELS_CHANGED,
+    CONNECTION_STATUS,
+    ETHERNET_STATUS,
+    CELLULAR_STATUS,
+    CO2,
+    PRESSURE,
+    MOTION,
+    DESK_OCCUPANCY,
+    CONTACT,
+    PROBE_WIRE_STATUS,
 ]
 
 
@@ -65,17 +80,17 @@ class _EventData(dtoutputs.OutputBase):
         self.timestamp: Optional[datetime | str] = None
 
         # If timestamp is provided, verify type and set attribute.
-        if 'updateTime' in data:
+        if "updateTime" in data:
             # Raw should be iso8601 str format, while
             # attribute should be type datetime.
-            ts_iso8601 = dttrans.to_iso8601(data['updateTime'])
-            ts_datetime = dttrans.to_datetime(data['updateTime'])
+            ts_iso8601 = dttrans.to_iso8601(data["updateTime"])
+            ts_datetime = dttrans.to_datetime(data["updateTime"])
 
             # If we can not verify iso8601 format, remove field.
             if ts_iso8601 is not None:
-                data['updateTime'] = ts_iso8601
+                data["updateTime"] = ts_iso8601
             else:
-                del data['updateTime']
+                del data["updateTime"]
 
             # Set datetime return as timestamp attribute.
             self.timestamp = ts_datetime
@@ -90,10 +105,11 @@ class _EventData(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, data)
 
     @classmethod
-    def from_event_type(cls,
-                        data: dict,
-                        event_type: str,
-                        ) -> Optional[_EventType]:
+    def from_event_type(
+        cls,
+        data: dict,
+        event_type: str,
+    ) -> Optional[_EventType]:
         """
         Constructs the appropriate child class from the provided event type.
 
@@ -122,8 +138,9 @@ class _EventData(dtoutputs.OutputBase):
         return child_instance
 
     @staticmethod
-    def __child_map(event_type: str,
-                    ) -> tuple[Optional[_EventType], Optional[bool]]:
+    def __child_map(
+        event_type: str,
+    ) -> tuple[Optional[_EventType], Optional[bool]]:
         """
         Based on provided event type, returns the
         child class and supporting information.
@@ -140,13 +157,13 @@ class _EventData(dtoutputs.OutputBase):
             out = (
                 getattr(
                     disruptive.events,
-                    _EVENTS_MAP._api_names[event_type].class_name
+                    _EVENTS_MAP._api_names[event_type].class_name,
                 ),
                 _EVENTS_MAP._api_names[event_type].is_keyed,
             )
             return out
 
-        dtlog.warning('Skipping unknown event type {}.'.format(event_type))
+        dtlog.warning("Skipping unknown event type {}.".format(event_type))
         return None, None
 
 
@@ -177,12 +194,10 @@ class Touch(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'touch')
+        _EventData.__init__(self, self.__repack(), "touch")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -208,7 +223,7 @@ class Touch(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            timestamp=data['updateTime'],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -219,7 +234,7 @@ class Touch(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -242,12 +257,13 @@ class Temperature(_EventData):
 
     """
 
-    def __init__(self,
-                 celsius: float,
-                 samples: Optional[list] = None,
-                 is_backfilled: Optional[bool] = None,
-                 timestamp: Optional[datetime | str] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        celsius: float,
+        samples: Optional[list] = None,
+        is_backfilled: Optional[bool] = None,
+        timestamp: Optional[datetime | str] = None,
+    ) -> None:
         """
         Constructs the Temperature object. The `fahrenheit` attribute is
         calculated from the provided `celsius` parameter.
@@ -274,15 +290,12 @@ class Temperature(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'temperature')
+        _EventData.__init__(self, self.__repack(), "temperature")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'celsius={}, '\
-            'samples={}, '\
-            'is_backfilled={}, '\
-            'timestamp={}'\
-            ')'
+        string = (
+            "{}.{}(celsius={}, samples={}, is_backfilled={}, timestamp={})"
+        )
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -311,18 +324,20 @@ class Temperature(_EventData):
 
         # Convert samples dictionaries to TemperatureSample objects.
         sample_objs = []
-        for sample in data['samples']:
-            sample_objs.append(TemperatureSample(
-                celsius=sample['value'],
-                timestamp=sample['sampleTime'],
-            ))
+        for sample in data["samples"]:
+            sample_objs.append(
+                TemperatureSample(
+                    celsius=sample["value"],
+                    timestamp=sample["sampleTime"],
+                )
+            )
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            celsius=data['value'],
+            celsius=data["value"],
             samples=sample_objs,
-            is_backfilled=data['isBackfilled'],
-            timestamp=data['updateTime'],
+            is_backfilled=data["isBackfilled"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -333,13 +348,13 @@ class Temperature(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.celsius is not None:
-            data['value'] = self.celsius
+            data["value"] = self.celsius
         if self.samples is not None:
-            data['samples'] = [s._raw for s in self.samples]
+            data["samples"] = [s._raw for s in self.samples]
         if self.is_backfilled is not None:
-            data['isBackfilled'] = self.is_backfilled
+            data["isBackfilled"] = self.is_backfilled
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -358,10 +373,11 @@ class TemperatureSample(dtoutputs.OutputBase):
 
     """
 
-    def __init__(self,
-                 celsius: float,
-                 timestamp: datetime | str,
-                 ) -> None:
+    def __init__(
+        self,
+        celsius: float,
+        timestamp: datetime | str,
+    ) -> None:
         """
         Constructs the TemperatureSample object. The `fahrenheit` attribute is
         calculated from the provided `celsius` parameter.
@@ -385,10 +401,7 @@ class TemperatureSample(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, self.__repack())
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'celsius={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(celsius={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -400,8 +413,8 @@ class TemperatureSample(dtoutputs.OutputBase):
     def _from_raw(cls, data: dict) -> TemperatureSample:
         # Construct the object with unpacked parameters.
         obj = cls(
-            celsius=data['value'],
-            timestamp=data['sampleTime'],
+            celsius=data["value"],
+            timestamp=data["sampleTime"],
         )
 
         # Inherit parent class.
@@ -412,9 +425,9 @@ class TemperatureSample(dtoutputs.OutputBase):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.celsius is not None:
-            data['value'] = self.celsius
+            data["value"] = self.celsius
         if self.timestamp is not None:
-            data['sampleTime'] = dttrans.to_iso8601(self.timestamp)
+            data["sampleTime"] = dttrans.to_iso8601(self.timestamp)
         return data
 
 
@@ -431,13 +444,14 @@ class ObjectPresent(_EventData):
 
     """
 
-    STATE_PRESENT = 'PRESENT'
-    STATE_NOT_PRESENT = 'NOT_PRESENT'
+    STATE_PRESENT = "PRESENT"
+    STATE_NOT_PRESENT = "NOT_PRESENT"
 
-    def __init__(self,
-                 state: str,
-                 timestamp: Optional[datetime | str] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        state: str,
+        timestamp: Optional[datetime | str] = None,
+    ) -> None:
         """
         Constructs the ObjectPresent object, inheriting parent class
         and setting the type-specific attributes.
@@ -457,13 +471,10 @@ class ObjectPresent(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'objectPresent')
+        _EventData.__init__(self, self.__repack(), "objectPresent")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'state={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(state={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -490,8 +501,8 @@ class ObjectPresent(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            state=data['state'],
-            timestamp=data['updateTime'],
+            state=data["state"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -502,9 +513,9 @@ class ObjectPresent(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.state is not None:
-            data['state'] = self.state
+            data["state"] = self.state
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -526,13 +537,14 @@ class Humidity(_EventData):
 
     """
 
-    def __init__(self,
-                 celsius: float,
-                 relative_humidity: float,
-                 samples: Optional[list] = None,
-                 is_backfilled: Optional[bool] = None,
-                 timestamp: Optional[datetime | str] = None,
-                 ):
+    def __init__(
+        self,
+        celsius: float,
+        relative_humidity: float,
+        samples: Optional[list] = None,
+        is_backfilled: Optional[bool] = None,
+        timestamp: Optional[datetime | str] = None,
+    ):
         """
         Constructs the Humidity object.
 
@@ -562,16 +574,18 @@ class Humidity(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'humidity')
+        _EventData.__init__(self, self.__repack(), "humidity")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'celsius={}, '\
-            'relative_humidity={}, '\
-            'samples={}, '\
-            'is_backfilled={}, '\
-            'timestamp={}'\
-            ')'
+        string = (
+            "{}.{}("
+            "celsius={}, "
+            "relative_humidity={}, "
+            "samples={}, "
+            "is_backfilled={}, "
+            "timestamp={}"
+            ")"
+        )
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -601,20 +615,22 @@ class Humidity(_EventData):
 
         # Convert samples dictionaries to HumiditySample objects.
         sample_objs = []
-        for sample in data['samples']:
-            sample_objs.append(HumiditySample(
-                celsius=sample['temperature'],
-                relative_humidity=sample['relativeHumidity'],
-                timestamp=sample['sampleTime'],
-            ))
+        for sample in data["samples"]:
+            sample_objs.append(
+                HumiditySample(
+                    celsius=sample["temperature"],
+                    relative_humidity=sample["relativeHumidity"],
+                    timestamp=sample["sampleTime"],
+                )
+            )
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            celsius=data['temperature'],
-            relative_humidity=data['relativeHumidity'],
+            celsius=data["temperature"],
+            relative_humidity=data["relativeHumidity"],
             samples=sample_objs,
-            is_backfilled=data['isBackfilled'],
-            timestamp=data['updateTime'],
+            is_backfilled=data["isBackfilled"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -625,13 +641,13 @@ class Humidity(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.celsius is not None:
-            data['temperature'] = self.celsius
+            data["temperature"] = self.celsius
         if self.relative_humidity is not None:
-            data['relativeHumidity'] = self.relative_humidity
+            data["relativeHumidity"] = self.relative_humidity
         if self.is_backfilled is not None:
-            data['isBackfilled'] = self.is_backfilled
+            data["isBackfilled"] = self.is_backfilled
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -652,11 +668,12 @@ class HumiditySample(dtoutputs.OutputBase):
 
     """
 
-    def __init__(self,
-                 celsius: float,
-                 relative_humidity: float,
-                 timestamp: datetime | str,
-                 ) -> None:
+    def __init__(
+        self,
+        celsius: float,
+        relative_humidity: float,
+        timestamp: datetime | str,
+    ) -> None:
         """
         Constructs the TemperatureSample object. The `fahrenheit` attribute is
         calculated from the provided `celsius` parameter.
@@ -683,11 +700,7 @@ class HumiditySample(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, self.__repack())
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'celsius={}, '\
-            'relative_humidity={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(celsius={}, relative_humidity={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -700,9 +713,9 @@ class HumiditySample(dtoutputs.OutputBase):
     def _from_raw(cls, data: dict) -> HumiditySample:
         # Construct the object with unpacked parameters.
         obj = cls(
-            celsius=data['temperature'],
-            relative_humidity=data['relativeHumidity'],
-            timestamp=data['sampleTime'],
+            celsius=data["temperature"],
+            relative_humidity=data["relativeHumidity"],
+            timestamp=data["sampleTime"],
         )
 
         # Inherit parent class.
@@ -713,11 +726,11 @@ class HumiditySample(dtoutputs.OutputBase):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.celsius is not None:
-            data['celsius'] = self.celsius
+            data["celsius"] = self.celsius
         if self.relative_humidity is not None:
-            data['relativeHumidity'] = self.relative_humidity
+            data["relativeHumidity"] = self.relative_humidity
         if self.timestamp is not None:
-            data['sampleTime'] = dttrans.to_iso8601(self.timestamp)
+            data["sampleTime"] = dttrans.to_iso8601(self.timestamp)
         return data
 
 
@@ -735,10 +748,11 @@ class ObjectPresentCount(_EventData):
 
     """
 
-    def __init__(self,
-                 total: int,
-                 timestamp: Optional[datetime | str] = None,
-                 ):
+    def __init__(
+        self,
+        total: int,
+        timestamp: Optional[datetime | str] = None,
+    ):
         """
         Constructs the ObjectPresentCount object.
 
@@ -758,13 +772,10 @@ class ObjectPresentCount(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'objectPresentCount')
+        _EventData.__init__(self, self.__repack(), "objectPresentCount")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'total={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(total={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -791,8 +802,8 @@ class ObjectPresentCount(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            total=data['total'],
-            timestamp=data['updateTime'],
+            total=data["total"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -802,9 +813,9 @@ class ObjectPresentCount(_EventData):
 
     def __repack(self) -> dict:
         data: dict = dict()
-        data['total'] = self.total
+        data["total"] = self.total
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -822,10 +833,11 @@ class TouchCount(_EventData):
 
     """
 
-    def __init__(self,
-                 total: int,
-                 timestamp: Optional[datetime | str] = None,
-                 ):
+    def __init__(
+        self,
+        total: int,
+        timestamp: Optional[datetime | str] = None,
+    ):
         """
         Constructs the TouchCount object.
 
@@ -845,13 +857,10 @@ class TouchCount(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'touchCount')
+        _EventData.__init__(self, self.__repack(), "touchCount")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'total={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(total={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -878,8 +887,8 @@ class TouchCount(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            total=data['total'],
-            timestamp=data['updateTime'],
+            total=data["total"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -889,9 +898,9 @@ class TouchCount(_EventData):
 
     def __repack(self) -> dict:
         data: dict = dict()
-        data['total'] = self.total
+        data["total"] = self.total
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -908,13 +917,14 @@ class WaterPresent(_EventData):
 
     """
 
-    STATE_PRESENT = 'PRESENT'
-    STATE_NOT_PRESENT = 'NOT_PRESENT'
+    STATE_PRESENT = "PRESENT"
+    STATE_NOT_PRESENT = "NOT_PRESENT"
 
-    def __init__(self,
-                 state: str,
-                 timestamp: Optional[datetime | str] = None,
-                 ):
+    def __init__(
+        self,
+        state: str,
+        timestamp: Optional[datetime | str] = None,
+    ):
         """
         Constructs the WaterPresent object.
 
@@ -933,13 +943,10 @@ class WaterPresent(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'waterPresent')
+        _EventData.__init__(self, self.__repack(), "waterPresent")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'state={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(state={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -966,8 +973,8 @@ class WaterPresent(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            state=data['state'],
-            timestamp=data['updateTime'],
+            state=data["state"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -977,9 +984,9 @@ class WaterPresent(_EventData):
 
     def __repack(self) -> dict:
         data: dict = dict()
-        data['state'] = self.state
+        data["state"] = self.state
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -1000,11 +1007,12 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
 
     """
 
-    def __init__(self,
-                 device_id: str,
-                 signal_strength: int,
-                 rssi: int,
-                 ):
+    def __init__(
+        self,
+        device_id: str,
+        signal_strength: int,
+        rssi: int,
+    ):
         """
         Constructs the NetworkStatusCloudConnector object.
 
@@ -1030,11 +1038,7 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
         self.rssi: int = rssi
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'device_id={}, '\
-            'signal_strength={}, '\
-            'rssi={}'\
-            ')'
+        string = "{}.{}(device_id={}, signal_strength={}, rssi={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1062,9 +1066,9 @@ class NetworkStatusCloudConnector(dtoutputs.OutputBase):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            device_id=data['id'],
-            signal_strength=data['signalStrength'],
-            rssi=data['rssi'],
+            device_id=data["id"],
+            signal_strength=data["signalStrength"],
+            rssi=data["rssi"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1095,15 +1099,14 @@ class NetworkStatus(_EventData):
 
     """
 
-    def __init__(self,
-                 signal_strength: Optional[int] = None,
-                 rssi: Optional[int] = None,
-                 transmission_mode: Optional[str] = None,
-                 cloud_connectors:
-                 Optional[list[NetworkStatusCloudConnector]] = None,
-                 timestamp: Optional[datetime | str] = None,
-                 ) -> None:
-
+    def __init__(
+        self,
+        signal_strength: Optional[int] = None,
+        rssi: Optional[int] = None,
+        transmission_mode: Optional[str] = None,
+        cloud_connectors: Optional[list[NetworkStatusCloudConnector]] = None,
+        timestamp: Optional[datetime | str] = None,
+    ) -> None:
         """
         Constructs the NetworkStatus object.
 
@@ -1130,21 +1133,24 @@ class NetworkStatus(_EventData):
         self.signal_strength: Optional[int] = signal_strength
         self.rssi: Optional[int] = rssi
         self.transmission_mode: Optional[str] = transmission_mode
-        self.cloud_connectors: Optional[list[NetworkStatusCloudConnector]] = \
+        self.cloud_connectors: Optional[list[NetworkStatusCloudConnector]] = (
             cloud_connectors
+        )
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'networkStatus')
+        _EventData.__init__(self, self.__repack(), "networkStatus")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'signal_strength={}, '\
-            'rssi={}, '\
-            'transmission_mode={}, '\
-            'cloud_connectors={}, '\
-            'timestamp={}'\
-            ')'
+        string = (
+            "{}.{}("
+            "signal_strength={}, "
+            "rssi={}, "
+            "transmission_mode={}, "
+            "cloud_connectors={}, "
+            "timestamp={}"
+            ")"
+        )
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1174,18 +1180,18 @@ class NetworkStatus(_EventData):
 
         # Isolate list of NetworkStatusCloudConnector objects.
         cloud_connectors = []
-        for ccon in data['cloudConnectors']:
+        for ccon in data["cloudConnectors"]:
             cloud_connectors.append(
                 NetworkStatusCloudConnector._from_raw(ccon)
             )
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            signal_strength=data['signalStrength'],
-            rssi=data['rssi'],
-            transmission_mode=data['transmissionMode'],
+            signal_strength=data["signalStrength"],
+            rssi=data["rssi"],
+            transmission_mode=data["transmissionMode"],
             cloud_connectors=cloud_connectors,
-            timestamp=data['updateTime'],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1196,23 +1202,23 @@ class NetworkStatus(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.signal_strength is not None:
-            data['signalStrength'] = self.signal_strength
+            data["signalStrength"] = self.signal_strength
         if self.rssi is not None:
-            data['rssi'] = self.rssi
+            data["rssi"] = self.rssi
         if self.transmission_mode is not None:
-            data['transmissionMode'] = self.transmission_mode
+            data["transmissionMode"] = self.transmission_mode
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         if self.cloud_connectors is not None:
-            data['cloud_connectors'] = []
+            data["cloud_connectors"] = []
             for ccon in self.cloud_connectors:
                 ccon_data: dict = dict()
                 if ccon.device_id is not None:
-                    ccon_data['id'] = ccon.device_id
+                    ccon_data["id"] = ccon.device_id
                 if ccon.signal_strength is not None:
-                    ccon_data['signalStrength'] = ccon.signal_strength
+                    ccon_data["signalStrength"] = ccon.signal_strength
                 if len(ccon_data) > 0:
-                    data['cloud_connectors'].append(ccon_data)
+                    data["cloud_connectors"].append(ccon_data)
         return data
 
 
@@ -1229,10 +1235,11 @@ class BatteryStatus(_EventData):
 
     """
 
-    def __init__(self,
-                 percentage: int,
-                 timestamp: Optional[datetime | str] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        percentage: int,
+        timestamp: Optional[datetime | str] = None,
+    ) -> None:
         """
         Constructs the Temperature object.
 
@@ -1251,13 +1258,10 @@ class BatteryStatus(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'batteryStatus')
+        _EventData.__init__(self, self.__repack(), "batteryStatus")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'percentage={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(percentage={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1284,8 +1288,8 @@ class BatteryStatus(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            percentage=data['percentage'],
-            timestamp=data['updateTime'],
+            percentage=data["percentage"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1296,9 +1300,9 @@ class BatteryStatus(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.percentage is not None:
-            data['percentage'] = self.percentage
+            data["percentage"] = self.percentage
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -1319,12 +1323,13 @@ class LabelsChanged(_EventData):
 
     """
 
-    def __init__(self,
-                 added: dict[str, str],
-                 modified: dict[str, str],
-                 removed: list[str],
-                 timestamp: Optional[datetime | str] = None,
-                 ):
+    def __init__(
+        self,
+        added: dict[str, str],
+        modified: dict[str, str],
+        removed: list[str],
+        timestamp: Optional[datetime | str] = None,
+    ):
         """
         Constructs the LabelsChanged object.
 
@@ -1349,15 +1354,10 @@ class LabelsChanged(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'labelsChanged')
+        _EventData.__init__(self, self.__repack(), "labelsChanged")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'added={}, '\
-            'modified={}, '\
-            'removed={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(added={}, modified={}, removed={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1386,10 +1386,10 @@ class LabelsChanged(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            added=data['added'],
-            modified=data['modified'],
-            removed=data['removed'],
-            timestamp=data['updateTime'],
+            added=data["added"],
+            modified=data["modified"],
+            removed=data["removed"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1400,13 +1400,13 @@ class LabelsChanged(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.added is not None:
-            data['added'] = self.added
+            data["added"] = self.added
         if self.modified is not None:
-            data['modified'] = self.modified
+            data["modified"] = self.modified
         if self.removed is not None:
-            data['removed'] = self.removed
+            data["removed"] = self.removed
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -1430,16 +1430,17 @@ class ConnectionStatus(_EventData):
 
     """
 
-    CONNECTION_SDS: str = 'SDS'
-    CONNECTION_ETHERNET: str = 'ETHERNET'
-    CONNECTION_CELLULAR: str = 'CELLULAR'
-    CONNECTION_OFFLINE: str = 'OFFLINE'
+    CONNECTION_SDS: str = "SDS"
+    CONNECTION_ETHERNET: str = "ETHERNET"
+    CONNECTION_CELLULAR: str = "CELLULAR"
+    CONNECTION_OFFLINE: str = "OFFLINE"
 
-    def __init__(self,
-                 connection: str,
-                 available: list[str],
-                 timestamp: Optional[datetime | str] = None,
-                 ):
+    def __init__(
+        self,
+        connection: str,
+        available: list[str],
+        timestamp: Optional[datetime | str] = None,
+    ):
         """
         Constructs the ConnectionStatus object.
 
@@ -1465,14 +1466,10 @@ class ConnectionStatus(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'connectionStatus')
+        _EventData.__init__(self, self.__repack(), "connectionStatus")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'connection={}, '\
-            'available={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(connection={}, available={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1500,9 +1497,9 @@ class ConnectionStatus(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            connection=data['connection'],
-            available=data['available'],
-            timestamp=data['updateTime'],
+            connection=data["connection"],
+            available=data["available"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1513,11 +1510,11 @@ class ConnectionStatus(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.connection is not None:
-            data['connection'] = self.connection
+            data["connection"] = self.connection
         if self.available is not None:
-            data['available'] = self.available
+            data["available"] = self.available
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -1536,11 +1533,12 @@ class EthernetStatus(_EventData):
 
     """
 
-    def __init__(self,
-                 mac_address: str,
-                 ip_address: str,
-                 timestamp: Optional[datetime | str] = None,
-                 ):
+    def __init__(
+        self,
+        mac_address: str,
+        ip_address: str,
+        timestamp: Optional[datetime | str] = None,
+    ):
         """
         Constructs the EthernetStatus object, inheriting parent class
         and setting the type-specific attributes.
@@ -1563,14 +1561,10 @@ class EthernetStatus(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'ethernetStatus')
+        _EventData.__init__(self, self.__repack(), "ethernetStatus")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'mac_address={}, '\
-            'ip_address={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(mac_address={}, ip_address={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1598,9 +1592,9 @@ class EthernetStatus(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            mac_address=data['macAddress'],
-            ip_address=data['ipAddress'],
-            timestamp=data['updateTime'],
+            mac_address=data["macAddress"],
+            ip_address=data["ipAddress"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1611,11 +1605,11 @@ class EthernetStatus(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.mac_address is not None:
-            data['macAddress'] = self.mac_address
+            data["macAddress"] = self.mac_address
         if self.ip_address is not None:
-            data['ipAddress'] = self.ip_address
+            data["ipAddress"] = self.ip_address
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -1632,10 +1626,11 @@ class CellularStatus(_EventData):
 
     """
 
-    def __init__(self,
-                 signal_strength: int,
-                 timestamp: Optional[datetime | str] = None,
-                 ):
+    def __init__(
+        self,
+        signal_strength: int,
+        timestamp: Optional[datetime | str] = None,
+    ):
         """
         Constructs the Temperature object.
 
@@ -1654,13 +1649,10 @@ class CellularStatus(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'cellularStatus')
+        _EventData.__init__(self, self.__repack(), "cellularStatus")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'signal_strength={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(signal_strength={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1687,8 +1679,8 @@ class CellularStatus(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            signal_strength=data['signalStrength'],
-            timestamp=data['updateTime'],
+            signal_strength=data["signalStrength"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent using a full raw dictionary.
@@ -1699,9 +1691,9 @@ class CellularStatus(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.signal_strength is not None:
-            data['signalStrength'] = self.signal_strength
+            data["signalStrength"] = self.signal_strength
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -1718,10 +1710,11 @@ class Co2(_EventData):
 
     """
 
-    def __init__(self,
-                 ppm: int,
-                 timestamp: Optional[datetime | str] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        ppm: int,
+        timestamp: Optional[datetime | str] = None,
+    ) -> None:
         """
         Constructs the Co2 object.
 
@@ -1740,13 +1733,10 @@ class Co2(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'co2')
+        _EventData.__init__(self, self.__repack(), "co2")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'ppm={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(ppm={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1773,8 +1763,8 @@ class Co2(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            ppm=data['ppm'],
-            timestamp=data['updateTime'],
+            ppm=data["ppm"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1785,9 +1775,9 @@ class Co2(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.ppm is not None:
-            data['ppm'] = self.ppm
+            data["ppm"] = self.ppm
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -1804,10 +1794,11 @@ class Pressure(_EventData):
 
     """
 
-    def __init__(self,
-                 pascal: float,
-                 timestamp: Optional[datetime | str] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        pascal: float,
+        timestamp: Optional[datetime | str] = None,
+    ) -> None:
         """
         Constructs the Pressure object.
 
@@ -1826,13 +1817,10 @@ class Pressure(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'pressure')
+        _EventData.__init__(self, self.__repack(), "pressure")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'pascal={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(pascal={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1859,8 +1847,8 @@ class Pressure(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            pascal=data['pascal'],
-            timestamp=data['updateTime'],
+            pascal=data["pascal"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1871,9 +1859,9 @@ class Pressure(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.pascal is not None:
-            data['pascal'] = self.pascal
+            data["pascal"] = self.pascal
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -1890,13 +1878,14 @@ class Motion(_EventData):
 
     """
 
-    STATE_MOTION_DETECTED = 'MOTION_DETECTED'
-    STATE_NO_MOTION_DETECTED = 'NO_MOTION_DETECTED'
+    STATE_MOTION_DETECTED = "MOTION_DETECTED"
+    STATE_NO_MOTION_DETECTED = "NO_MOTION_DETECTED"
 
-    def __init__(self,
-                 state: str,
-                 timestamp: Optional[datetime | str] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        state: str,
+        timestamp: Optional[datetime | str] = None,
+    ) -> None:
         """
         Constructs the Motion object, inheriting parent class
         and setting the type-specific attributes.
@@ -1916,13 +1905,10 @@ class Motion(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'motion')
+        _EventData.__init__(self, self.__repack(), "motion")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'state={}, '\
-            'timestamp={}'\
-            ')'
+        string = "{}.{}(state={}, timestamp={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -1949,8 +1935,8 @@ class Motion(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            state=data['state'],
-            timestamp=data['updateTime'],
+            state=data["state"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -1961,9 +1947,9 @@ class Motion(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.state is not None:
-            data['state'] = self.state
+            data["state"] = self.state
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -1984,14 +1970,15 @@ class DeskOccupancy(_EventData):
 
     """
 
-    STATE_OCCUPIED = 'OCCUPIED'
-    STATE_NOT_OCCUPIED = 'NOT_OCCUPIED'
+    STATE_OCCUPIED = "OCCUPIED"
+    STATE_NOT_OCCUPIED = "NOT_OCCUPIED"
 
-    def __init__(self,
-                 state: str,
-                 timestamp: Optional[datetime | str] = None,
-                 remarks: Optional[list[str]] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        state: str,
+        timestamp: Optional[datetime | str] = None,
+        remarks: Optional[list[str]] = None,
+    ) -> None:
         """
         Constructs the DeskOccupancy object, inheriting parent class
         and setting the type-specific attributes.
@@ -2016,14 +2003,10 @@ class DeskOccupancy(_EventData):
         self.remarks: Optional[list[str]] = remarks
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'deskOccupancy')
+        _EventData.__init__(self, self.__repack(), "deskOccupancy")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'state={}, '\
-            'timestamp={}, '\
-            'remarks={}'\
-            ')'
+        string = "{}.{}(state={}, timestamp={}, remarks={})"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -2051,9 +2034,9 @@ class DeskOccupancy(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            state=data['state'],
-            timestamp=data['updateTime'],
-            remarks=data['remarks'],
+            state=data["state"],
+            timestamp=data["updateTime"],
+            remarks=data["remarks"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -2064,11 +2047,11 @@ class DeskOccupancy(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.state is not None:
-            data['state'] = self.state
+            data["state"] = self.state
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         if self.remarks is not None:
-            data['remarks'] = self.remarks
+            data["remarks"] = self.remarks
         return data
 
 
@@ -2085,13 +2068,14 @@ class Contact(_EventData):
 
     """
 
-    STATE_CLOSED: str = 'CLOSED'
-    STATE_OPEN: str = 'OPEN'
+    STATE_CLOSED: str = "CLOSED"
+    STATE_OPEN: str = "OPEN"
 
-    def __init__(self,
-                 state: str,
-                 timestamp: Optional[datetime | str] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        state: str,
+        timestamp: Optional[datetime | str] = None,
+    ) -> None:
         """
         Constructs the Contact object, inheriting parent class
         and setting the type-specific attributes.
@@ -2110,13 +2094,10 @@ class Contact(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'contact')
+        _EventData.__init__(self, self.__repack(), "contact")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'state={}, '\
-            'timestamp={}, '\
-            ')'
+        string = "{}.{}(state={}, timestamp={}, )"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -2143,8 +2124,8 @@ class Contact(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            state=data['state'],
-            timestamp=data['updateTime'],
+            state=data["state"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -2155,9 +2136,9 @@ class Contact(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.state is not None:
-            data['state'] = self.state
+            data["state"] = self.state
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -2172,17 +2153,19 @@ class ProbeWireStatus(_EventData):
 
     """
 
-    STATE_INVALID_WIRE_CONFIGURATION: str = 'INVALID_WIRE_CONFIGURATION'
-    STATE_INVALID_COEFFICIENT_CONFIGURATION: str \
-        = 'INVALID_COEFFICIENT_CONFIGURATION'
-    STATE_TWO_WIRE: str = 'TWO_WIRE'
-    STATE_THREE_WIRE: str = 'THREE_WIRE'
-    STATE_FOUR_WIRE: str = 'FOUR_WIRE'
+    STATE_INVALID_WIRE_CONFIGURATION: str = "INVALID_WIRE_CONFIGURATION"
+    STATE_INVALID_COEFFICIENT_CONFIGURATION: str = (
+        "INVALID_COEFFICIENT_CONFIGURATION"
+    )
+    STATE_TWO_WIRE: str = "TWO_WIRE"
+    STATE_THREE_WIRE: str = "THREE_WIRE"
+    STATE_FOUR_WIRE: str = "FOUR_WIRE"
 
-    def __init__(self,
-                 state: str,
-                 timestamp: Optional[datetime | str] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        state: str,
+        timestamp: Optional[datetime | str] = None,
+    ) -> None:
         """
         Constructs the ProbeWireStatus object, inheriting parent class
         and setting the type-specific attributes.
@@ -2203,13 +2186,10 @@ class ProbeWireStatus(_EventData):
         self.timestamp: Optional[datetime | str] = timestamp
 
         # Inherit parent _EventData class init with repacked data dictionary.
-        _EventData.__init__(self, self.__repack(), 'probeWireStatus')
+        _EventData.__init__(self, self.__repack(), "probeWireStatus")
 
     def __repr__(self) -> str:
-        string = '{}.{}('\
-            'state={}, '\
-            'timestamp={}, '\
-            ')'
+        string = "{}.{}(state={}, timestamp={}, )"
         return string.format(
             self.__class__.__module__,
             self.__class__.__name__,
@@ -2236,8 +2216,8 @@ class ProbeWireStatus(_EventData):
 
         # Construct the object with unpacked parameters.
         obj = cls(
-            state=data['state'],
-            timestamp=data['updateTime'],
+            state=data["state"],
+            timestamp=data["updateTime"],
         )
 
         # Re-inherit from parent, but now providing response data.
@@ -2248,9 +2228,9 @@ class ProbeWireStatus(_EventData):
     def __repack(self) -> dict:
         data: dict = dict()
         if self.state is not None:
-            data['state'] = self.state
+            data["state"] = self.state
         if self.timestamp is not None:
-            data['updateTime'] = self.timestamp
+            data["updateTime"] = self.timestamp
         return data
 
 
@@ -2280,20 +2260,20 @@ class Event(dtoutputs.OutputBase):
         dtoutputs.OutputBase.__init__(self, event)
 
         # Unpack attributes from dictionary.
-        self.event_id: str = event['eventId']
-        self.event_type: str = event['eventType']
-        self.device_id: str = event['targetName'].split('/')[-1]
-        self.project_id: str = event['targetName'].split('/')[1]
+        self.event_id: str = event["eventId"]
+        self.event_type: str = event["eventType"]
+        self.device_id: str = event["targetName"].split("/")[-1]
+        self.project_id: str = event["targetName"].split("/")[1]
 
         # Since labelsChanged is the only event that does not
         # contain an updateTime field in data, we provide the
         # field as it is a massive convenience boost.
-        if self.event_type == 'labelsChanged':
-            event['data']['updateTime'] = event['timestamp']
+        if self.event_type == "labelsChanged":
+            event["data"]["updateTime"] = event["timestamp"]
 
         # Initialize the appropriate data class.
         self.data = _EventData.from_event_type(
-            event['data'],
+            event["data"],
             self.event_type,
         )
 
@@ -2325,134 +2305,133 @@ class Event(dtoutputs.OutputBase):
         return object_list
 
 
-class __EventsMap():
-
-    class __TypeNames():
-
-        def __init__(self,
-                     api_name: str,
-                     attr_name: str,
-                     class_name: str,
-                     is_keyed: bool
-                     ) -> None:
+class __EventsMap:
+    class __TypeNames:
+        def __init__(
+            self,
+            api_name: str,
+            attr_name: str,
+            class_name: str,
+            is_keyed: bool,
+        ) -> None:
             self.api_name = api_name
             self.attr_name = attr_name
             self.class_name = class_name
             self.is_keyed = is_keyed
 
     _api_names = {
-        'touch': __TypeNames(
-            api_name='touch',
-            attr_name='touch',
-            class_name='Touch',
-            is_keyed=True
-        ),
-        'temperature': __TypeNames(
-            api_name='temperature',
-            attr_name='temperature',
-            class_name='Temperature',
-            is_keyed=True
-        ),
-        'objectPresent': __TypeNames(
-            api_name='objectPresent',
-            attr_name='object_present',
-            class_name='ObjectPresent',
-            is_keyed=True
-        ),
-        'humidity': __TypeNames(
-            api_name='humidity',
-            attr_name='humidity',
-            class_name='Humidity',
-            is_keyed=True
-        ),
-        'objectPresentCount': __TypeNames(
-            api_name='objectPresentCount',
-            attr_name='object_present_count',
-            class_name='ObjectPresentCount',
-            is_keyed=True
-        ),
-        'touchCount': __TypeNames(
-            api_name='touchCount',
-            attr_name='touch_count',
-            class_name='TouchCount',
-            is_keyed=True
-        ),
-        'waterPresent': __TypeNames(
-            api_name='waterPresent',
-            attr_name='water_present',
-            class_name='WaterPresent',
-            is_keyed=True
-        ),
-        'networkStatus': __TypeNames(
-            api_name='networkStatus',
-            attr_name='network_status',
-            class_name='NetworkStatus',
+        "touch": __TypeNames(
+            api_name="touch",
+            attr_name="touch",
+            class_name="Touch",
             is_keyed=True,
         ),
-        'batteryStatus': __TypeNames(
-            api_name='batteryStatus',
-            attr_name='battery_status',
-            class_name='BatteryStatus',
+        "temperature": __TypeNames(
+            api_name="temperature",
+            attr_name="temperature",
+            class_name="Temperature",
             is_keyed=True,
         ),
-        'labelsChanged': __TypeNames(
-            api_name='labelsChanged',
-            attr_name='labels_changed',
-            class_name='LabelsChanged',
+        "objectPresent": __TypeNames(
+            api_name="objectPresent",
+            attr_name="object_present",
+            class_name="ObjectPresent",
+            is_keyed=True,
+        ),
+        "humidity": __TypeNames(
+            api_name="humidity",
+            attr_name="humidity",
+            class_name="Humidity",
+            is_keyed=True,
+        ),
+        "objectPresentCount": __TypeNames(
+            api_name="objectPresentCount",
+            attr_name="object_present_count",
+            class_name="ObjectPresentCount",
+            is_keyed=True,
+        ),
+        "touchCount": __TypeNames(
+            api_name="touchCount",
+            attr_name="touch_count",
+            class_name="TouchCount",
+            is_keyed=True,
+        ),
+        "waterPresent": __TypeNames(
+            api_name="waterPresent",
+            attr_name="water_present",
+            class_name="WaterPresent",
+            is_keyed=True,
+        ),
+        "networkStatus": __TypeNames(
+            api_name="networkStatus",
+            attr_name="network_status",
+            class_name="NetworkStatus",
+            is_keyed=True,
+        ),
+        "batteryStatus": __TypeNames(
+            api_name="batteryStatus",
+            attr_name="battery_status",
+            class_name="BatteryStatus",
+            is_keyed=True,
+        ),
+        "labelsChanged": __TypeNames(
+            api_name="labelsChanged",
+            attr_name="labels_changed",
+            class_name="LabelsChanged",
             is_keyed=False,
         ),
-        'connectionStatus': __TypeNames(
-            api_name='connectionStatus',
-            attr_name='connection_status',
-            class_name='ConnectionStatus',
+        "connectionStatus": __TypeNames(
+            api_name="connectionStatus",
+            attr_name="connection_status",
+            class_name="ConnectionStatus",
             is_keyed=True,
         ),
-        'ethernetStatus': __TypeNames(
-            api_name='ethernetStatus',
-            attr_name='ethernet_status',
-            class_name='EthernetStatus',
+        "ethernetStatus": __TypeNames(
+            api_name="ethernetStatus",
+            attr_name="ethernet_status",
+            class_name="EthernetStatus",
             is_keyed=True,
         ),
-        'cellularStatus': __TypeNames(
-            api_name='cellularStatus',
-            attr_name='cellular_status',
-            class_name='CellularStatus',
+        "cellularStatus": __TypeNames(
+            api_name="cellularStatus",
+            attr_name="cellular_status",
+            class_name="CellularStatus",
             is_keyed=True,
         ),
-        'co2': __TypeNames(
-            api_name='co2',
-            attr_name='co2',
-            class_name='Co2',
+        "co2": __TypeNames(
+            api_name="co2",
+            attr_name="co2",
+            class_name="Co2",
             is_keyed=True,
         ),
-        'pressure': __TypeNames(
-            api_name='pressure',
-            attr_name='pressure',
-            class_name='Pressure',
+        "pressure": __TypeNames(
+            api_name="pressure",
+            attr_name="pressure",
+            class_name="Pressure",
             is_keyed=True,
         ),
-        'motion': __TypeNames(
-            api_name='motion',
-            attr_name='motion',
-            class_name='Motion',
+        "motion": __TypeNames(
+            api_name="motion",
+            attr_name="motion",
+            class_name="Motion",
             is_keyed=True,
         ),
-        'deskOccupancy': __TypeNames(
-            api_name='deskOccupancy',
-            attr_name='desk_occupancy',
-            class_name='DeskOccupancy',
+        "deskOccupancy": __TypeNames(
+            api_name="deskOccupancy",
+            attr_name="desk_occupancy",
+            class_name="DeskOccupancy",
             is_keyed=True,
         ),
-        'contact': __TypeNames(
-            api_name='contact',
-            attr_name='contact',
-            class_name='Contact',
+        "contact": __TypeNames(
+            api_name="contact",
+            attr_name="contact",
+            class_name="Contact",
             is_keyed=True,
         ),
-        'probeWireStatus': __TypeNames(
-            api_name='probeWireStatus',
-            attr_name='probe_wire_status',
-            class_name='ProbeWireStatus',
+        "probeWireStatus": __TypeNames(
+            api_name="probeWireStatus",
+            attr_name="probe_wire_status",
+            class_name="ProbeWireStatus",
             is_keyed=True,
         ),
     }
@@ -2461,8 +2440,22 @@ class __EventsMap():
 _EVENTS_MAP = __EventsMap()
 
 _EventType = Union[
-    Touch, Temperature, ObjectPresent, Humidity, ObjectPresentCount,
-    TouchCount, WaterPresent, NetworkStatus, NetworkStatusCloudConnector,
-    BatteryStatus, LabelsChanged, ConnectionStatus, EthernetStatus,
-    CellularStatus, Co2, Pressure, Motion, DeskOccupancy,
+    Touch,
+    Temperature,
+    ObjectPresent,
+    Humidity,
+    ObjectPresentCount,
+    TouchCount,
+    WaterPresent,
+    NetworkStatus,
+    NetworkStatusCloudConnector,
+    BatteryStatus,
+    LabelsChanged,
+    ConnectionStatus,
+    EthernetStatus,
+    CellularStatus,
+    Co2,
+    Pressure,
+    Motion,
+    DeskOccupancy,
 ]

@@ -9,8 +9,7 @@ import disruptive as dt
 import tests.api_responses as dtapiresponses
 
 
-class TestEmulator():
-
+class TestEmulator:
     def test_create_device(self, request_mock):
         # Update the response data with device data.
         res = dtapiresponses.created_temperature_emulator
@@ -18,23 +17,23 @@ class TestEmulator():
 
         # Call Emulator.create_device() method.
         d = dt.Emulator.create_device(
-            project_id='project_id',
-            device_type='temperature',
-            display_name='new-device',
-            labels={'key': 'value'},
+            project_id="project_id",
+            device_type="temperature",
+            display_name="new-device",
+            labels={"key": "value"},
         )
 
         # Verify expected outgoing parameters in request.
         request_mock.assert_requested(
-            method='POST',
-            url=dt.emulator_base_url+'/projects/project_id/devices',
+            method="POST",
+            url=dt.emulator_base_url + "/projects/project_id/devices",
             body={
-                'type': 'temperature',
-                'labels': {
-                    'key': 'value',
-                    'name': 'new-device',
+                "type": "temperature",
+                "labels": {
+                    "key": "value",
+                    "name": "new-device",
                 },
-            }
+            },
         )
 
         # Assert single request sent.
@@ -46,14 +45,15 @@ class TestEmulator():
     def test_delete_device(self, request_mock):
         # Call Emulator.delete_device() method.
         d = dt.Emulator.delete_device(
-            device_id='device_id',
-            project_id='project_id',
+            device_id="device_id",
+            project_id="project_id",
         )
 
         # Verify expected outgoing parameters in request.
         request_mock.assert_requested(
-            method='DELETE',
-            url=dt.emulator_base_url+'/projects/project_id/devices/device_id',
+            method="DELETE",
+            url=dt.emulator_base_url
+            + "/projects/project_id/devices/device_id",
         )
 
         # Assert single request sent.
@@ -63,11 +63,11 @@ class TestEmulator():
         assert d is None
 
     def test_publish_event(self, request_mock):
-        project_id = 'test_project'
-        device_id = 'test_device'
+        project_id = "test_project"
+        device_id = "test_device"
         url = dt.emulator_base_url
-        url += f'/projects/{project_id}/devices/{device_id}:publish'
-        args = {'device_id': device_id, 'project_id': project_id}
+        url += f"/projects/{project_id}/devices/{device_id}:publish"
+        args = {"device_id": device_id, "project_id": project_id}
 
         # datetime.datetime.utcnow() is deprecated in Python 3.12
         if sys.version_info.major >= 3 and sys.version_info.minor >= 11:
@@ -84,13 +84,13 @@ class TestEmulator():
 
         tests = [
             TestCase(
-                name='touch',
+                name="touch",
                 give_type=dt.events.TOUCH,
                 give_data=dt.events.Touch(now),
                 want_err=None,
             ),
             TestCase(
-                name='temperature w/o samples',
+                name="temperature w/o samples",
                 give_type=dt.events.TEMPERATURE,
                 give_data=dt.events.Temperature(
                     timestamp=now,
@@ -99,7 +99,7 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='temperature w/ samples',
+                name="temperature w/ samples",
                 give_type=dt.events.TEMPERATURE,
                 give_data=dt.events.Temperature(
                     timestamp=now,
@@ -115,16 +115,16 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='object present',
+                name="object present",
                 give_type=dt.events.OBJECT_PRESENT,
                 give_data=dt.events.ObjectPresent(
                     timestamp=now,
-                    state='PRESENT',
+                    state="PRESENT",
                 ),
                 want_err=None,
             ),
             TestCase(
-                name='humidity',
+                name="humidity",
                 give_type=dt.events.HUMIDITY,
                 give_data=dt.events.Humidity(
                     timestamp=now,
@@ -134,7 +134,7 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='object present count',
+                name="object present count",
                 give_type=dt.events.OBJECT_PRESENT_COUNT,
                 give_data=dt.events.ObjectPresentCount(
                     timestamp=now,
@@ -143,7 +143,7 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='touch count',
+                name="touch count",
                 give_type=dt.events.TOUCH_COUNT,
                 give_data=dt.events.TouchCount(
                     timestamp=now,
@@ -152,30 +152,30 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='water present',
+                name="water present",
                 give_type=dt.events.WATER_PRESENT,
                 give_data=dt.events.WaterPresent(
                     timestamp=now,
-                    state='PRESENT',
+                    state="PRESENT",
                 ),
                 want_err=None,
             ),
             TestCase(
-                name='network status',
+                name="network status",
                 give_type=dt.events.NETWORK_STATUS,
                 give_data=dt.events.NetworkStatus(
                     timestamp=now,
                     signal_strength=98,
                     rssi=-66,
-                    transmission_mode='LOW_POWER_STANDARD_MODE',
+                    transmission_mode="LOW_POWER_STANDARD_MODE",
                     cloud_connectors=[
                         dt.events.NetworkStatusCloudConnector(
-                            device_id='ccon 1',
+                            device_id="ccon 1",
                             signal_strength=99,
                             rssi=-77,
                         ),
                         dt.events.NetworkStatusCloudConnector(
-                            device_id='ccon 2',
+                            device_id="ccon 2",
                             signal_strength=88,
                             rssi=-61,
                         ),
@@ -184,7 +184,7 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='battery status',
+                name="battery status",
                 give_type=dt.events.BATTERY_STATUS,
                 give_data=dt.events.BatteryStatus(
                     timestamp=now,
@@ -193,38 +193,38 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='labels changed',
+                name="labels changed",
                 give_type=dt.events.LABELS_CHANGED,
                 give_data=dt.events.LabelsChanged(
                     timestamp=now,
-                    added={'a': 1},
-                    modified={'b': 2},
-                    removed=['c'],
+                    added={"a": 1},
+                    modified={"b": 2},
+                    removed=["c"],
                 ),
                 want_err=None,
             ),
             TestCase(
-                name='connection status',
+                name="connection status",
                 give_type=dt.events.CONNECTION_STATUS,
                 give_data=dt.events.ConnectionStatus(
                     timestamp=now,
-                    connection='ETHERNET',
-                    available=['ETHERNET', 'CELLULAR'],
+                    connection="ETHERNET",
+                    available=["ETHERNET", "CELLULAR"],
                 ),
                 want_err=None,
             ),
             TestCase(
-                name='ethernet status',
+                name="ethernet status",
                 give_type=dt.events.ETHERNET_STATUS,
                 give_data=dt.events.EthernetStatus(
                     timestamp=now,
-                    mac_address='abc',
-                    ip_address='123',
+                    mac_address="abc",
+                    ip_address="123",
                 ),
                 want_err=None,
             ),
             TestCase(
-                name='cellular status',
+                name="cellular status",
                 give_type=dt.events.CELLULAR_STATUS,
                 give_data=dt.events.CellularStatus(
                     timestamp=now,
@@ -233,7 +233,7 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='co2',
+                name="co2",
                 give_type=dt.events.CO2,
                 give_data=dt.events.Co2(
                     timestamp=now,
@@ -242,7 +242,7 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='pressure',
+                name="pressure",
                 give_type=dt.events.PRESSURE,
                 give_data=dt.events.Pressure(
                     timestamp=now,
@@ -251,29 +251,29 @@ class TestEmulator():
                 want_err=None,
             ),
             TestCase(
-                name='motion',
+                name="motion",
                 give_type=dt.events.MOTION,
                 give_data=dt.events.Motion(
                     timestamp=now,
-                    state='NO_MOTION_DETECTED',
+                    state="NO_MOTION_DETECTED",
                 ),
                 want_err=None,
             ),
             TestCase(
-                name='contact',
+                name="contact",
                 give_type=dt.events.CONTACT,
                 give_data=dt.events.Contact(
                     timestamp=now,
-                    state='OPEN',
+                    state="OPEN",
                 ),
                 want_err=None,
             ),
             TestCase(
-                name='probeWireStatus',
+                name="probeWireStatus",
                 give_type=dt.events.PROBE_WIRE_STATUS,
                 give_data=dt.events.ProbeWireStatus(
                     timestamp=now,
-                    state='THREE_WIRE',
+                    state="THREE_WIRE",
                 ),
                 want_err=None,
             ),
@@ -281,13 +281,13 @@ class TestEmulator():
 
         i = 0
         for test in tests:
-            args['data'] = test.give_data
+            args["data"] = test.give_data
 
             if test.want_err is None:
                 dt.Emulator.publish_event(**args)
 
                 request_mock.assert_requested(
-                    method='POST',
+                    method="POST",
                     url=url,
                     body={test.give_type: test.give_data._raw},
                 )

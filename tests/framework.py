@@ -4,7 +4,7 @@ import disruptive as dt
 from disruptive.authentication import Unauthenticated
 
 
-class RequestsReponseMock():
+class RequestsReponseMock:
     """
     A simple class used to imitate an requests.Response object.
 
@@ -31,8 +31,7 @@ class RequestsReponseMock():
         raise KeyboardInterrupt
 
 
-class RequestMock():
-
+class RequestMock:
     def __init__(self, mocker):
         self._mocker = mocker
 
@@ -49,18 +48,18 @@ class RequestMock():
         self.iter_data = []
 
         self.request_patcher = self._mocker.patch(
-            'requests.request',
+            "requests.request",
             side_effect=self._patched_requests_request,
         )
 
         self.auth_expiration_patcher = self._mocker.patch.object(
             Unauthenticated,
-            '_has_expired',
+            "_has_expired",
             return_value=False,
         )
 
         self.sleep_patcher = self._mocker.patch(
-            'time.sleep',
+            "time.sleep",
         )
 
     def _patched_requests_request(self, **kwargs):
@@ -81,11 +80,11 @@ class RequestMock():
         url,
         params={},
         headers={
-            'Authorization': '',
-            'User-Agent': 'DisruptivePythonAPI/{} Python/{}'.format(
+            "Authorization": "",
+            "User-Agent": "DisruptivePythonAPI/{} Python/{}".format(
                 dt.__version__,
-                f'{sys.version_info.major}.{sys.version_info.minor}',
-            )
+                f"{sys.version_info.major}.{sys.version_info.minor}",
+            ),
         },
         body=None,
         data=None,

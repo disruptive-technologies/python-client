@@ -4,11 +4,11 @@ from datetime import datetime, timedelta
 import disruptive as dt
 
 # Fetch credentials and device info from environment.
-key_id = os.getenv('DT_SERVICE_ACCOUNT_KEY_ID', '')
-secret = os.getenv('DT_SERVICE_ACCOUNT_SECRET', '')
-email = os.getenv('DT_SERVICE_ACCOUNT_EMAIL', '')
-device_id = os.getenv('DT_DEVICE_ID', '')
-project_id = os.getenv('DT_PROJECT_ID', '')
+key_id = os.getenv("DT_SERVICE_ACCOUNT_KEY_ID", "")
+secret = os.getenv("DT_SERVICE_ACCOUNT_SECRET", "")
+email = os.getenv("DT_SERVICE_ACCOUNT_EMAIL", "")
+device_id = os.getenv("DT_DEVICE_ID", "")
+project_id = os.getenv("DT_PROJECT_ID", "")
 
 # Authenticate the package using Service Account credentials.
 dt.default_auth = dt.Auth.service_account(key_id, secret, email)
@@ -32,4 +32,4 @@ for event in events:
     humidity = event.data.humidity
 
     # Print a formatted string of the isolated information.
-    print(f'{humidity}% humidity from event {event_id} at {timestamp}.')
+    print(f"{humidity}% humidity from event {event_id} at {timestamp}.")
