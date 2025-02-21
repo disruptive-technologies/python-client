@@ -2,6 +2,10 @@
 All notable changes, fixes, and additions to the project is listed in this changelog.  
 The project adheres to [semantic versioning](https://semver.org/).
 
+# v1.7.3
+### Added
+- [#142](https://github.com/disruptive-technologies/python-client/pull/142) Support for listing devices in an organization.
+
 # v1.7.2
 ### Added
 - [#141](https://github.com/disruptive-technologies/python-client/pull/141) Drop PyJWT dependency.
