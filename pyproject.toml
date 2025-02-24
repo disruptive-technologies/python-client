@@ -1,3 +1,51 @@
+[project]
+name = "disruptive"
+dynamic = ["version"]
+description = "Disruptive Technologies Python API."
+authors = [
+    {name = "Disruptive Technologies Research AS", email = "developer-support@disruptive-technologies.com"}
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["disruptive", "dt", "rest", "api"]
+classifiers = [
+    "Natural Language :: English",
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "requests>=2.19.0, <3.0.0",
+]
+
+[project.urls]
+Repository = "https://github.com/disruptive-technologies/disruptive-python"
+Documentation = "https://developer.disruptive-technologies.com/api/libraries/python/"
+
+[project.optional-dependencies]
+extra = [
+    "pandas>=2.2.3",
+    "polars>=1.22.0",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.9.7",
+    "setuptools>=75.8.0",
+    "wheel>=0.45.1",
+]
+
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"

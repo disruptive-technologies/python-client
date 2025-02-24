@@ -1,11 +1,11 @@
-from unittest import mock
 from dataclasses import dataclass
+from unittest import mock
 
 import pytest
 
 import disruptive
-from disruptive.events.events import Event
 import tests.api_responses as dtapiresponses
+from disruptive.events.events import Event
 
 
 class TestEventHistory:

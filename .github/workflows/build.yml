@@ -31,25 +31,30 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install the latest version of uv
+      uses: astral-sh/setup-uv@v5
 
-    - name: Install dependencies.
+    - name: Fetch dependencies.
+      run: uv sync --frozen --dev --all-extras --no-install-project --python=${{ matrix.python-version }}
+        
+    - name: Lint with ruff.
       run: |
-          make
+        uv run ruff check .
+        
+    - name: Type-check with mypy.
+      run: |
+        uv run ruff check .
         
     - name: Test with pytest.
       run: |
-        make test
-        
-    - name: Lint with mypy and ruff.
-      run: |
-        make lint
+        uv run pytest tests/
   
   package:
     runs-on: "${{ matrix.platform }}"
     strategy:
       matrix:
         platform: ["ubuntu-latest"]
-        python-version: ["3.12"]
+        python-version: ["3.13"]
 
     steps:
     - uses: actions/checkout@v4
@@ -57,14 +62,15 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install the latest version of uv
+      uses: astral-sh/setup-uv@v5
 
     - name: Install dependencies.
-      run: |
-          pip install --upgrade pip twine
+      run: uv sync --frozen --dev --all-extras --no-install-project --python=${{ matrix.python-version }}
         
     - name: Build the package.
       run: |
-        make build
+        uv build . --package disruptive
 
     - name: Check twine.
-      run: python -m twine check dist/*
+      run: uv run --with twine twine check dist/*

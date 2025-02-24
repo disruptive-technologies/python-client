@@ -115,23 +115,19 @@ python examples/example_name.py
 If a request is unsuccessful or has been provided with invalid parameters, an exception is raised. A list of available exceptions are available in the [API Reference](https://developer.disruptive-technologies.com/api/libraries/python/client/errors.html).
 
 ## Development
+This repository uses `uv` to manage dependencies.
 
-Set up the development virtualenv environment:
+Unit-tests
 ```
-make
-```
-
-Run unit-tests against the currently active python version:
-```
-make test
+uv run --extra extra pytest tests/
 ```
 
-Lint the package code using MyPy and ruff:
+Linting
 ```
-make lint
+uv run ruff check .
 ```
 
-Build the package distribution:
+Type-Checking
 ```
-make build
+uv run mypy disruptive/
 ```
