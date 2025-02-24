@@ -23,17 +23,16 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.13'
+    - name: Install the latest version of uv
+      uses: astral-sh/setup-uv@v5
 
     - name: Install dependencies
-      run: |
-          pip install pytest pytest-mock pytest-cov
-          pip install -e .[extra]
+      run: uv sync --frozen --dev --all-extras --no-install-project --python=${{ matrix.python-version }}
           
     # Install coverage dependencies and generate report.
     - name: Generate coverage report
-      run: |
-          pytest --cov=disruptive --cov-report=xml tests/
+      run: uv run pytest --cov=disruptive --cov-report=xml tests/
 
     # Using the generated report, upload to codecov.
     - name: Upload coverage to Codecov

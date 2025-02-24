@@ -20,15 +20,17 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.13'
+    - name: Install the latest version of uv
+      uses: astral-sh/setup-uv@v5
+
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install setuptools wheel twine
+      run: uv sync --frozen --dev --no-extras --no-install-project --python=${{ matrix.python-version }}
+
     - name: Build and publish
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
-        python setup.py sdist bdist_wheel
-        twine upload dist/*
+        uv build . --package disruptive
+        uv run --with twine twine upload dist/*
